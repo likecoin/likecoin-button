@@ -2,7 +2,7 @@
   "functions": {
     "source": "functions/dist",
     "predeploy": [
-      "npm --prefix functions run lint && npm --prefix functions run package && npm --prefix src run lint && npm --prefix src run build"
+      "npm --prefix src run lint && npm --prefix src run build && cp src/nuxt.config.js functions/ && npm --prefix functions run lint && npm --prefix functions run package "
     ]
   },
   "hosting": {

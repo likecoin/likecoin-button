@@ -5,9 +5,9 @@
     "lint": "./node_modules/.bin/eslint *.js",
     "clean": "rimraf 'dist/functions'",
     "build": "BABEL_ENV=production babel . --out-dir 'dist' --ignore 'nuxt,node_modules,dist'",
-    "deps:copy": "cp -r package.json package-lock.json nuxt dist/",
+    "deps:copy": "cp -r nuxt.config.js package.json package-lock.json nuxt dist/",
     "deps:install": "cd 'dist' && npm install --production",
-    "package": "npm run build && npm run deps:copy && npm run deps:install"
+    "package": "npm run clean && npm run build && npm run deps:copy && npm run deps:install"
   },
   "dependencies": {
     "axios": "^0.18.0",
