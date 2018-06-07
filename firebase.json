@@ -1,8 +1,8 @@
 {
   "functions": {
-    "source": "functions",
+    "source": "functions/dist",
     "predeploy": [
-      "npm --prefix functions run lint && npm --prefix src run lint && npm --prefix src run build"
+      "npm --prefix functions run lint && npm --prefix functions run package && npm --prefix src run lint && npm --prefix src run build"
     ]
   },
   "hosting": {
