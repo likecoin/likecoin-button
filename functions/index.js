@@ -1,9 +1,9 @@
-const functions = require('firebase-functions');
-const { Nuxt } = require('nuxt-edge');
+/* eslint-disable global-require */
 
-const config = {
-  dev: false,
-  buildDir: 'nuxt',
-};
-const nuxt = new Nuxt(config);
-exports.ssrapp = functions.https.onRequest((req, res) => nuxt.render(req, res));
+if (!process.env.FUNCTION_NAME || process.env.FUNCTION_NAME === 'ssrapp') {
+  exports.ssrapp = require('./ssrapp');
+}
+
+if (!process.env.FUNCTION_NAME || process.env.FUNCTION_NAME === 'like') {
+  exports.like = require('./like');
+}
