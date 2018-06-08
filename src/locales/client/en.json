@@ -1,0 +1,22 @@
+{
+  "LikeButton": {
+    "head": {
+      "title": "Like {name}'s work",
+      "description": "Reward Creativity, powered by LikeCoin"
+    },
+    "label": {
+      "error": "Error",
+      "success": "Success",
+      "likedMessage": "You have just liked {name}",
+      "checkingReCaptcha": "Checking reCaptcha...",
+      "loading": "Loading...",
+      "userNotFound": "User {name} Not Found",
+      "no": "No",
+      "ok": "OK",
+      "copy": "Copy",
+      "copied": "Copied",
+      "done": "Done",
+      "myAccount": "My Account"
+    }
+  }
+}

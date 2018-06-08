@@ -6,7 +6,7 @@
       </h1>
       <img v-if="avatar" :src="avatar" />
       <h2 class="subtitle">
-        You have just liked {{ likee }}
+        {{ $t('LikeButton.label.likedMessage', { name: likee }) }}
       </h2>
       <div class="links">
         <a
@@ -51,22 +51,22 @@ export default {
   },
   head() {
     return {
-      title: `Like ${this.displayName}'s work`,
+      title: this.$t('LikeButton.head.title', { name: this.displayName }),
       meta: [
         {
           hid: 'og_title',
           property: 'og:title',
-          content: `Like ${this.displayName}'s work`,
+          content: this.$t('LikeButton.head.title', { name: this.displayName }),
         },
         {
           hid: 'description',
           name: 'description',
-          content: 'Reward Creativity, powered by LikeCoin',
+          content: this.$t('LikeButton.head.description'),
         },
         {
           hid: 'og_description',
           property: 'og:description',
-          content: 'Reward Creativity, powered by LikeCoin',
+          content: this.$t('LikeButton.head.description'),
         },
         {
           hid: 'og_image',
