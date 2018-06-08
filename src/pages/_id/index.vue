@@ -58,7 +58,7 @@ export default {
     if (params.id !== params.id.toLowerCase()) {
       redirect({ name: route.name, params: { ...params, id: params.id.toLowerCase() }, query });
     }
-    return axios.get(`https://like.co/api/users/id/${params.id}/min`)
+    return axios.get(`https://api.like.co/api/users/id/${params.id}/min`)
       .then((res) => {
         const { avatar, displayName } = res.data;
         return {
