@@ -27,7 +27,7 @@ module.exports = {
   /*
   ** Build configuration
   */
-  buildDir: '../functions/nuxt',
+  buildDir: 'nuxt',
   build: {
     extractCSS: true,
     parallel: true,
@@ -56,7 +56,7 @@ module.exports = {
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
-          exclude: /(node_modules)/,
+          exclude: /(node_modules|nuxt)/,
         });
       }
     },
