@@ -3,7 +3,7 @@ import Vue from 'vue'; // eslint-disable-line import/no-extraneous-dependencies
 import VueI18n from 'vue-i18n';
 import axios from 'axios';
 
-import { defaultLocale, defaultMessage, supportedLocales } from '../locales';
+import { defaultLocale, preloadMessages, supportedLocales } from '../locales';
 
 Vue.use(VueI18n);
 
@@ -57,7 +57,7 @@ export default async ({
   app.i18n = new VueI18n({
     locale,
     fallbackLocale: defaultLocale,
-    messages: defaultMessage,
+    messages: preloadMessages,
   });
   app.i18n.loadLanguageAsync = lang => loadLanguageAsync(app.i18n, lang);
   await app.i18n.loadLanguageAsync(locale);

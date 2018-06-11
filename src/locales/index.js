@@ -11,7 +11,7 @@ import en from './client/en.json';
 // import ru from './ru.json';
 
 export const defaultLocale = 'en';
-export const defaultMessage = {
+export const preloadMessages = {
   en,
 };
 
