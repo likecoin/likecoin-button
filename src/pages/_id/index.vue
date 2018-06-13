@@ -106,7 +106,7 @@ export default {
     async postLike() {
       try {
         await axios.post(
-          `/api/like/${this.likee}`,
+          `https://api.like.co/api/like/${this.likee}`,
           { reCaptchaResponse: this.reCaptchaResponse },
           { headers: { 'Like-Referer': document.referrer } },
         );
