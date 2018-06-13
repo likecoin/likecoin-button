@@ -11,6 +11,7 @@
       <h1 class="title">
         likecoin-button
       </h1>
+      <img v-if="avatar" :src="avatar" />
       <h2 v-if="isError">{{ isNotFound ? `User ${likee} Not Found` : 'Error' }}</h2>
       <h2 v-else-if="isNeedCaptcha">Checking reCaptcha...</h2>
       <h2 v-else-if="!isDone">Loading...</h2>
@@ -47,10 +48,64 @@ export default {
       return this.$route.params.id;
     },
   },
+  asyncData({
+    route,
+    params,
+    query,
+    redirect,
+    error,
+  }) {
+    if (params.id !== params.id.toLowerCase()) {
+      redirect({ name: route.name, params: { ...params, id: params.id.toLowerCase() }, query });
+    }
+    return axios.get(`https://like.co/api/users/id/${params.id}/min`)
+      .then((res) => {
+        const { avatar, displayName } = res.data;
+        return {
+          avatar,
+          likee: params.id,
+          displayName: displayName || params.id,
+        };
+      })
+      .catch((e) => { // eslint-disable-line no-unused-vars
+        error({ statusCode: 404, message: '' });
+      });
+  },
+  head() {
+    return {
+      title: `Like ${this.displayName}'s work`,
+      meta: [
+        {
+          hid: 'og_title',
+          property: 'og:title',
+          content: `Like ${this.displayName}'s work`,
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'Reward Creativity, powered by LikeCoin',
+        },
+        {
+          hid: 'og_description',
+          property: 'og:description',
+          content: 'Reward Creativity, powered by LikeCoin',
+        },
+        {
+          hid: 'og_image',
+          property: 'og:image',
+          content: 'https://like.co/images/og/tokensale.jpg',
+        },
+      ],
+    };
+  },
   methods: {
     async postLike() {
       try {
-        await axios.post(`/api/like/${this.likee}`, { reCaptchaResponse: this.reCaptchaResponse });
+        await axios.post(
+          `/api/like/${this.likee}`,
+          { reCaptchaResponse: this.reCaptchaResponse },
+          { headers: { 'Like-Referer': document.referrer } },
+        );
       } catch (err) {
         if (err.response && err.response.status === 404) {
           this.isNotFound = true;
