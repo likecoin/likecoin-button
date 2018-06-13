@@ -1,0 +1,7 @@
+runtime: nodejs8
+instance_class: F2
+automatic_scaling:
+  min_instances: 1
+env_variables:
+  NODE_ENV: "production"
+  HOST: "0.0.0.0"
