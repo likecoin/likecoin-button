@@ -10,7 +10,8 @@
 │   ├── nuxt # auto generated nuxt directory
 │   ├── ssrapp.js # handle nuxt SSR logic
 │   └── index.js # import all other functions
-├── public # public static content, will be merged with nuxt build
+├── public_base # public static content, will be merged with nuxt build
+├── public # auto generated static content folder from nuxt and public_base
 ├── src # Actualy nuxt project, where development should happen
 ├── .firebaserc # define firebase project
 └── firebase.json # firebase related settings

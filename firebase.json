@@ -7,7 +7,7 @@
   },
   "hosting": {
     "predeploy": [
-      "rm -rf public/ && cp -r functions/nuxt/dist/ public/"
+      "rm -rf public/ && cp -r functions/nuxt/dist/ public/ && cp -a public_base/. public/"
     ],
     "public": "public",
     "ignore": [
