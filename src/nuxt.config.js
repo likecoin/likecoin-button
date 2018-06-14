@@ -1,5 +1,4 @@
 /* eslint import/no-extraneous-dependencies: "off" */
-const SentryPlugin = require('@sentry/webpack-plugin');
 
 module.exports = {
   /*
@@ -131,6 +130,7 @@ module.exports = {
     */
     extend(config, { isClient }) {
       if (process.env.RELEASE && process.env.SENTRY_AUTH_TOKEN) {
+        const SentryPlugin = require('@sentry/webpack-plugin'); // eslint-disable-line global-require
         if (isClient) config.devtool = '#source-map'; // eslint-disable-line no-param-reassign
         config.plugins.push(new SentryPlugin({
           release: process.env.RELEASE,
