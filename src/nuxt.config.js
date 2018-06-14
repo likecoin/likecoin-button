@@ -1,3 +1,6 @@
+/* eslint import/no-extraneous-dependencies: "off" */
+const SentryPlugin = require('@sentry/webpack-plugin');
+
 module.exports = {
   /*
   ** Headers of the page
@@ -14,6 +17,7 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Material+Icons' },
     ],
   },
   /*
@@ -23,6 +27,15 @@ module.exports = {
   plugins: [
     { src: '~/plugins/vuetify' },
     { src: '~/plugins/vue-i18n' },
+  ],
+  modules: [
+    ['@nuxtjs/google-analytics', {
+      id: process.env.GA_TRACKING_ID || 'UA-12301-2',
+      autoTracking: {
+        exception: true,
+      },
+    }],
+    '@nuxtjs/sentry',
   ],
   /*
   ** Build configuration
@@ -50,8 +63,17 @@ module.exports = {
     /*
     ** Run ESLint on save
     */
-    extend(config, { isDev, isClient }) {
-      if (isDev && isClient) {
+    extend(config, { isClient }) {
+      if (process.env.RELEASE && process.env.SENTRY_AUTH_TOKEN) {
+        if (isClient) config.devtool = '#source-map'; // eslint-disable-line no-param-reassign
+        config.plugins.push(new SentryPlugin({
+          release: process.env.RELEASE,
+          include: ['nuxt/dist'],
+          ignore: ['node_modules', 'nuxt/dist/server-bundle.json', 'nuxt/dist/img', 'nuxt/dist'],
+          configFile: '.sentryclirc',
+        }));
+      }
+      if (isClient) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
