@@ -28,6 +28,72 @@ module.exports = {
     { src: '~/plugins/vuetify' },
     { src: '~/plugins/vue-i18n' },
   ],
+  render: {
+    csp: {
+      enabled: true,
+      hashAlgorithm: 'sha256',
+      policies: {
+        'default-src': ["'self'"],
+        'script-src': [
+          "'self'",
+          /* gtm inline code */
+          'https://www.google-analytics.com',
+          'https://*.google.com',
+          'https://recaptcha.net',
+          'https://www.recaptcha.net',
+          'https://www.gstatic.com/',
+          'https://js.intercomcdn.com',
+          'https://widget.intercom.io',
+          'https://connect.facebook.net',
+          'https://use.typekit.net',
+          'https://*.intercom.io',
+        ],
+        'font-src': [
+          "'self'",
+          'data:',
+          'https://fonts.gstatic.com',
+          'https://fonts.googleapis.com',
+          'https://use.typekit.net',
+          'https://js.intercomcdn.com',
+        ],
+        'frame-src': [
+          'https://www.google.com/',
+          'https://recaptcha.net',
+          'https://www.recaptcha.net',
+          'https://*.facebook.com',
+          'https://*.facebook.net',
+        ],
+        'img-src': [
+          "'self'",
+          'data:',
+          'blob:',
+          '*',
+        ],
+        'media-src': [
+          'https://*.intercomcdn.com',
+          'https://*.gstatic.com',
+        ],
+        'connect-src': [
+          "'self'",
+          'data:',
+          '*',
+          'wss://*.intercom.io',
+        ],
+        'style-src': [
+          "'self'",
+          "'unsafe-inline'",
+          'https://fonts.googleapis.com',
+        ],
+        'worker-src': [
+          "'self'",
+          'blob:',
+        ],
+        'report-uri': [
+          process.env.SENTRY_REPORT_URI,
+        ],
+      },
+    },
+  },
   modules: [
     ['@nuxtjs/google-analytics', {
       id: process.env.GA_TRACKING_ID || 'UA-12301-2',
