@@ -94,11 +94,9 @@ module.exports = {
     },
   },
   modules: [
-    ['@nuxtjs/google-analytics', {
-      id: process.env.GA_TRACKING_ID || 'UA-12301-2',
-      autoTracking: {
-        exception: true,
-      },
+    ['@nuxtjs/google-tag-manager', {
+      id: process.env.GTM_ID || 'GTM-XXXXXXX',
+      pageTracking: true,
     }],
     '@nuxtjs/sentry',
   ],

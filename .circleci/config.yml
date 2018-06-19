@@ -52,7 +52,7 @@ jobs:
       - deploy:
           name: Deploy
           command: |
-            firebase deploy
+            RELEASE=${CIRCLE_SHA1} firebase deploy
  workflows:
   version: 2
   build_and_test:
