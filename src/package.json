@@ -28,9 +28,12 @@
   "devDependencies": {
     "@sentry/webpack-plugin": "^1.5.2",
     "babel-eslint": "^8.2.1",
-    "eslint": "^4.15.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
     "eslint-friendly-formatter": "^3.0.0",
+    "eslint-import-resolver-webpack": "^0.10.0",
     "eslint-loader": "^1.7.1",
+    "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-vue": "^4.0.0"
   }
 }
