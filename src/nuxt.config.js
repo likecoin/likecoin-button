@@ -1,6 +1,9 @@
 /* eslint import/no-extraneous-dependencies: "off" */
 
 module.exports = {
+  env: {
+    SENTRY_DSN: process.env.SENTRY_DSN,
+  },
   /*
   ** Headers of the page
   */
