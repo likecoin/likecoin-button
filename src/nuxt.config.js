@@ -1,4 +1,9 @@
+/* eslint import/no-extraneous-dependencies: "off" */
+
 module.exports = {
+  env: {
+    SENTRY_DSN: process.env.SENTRY_DSN,
+  },
   /*
   ** Headers of the page
   */
@@ -14,6 +19,7 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Material+Icons' },
     ],
   },
   /*
@@ -23,6 +29,82 @@ module.exports = {
   plugins: [
     { src: '~/plugins/vuetify' },
     { src: '~/plugins/vue-i18n' },
+  ],
+  render: {
+    csp: {
+      enabled: true,
+      hashAlgorithm: 'sha256',
+      policies: {
+        'default-src': ["'self'"],
+        'script-src': [
+          "'self'",
+          /* gtm inline code */
+          "'sha256-X3ZM8SMe34uV9LglkNh69UN/Vkuo+blzT0E7mN1rUnQ='",
+          'https://www.google-analytics.com',
+          'https://www.googletagmanager.com',
+          'https://www.googleadservices.com',
+          'https://*.google.com',
+          'https://recaptcha.net',
+          'https://www.recaptcha.net',
+          'https://www.gstatic.com/',
+          'https://js.intercomcdn.com',
+          'https://widget.intercom.io',
+          'https://connect.facebook.net',
+          'https://use.typekit.net',
+          'https://*.intercom.io',
+        ],
+        'font-src': [
+          "'self'",
+          'data:',
+          'https://fonts.gstatic.com',
+          'https://fonts.googleapis.com',
+          'https://use.typekit.net',
+          'https://js.intercomcdn.com',
+        ],
+        'frame-src': [
+          'https://www.google.com/',
+          'https://recaptcha.net',
+          'https://www.recaptcha.net',
+          'https://*.facebook.com',
+          'https://*.facebook.net',
+        ],
+        'img-src': [
+          "'self'",
+          'data:',
+          'blob:',
+          '*',
+        ],
+        'media-src': [
+          'https://*.intercomcdn.com',
+          'https://*.gstatic.com',
+        ],
+        'connect-src': [
+          "'self'",
+          'data:',
+          '*',
+          'wss://*.intercom.io',
+        ],
+        'style-src': [
+          "'self'",
+          "'unsafe-inline'",
+          'https://fonts.googleapis.com',
+        ],
+        'worker-src': [
+          "'self'",
+          'blob:',
+        ],
+        'report-uri': [
+          process.env.SENTRY_REPORT_URI,
+        ],
+      },
+    },
+  },
+  modules: [
+    ['@nuxtjs/google-tag-manager', {
+      id: process.env.GTM_ID || 'GTM-XXXXXXX',
+      pageTracking: true,
+    }],
+    '@nuxtjs/sentry',
   ],
   /*
   ** Build configuration
@@ -50,8 +132,19 @@ module.exports = {
     /*
     ** Run ESLint on save
     */
-    extend(config, { isDev, isClient }) {
-      if (isDev && isClient) {
+    extend(config, { isClient }) {
+      if (process.env.RELEASE && process.env.SENTRY_AUTH_TOKEN) {
+        /* eslint-disable-next-line global-require, import/no-unresolved */
+        const SentryPlugin = require('@sentry/webpack-plugin');
+        if (isClient) config.devtool = '#source-map'; // eslint-disable-line no-param-reassign
+        config.plugins.push(new SentryPlugin({
+          release: process.env.RELEASE,
+          include: ['nuxt/dist'],
+          ignore: ['node_modules', 'nuxt/dist/server-bundle.json', 'nuxt/dist/img', 'nuxt/dist'],
+          configFile: '.sentryclirc',
+        }));
+      }
+      if (isClient) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,

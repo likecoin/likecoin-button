@@ -11,4 +11,7 @@ const config = {
 };
 const nuxt = new Nuxt(config);
 
-module.exports = functions.https.onRequest((req, res) => nuxt.render(req, res));
+module.exports = functions.https.onRequest((req, res) => {
+  res.set('Cache-Control', 'public, max-age=60, s-maxage=60, stale-if-error=60');
+  return nuxt.render(req, res);
+});
