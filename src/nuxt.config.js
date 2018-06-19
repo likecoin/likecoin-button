@@ -36,7 +36,10 @@ module.exports = {
         'script-src': [
           "'self'",
           /* gtm inline code */
+          "'sha256-X3ZM8SMe34uV9LglkNh69UN/Vkuo+blzT0E7mN1rUnQ='",
           'https://www.google-analytics.com',
+          'https://www.googletagmanager.com',
+          'https://www.googleadservices.com',
           'https://*.google.com',
           'https://recaptcha.net',
           'https://www.recaptcha.net',
@@ -128,7 +131,8 @@ module.exports = {
     */
     extend(config, { isClient }) {
       if (process.env.RELEASE && process.env.SENTRY_AUTH_TOKEN) {
-        const SentryPlugin = require('@sentry/webpack-plugin'); // eslint-disable-line global-require
+        /* eslint-disable-next-line global-require, import/no-unresolved */
+        const SentryPlugin = require('@sentry/webpack-plugin');
         if (isClient) config.devtool = '#source-map'; // eslint-disable-line no-param-reassign
         config.plugins.push(new SentryPlugin({
           release: process.env.RELEASE,
