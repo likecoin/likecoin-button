@@ -154,4 +154,10 @@ module.exports = {
       }
     },
   },
+  /*
+  ** Global CSS
+  */
+  css: [
+    { src: '~/assets/css/index.scss', lang: 'scss' },
+  ],
 };

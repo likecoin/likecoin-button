@@ -1,0 +1,19 @@
+// @import 'node_modules/vuetify/dist/vuetify.min.css'; // uncomment when vuetify is in use
+
+body {
+  font-family: 'Open Sans', Arial, sans-serif !important;
+}
+
+a {
+  color: #28646e;
+}
+
+.lc-container {
+  max-width: 576px;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media (min-width: 600px + 1px) {
+    padding-top: 60px;
+  }
+}

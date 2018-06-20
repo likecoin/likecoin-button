@@ -1,22 +1,26 @@
 {
+  "general": {
+    "error": "Error",
+    "no": "No",
+    "ok": "OK"
+  },
   "LikeButton": {
     "head": {
       "title": "Like {name}'s work",
       "description": "Reward Creativity, powered by LikeCoin"
     },
     "label": {
-      "error": "Error",
-      "success": "Success",
-      "likedMessage": "You have just liked {name}",
-      "checkingReCaptcha": "Checking reCaptcha...",
-      "loading": "Loading...",
       "userNotFound": "User {name} Not Found",
-      "no": "No",
-      "ok": "OK",
-      "copy": "Copy",
-      "copied": "Copied",
-      "done": "Done",
-      "myAccount": "My Account"
+      "pending": "Pending",
+      "thanksAppreciation": "Thanks for showing your appreciation on the article.",
+      "distributeLikeFromEcosystem": "Some LIKE will be distributed to {user} tomorrow from the LikeCoin Ecosystem.",
+      "considerSuperLike": "Other than helping to mine LIKE by Liking, please consider paying {likee} directly by \"Super Like\":",
+      "doYouKnow": {
+        "title": "Do you know: ",
+        "login": "Content creator will receive more LikeCoin if you login with {loginPage}",
+        "likecoinId": "LikeCoin ID"
+      },
+      "backToHome": "Back to homepage"
     }
   }
 }
