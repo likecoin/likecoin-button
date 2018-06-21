@@ -39,7 +39,7 @@ import axios from '@/plugins/axios';
 
 import LikeForm from '@/components/LikeForm';
 import LoadingIndicator from '@/components/LoadingIndicator';
-
+import { LIKECOIN_API } from '@/constant';
 
 export default {
   name: 'id',
@@ -72,7 +72,7 @@ export default {
     if (params.id !== params.id.toLowerCase()) {
       redirect({ name: route.name, params: { ...params, id: params.id.toLowerCase() }, query });
     }
-    return axios.get(`https://api.like.co/api/users/id/${params.id}/min`)
+    return axios.get(`${LIKECOIN_API}/api/users/id/${params.id}/min`)
       .then((res) => {
         const { avatar, displayName } = res.data;
         return {
@@ -115,7 +115,7 @@ export default {
     async postLike() {
       try {
         await axios.post(
-          `https://api.like.co/api/like/${this.likee}`,
+          `${LIKECOIN_API}/api/like/${this.likee}`,
           { reCaptchaResponse: this.reCaptchaResponse },
           { headers: { 'Like-Referer': document.referrer } },
         );

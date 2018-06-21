@@ -3,22 +3,30 @@
 module.exports = {
   env: {
     SENTRY_DSN: process.env.SENTRY_DSN,
+    IS_TESTNET: process.env.IS_TESTNET,
   },
   /*
   ** Headers of the page
   */
   head: {
-    title: 'likecoin-button',
+    title: 'LikeCoin - Reinventing the Like',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Nuxt.js project' },
+      { hid: 'description', name: 'description', content: 'With our unique LikeRank algorithm and decentralized Like button, we trace content footprint and reward all creators involved. This is called Proof of Creativity.' },
+      { hid: 'og_title', property: 'og:title', content: 'LikeCoin - Reinventing the Like' },
+      { hid: 'og_description', property: 'og:description', content: 'With our unique LikeRank algorithm and decentralized Like button, we trace content footprint and reward all creators involved. This is called Proof of Creativity.' },
+      { hid: 'og_image', property: 'og:image', content: 'https://like.co/images/og/default.png' },
+      { hid: 'og_image_alt', property: 'og:image:alt', content: 'LikeCoin' },
+      { hid: 'og_image_width', property: 'og:image:width', content: '1200' },
+      { hid: 'og_image_height', property: 'og:image:height', content: '630' },
+      { hid: 'theme-color', name: 'theme-color', content: '#D2F0F0' },
     ],
     script: [
       { src: 'https://www.recaptcha.net/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit' },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'icon', type: 'image/png', href: '/favicon.png' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Material+Icons' },
     ],
   },
