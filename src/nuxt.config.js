@@ -3,6 +3,7 @@
 module.exports = {
   env: {
     SENTRY_DSN: process.env.SENTRY_DSN,
+    IS_TESTNET: process.env.IS_TESTNET,
   },
   /*
   ** Headers of the page
