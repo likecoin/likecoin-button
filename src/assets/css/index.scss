@@ -1,0 +1,27 @@
+// @import 'node_modules/vuetify/dist/vuetify.min.css'; // uncomment when vuetify is in use
+@import 'variables';
+
+body {
+  margin: 0;
+
+  font-family: 'Open Sans', Arial, sans-serif !important;
+}
+
+a {
+  transition: color 0.25s ease;
+
+  color: $like-green;
+
+  &:hover {
+    color: darken($like-green, 10%);
+  }
+}
+
+.lc-container {
+  max-width: 576px;
+  margin: 0 auto;
+
+  @media (min-width: 600px + 1px) {
+    padding-top: 60px;
+  }
+}

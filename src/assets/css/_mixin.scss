@@ -1,0 +1,19 @@
+@mixin background-image-sliding-animation-x($gradient) {
+  @keyframes sliding-animation {
+    0% { background-position-x: 100%; }
+    100% { background-position-x: -100%; }
+  }
+
+  animation: {
+    name: sliding-animation;
+    duration: .8s;
+    timing-function: linear;
+    iteration-count: infinite;
+    fill-mode: forwards;
+  };
+
+  background: {
+    image: $gradient;
+    size: 200%;
+  }
+}
