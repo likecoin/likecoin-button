@@ -1,5 +1,5 @@
 <template>
-  <section class="container">
+  <div class="lc-container">
     <vue-recaptcha
       ref="invisibleRecaptcha"
       size="invisible"
@@ -7,38 +7,47 @@
       @expired="onCaptchaExpired"
       @render="onCaptchaRender"
       sitekey="6Le9w10UAAAAANsMwDA5YuiwCudW8YKu2RGI8Hcl" />
-    <div>
-      <h1 class="title">
-        likecoin-button
-      </h1>
-      <img v-if="avatar" :src="avatar" />
-      <h2 v-if="isError">
-        {{ isNotFound ?
-          $t('LikeButton.label.likedMessage', { name: likee })
-          : $t('LikeButton.label.error') }}
-      </h2>
-      <h2 v-else-if="isNeedCaptcha"> {{ $t('LikeButton.label.checkingReCaptcha') }}</h2>
-      <h2 v-else-if="!isDone"> {{ $t('LikeButton.label.loading') }}</h2>
-      <h2 v-else class="subtitle">
-        {{ $t('LikeButton.label.likedMessage', { name: likee }) }}
-      </h2>
-      <div class="links">
-        <v-btn color="success">LikeCoin</v-btn>
-        <a
-          href="https://like.co/"
-          target="_blank">LikeCoin</a>
+
+    <like-form
+      :avatar="avatar"
+      :displayName="displayName"
+      :likee="likee"
+    >
+      <div class="like-form__info">
+        <div
+          v-if="isError && isNotFound"
+          class="like-form__info--error"
+        >
+          {{ $t('general.error') }}
+        </div>
+        <div
+          v-else
+          class="like-form__info--pending"
+        >
+          <loading-indicator color="#d9b503" />
+          <span>{{ $t('LikeButton.label.pending') }}</span>
+        </div>
       </div>
-    </div>
-  </section>
+    </like-form>
+
+  </div>
 </template>
 
 <script>
 import VueRecaptcha from 'vue-recaptcha';
-import axios from '~/plugins/axios';
+import axios from '@/plugins/axios';
+
+import LikeForm from '@/components/LikeForm';
+import LoadingIndicator from '@/components/LoadingIndicator';
+import { LIKECOIN_API } from '@/constant';
 
 export default {
   name: 'id',
-  components: { VueRecaptcha },
+  components: {
+    LikeForm,
+    LoadingIndicator,
+    VueRecaptcha,
+  },
   data() {
     return {
       reCaptchaResponse: '',
@@ -63,7 +72,7 @@ export default {
     if (params.id !== params.id.toLowerCase()) {
       redirect({ name: route.name, params: { ...params, id: params.id.toLowerCase() }, query });
     }
-    return axios.get(`https://api.like.co/api/users/id/${params.id}/min`)
+    return axios.get(`${LIKECOIN_API}/api/users/id/${params.id}/min`)
       .then((res) => {
         const { avatar, displayName } = res.data;
         return {
@@ -106,7 +115,7 @@ export default {
     async postLike() {
       try {
         await axios.post(
-          `https://api.like.co/api/like/${this.likee}`,
+          `${LIKECOIN_API}/api/like/${this.likee}`,
           { reCaptchaResponse: this.reCaptchaResponse },
           { headers: { 'Like-Referer': document.referrer } },
         );
@@ -134,3 +143,43 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import "~assets/css/mixin";
+
+.like-form {
+  :global(.like-form__header) {
+    @include background-image-sliding-animation-x(
+      linear-gradient(260deg, #d2f0f0, #f0e6b4)
+    );
+  }
+}
+
+.like-form {
+  &__info {
+    > * {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+
+      margin-top: 72px;
+      margin-bottom: 56px;
+
+      font-size: 32px;
+      font-weight: 300;
+    }
+
+    &--pending {
+      color: #d9b503;
+
+      span {
+        padding-left: 16px;
+      }
+    }
+
+    &--error {
+      color: #fc5757;
+    }
+  }
+}
+</style>
