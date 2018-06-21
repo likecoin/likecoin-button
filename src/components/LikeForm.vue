@@ -20,7 +20,15 @@
 
       <div class="like-form__user">
         <div class="like-form__user__avatar">
-          <img v-if="avatar" :src="avatar" />
+          <a
+            v-if="avatar"
+            :href="`https://like.co/${likee}`"
+            place="user"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <img :src="avatar" />
+          </a>
         </div>
         <div class="like-form__user__detail">
           <h2>{{ $t('LikeButton.label.thanksAppreciation') }}</h2>
@@ -33,9 +41,7 @@
               place="user"
               rel="noopener noreferrer"
               target="_blank"
-            >{{
-              displayName
-            }}</a>
+            >{{ displayName }}</a>
           </i18n>
         </div>
       </div>
@@ -100,14 +106,13 @@ $header-height: 48px;
   }
 
   &__content {
+    background-color: #f7f7f7;
     @media (min-width: 600px + 1px) {
       padding: 80px 48px 38px;
     }
     @media (max-width: 600px) {
       padding: 80px 16px 24px;
     }
-
-    background-color: #f7f7f7;
   }
 
   &__user {
@@ -115,12 +120,19 @@ $header-height: 48px;
     align-items: center;
     flex-direction: row;
 
+    @media (max-width: 576px) {
+      flex-direction: column;
+
+      text-align: center;
+    }
+
     &__avatar {
       overflow: hidden;
       flex-shrink: 0;
 
       width: 80px;
       height: 80px;
+      margin: 10px 0;
 
       border-radius: 50%;
       box-shadow: 0 0 1px #9b9b9b;

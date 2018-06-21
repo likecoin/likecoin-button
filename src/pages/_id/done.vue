@@ -18,9 +18,17 @@
 
       <div class="like-form__info">
         <div class="like-form__info--super-like">
-          <span>
-            {{ $t('LikeButton.label.considerSuperLike', { likee }) }}
-          </span>
+          <i18n
+            path="LikeButton.label.considerSuperLike"
+            tag="span"
+          >
+            <a
+              :href="`https://like.co/${likee}`"
+              place="likee"
+              rel="noopener noreferrer"
+              target="_blank"
+            >{{ displayName }}</a>
+          </i18n>
           <a
             :href="`https://like.co/${likee}/8`"
             class="super-like-button"
@@ -187,12 +195,27 @@ export default {
       margin-top: 48px;
 
       animation: slide-down 0.5s cubic-bezier(0.2, 0.2, 0, 1);
+      text-align: center;
       letter-spacing: -0.1px;
 
       color: #737373;
 
       font-size: 16px;
       line-height: 1.6;
+
+      > span {
+        a {
+          text-decoration: none;
+
+          color: inherit;
+
+          font-weight: 600;
+
+          &:hover {
+            color: darken(#737373, 10%);
+          }
+        }
+      }
     }
   }
 }
