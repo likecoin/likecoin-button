@@ -103,11 +103,6 @@ export default {
           property: 'og:description',
           content: this.$t('LikeButton.head.description'),
         },
-        {
-          hid: 'og_image',
-          property: 'og:image',
-          content: 'https://like.co/images/og/tokensale.jpg',
-        },
       ],
     };
   },
