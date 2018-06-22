@@ -3,6 +3,10 @@ const { Nuxt } = require('nuxt-edge');
 
 const nuxtConfig = require('./nuxt.config.js');
 
+if (functions.config().likeco.testmode) {
+  process.env.IS_TESTNET = true;
+}
+
 const config = {
   ...nuxtConfig,
   dev: false,
