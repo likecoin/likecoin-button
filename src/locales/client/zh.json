@@ -20,6 +20,7 @@
         "login": "登入 {loginPage} ，可讓作者獲得更多 LikeCoin。",
         "likecoinId": "LikeCoin ID"
       },
+      "backToLastPage": "返回上一頁",
       "backToHome": "返回主頁"
     }
   }
