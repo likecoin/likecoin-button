@@ -51,6 +51,8 @@ module.exports = {
           'https://www.google-analytics.com',
           'https://www.googletagmanager.com',
           'https://www.googleadservices.com',
+          'https://cdn.mouseflow.com',
+          'https://ajax.googleapis.com',
           'https://*.google.com',
           'https://recaptcha.net',
           'https://www.recaptcha.net',
