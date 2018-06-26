@@ -13,6 +13,7 @@ import zh from './client/zh.json';
 export const defaultLocale = 'en';
 export const preloadMessages = {
   en,
+  zh,
 };
 
 export const supportedLocales = [
