@@ -1,5 +1,5 @@
 import en from './client/en.json';
-import zh from './zh.json';
+import zh from './client/zh.json';
 // import cn from './cn.json';
 // import ja from './ja.json';
 // import ko from './ko.json';
