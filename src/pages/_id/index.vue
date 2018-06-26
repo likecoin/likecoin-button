@@ -40,6 +40,9 @@ import axios from '@/plugins/axios';
 import LikeForm from '@/components/LikeForm';
 import LoadingIndicator from '@/components/LoadingIndicator';
 import { LIKECOIN_API } from '@/constant';
+import { logTrackerEvent } from '@/util/EventLogger';
+
+const PENDING_LIKE_INTERVAL = 200;
 
 export default {
   name: 'id',
@@ -55,6 +58,8 @@ export default {
       isDone: false,
       isError: false,
       isNotFound: false,
+      timeStarted: Date.now(),
+      updateTimer: null,
     };
   },
   computed: {
@@ -121,6 +126,9 @@ export default {
         this.isError = true;
       }
       this.isDone = true;
+      clearTimeout(this.updateTimer);
+      const timeDiff = Math.floor((Date.now() - this.timeStarted));
+      logTrackerEvent(this, 'LikeButtonFlow', 'completeLIKE', 'completeLIKE', timeDiff);
       this.$router.replace({ name: 'id-done', params: this.$route.params });
     },
     onCaptchaVerify(response) {
@@ -135,6 +143,21 @@ export default {
       this.isNeedCaptcha = true;
       this.$refs.invisibleRecaptcha.execute();
     },
+  },
+  mounted() {
+    logTrackerEvent(this, 'LikeButtonFlow', 'startLIKE', 'startLIKE', 1);
+    this.timeStarted = Date.now();
+    if (this.updateTimer) clearTimeout(this.updateTimer);
+    this.updateTimer = setTimeout(async () => {
+      const timeDiff = Math.floor((Date.now() - this.timeStarted));
+      logTrackerEvent(this, 'LikeButtonFlow', 'liking', 'liking', timeDiff);
+    }, PENDING_LIKE_INTERVAL);
+  },
+  beforeDestroy() {
+    if (this.updateTimer) {
+      clearTimeout(this.updateTimer);
+      this.updateTimer = null;
+    }
   },
 };
 </script>
