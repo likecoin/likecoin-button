@@ -1,5 +1,11 @@
 <template>
   <div class="done-page lc-container">
+    <div class="done-page__back-button" @click="$router.go(-1)">
+      <img :src="BackIcon">
+      <span>
+        {{ $t('general.back') }}
+      </span>
+    </div>
 
     <like-form
       :avatar="avatar"
@@ -12,7 +18,7 @@
           rel="noopener noreferrer"
           target="_blank"
         >
-          About LikeCoin
+          {{ $t('LikeButton.button.aboutLikeCoin') }}
         </a>
       </template>
 
@@ -35,7 +41,6 @@
           >
             <div class="super-like-button__content">Super Like</div>
           </a>
-          <a href="#back" @click="$router.go(-1)">{{ $t('LikeButton.label.backToLastPage') }}</a>
         </div>
       </div>
     </like-form>
@@ -66,10 +71,17 @@ import axios from '~/plugins/axios';
 import LikeForm from '@/components/LikeForm';
 import { LIKECOIN_API } from '@/constant';
 
+import BackIcon from '@/assets/icon/arrow.svg';
+
 export default {
   name: 'id-done',
   components: {
     LikeForm,
+  },
+  data() {
+    return {
+      BackIcon,
+    };
   },
   computed: {
     likee() {
@@ -166,6 +178,31 @@ export default {
 
 .done-page {
   max-width: 576px;
+
+  &__back-button {
+    position: absolute;
+
+    display: flex;
+    align-items: center;
+
+    padding-left: 12px;
+
+    cursor: pointer;
+    transition: transform .3s ease-in-out;
+    animation: slide-down 0.5s cubic-bezier(0.2, 0.2, 0, 1);
+
+    color: #28646e;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+
+    span {
+      margin-left: 16px;
+
+      font-size: 18px;
+    }
+  }
 
   &__tips {
     padding: 16px 32px;
@@ -278,7 +315,7 @@ export default {
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.2);
   }
-  &:focus:not(:active)::after {
+  &:not(:active)::after {
     animation: ripple 0.5s ease-out;
   }
 

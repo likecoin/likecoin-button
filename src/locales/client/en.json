@@ -2,7 +2,8 @@
   "general": {
     "error": "Error",
     "no": "No",
-    "ok": "OK"
+    "ok": "OK",
+    "back": "Back"
   },
   "LikeButton": {
     "head": {
@@ -20,8 +21,10 @@
         "login": "Content creator will receive more LikeCoin if you login with {loginPage}",
         "likecoinId": "LikeCoin ID"
       },
-      "backToHome": "Back to previous page",
       "backToHome": "Back to homepage"
+    },
+    "button": {
+      "aboutLikeCoin": "About LikeCoin"
     }
   }
 }
