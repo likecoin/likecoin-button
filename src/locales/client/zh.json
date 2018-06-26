@@ -2,7 +2,8 @@
   "general": {
     "error": "錯誤",
     "no": "不",
-    "ok": "好"
+    "ok": "好",
+    "back": "返回"
   },
   "LikeButton": {
     "head": {
@@ -14,14 +15,16 @@
       "pending": "等待中",
       "thanksAppreciation": "感謝你對這篇文章的讚賞！",
       "distributeLikeFromEcosystem": "{user} 明天將會收到一些來自 LikeCoin 生態圈的 LIKE。",
-      "considerSuperLike": "除了以讚好挖LIKE，還可以用 \"Super Like\"，直接以 LikeCoin 表達對 {likee} 的支持和讚賞。",
+      "considerSuperLike": "除了以讚好挖 LIKE，還可以用 \"Super Like\"，直接以 LikeCoin 表達對 {likee} 的支持和讚賞。",
       "doYouKnow": {
         "title": "你知道嗎： ",
         "login": "登入 {loginPage} ，可讓作者獲得更多 LikeCoin。",
         "likecoinId": "LikeCoin ID"
       },
-      "backToLastPage": "返回上一頁",
       "backToHome": "返回主頁"
+    },
+    "button": {
+      "aboutLikeCoin": "關於 LikeCoin"
     }
   }
 }
