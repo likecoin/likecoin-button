@@ -35,6 +35,7 @@
           >
             <div class="super-like-button__content">Super Like</div>
           </a>
+          <a href="#back" @click="$router.go(-1)">{{ $t('LikeButton.label.backToLastPage') }}</a>
         </div>
       </div>
     </like-form>
