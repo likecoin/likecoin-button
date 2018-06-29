@@ -66,6 +66,9 @@ export default {
     likee() {
       return this.$route.params.id;
     },
+    referrer() {
+      return this.$route.query.referrer || document.referrer || '';
+    },
   },
   asyncData({
     route,
@@ -117,7 +120,7 @@ export default {
         await axios.post(
           `${LIKECOIN_API}/api/like/${this.likee}`,
           { reCaptchaResponse: this.reCaptchaResponse },
-          { headers: { 'Like-Referer': document.referrer } },
+          { headers: { 'Like-Referer': this.referrer } },
         );
       } catch (err) {
         if (err.response && err.response.status === 404) {
