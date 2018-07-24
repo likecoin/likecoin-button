@@ -15,8 +15,8 @@ export function checkIsDesktopChrome() {
   return (/Chrome/i.test(ua) && /Google/i.test(uv)) && !(/OPR/i.test(ua));
 }
 
-export function checkIsTrustClient(vue) {
-  return vue.$store.getters.getWeb3Type === 'window' && window.web3 && window.web3.currentProvider.isTrust;
+export function checkIsTrustClient() {
+  return window.web3 && window.web3.currentProvider.isTrust;
 }
 
 export function isAndroid() {
