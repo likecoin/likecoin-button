@@ -37,9 +37,10 @@
 import VueRecaptcha from 'vue-recaptcha';
 import axios from '@/plugins/axios';
 
+import { LIKECOIN_API } from '@/constant';
+import { apiGetUserMinById } from '@/util/api/api';
 import LikeForm from '@/components/LikeForm';
 import LoadingIndicator from '@/components/LoadingIndicator';
-import { LIKECOIN_API } from '@/constant';
 import { logTrackerEvent } from '@/util/EventLogger';
 
 const PENDING_LIKE_INTERVAL = 200;
@@ -80,7 +81,7 @@ export default {
     if (params.id !== params.id.toLowerCase()) {
       redirect({ name: route.name, params: { ...params, id: params.id.toLowerCase() }, query });
     }
-    return axios.get(`${LIKECOIN_API}/api/users/id/${params.id}/min`)
+    return apiGetUserMinById(params.id)
       .then((res) => {
         const { avatar, displayName } = res.data;
         return {
