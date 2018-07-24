@@ -8,7 +8,7 @@
     "node": "8.x.x"
   },
   "scripts": {
-    "dev": "nuxt",
+    "dev": "IS_TESTNET=TRUE nuxt",
     "build": "nuxt build",
     "deploy": "npm run build && gcloud app deploy",
     "start": "nuxt start",
@@ -20,9 +20,11 @@
     "@nuxtjs/google-tag-manager": "^2.0.0",
     "@nuxtjs/sentry": "^1.0.3",
     "axios": "^0.18.0",
+    "lodash.debounce": "^4.0.8",
     "nuxt": "^1.0.0",
     "vue-i18n": "^7.8.0",
     "vue-recaptcha": "^1.1.1",
+    "vue-simple-svg": "^1.3.1",
     "vuetify": "^1.0.19"
   },
   "devDependencies": {
