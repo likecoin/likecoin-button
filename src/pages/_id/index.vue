@@ -36,10 +36,11 @@
 
 <script>
 import VueRecaptcha from 'vue-recaptcha';
-import axios from '@/plugins/axios';
 
-import { LIKECOIN_API } from '@/constant';
-import { apiGetUserMinById } from '@/util/api/api';
+import {
+  apiGetUserMinById,
+  apiPostLikeLink,
+} from '@/util/api/api';
 import LikeForm from '@/components/LikeForm';
 import LoadingIndicator from '@/components/LoadingIndicator';
 import { logTrackerEvent } from '@/util/EventLogger';
@@ -134,10 +135,10 @@ export default {
   methods: {
     async postLike() {
       try {
-        await axios.post(
-          `${LIKECOIN_API}/api/like/${this.likee}`,
+        await apiPostLikeLink(
+          this.likee,
+          this.referrer,
           { reCaptchaResponse: this.reCaptchaResponse },
-          { headers: { 'Like-Referer': this.referrer } },
         );
       } catch (err) {
         if (err.response && err.response.status === 404) {

@@ -19,7 +19,7 @@ export default {
   name: 'nuxt-error',
   props: {
     error: {
-      type: String,
+      type: Object,
       required: true,
     },
   },

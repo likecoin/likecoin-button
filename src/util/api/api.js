@@ -14,6 +14,13 @@ export const apiGetLikeButtonTotalCount =
 export const apiGetLikeButtonLikerList =
   (id, referrer) => axios.get(`${LIKECOIN_MISC_API_BASE}/api/like/likebutton/${id}/list`, { params: { referrer } });
 
+export const apiPostLikeLink =
+  (id, referrer, payload) => axios.post(
+    `${LIKECOIN_MISC_API_BASE}/api/like/likelink/${id}`,
+    payload,
+    { params: { referrer } },
+  );
+
 export const apiPostLikeButton =
   (id, referrer, count = 1) => axios.post(
     `${LIKECOIN_MISC_API_BASE}/api/like/likebutton/${id}/${count}`,
