@@ -1,3 +1,5 @@
+import { LIKE_CO_HOSTNAME } from '@/constant';
+
 import EmbedCreateWidgetButton from '~/components/embed/EmbedCreateWidgetButton';
 import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
 import SocialMediaConnect from '~/components/SocialMediaConnect';
@@ -59,7 +61,7 @@ export default {
     getUserPath() {
       const amount = this.amount ? `/${this.amount}` : '';
       const referrer = this.urlReferrer ? `/?referrer=${this.urlReferrer}` : '';
-      return `/${this.id}${amount}${referrer}`;
+      return `https://${LIKE_CO_HOSTNAME}/${this.id}${amount}${referrer}`;
     },
     urlReferrer() {
       const { query } = this.$route;
@@ -67,7 +69,7 @@ export default {
     },
     getReferralLink() {
       const referrer = this.urlReferrer ? `/?referrer=${this.urlReferrer}` : '';
-      return `https://like.co/ref/${this.id}${referrer}`;
+      return `https://${LIKE_CO_HOSTNAME}/ref/${this.id}${referrer}`;
     },
   },
 };

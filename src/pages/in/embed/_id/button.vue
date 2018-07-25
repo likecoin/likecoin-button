@@ -139,7 +139,9 @@
                     class="login-tooltip__bubble"
                   >
                     <a
-                      href="#"
+                      :href="`https://${LIKE_CO_HOSTNAME}/in`"
+                      target="_blank"
+                      rel="noopener"
                       place="login"
                       @click="isLoginTooltipOpen = false"
                     >{{ $t('Embed.button.login') }}</a>
@@ -182,6 +184,8 @@ import {
   apiGetLikeButtonTotalCount,
 } from '@/util/api/api';
 
+import { LIKE_CO_HOSTNAME } from '@/constant';
+
 import CloseButtonIcon from '~/assets/like-button/close-btn.svg';
 import QuestionButtonIcon from '~/assets/like-button/question-btn.svg';
 
@@ -210,6 +214,8 @@ export default {
     return {
       CloseButtonIcon,
       QuestionButtonIcon,
+
+      LIKE_CO_HOSTNAME,
 
       isLoggedIn: false,
       isLoginTooltipOpen: false,

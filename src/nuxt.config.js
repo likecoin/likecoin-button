@@ -112,6 +112,15 @@ module.exports = {
       },
     },
   },
+  router: {
+    extendRoutes(routes, resolve) {
+      routes.push({
+        name: 'in-embed-id-button-amount',
+        path: '/in/embed/:id/button/:amount?',
+        component: resolve(__dirname, 'pages/in/embed/_id/button.vue'),
+      });
+    },
+  },
   modules: [
     ['@nuxtjs/google-tag-manager', {
       id: process.env.GTM_ID || 'GTM-XXXXXXX',
