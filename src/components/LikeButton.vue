@@ -285,7 +285,7 @@ $like-button-like-count-size: 24;
 
     position: relative;
 
-    display: inline-block;
+    display: block;
 
     box-sizing: border-box;
     width: normalized($like-button-size);
@@ -484,7 +484,7 @@ $like-button-like-count-size: 24;
     }
 
     &__total-like {
-      display: inline-block;
+      display: block;
 
       margin-top: normalized(4);
 
