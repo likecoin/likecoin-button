@@ -1,6 +1,9 @@
 <template>
   <div class="done-page lc-container">
-    <div class="done-page__back-button" @click="$router.go(-1)">
+    <div
+      class="done-page__back-button"
+      @click="$router.go(-1)"
+    >
       <img :src="BackIcon">
       <span>
         {{ $t('general.back') }}
@@ -66,12 +69,11 @@
 </template>
 
 <script>
-import axios from '~/plugins/axios';
+import { apiGetUserMinById } from '@/util/api/api';
 
 import LikeForm from '@/components/LikeForm';
-import { LIKECOIN_API } from '@/constant';
 
-import BackIcon from '@/assets/icon/arrow.svg';
+import BackIcon from '@/assets/icons/arrow.svg';
 
 export default {
   name: 'id-done',
@@ -98,7 +100,7 @@ export default {
     if (params.id !== params.id.toLowerCase()) {
       redirect({ name: route.name, params: { ...params, id: params.id.toLowerCase() }, query });
     }
-    return axios.get(`${LIKECOIN_API}/api/users/id/${params.id}/min`)
+    return apiGetUserMinById(params.id)
       .then((res) => {
         const { avatar, displayName } = res.data;
         return {

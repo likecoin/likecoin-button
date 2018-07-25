@@ -3,10 +3,11 @@
     <vue-recaptcha
       ref="invisibleRecaptcha"
       size="invisible"
+      sitekey="6Le9w10UAAAAANsMwDA5YuiwCudW8YKu2RGI8Hcl"
       @verify="onCaptchaVerify"
       @expired="onCaptchaExpired"
       @render="onCaptchaRender"
-      sitekey="6Le9w10UAAAAANsMwDA5YuiwCudW8YKu2RGI8Hcl" />
+    />
 
     <like-form
       :avatar="avatar"
@@ -35,11 +36,13 @@
 
 <script>
 import VueRecaptcha from 'vue-recaptcha';
-import axios from '@/plugins/axios';
 
+import {
+  apiGetUserMinById,
+  apiPostLikeLink,
+} from '@/util/api/api';
 import LikeForm from '@/components/LikeForm';
 import LoadingIndicator from '@/components/LoadingIndicator';
-import { LIKECOIN_API } from '@/constant';
 import { logTrackerEvent } from '@/util/EventLogger';
 
 const PENDING_LIKE_INTERVAL = 200;
@@ -80,7 +83,7 @@ export default {
     if (params.id !== params.id.toLowerCase()) {
       redirect({ name: route.name, params: { ...params, id: params.id.toLowerCase() }, query });
     }
-    return axios.get(`${LIKECOIN_API}/api/users/id/${params.id}/min`)
+    return apiGetUserMinById(params.id)
       .then((res) => {
         const { avatar, displayName } = res.data;
         return {
@@ -114,13 +117,28 @@ export default {
       ],
     };
   },
+  mounted() {
+    logTrackerEvent(this, 'LikeButtonFlow', 'startLIKE', 'startLIKE', 1);
+    this.timeStarted = Date.now();
+    if (this.updateTimer) clearTimeout(this.updateTimer);
+    this.updateTimer = setTimeout(async () => {
+      const timeDiff = Math.floor((Date.now() - this.timeStarted));
+      logTrackerEvent(this, 'LikeButtonFlow', 'liking', 'liking', timeDiff);
+    }, PENDING_LIKE_INTERVAL);
+  },
+  beforeDestroy() {
+    if (this.updateTimer) {
+      clearTimeout(this.updateTimer);
+      this.updateTimer = null;
+    }
+  },
   methods: {
     async postLike() {
       try {
-        await axios.post(
-          `${LIKECOIN_API}/api/like/${this.likee}`,
+        await apiPostLikeLink(
+          this.likee,
+          this.referrer,
           { reCaptchaResponse: this.reCaptchaResponse },
-          { headers: { 'Like-Referer': this.referrer } },
         );
       } catch (err) {
         if (err.response && err.response.status === 404) {
@@ -147,21 +165,6 @@ export default {
       this.$refs.invisibleRecaptcha.execute();
     },
   },
-  mounted() {
-    logTrackerEvent(this, 'LikeButtonFlow', 'startLIKE', 'startLIKE', 1);
-    this.timeStarted = Date.now();
-    if (this.updateTimer) clearTimeout(this.updateTimer);
-    this.updateTimer = setTimeout(async () => {
-      const timeDiff = Math.floor((Date.now() - this.timeStarted));
-      logTrackerEvent(this, 'LikeButtonFlow', 'liking', 'liking', timeDiff);
-    }, PENDING_LIKE_INTERVAL);
-  },
-  beforeDestroy() {
-    if (this.updateTimer) {
-      clearTimeout(this.updateTimer);
-      this.updateTimer = null;
-    }
-  },
 };
 </script>
 
@@ -174,9 +177,6 @@ export default {
       linear-gradient(260deg, #d2f0f0, #f0e6b4)
     );
   }
-}
-
-.like-form {
   &__info {
     > * {
       display: flex;
