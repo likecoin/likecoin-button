@@ -20,7 +20,7 @@
     >
       <a
         v-if="user.displayName"
-        :href="`https://${EXTERNAL_HOSTNAME}/${user.id}`"
+        :href="`https://${LIKE_CO_HOSTNAME}/${user.id}`"
         rel="noopener noreferrer"
         target="_blank"
       >
@@ -37,7 +37,7 @@
 
 
 <script>
-import { EXTERNAL_HOSTNAME } from '@/constant';
+import { LIKE_CO_HOSTNAME } from '@/constant';
 
 export default {
   name: 'user-avatar',
@@ -49,7 +49,7 @@ export default {
   },
   data() {
     return {
-      EXTERNAL_HOSTNAME,
+      LIKE_CO_HOSTNAME,
       style: {
         displayNamePlaceholder: {
           width: `${50 + Math.floor(Math.random() * 35)}%`,
