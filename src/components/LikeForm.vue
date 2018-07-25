@@ -7,9 +7,9 @@
       </div>
 
       <img
-        class="like-form__header__icon"
         :src="LikeCoinIcon"
-      />
+        class="like-form__header__icon"
+      >
 
       <div class="like-form__header__right">
         <slot name="header-right" />
@@ -17,34 +17,6 @@
     </header>
 
     <div class="like-form__content">
-
-      <div class="like-form__user">
-        <div class="like-form__user__avatar">
-          <a
-            v-if="avatar"
-            :href="`https://like.co/${likee}`"
-            place="user"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <img :src="avatar" />
-          </a>
-        </div>
-        <div class="like-form__user__detail">
-          <h2>{{ $t('LikeButton.label.thanksAppreciation') }}</h2>
-          <i18n
-            path="LikeButton.label.distributeLikeFromEcosystem"
-            tag="p"
-          >
-            <a
-              :href="`https://like.co/${likee}`"
-              place="user"
-              rel="noopener noreferrer"
-              target="_blank"
-            >{{ displayName }}</a>
-          </i18n>
-        </div>
-      </div>
 
       <slot />
 
@@ -54,7 +26,7 @@
 </template>
 
 <script>
-import LikeCoinIcon from '../assets/logo/icon.svg';
+import LikeCoinIcon from '../assets/logo/color-icon-label.svg';
 
 export default {
   name: 'like-form',
@@ -63,7 +35,6 @@ export default {
       LikeCoinIcon,
     };
   },
-  props: ['avatar', 'displayName', 'likee'],
 };
 </script>
 
@@ -112,64 +83,6 @@ $header-height: 48px;
     }
     @media (max-width: 600px) {
       padding: 80px 16px 24px;
-    }
-  }
-
-  &__user {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-
-    @media (max-width: 576px) {
-      flex-direction: column;
-
-      text-align: center;
-    }
-
-    &__avatar {
-      overflow: hidden;
-      flex-shrink: 0;
-
-      width: 80px;
-      height: 80px;
-      margin: 10px 0;
-
-      border-radius: 50%;
-      box-shadow: 0 0 1px #9b9b9b;
-
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-
-    &__detail {
-      margin-left: 20px;
-
-      color: #462405;
-
-      h2, p {
-        line-height: 27px;
-
-        -webkit-margin-before: 0;
-        -webkit-margin-after: 0;
-      }
-
-      h2 {
-        font-size: 22px;
-        font-weight: 300;
-      }
-
-      p {
-        margin-top: 4px;
-
-        font-size: 16px;
-        font-weight: 600;
-
-        a {
-          text-decoration: none;
-        }
-      }
     }
   }
 }
