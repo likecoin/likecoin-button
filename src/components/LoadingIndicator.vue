@@ -1,6 +1,9 @@
 <template>
-  <div :class="['loading-indicator', layout]" :style="style">
-    <div :key="n" v-for="n in NUM_DOTS" />
+  <div :class="['lc-loading-indicator', layout]">
+    <div
+      v-for="(n, index) in NUM_DOTS"
+      :key="index"
+    />
   </div>
 </template>
 
@@ -8,16 +11,7 @@
 <script>
 export default {
   name: 'loading-indicator',
-  data() {
-    return {
-      NUM_DOTS: 3,
-    };
-  },
   props: {
-    color: {
-      type: String,
-      default: '#28646e',
-    },
     layout: {
       type: String,
       validator(value) {
@@ -26,18 +20,19 @@ export default {
       default: 'fluid',
     },
   },
-  computed: {
-    style() {
-      return {
-        color: this.color,
-      };
-    },
+  data() {
+    return {
+      NUM_DOTS: 3,
+    };
   },
 };
 </script>
 
 
 <style lang="scss" scoped>
+@import "~assets/css/variables";
+
+
 @mixin medium-loading-indicator {
   width: 5px;
   margin: 3px;
@@ -48,13 +43,20 @@ export default {
   margin: 2px;
 }
 
-.loading-indicator {
+.lc-loading-indicator {
   display: flex;
+  align-items: center;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  color: $like-green;
 
   > div {
+    flex-shrink: 0;
+
     animation: wave 1.5s infinite ease-in-out;
 
     &:nth-child(1) {
@@ -63,16 +65,19 @@ export default {
     &:nth-child(2) {
       animation-delay: 0.15s;
     }
-    flex-shrink: 0;
 
     &::before {
-      content: " ";
       position: relative;
-      border-radius: 50%;
-      background: currentColor;
+
+      display: block;
+
       width: 100%;
       padding-top: 100%;
-      display: block;
+
+      content: " ";
+
+      border-radius: 50%;
+      background: currentColor;
     }
   }
 

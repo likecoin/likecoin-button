@@ -3,10 +3,11 @@
     <vue-recaptcha
       ref="invisibleRecaptcha"
       size="invisible"
+      sitekey="6Le9w10UAAAAANsMwDA5YuiwCudW8YKu2RGI8Hcl"
       @verify="onCaptchaVerify"
       @expired="onCaptchaExpired"
       @render="onCaptchaRender"
-      sitekey="6Le9w10UAAAAANsMwDA5YuiwCudW8YKu2RGI8Hcl" />
+    />
 
     <like-form
       :avatar="avatar"
@@ -115,6 +116,21 @@ export default {
       ],
     };
   },
+  mounted() {
+    logTrackerEvent(this, 'LikeButtonFlow', 'startLIKE', 'startLIKE', 1);
+    this.timeStarted = Date.now();
+    if (this.updateTimer) clearTimeout(this.updateTimer);
+    this.updateTimer = setTimeout(async () => {
+      const timeDiff = Math.floor((Date.now() - this.timeStarted));
+      logTrackerEvent(this, 'LikeButtonFlow', 'liking', 'liking', timeDiff);
+    }, PENDING_LIKE_INTERVAL);
+  },
+  beforeDestroy() {
+    if (this.updateTimer) {
+      clearTimeout(this.updateTimer);
+      this.updateTimer = null;
+    }
+  },
   methods: {
     async postLike() {
       try {
@@ -148,21 +164,6 @@ export default {
       this.$refs.invisibleRecaptcha.execute();
     },
   },
-  mounted() {
-    logTrackerEvent(this, 'LikeButtonFlow', 'startLIKE', 'startLIKE', 1);
-    this.timeStarted = Date.now();
-    if (this.updateTimer) clearTimeout(this.updateTimer);
-    this.updateTimer = setTimeout(async () => {
-      const timeDiff = Math.floor((Date.now() - this.timeStarted));
-      logTrackerEvent(this, 'LikeButtonFlow', 'liking', 'liking', timeDiff);
-    }, PENDING_LIKE_INTERVAL);
-  },
-  beforeDestroy() {
-    if (this.updateTimer) {
-      clearTimeout(this.updateTimer);
-      this.updateTimer = null;
-    }
-  },
 };
 </script>
 
@@ -175,9 +176,6 @@ export default {
       linear-gradient(260deg, #d2f0f0, #f0e6b4)
     );
   }
-}
-
-.like-form {
   &__info {
     > * {
       display: flex;

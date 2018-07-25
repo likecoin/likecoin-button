@@ -6,7 +6,7 @@
         :href="HOMEPAGE"
         class="error-link"
       >
-        {{ $t('LikeButton.label.backToHome')}}
+        {{ $t('LikeButton.label.backToHome') }}
       </a>
     </p>
   </div>
@@ -17,7 +17,12 @@ const HOMEPAGE = 'https://like.co';
 
 export default {
   name: 'nuxt-error',
-  props: ['error'],
+  props: {
+    error: {
+      type: String,
+      required: true,
+    },
+  },
   head() {
     return {
       title: this.message,
@@ -34,20 +39,6 @@ export default {
       HOMEPAGE,
     };
   },
-  mounted() {
-    console.error(this.error);
-    setTimeout(() => {
-      window.location.href = HOMEPAGE;
-    }, 3000);
-  },
-  watch: {
-    error(newErr) {
-      if (newErr) {
-        console.error(newErr);
-      }
-    },
-  },
-
   computed: {
     statusCode() {
       return (this.error && this.error.statusCode) || 500;
@@ -56,8 +47,18 @@ export default {
       return this.error.message || 'Error';
     },
   },
+  watch: {
+    error(newErr) {
+      if (newErr) {
+        console.error(newErr);
+      }
+    },
+  },
+  mounted() {
+    console.error(this.error);
+    setTimeout(() => {
+      window.location.href = HOMEPAGE;
+    }, 3000);
+  },
 };
 </script>
-
-<style>
-</style>

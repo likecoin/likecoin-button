@@ -1,6 +1,9 @@
 <template>
   <div class="done-page lc-container">
-    <div class="done-page__back-button" @click="$router.go(-1)">
+    <div
+      class="done-page__back-button"
+      @click="$router.go(-1)"
+    >
       <img :src="BackIcon">
       <span>
         {{ $t('general.back') }}

@@ -13,7 +13,9 @@
     "deploy": "npm run build && gcloud app deploy",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "lint": "npm run lint:es && npm run lint:style",
+    "lint:es": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "lint:style": "stylelint -i .gitignore '**/*.{scss,vue}'",
     "precommit": "npm run lint"
   },
   "dependencies": {
@@ -38,6 +40,10 @@
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-vue": "^4.0.0",
     "node-sass": "^4.9.0",
+    "stylelint": "^9.3.0",
+    "stylelint-config-recommended-scss": "^3.2.0",
+    "stylelint-order": "^0.8.1",
+    "stylelint-scss": "^3.1.3",
     "sass-loader": "^7.0.3"
   }
 }
