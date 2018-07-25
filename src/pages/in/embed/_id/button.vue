@@ -25,7 +25,11 @@
             class="likecoin-embed__badge__close-btn"
             @click="onClickCloseButton"
           >
-            <md-icon>close</md-icon>
+            <simple-svg
+              :filepath="CloseButtonIcon"
+              fill="currentColor"
+              stroke="transparent"
+            />
           </div>
 
           <div class="text-content">
@@ -348,10 +352,11 @@ $close-btn-width: 56;
         background-color: rgba(white, 0.7);
       }
 
-      :global(.md-icon) {
-        color: $like-green;
+      > div {
+        width: normalized(28);
+        height: normalized(28);
 
-        font-size: normalized(20) !important;
+        color: $like-green;
       }
     }
   }

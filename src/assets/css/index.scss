@@ -1,6 +1,10 @@
 // @import 'node_modules/vuetify/dist/vuetify.min.css'; // uncomment when vuetify is in use
 @import 'variables';
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
 
@@ -23,5 +27,15 @@ a {
 
   @media (min-width: 600px + 1px) {
     padding-top: 60px;
+  }
+}
+
+.simple-svg-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  > svg {
+    flex: 1;
   }
 }

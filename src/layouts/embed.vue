@@ -152,6 +152,14 @@ html[likecoin-embed] {
 
     border: none;
   }
+
+  button {
+    padding: 0;
+
+    border-color:transparent;
+    outline-style:none;
+    box-shadow:none;
+  }
 }
 
 #embed-superlike-button {
