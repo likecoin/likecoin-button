@@ -158,7 +158,9 @@
     <like-button
       :like-count="likeCount"
       :total-like="totalLike"
-      :is-super-like="shouldShowBackside"
+      :is-toggled="shouldShowBackside"
+      :is-super-like="isSuperLike"
+      @toggle="onToggleLikeButton"
       @like="onClickLike"
       @super-like="onClickSuperLike"
       @click-stats="onClickLikeStats"
@@ -261,15 +263,16 @@ export default {
       }
       debouncedOnClick(this);
     },
-    onClickSuperLike(e, isSuperLike) {
+    onToggleLikeButton(isSuperLike) {
+      this.shouldShowBackside = isSuperLike;
+    },
+    onClickSuperLike(e) {
       if (
-        isSuperLike &&
         this.shouldShowBackside &&
         this.$refs.superLikeButton
       ) {
         this.$refs.superLikeButton.click(e);
       }
-      this.shouldShowBackside = isSuperLike;
     },
     onClickLikeStats() {
       const { id } = this.$route.params;
