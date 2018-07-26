@@ -158,7 +158,8 @@
     <like-button
       :like-count="likeCount"
       :total-like="totalLike"
-      :is-super-like="shouldShowBackside"
+      :is-toggled="shouldShowBackside"
+      :is-super-like="isSuperLike"
       @toggle="onToggleLikeButton"
       @like="onClickLike"
       @super-like="onClickSuperLike"

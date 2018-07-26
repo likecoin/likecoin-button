@@ -24,7 +24,7 @@
             class="like-button-knob"
             @mousedown="onPressKnob"
             @touchstart="onPressKnob"
-            @click="onClickKnob"
+            @mouseup="onClickKnob"
           >
             <transition
               v-for="i in 12"
@@ -88,9 +88,12 @@
 </template>
 
 <script>
+import _debounce from 'lodash.debounce';
+
 import ClapEffectIcon from '~/assets/like-button/clap-effect.svg';
 import LikeClapIcon from '~/assets/like-button/like-clap.svg';
 import LikeTextIcon from '~/assets/like-button/like-text.svg';
+
 
 export default {
   name: 'like-button',
@@ -102,6 +105,10 @@ export default {
     totalLike: {
       type: Number,
       default: 0,
+    },
+    isToggled: {
+      type: [Boolean, String],
+      default: false,
     },
     isSuperLike: {
       type: [Boolean, String],
@@ -121,10 +128,9 @@ export default {
       lastClientX: 0,
       clientX: 0,
       clampedClientX: 0,
-      knobProgress: this.isSuperLike ? 1 : 0,
+      knobProgress: this.isToggled ? 1 : 0,
 
       bubbleTimer: null,
-      movedKnobTimer: null,
     };
   },
   computed: {
@@ -142,8 +148,13 @@ export default {
     },
   },
   watch: {
-    isSuperLike(isSuperLike) {
-      this.knobProgress = isSuperLike ? 1 : 0;
+    isToggled(value) {
+      this.knobProgress = value ? 1 : 0;
+    },
+    knobProgress(value) {
+      if (value > 0 && value < 1) {
+        this.debouncedSnapKnobProgress();
+      }
     },
   },
   mounted() {
@@ -151,29 +162,35 @@ export default {
     document.addEventListener('touchmove', this.onMovingKnob);
     document.addEventListener('mouseup', this.onReleaseKnob);
     document.addEventListener('touchend', this.onReleaseKnob);
-    document.addEventListener('click', this.onReleaseKnob);
   },
   beforeDestroy() {
     document.removeEventListener('mousemove', this.onMovingKnob);
     document.removeEventListener('touchmove', this.onMovingKnob);
     document.removeEventListener('mouseup', this.onReleaseKnob);
     document.removeEventListener('touchend', this.onReleaseKnob);
-    document.removeEventListener('click', this.onReleaseKnob);
 
     if (this.bubbleTimer) {
       clearTimeout(this.bubbleTimer);
       this.bubbleTimer = null;
     }
-    if (this.movedKnobTimer) {
-      clearTimeout(this.movedKnobTimer);
-      this.movedKnobTimer = null;
-    }
   },
   methods: {
+    snapKnobProgress() {
+      if (!this.isPressingKnob) {
+        this.knobProgress = this.knobProgress > 0.5 ? 1 : 0;
+      }
+    },
+    debouncedSnapKnobProgress: _debounce(
+      // eslint-disable-next-line func-names
+      function () { this.snapKnobProgress(); },
+      50,
+    ),
     setClientX(e) {
       this.clientX = e.targetTouches ? e.targetTouches[0].clientX : e.clientX;
     },
     updateKnobProgressByEvent(e) {
+      this.lastMoveKnobTimeStamp = e.timeStamp;
+
       this.setClientX(e);
       const diff = this.clientX - this.lastClientX;
       this.lastClientX = this.clientX;
@@ -182,16 +199,16 @@ export default {
       this.clampedClientX = Math.min(Math.max(this.clampedClientX + diff, 0), slidableWidth);
       this.knobProgress = this.clampedClientX / slidableWidth;
 
-      if (!this.hasMovedKnob && Math.abs(diff) / slidableWidth > 0.1) {
+      if (!this.hasMovedKnob && Math.abs(diff) > 0) {
         this.hasMovedKnob = true;
       }
     },
     onClickKnob(e) {
       if (this.hasMovedKnob) return;
 
-      if (this.isLocalSuperLike) {
+      if (this.knobProgress === 1) {
         this.$emit('super-like', e, true);
-      } else {
+      } else if (this.knobProgress === 0) {
         this.isShowBubble = true;
         this.bubbleTimer = setTimeout(() => {
           this.isShowBubble = false;
@@ -202,7 +219,11 @@ export default {
           this.isShowClapEffect = false;
         });
 
-        this.$emit('like', e);
+        if (this.isSuperLike) {
+          this.knobProgress = 1;
+        } else {
+          this.$emit('like', e);
+        }
       }
     },
     onMovingKnob(e) {
@@ -211,7 +232,7 @@ export default {
       if (requestAnimationFrame) {
         requestAnimationFrame(() => this.updateKnobProgressByEvent(e));
       } else if (!this.hasMovedKnob) {
-        this.knobProgress = this.isLocalSuperLike ? 0 : 1;
+        this.knobProgress = this.knobProgress > 0.5 ? 0 : 1;
         this.hasMovedKnob = true;
       }
     },
@@ -219,17 +240,15 @@ export default {
       this.setClientX(e);
       this.lastClientX = this.clientX;
       this.isPressingKnob = true;
+      this.hasMovedKnob = false;
     },
     onReleaseKnob() {
-      if (this.isPressingKnob) {
-        this.isPressingKnob = false;
-        this.knobProgress = this.isLocalSuperLike ? 1 : 0;
-        this.$emit('toggle', this.isLocalSuperLike);
-      }
+      if (!this.isPressingKnob) return;
 
-      this.movedKnobTimer = setTimeout(() => {
-        this.hasMovedKnob = false;
-      }, 6);
+      this.isPressingKnob = false;
+      this.snapKnobProgress();
+      this.$emit('toggle', this.isLocalSuperLike);
+      this.hasMovedKnob = false;
     },
   },
 };
