@@ -13,7 +13,16 @@
 
       <div class="like-button-wrapper">
 
-        <div class="like-button-slide-track" />
+        <no-ssr>
+          <div
+            :class="[
+              'like-button-slide-track',
+              {
+                'like-button-slide-track--disabled': !isKnobMovable,
+              },
+            ]"
+          />
+        </no-ssr>
 
         <div
           ref="knobWrapper"
@@ -24,8 +33,8 @@
             :style="{ marginLeft: `${knobProgress * 100}%` }"
             class="like-button-knob"
             @mousedown="onPressKnob"
-            @touchstart="onPressKnob"
-            @mouseup="onClickKnob"
+            @mouseup="onPressedKnob"
+            @click="onClickKnob"
           >
             <transition
               v-for="i in 12"
@@ -91,6 +100,8 @@
 <script>
 import _debounce from 'lodash.debounce';
 
+import { checkIsMobileClient } from '~/util/client';
+
 import ClapEffectIcon from '~/assets/like-button/clap-effect.svg';
 import LikeClapIcon from '~/assets/like-button/like-clap.svg';
 import LikeTextIcon from '~/assets/like-button/like-text.svg';
@@ -147,10 +158,13 @@ export default {
     isLocalSuperLike() {
       return this.knobProgress === 1;
     },
+    isKnobMovable() {
+      return !checkIsMobileClient();
+    },
   },
   watch: {
     isToggled(value) {
-      this.knobProgress = value ? 1 : 0;
+      this.knobProgress = value && this.isKnobMovable ? 1 : 0;
     },
     knobProgress(value) {
       if (value > 0 && value < 1) {
@@ -159,16 +173,16 @@ export default {
     },
   },
   mounted() {
-    document.addEventListener('mousemove', this.onMovingKnob);
-    document.addEventListener('touchmove', this.onMovingKnob);
-    document.addEventListener('mouseup', this.onReleaseKnob);
-    document.addEventListener('touchend', this.onReleaseKnob);
+    if (this.isKnobMovable) {
+      document.addEventListener('mousemove', this.onMovingKnob);
+      document.addEventListener('mouseup', this.onReleaseKnob);
+    }
   },
   beforeDestroy() {
-    document.removeEventListener('mousemove', this.onMovingKnob);
-    document.removeEventListener('touchmove', this.onMovingKnob);
-    document.removeEventListener('mouseup', this.onReleaseKnob);
-    document.removeEventListener('touchend', this.onReleaseKnob);
+    if (this.isKnobMovable) {
+      document.removeEventListener('mousemove', this.onMovingKnob);
+      document.removeEventListener('mouseup', this.onReleaseKnob);
+    }
 
     if (this.bubbleTimer) {
       clearTimeout(this.bubbleTimer);
@@ -178,7 +192,7 @@ export default {
   methods: {
     snapKnobProgress() {
       if (!this.isPressingKnob) {
-        this.knobProgress = this.knobProgress > 0.5 ? 1 : 0;
+        this.knobProgress = this.isKnobMovable && this.knobProgress > 0.5 ? 1 : 0;
       }
     },
     debouncedSnapKnobProgress: _debounce(
@@ -205,6 +219,11 @@ export default {
       }
     },
     onClickKnob(e) {
+      if (!this.isKnobMovable) {
+        this.onPressedKnob(e);
+      }
+    },
+    onPressedKnob(e) {
       if (this.hasMovedKnob) return;
 
       if (this.knobProgress === 1) {
@@ -221,7 +240,9 @@ export default {
         });
 
         if (this.isSuperLike) {
-          this.knobProgress = 1;
+          if (this.isKnobMovable) {
+            this.knobProgress = 1;
+          }
         } else {
           this.$emit('like', e);
         }
@@ -269,6 +290,9 @@ $like-button-like-count-size: 24;
   &-wrapper {
     position: relative;
 
+    display: flex;
+    align-items: flex-start;
+
     width: normalized($like-button-size);
     height: normalized($like-button-size);
 
@@ -279,8 +303,18 @@ $like-button-like-count-size: 24;
   &-slide-track {
     position: relative;
 
+    flex-shrink: 0;
+
     width: normalized($like-button-slide-track-width);
     padding: normalized(($like-button-size - $like-button-slide-track-height) / 2) normalized(8);
+
+    &--disabled {
+      width: normalized($like-button-size + 8);
+
+      &::before {
+        display: none;
+      }
+    }
 
     &::before {
       display: block;
@@ -502,10 +536,7 @@ $like-button-like-count-size: 24;
   }
 
   &-stats {
-    position: absolute;
-    top: calc(50% - #{normalized(13)});
-    left: normalized($like-button-slide-track-width);
-
+    margin-top: calc(50% - #{normalized(13)});
     margin-left: normalized(12);
 
     cursor: pointer;
