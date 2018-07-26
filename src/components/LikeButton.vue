@@ -34,7 +34,6 @@
             class="like-button-knob"
             @mousedown="onPressKnob"
             @mouseup="onPressedKnob"
-            @click="onClickKnob"
           >
             <transition
               v-for="i in 12"
@@ -218,11 +217,6 @@ export default {
         this.hasMovedKnob = true;
       }
     },
-    onClickKnob(e) {
-      if (!this.isKnobMovable) {
-        this.onPressedKnob(e);
-      }
-    },
     onPressedKnob(e) {
       if (this.hasMovedKnob) return;
 
@@ -259,6 +253,8 @@ export default {
       }
     },
     onPressKnob(e) {
+      if (!this.isKnobMovable) return;
+
       this.setClientX(e);
       this.lastClientX = this.clientX;
       this.isPressingKnob = true;
