@@ -220,11 +220,11 @@ export default {
       this.lastClientX = this.clientX;
       this.isPressingKnob = true;
     },
-    onReleaseKnob(e) {
+    onReleaseKnob() {
       if (this.isPressingKnob) {
         this.isPressingKnob = false;
-        this.knobProgress = this.knobProgress > 0.5 ? 1 : 0;
-        this.$emit('super-like', e, this.isLocalSuperLike);
+        this.knobProgress = this.isLocalSuperLike ? 1 : 0;
+        this.$emit('toggle', this.isLocalSuperLike);
       }
 
       this.movedKnobTimer = setTimeout(() => {
