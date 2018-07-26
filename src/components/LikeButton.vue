@@ -3,6 +3,7 @@
     :class="[
       'like-button',
       {
+        'like-button--liked': likeCount > 0,
         'like-button--super-like': isLocalSuperLike,
         'like-button--pressed': isPressingKnob,
       },
@@ -290,6 +291,26 @@ $like-button-like-count-size: 24;
 
       border-radius: normalized($like-button-slide-track-height);
       background-color: #E6E6E6;
+
+      .like-button--liked:not(.like-button--super-like) & {
+        @keyframes sliding-animation {
+          0% { background-position-x: 100%; }
+          100% { background-position-x: -100%; }
+        }
+
+        animation: {
+          name: sliding-animation;
+          duration: 0.8s;
+          timing-function: linear;
+          iteration-count: infinite;
+          fill-mode: forwards;
+        };
+
+        background: {
+          image: linear-gradient(to right, #E6E6E6, $like-green);
+          size: 200%;
+        }
+      }
     }
   }
 
@@ -327,6 +348,7 @@ $like-button-like-count-size: 24;
       color: $like-green;
     }
     .like-button--pressed &,
+    .like-button--liked &,
     .like-button--super-like & {
       color: white !important;
     }
@@ -355,6 +377,7 @@ $like-button-like-count-size: 24;
       .like-button-knob:hover & {
         box-shadow: normalized(2) normalized(4) normalized(6) 0 rgba(0, 0, 0, 0.25);
       }
+      .like-button--liked &,
       .like-button--super-like & {
         transform: scale(1.02);
       }
@@ -363,6 +386,7 @@ $like-button-like-count-size: 24;
         transform: scale(1.05);
       }
       .like-button--pressed &,
+      .like-button--liked &,
       .like-button--super-like & {
         background: linear-gradient(47deg, #d2f0f0, #f0e6b4);
         box-shadow: 0 normalized(2) normalized(6) 0 rgba(0, 0, 0, 0.25);
@@ -382,6 +406,7 @@ $like-button-like-count-size: 24;
       background-color: white;
 
       .like-button--pressed &,
+      .like-button--liked &,
       .like-button--super-like & {
         background-color: $like-green;
       }
