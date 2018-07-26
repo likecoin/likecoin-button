@@ -99,6 +99,10 @@ $placeholder-gradient: linear-gradient(to right, #eee 8%, #ddd 24%, #eee 32%);
 
   a {
     max-width: calc(100% - #{$user-avatar-image-size});
+
+    &:not(:hover) {
+      text-decoration: none;
+    }
   }
 
   span {

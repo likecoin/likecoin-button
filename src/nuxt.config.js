@@ -119,6 +119,11 @@ module.exports = {
         path: '/in/embed/:id/button/:amount?',
         component: resolve(__dirname, 'pages/in/embed/_id/button.vue'),
       });
+      routes.push({
+        name: 'id-done',
+        path: '/:id/done',
+        component: resolve(__dirname, 'pages/_id/index.vue'),
+      });
     },
   },
   modules: [

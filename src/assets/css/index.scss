@@ -27,6 +27,7 @@ a {
 
   @media (min-width: 600px + 1px) {
     padding-top: 60px;
+    padding-bottom: 48px;
   }
 }
 
@@ -37,5 +38,35 @@ a {
 
   > svg {
     flex: 1;
+  }
+}
+
+/* Transition */
+
+.lc-transition {
+  &-default {
+    &-enter-active {
+      transition: max-height 1.2s ease-in-out,
+                  opacity 1.2s ease-out;
+    }
+
+    &-leave-active {
+      transition: max-height .8s ease-in-out,
+                  opacity .8s ease-in;
+    }
+
+    &-enter-active,
+    &-leave {
+      max-height: 100vh;
+
+      opacity: 1;
+    }
+
+    &-enter,
+    &-leave-to {
+      max-height: 0;
+
+      opacity: 0;
+    }
   }
 }

@@ -1,19 +1,18 @@
 <template>
-  <div class="lc-container-1 likee-list-page">
-    <div class="lc-container-2">
+  <div class="likee-list-page">
+    <div class="lc-container">
       <like-form>
         <template slot="header-right">
           <a
-            class="lc-underline"
             href="https://like.co/"
             rel="noopener noreferrer"
             target="_blank"
           >
-            About LikeCoin
+            {{ $t('LikeButton.button.aboutLikeCoin') }}
           </a>
         </template>
 
-        <span class="lc-color-like-dark-brown-2 lc-font-size-20">
+        <span class="likee-list-page__content">
           {{ $t('Embed.label.numLikesForArticle', {
             numOfLikees: likees.length,
             numOfLikes,
@@ -22,7 +21,7 @@
         </span>
 
         <div
-          :class="['likee-list', 'lc-margin-top-8', { expand: isShowAll }]"
+          :class="['likee-list-page__list', { expand: isShowAll }]"
           :style="{ maxHeight: `${Math.ceil(likees.length / 2) * 74}px` }"
         >
 
@@ -41,15 +40,14 @@
         </div>
 
         <div
-          class="lc-margin-top-12 lc-text-align-center"
+          class="likee-list-page__show-more-btn-wrapper"
         >
-          <md-button
+          <button
             v-if="!isShowAll"
-            class="lc-color-like-green lc-underline"
             @click="isShowAll = true"
           >
             {{ $t('Embed.button.showMore') }}
-          </md-button>
+          </button>
         </div>
       </like-form>
     </div>
@@ -141,6 +139,7 @@ export default {
 @import "~assets/css/mixin";
 
 $user-avatar-image-size: 48px;
+
 .likee-list-page {
   .user-avatar {
     min-height: 72px;
@@ -149,36 +148,75 @@ $user-avatar-image-size: 48px;
 
     border-bottom: 1px solid #e6e6e6;
   }
-}
 
-.likee-list {
-  position: relative;
+  &__content {
+    color: $like-dark-brown-2;
 
-  display: flex;
-  overflow: hidden;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-
-  transition: max-height 0.25s ease-in-out;
-
-  &:not(.expand) {
-    max-height: 272px !important;
+    font-size: 20px;
+    font-weight: 300;
   }
 
-  > * {
-    width: calc(50% - 16px);
+  &__list {
+    position: relative;
+
+    display: flex;
+    overflow: hidden;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    margin-top: 8px;
+
+    transition: max-height 0.25s ease-in-out;
+
+    &:not(.expand) {
+      max-height: 272px !important;
+    }
+
+    > * {
+      width: calc(50% - 16px);
+    }
+
+    .overflow-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+
+      width: 100%;
+      height: calc(100% - 226px);
+
+      background-image: linear-gradient(to bottom, rgba(247, 247, 247, 0), $like-gray-1);
+    }
   }
 
-  .overflow-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
+  &__show-more-btn-wrapper {
+    margin-top: 12px;
 
-    width: 100%;
-    height: calc(100% - 226px);
+    text-align: center;
 
-    background-image: linear-gradient(to bottom, rgba(247, 247, 247, 0), $like-gray-1);
+    button {
+      padding: 8px 10px;
+
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+      text-decoration: underline;
+
+      color: $like-green;
+      border: none;
+      border-radius: 2px;
+      outline:none;
+      background-color: transparent;
+
+      font-size: 14px;
+
+      &:hover {
+        background-color: $like-gray-3;
+      }
+
+      &:active {
+        background-color: $gray-9b;
+      }
+    }
   }
 }
 </style>
