@@ -1,11 +1,15 @@
 const functions = require('firebase-functions');
 const { Nuxt } = require('nuxt-edge');
 
-const nuxtConfig = require('./nuxt.config.js');
-
 if ((functions.config().likeco || {}).testmode) {
   process.env.IS_TESTNET = true;
 }
+
+if ((functions.config().sentry || {}).report_uri) {
+  process.env.SENTRY_REPORT_URI = functions.config().sentry.report_uri;
+}
+
+const nuxtConfig = require('./nuxt.config.js');
 
 const config = {
   ...nuxtConfig,
@@ -16,6 +20,6 @@ const config = {
 const nuxt = new Nuxt(config);
 
 module.exports = functions.https.onRequest((req, res) => {
-  res.set('Cache-Control', 'public, max-age=60, s-maxage=60, stale-if-error=60');
+  res.set('Cache-Control', 'public, max-age=600, s-maxage=600, stale-if-error=600');
   return nuxt.render(req, res);
 });
