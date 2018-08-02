@@ -27,3 +27,5 @@ export const apiPostLikeButton =
     {},
     { params: { referrer } },
   );
+
+export const apiQueryCoinGeckoInfo = () => axios.get('https://api.coingecko.com/api/v3/coins/likecoin?localization=false', { withCredentials: false });
