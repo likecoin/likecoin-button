@@ -1,5 +1,5 @@
 const functions = require('firebase-functions');
-const { Nuxt } = require('nuxt-edge');
+const { Nuxt } = require('nuxt');
 
 if ((functions.config().likeco || {}).testmode) {
   process.env.IS_TESTNET = true;
