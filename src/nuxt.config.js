@@ -58,6 +58,7 @@ module.exports = {
           'https://recaptcha.net',
           'https://www.recaptcha.net',
           'https://www.gstatic.com/',
+          'https://www.gstatic.cn/',
           'https://cdn.mouseflow.com',
           'https://ajax.googleapis.com',
           'https://js.intercomcdn.com',

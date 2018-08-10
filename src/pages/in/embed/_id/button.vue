@@ -281,7 +281,7 @@ export default {
       const { id } = this.$route.params;
       const { referrer } = this.$route.query;
       window.open(
-        `/in/embed/${id}/list${referrer ? `?referrer=${referrer}` : ''}`,
+        `/in/embed/${id}/list${referrer ? `?referrer=${encodeURIComponent(referrer)}` : ''}`,
         '_blank',
         'menubar=no,location=no,width=576,height=768',
       );
