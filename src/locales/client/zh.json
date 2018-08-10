@@ -33,11 +33,18 @@
       "providedBy": "by LikeCoin 化讚為賞回饋創作",
       "subtitle": "喜歡這篇文章",
       "title": "化讚為賞 回饋創作",
-      "createMyWidget": "Create my LikeWidget",
-      "createMyButton": "Create my LikeButton"
+      "createMyWidget": "創建我的 LikeWidget",
+      "createMyButton": "創建我的 LikeButton",
+      "clickLikeButton": "點擊全新的 LikeButton ",
+      "rewardUserWithLikeToken": "以 LIKE 代幣讚賞 {user}",
+      "supportUser": "支持 {user}",
+      "loginAdvice": "{login} 你讚好的作者能獲得更多 LikeCoin",
+      "numLikesForArticle": "從 {numOfLikees} 人獲得 {numOfLikes} Like"
     },
     "button": {
-      "sendLike": "賞"
+      "login": "登入 LikeCoin ID",
+      "sendLike": "賞",
+      "showMore": "顯示更多"
     }
   }
 }
