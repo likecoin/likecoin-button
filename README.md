@@ -1,5 +1,7 @@
 # likecoin-button
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/likecoin/likecoin-button.svg)](https://greenkeeper.io/)
+
 > Link based LikeButton on firebase functions + hosting
 
 ## Folder structure
