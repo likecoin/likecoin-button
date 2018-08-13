@@ -1,5 +1,5 @@
 # likecoin-button
-
+[![CircleCI](https://circleci.com/gh/likecoin/likecoin-button.svg?style=svg)](https://circleci.com/gh/likecoin/likecoin-button)
 [![Greenkeeper badge](https://badges.greenkeeper.io/likecoin/likecoin-button.svg)](https://greenkeeper.io/)
 
 > Link based LikeButton on firebase functions + hosting
