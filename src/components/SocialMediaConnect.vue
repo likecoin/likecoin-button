@@ -130,9 +130,9 @@ export default {
         .filter(({ id, tier }) => {
           const isConnected = this.getIsConnected(id);
           return (
-            (this.type === TYPE.READONLY && isConnected) ||
-            (this.type === TYPE.MINI && (isConnected || tier === 1)) ||
-            this.type === TYPE.LARGE
+            (this.type === TYPE.READONLY && isConnected)
+            || (this.type === TYPE.MINI && (isConnected || tier === 1))
+            || this.type === TYPE.LARGE
           );
         })
         .slice(0, this.limit);
