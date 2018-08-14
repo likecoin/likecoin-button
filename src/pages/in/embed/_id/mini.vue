@@ -2,9 +2,8 @@
   <like-button
     :like-count="likeCount"
     :total-like="totalLike"
-    :is-super-like="shouldShowBackside"
+    :is-super-like="isSuperLike"
     @like="onClickLike"
-    @super-like="onClickSuperLike"
     @click-stats="onClickLikeStats"
   />
 </template>
@@ -43,7 +42,6 @@ export default {
       likeCount: 0,
       likeSent: 0,
       totalLike: 0,
-      shouldShowBackside: false,
     };
   },
   computed: {
@@ -75,28 +73,16 @@ export default {
       }
     },
     onClickLike() {
-      if (this.isSuperLike) {
-        this.shouldShowBackside = true;
-      } else {
+      if (!this.isSuperLike) {
         this.likeCount += 1;
       }
       debouncedOnClick(this);
-    },
-    onClickSuperLike(e, isSuperLike) {
-      if (
-        isSuperLike &&
-        this.shouldShowBackside &&
-        this.$refs.superLikeButton
-      ) {
-        this.$refs.superLikeButton.click(e);
-      }
-      this.shouldShowBackside = isSuperLike;
     },
     onClickLikeStats() {
       const { id } = this.$route.params;
       const { referrer } = this.$route.query;
       window.open(
-        `/in/embed/${id}/list${referrer ? `?referrer=${referrer}` : ''}`,
+        `/in/embed/${id}/list${referrer ? `?referrer=${encodeURIComponent(referrer)}` : ''}`,
         '_blank',
         'menubar=no,location=no,width=576,height=768',
       );
