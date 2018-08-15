@@ -1,6 +1,9 @@
 {
   "name": "functions",
   "description": "Cloud Functions for Firebase",
+  "engines": {
+    "node": "8"
+  },
   "scripts": {
     "lint": "./node_modules/.bin/eslint *.js",
     "clean": "rimraf 'dist/functions'",
@@ -22,7 +25,7 @@
     "firebase-functions": "^2.0.4",
     "lodash": "^4.17.10",
     "lodash.debounce": "^4.0.8",
-    "nuxt-edge": "^2.0.0-25468832.6578bd7",
+    "nuxt": "^1.4.2",
     "vue": "^2.5.16",
     "vue-i18n": "^8.0.0",
     "vue-meta": "^1.5.0",
