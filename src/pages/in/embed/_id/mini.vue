@@ -59,10 +59,7 @@ export default {
     this.updateUser();
   },
   beforeDestroy() {
-    if (this.untoggleTimer) {
-      clearTimeout(this.untoggleTimer);
-      this.untoggleTimer = null;
-    }
+    this.clearUntoggleTimer();
   },
   methods: {
     async updateUser() {
@@ -81,6 +78,12 @@ export default {
         console.error(err); // eslint-disable-line no-console
       }
     },
+    clearUntoggleTimer() {
+      if (this.untoggleTimer) {
+        clearTimeout(this.untoggleTimer);
+        this.untoggleTimer = null;
+      }
+    },
     toggleLikeButton() {
       // interactions when toggled like button or super like
       this.isToggled = true;
@@ -88,6 +91,7 @@ export default {
       this.untoggleLikeButton();
     },
     untoggleLikeButton() {
+      this.clearUntoggleTimer();
       this.untoggleTimer = setTimeout(() => {
         this.isToggled = false;
       }, 300);
