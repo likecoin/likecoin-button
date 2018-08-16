@@ -90,3 +90,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.like-button {
+  padding: 60px 32px 32px;
+}
+</style>
