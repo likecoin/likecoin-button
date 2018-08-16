@@ -3,8 +3,10 @@
     :like-count="likeCount"
     :total-like="totalLike"
     :is-super-like="isSuperLike"
+    :is-toggled="isToggled"
     @like="onClickLike"
     @click-stats="onClickLikeStats"
+    @toggle="onToggle"
   />
 </template>
 
@@ -39,6 +41,7 @@ export default {
   data() {
     return {
       isLoggedIn: false,
+      isToggled: false,
       likeCount: 0,
       likeSent: 0,
       totalLike: 0,
@@ -54,6 +57,12 @@ export default {
   },
   mounted() {
     this.updateUser();
+  },
+  beforeDestroy() {
+    if (this.untoggleTimer) {
+      clearTimeout(this.untoggleTimer);
+      this.untoggleTimer = null;
+    }
   },
   methods: {
     async updateUser() {
@@ -72,9 +81,22 @@ export default {
         console.error(err); // eslint-disable-line no-console
       }
     },
+    toggleLikeButton() {
+      // interactions when toggled like button or super like
+      this.isToggled = true;
+      this.onClickLikeStats();
+      this.untoggleLikeButton();
+    },
+    untoggleLikeButton() {
+      this.untoggleTimer = setTimeout(() => {
+        this.isToggled = false;
+      }, 300);
+    },
     onClickLike() {
       if (!this.isSuperLike) {
         this.likeCount += 1;
+      } else {
+        this.toggleLikeButton();
       }
       debouncedOnClick(this);
     },
@@ -86,6 +108,11 @@ export default {
         '_blank',
         'menubar=no,location=no,width=576,height=768',
       );
+    },
+    onToggle(isToggled) {
+      if (isToggled) {
+        this.toggleLikeButton();
+      }
     },
   },
 };
