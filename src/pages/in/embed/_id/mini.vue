@@ -20,6 +20,8 @@ import {
 import mixin from '~/components/embed/mixin';
 import LikeButton from '~/components/LikeButton';
 
+import { LIKECOIN_MISC_API_BASE } from '~/constant/index';
+
 const debounce = require('lodash.debounce');
 
 const debouncedOnClick = debounce((that) => {
@@ -30,7 +32,8 @@ const debouncedOnClick = debounce((that) => {
   that.totalLike += count;
   /* eslint-enable no-param-reassign */
 }, 500);
-const LIKE_STATS_WINDOW_NAME = 'LIKER_LIST_STATS';
+const LIKE_STATS_WINDOW_NAME = 'LIKER_LIST_STATS_WINDOW';
+const SUPER_LIKE_WINDOW_NAME = 'SUPER_LIKE_WINDOW';
 
 export default {
   name: 'embed-id-mini',
@@ -88,7 +91,11 @@ export default {
     toggleLikeButton() {
       // interactions when toggled like button or super like
       this.isToggled = true;
-      this.onClickLikeStats();
+      window.open(
+        `${LIKECOIN_MISC_API_BASE}/${this.id}/${this.amount}`,
+        SUPER_LIKE_WINDOW_NAME,
+        'menubar=no,location=no,width=415,height=768',
+      );
       this.untoggleLikeButton();
     },
     untoggleLikeButton() {
