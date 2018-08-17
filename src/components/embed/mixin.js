@@ -17,12 +17,10 @@ export default {
     SocialMediaConnect,
   },
   asyncData({
-    route,
     params,
     error,
   }) {
-    const isButton = /in-embed-id-button(-amount)?/.test(route.name);
-    let amount = isButton ? 0.25 : 8;
+    let amount;
     try {
       const parse = parseInt(params.amount, 10);
       if (parse && !Number.isNaN(parse)) amount = parse;
@@ -34,7 +32,7 @@ export default {
     return Promise.all([
       apiGetUserMinById(id),
       apiGetSocialListById(id).catch(() => {}),
-      isButton && apiQueryCoinGeckoInfo()
+      !amount && apiQueryCoinGeckoInfo()
         .then(res => res.data.market_data.current_price.usd)
         .catch(() => 0.0082625),
     ]).then((res) => {
@@ -44,8 +42,8 @@ export default {
       } = res[0].data;
 
       let amountInUSD;
-      if (isButton) {
-        amountInUSD = amount;
+      if (!amount) {
+        amountInUSD = 0.25;
         const USD_TO_LIKE = res[2];
         amount = (amountInUSD / USD_TO_LIKE).toFixed(2);
       }
