@@ -30,6 +30,7 @@ const debouncedOnClick = debounce((that) => {
   that.totalLike += count;
   /* eslint-enable no-param-reassign */
 }, 500);
+const LIKE_STATS_WINDOW_NAME = 'LIKER_LIST_STATS';
 
 export default {
   name: 'embed-id-mini',
@@ -109,7 +110,7 @@ export default {
       const { referrer } = this.$route.query;
       window.open(
         `/in/embed/${id}/list${referrer ? `?referrer=${encodeURIComponent(referrer)}` : ''}`,
-        '_blank',
+        LIKE_STATS_WINDOW_NAME,
         'menubar=no,location=no,width=576,height=768',
       );
     },
