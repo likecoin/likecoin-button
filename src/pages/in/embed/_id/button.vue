@@ -190,6 +190,7 @@ import {
 } from '@/util/api/api';
 
 import { LIKE_CO_HOSTNAME } from '@/constant';
+import { checkIsMobileClient } from '~/util/client';
 
 import CloseButtonIcon from '~/assets/like-button/close-btn.svg';
 import QuestionButtonIcon from '~/assets/like-button/question-btn.svg';
@@ -237,6 +238,9 @@ export default {
     isSuperLike() {
       return (this.likeCount >= 5);
     },
+    isMobile() {
+      return checkIsMobileClient();
+    },
   },
   mounted() {
     this.updateUser();
@@ -259,7 +263,7 @@ export default {
       }
     },
     onClickLike() {
-      if (!this.isLoggedIn) {
+      if (!this.isLoggedIn && !this.isMobile) {
         this.isLoginTooltipOpen = true;
       }
       if (this.isSuperLike) {
