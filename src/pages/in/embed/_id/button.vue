@@ -259,6 +259,9 @@ export default {
       }
     },
     onClickLike() {
+      if (!this.isLoggedIn) {
+        this.isLoginTooltipOpen = true;
+      }
       if (this.isSuperLike) {
         this.shouldShowBackside = true;
       } else {
