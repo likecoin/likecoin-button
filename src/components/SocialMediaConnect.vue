@@ -152,7 +152,6 @@ export default {
           this,
           this.platforms[socialMedia.id].url,
           '_blank',
-          'noopener',
         );
       }
     },
