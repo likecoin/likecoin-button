@@ -1,4 +1,7 @@
-import { LIKE_CO_HOSTNAME } from '@/constant';
+import {
+  LIKE_CO_HOSTNAME,
+  MEDIUM_REGEX,
+} from '@/constant';
 
 import EmbedCreateWidgetButton from '~/components/embed/EmbedCreateWidgetButton';
 import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
@@ -19,6 +22,7 @@ export default {
   asyncData({
     params,
     error,
+    query,
   }) {
     let amount;
     try {
@@ -29,9 +33,15 @@ export default {
     }
 
     const { id } = params;
+    let { type = '' } = query;
+    const { referrer = '' } = query;
+    if (!type && referrer.match(MEDIUM_REGEX)) {
+      type = 'medium';
+    }
+
     return Promise.all([
       apiGetUserMinById(id),
-      apiGetSocialListById(id).catch(() => {}),
+      apiGetSocialListById(id, type).catch(() => {}),
       !amount && apiQueryCoinGeckoInfo()
         .then(res => res.data.market_data.current_price.usd)
         .catch(() => 0.0082625),
@@ -57,7 +67,7 @@ export default {
         platforms: res[1].data,
       };
     }).catch((err) => {
-      console.error(err);
+      console.error(err); // eslint-disable-line no-console
       error({ statusCode: 404, message: '' });
     });
   },
