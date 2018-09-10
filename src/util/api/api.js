@@ -3,7 +3,7 @@ import { LIKECOIN_API, LIKECOIN_MISC_API_BASE } from '@/constant';
 
 export const apiGetUserMinById = id => axios.get(`${LIKECOIN_API}/api/users/id/${id}/min`);
 
-export const apiGetSocialListById = id => axios.get(`${LIKECOIN_API}/api/social/list/${id}`);
+export const apiGetSocialListById = (id, type = '') => axios.get(`${LIKECOIN_API}/api/social/list/${id}?type=${type}`);
 
 export const apiGetLikeButtonMyStatus = (id, referrer) => axios.get(`${LIKECOIN_MISC_API_BASE}/api/like/likebutton/${id}/self?referrer=${encodeURIComponent(referrer)}`);
 

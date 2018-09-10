@@ -24,6 +24,7 @@
                 getIsConnected(socialMedia.id) ? 'connected' : 'disconnected'
               }`,
             ]"
+            :title="getSocialMediaTitle(socialMedia)"
             type="button"
             @click="onClickButton(socialMedia)"
           >
@@ -59,7 +60,14 @@
 </template>
 
 <script>
+import LikeCoinIcon from '~/assets/icons/likecoin.svg';
+
+import { W3C_EMAIL_REGEX } from '~/constant';
 import { openURL } from '~/util/client';
+
+function getUrlWithPrefix(url) {
+  return /https?:\/\//.test(url) ? url : `https://${url}`;
+}
 
 const TYPE = {
   READONLY: 'readonly',
@@ -126,7 +134,7 @@ export default {
       return this.type === TYPE.MINI;
     },
     socialMediaList() {
-      return SOCIAL_MEDIA_LIST
+      const platforms = SOCIAL_MEDIA_LIST
         .filter(({ id, tier }) => {
           const isConnected = this.getIsConnected(id);
           return (
@@ -134,26 +142,55 @@ export default {
             || (this.type === TYPE.MINI && (isConnected || tier === 1))
             || this.type === TYPE.LARGE
           );
-        })
-        .slice(0, this.limit);
+        });
+
+      const links = Object.keys(this.platforms)
+        .filter(id => this.platforms[id].isExternalLink)
+        .map(id => ({ id, url: this.platforms[id].url }));
+      links.sort(({ id: id1 }, { id: id2 }) => (
+        this.platforms[id1].order - this.platforms[id2].order
+      ));
+
+      return [...platforms, ...links].slice(0, this.limit);
     },
   },
   methods: {
     getIconPath(id) {
-      return iconFolder(`./${id}.svg`);
+      try {
+        const filePath = this.platforms[id] && this.platforms[id].isExternalLink
+          ? `link/${this.platforms[id].iconType}`
+          : id;
+        return iconFolder(`./${filePath}.svg`);
+      } catch (err) {
+        return LikeCoinIcon;
+      }
     },
     getIsConnected(id) {
       return !!this.platforms[id];
     },
     onClickButton(socialMedia) {
       const isConnected = this.getIsConnected(socialMedia.id);
-      if (isConnected && this.platforms[socialMedia.id].url) {
+      let url = this.getSocialMediaUrl(socialMedia);
+      const isEmail = new RegExp(W3C_EMAIL_REGEX).test(url);
+      if (isEmail) {
+        url = `mailto:${url}`;
+      } else {
+        url = getUrlWithPrefix(url);
+      }
+      if (isConnected && url) {
         openURL(
           this,
-          this.platforms[socialMedia.id].url,
+          url,
           '_blank',
         );
       }
+    },
+    getSocialMediaUrl({ id }) {
+      return this.platforms[id].url;
+    },
+    getSocialMediaTitle({ id }) {
+      const platform = this.platforms[id];
+      return /link\d+/.test(id) ? platform.siteDisplayName : id;
     },
   },
 };
@@ -239,5 +276,9 @@ $hover-color-map: (
     margin: 0 -7px;
     padding: 7px;
   }
+}
+
+button[class*=social-media-connect__button--link] {
+  background-color: transparent !important;
 }
 </style>
