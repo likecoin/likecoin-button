@@ -8,8 +8,8 @@ export const preloadMessages = {
 export const supportedLocales = [
   'en',
   'zh',
-  // 'cn',
-  // 'ja',
+  'cn',
+  'ja',
   // 'ko',
   // 'de',
   // 'es',
