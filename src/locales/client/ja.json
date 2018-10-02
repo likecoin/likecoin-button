@@ -29,21 +29,21 @@
   },
   "Embed": {
     "label": {
-      "support": "サポート",
+      "support": "応援しよう！",
       "providedBy": "LikeCoinでクリエーターに報酬を与える。",
       "subtitle": "このコンテンツを「いいね」。",
       "title": "LIKEトークンでライターに報酬を与える",
       "createMyWidget": "LikeWidgetを作成する",
       "createMyButton": "LikeButtonを作成する",
-      "clickLikeButton": "新しいLikeButtonをクリックして",
+      "clickLikeButton": "新しいLikeButtonをLike！しよう",
       "rewardUserWithLikeToken": "LIKEトークンで{user}に報酬を与える",
-      "supportUser": "{user}をサポート",
+      "supportUser": "{user}を応援しよう！",
       "loginAdvice": "{ログイン}すると、好きなクリエーターがより多くのLikeCoinを受け取る",
       "numLikesForArticle": "{numOfLikees}読者から{numOfLikes}Like"
     },
     "button": {
       "login": "LikeCoin IDにログイン",
-      "sendLike": "報酬を与える",
+      "sendLike": "与える",
       "showMore": "もっと見る"
     }
   }
