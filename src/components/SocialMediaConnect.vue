@@ -64,6 +64,7 @@ import LikeCoinIcon from '~/assets/icons/likecoin.svg';
 
 import { W3C_EMAIL_REGEX } from '~/constant';
 import { openURL } from '~/util/client';
+import { logTrackerEvent } from '@/util/EventLogger';
 
 function getUrlWithPrefix(url) {
   return /https?:\/\//.test(url) ? url : `https://${url}`;
@@ -184,6 +185,7 @@ export default {
           '_blank',
         );
       }
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickSocial', 'clickSocial', this.getSocialMediaTitle(socialMedia));
     },
     getSocialMediaUrl({ id }) {
       return this.platforms[id].url;
