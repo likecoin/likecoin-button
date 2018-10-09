@@ -24,6 +24,7 @@ module.exports = {
     ],
     script: [
       { src: 'https://www.recaptcha.net/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit' },
+      { src: '/vendor/fb/pixel.js' },
     ],
     link: [
       { rel: 'icon', type: 'image/png', href: '/favicon.png' },

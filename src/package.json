@@ -14,7 +14,7 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "lint": "npm run lint:es && npm run lint:style",
-    "lint:es": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "lint:es": "eslint --ext .js,.vue .",
     "lint:style": "stylelint -i .gitignore '**/*.{scss,vue}'",
     "precommit": "npm run lint"
   },

@@ -13,6 +13,7 @@ export function logTrackerEvent(
     label,
     value,
   });
+  if (window.fbq) window.fbq('track', action);
 }
 
 export default logTrackerEvent;

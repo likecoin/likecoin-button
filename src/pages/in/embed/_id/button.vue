@@ -90,6 +90,7 @@
                 place="user"
                 rel="noopener noreferrer"
                 target="_blank"
+                @click="onClickFrontDisplayName"
               >{{ displayName }}</a>
             </i18n>
           </div>
@@ -197,6 +198,7 @@ import QuestionButtonIcon from '~/assets/like-button/question-btn.svg';
 
 import mixin from '~/components/embed/mixin';
 import LikeButton from '~/components/LikeButton';
+import { logTrackerEvent } from '@/util/EventLogger';
 
 const debounce = require('lodash.debounce');
 
@@ -275,6 +277,7 @@ export default {
     },
     onToggleLikeButton(isSuperLike) {
       this.shouldShowBackside = isSuperLike;
+      logTrackerEvent(this, 'LikeButtonFlow', 'toggleLikeButton', 'toggleLikeButton', 1);
     },
     onClickSuperLike(e) {
       if (
@@ -292,9 +295,13 @@ export default {
         '_blank',
         'menubar=no,location=no,width=576,height=768',
       );
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickLikeStats', 'clickLikeStats', 1);
     },
     onClickCloseButton() {
       this.shouldShowBackside = false;
+    },
+    onClickFrontDisplayName() {
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickFrontDisplayName', 'clickFrontDisplayName', 1);
     },
   },
 };

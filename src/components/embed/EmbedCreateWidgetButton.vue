@@ -4,6 +4,7 @@
       :href="link"
       target="_blank"
       rel="noopener"
+      @click="onClickCreate"
     >
       {{ $t(`Embed.label.createMy${isButton ? 'Button' : 'Widget'}`) }}
     </a>
@@ -11,6 +12,8 @@
 </template>
 
 <script>
+import { logTrackerEvent } from '@/util/EventLogger';
+
 export default {
   name: 'embed-create-widget-button',
   props: {
@@ -21,6 +24,11 @@ export default {
     isButton: {
       type: [Boolean, String],
       default: false,
+    },
+  },
+  methods: {
+    onClickCreate() {
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickCreate', 'clickCreate', 1);
     },
   },
 };
