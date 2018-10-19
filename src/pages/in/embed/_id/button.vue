@@ -77,21 +77,26 @@
           <embed-user-info :avatar="avatar" />
 
           <div class="text-content">
-            <div class="text-content__subtitle">
-              {{ $t('Embed.label.clickLikeButton') }}
-            </div>
+            <i18n
+              tag="div"
+              class="text-content__subtitle"
+              path="Embed.label.clickLikeButton"
+            >
+              <a
+                :href="`https://${LIKE_CO_HOSTNAME}/in/register`"
+                target="_blank"
+                rel="noopener"
+                place="action"
+              >{{ $t('Embed.label.registerNow') }}</a>
+            </i18n>
             <i18n
               tag="div"
               class="text-content__title"
               path="Embed.label.supportUser"
             >
-              <a
-                :href="getUserPath"
+              <span
                 place="user"
-                rel="noopener noreferrer"
-                target="_blank"
-                @click="onClickFrontDisplayName"
-              >{{ displayName }}</a>
+              >{{ displayName }}</span>
             </i18n>
           </div>
 
