@@ -76,11 +76,37 @@
 
           <embed-user-info :avatar="avatar" />
 
-          <div class="text-content">
+          <!-- Front upper part, Logged in -->
+          <div
+            v-if="isLoggedIn"
+            class="text-content"
+          >
+            <div class="text-content__subtitle">
+              {{ $t('Embed.label.clickLikeButton') }}
+            </div>
+            <i18n
+              tag="div"
+              class="text-content__title"
+              path="Embed.label.supportUser"
+            >
+              <a
+                :href="getUserPath"
+                place="user"
+                rel="noopener noreferrer"
+                target="_blank"
+                @click="onClickFrontDisplayName"
+              >{{ displayName }}</a>
+            </i18n>
+          </div>
+          <!-- Front upper part, Logged out -->
+          <div
+            v-else
+            class="text-content"
+          >
             <i18n
               tag="div"
               class="text-content__subtitle"
-              path="Embed.label.clickLikeButton"
+              path="Embed.label.clickLikeButtonNoLogin"
             >
               <a
                 :href="`https://${LIKE_CO_HOSTNAME}/in/register`"
@@ -92,7 +118,7 @@
             <i18n
               tag="div"
               class="text-content__title"
-              path="Embed.label.supportUser"
+              path="Embed.label.supportUserNoLogin"
             >
               <span
                 place="user"

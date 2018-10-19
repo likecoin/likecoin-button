@@ -35,9 +35,11 @@
       "title": "化讚為賞 回饋創作",
       "createMyWidget": "創建我的 LikeWidget",
       "createMyButton": "創建我的 LikeButton",
-      "clickLikeButton": " {action} ，你的點讚將化為我的收入",
+      "clickLikeButton": "點擊全新的 LikeButton",
+      "clickLikeButtonNoLogin": " {action} ，你的點讚將化為我的收入",
       "rewardUserWithLikeToken": "以 LIKE 代幣讚賞 {user}",
-      "supportUser": "來支持我 {user}",
+      "supportUser": "支持 {user}",
+      "supportUserNoLogin": "來支持我 {user}",
       "loginAdvice": "{login} 你讚好的作者能獲得更多 LikeCoin",
       "numLikesForArticle": "從 {numOfLikees} 人獲得 {numOfLikes} Like",
       "registerNow": "立即註冊"
