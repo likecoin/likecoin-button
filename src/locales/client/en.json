@@ -36,7 +36,7 @@
       "createMyWidget": "Create my LikeWidget",
       "createMyButton": "Create my LikeButton",
       "clickLikeButton": "Click the reinvented LikeButton to",
-      "clickLikeButtonNoLogin": " {action} to turn your Likes into my income",
+      "clickLikeButtonNoLogin": " {action} , clap for me to",
       "rewardUserWithLikeToken": "Reward {user} with LIKE token",
       "supportUser": "Support {user}",
       "supportUserNoLogin": "Support {user}",
