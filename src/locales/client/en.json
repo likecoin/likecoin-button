@@ -35,9 +35,11 @@
       "title": "Reward the writer with LIKE token",
       "createMyWidget": "Create my LikeWidget",
       "createMyButton": "Create my LikeButton",
-      "clickLikeButton": " {action} to turn your Likes into my income",
+      "clickLikeButton": "Click the reinvented LikeButton to",
+      "clickLikeButtonNoLogin": " {action} to turn your Likes into my income",
       "rewardUserWithLikeToken": "Reward {user} with LIKE token",
       "supportUser": "Support {user}",
+      "supportUserNoLogin": "Support {user}",
       "loginAdvice": "{login} the writer you like will generate more LikeCoin",
       "numLikesForArticle": "{numOfLikes} Like from {numOfLikees} people",
       "registerNow": "Register now"
