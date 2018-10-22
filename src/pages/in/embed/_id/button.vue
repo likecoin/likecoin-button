@@ -77,8 +77,9 @@
           <embed-user-info :avatar="avatar" />
 
           <!-- Front upper part, Logged in -->
+          <!-- Mobile -->
           <div
-            v-if="isLoggedIn"
+            v-if="isLoggedIn || isMobile"
             class="text-content"
           >
             <div class="text-content__subtitle">
