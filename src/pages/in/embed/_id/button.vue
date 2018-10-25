@@ -110,7 +110,7 @@
               path="Embed.label.clickLikeButtonNoLogin"
             >
               <a
-                :href="`https://${LIKE_CO_HOSTNAME}/in/register`"
+                :href="getReferralLink"
                 target="_blank"
                 rel="noopener"
                 place="action"
