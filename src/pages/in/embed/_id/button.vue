@@ -110,10 +110,8 @@
               path="Embed.label.clickLikeButtonNoLogin"
             >
               <a
-                :href="getReferralLink"
-                target="_blank"
-                rel="noopener"
                 place="action"
+                @click.prevent="onClickLoginButton"
               >{{ $t('Embed.label.registerNow') }}</a>
             </i18n>
             <i18n
@@ -172,11 +170,8 @@
                     class="login-tooltip__bubble"
                   >
                     <a
-                      :href="`https://${LIKE_CO_HOSTNAME}/in`"
-                      target="_blank"
-                      rel="noopener"
                       place="login"
-                      @click="isLoginTooltipOpen = false"
+                      @click.prevent="onClickLoginButton"
                     >{{ $t('Embed.button.login') }}</a>
                   </i18n>
                 </transition>
@@ -278,6 +273,10 @@ export default {
   },
   mounted() {
     this.updateUser();
+    window.addEventListener('message', this.handleWindowMessage);
+  },
+  beforeDestroy() {
+    window.removeEventListener('message', this.handleWindowMessage);
   },
   methods: {
     async updateUser() {
@@ -295,6 +294,14 @@ export default {
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
       }
+    },
+    onClickLoginButton() {
+      window.open(
+        `https://${LIKE_CO_HOSTNAME}/in/register/api`,
+        'signin',
+        'width=540,height=680,menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes',
+      );
+      this.isLoginTooltipOpen = true;
     },
     onClickLike() {
       if (!this.isLoggedIn && !this.isMobile) {
@@ -334,6 +341,19 @@ export default {
     },
     onClickFrontDisplayName() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickFrontDisplayName', 'clickFrontDisplayName', 1);
+    },
+    handleWindowMessage(event) {
+      if (event.origin !== `https://${LIKE_CO_HOSTNAME}`) return;
+      if (event.data) {
+        const { data } = event;
+        switch (data.action) {
+          case 'LOGGED_IN':
+            this.updateUser();
+            break;
+
+          default:
+        }
+      }
     },
   },
 };
