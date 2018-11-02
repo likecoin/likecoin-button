@@ -141,15 +141,12 @@ module.exports = {
   buildDir: 'nuxt',
   build: {
     extractCSS: true,
-    parallel: true,
-    vendor: [
-      'axios',
-      '~/plugins/vuetify',
-    ],
+    /* BUG: cannot parallel with extractCSS */
+    // parallel: true,
     babel: {
       presets: ({ isServer }) => [
         [
-          'vue-app',
+          '@nuxtjs/babel-preset-app',
           {
             targets: isServer
               ? { node: '8.11.1' }
