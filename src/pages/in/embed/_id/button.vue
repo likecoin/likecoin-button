@@ -297,9 +297,9 @@ export default {
     },
     onClickLoginButton() {
       window.open(
-        `https://${LIKE_CO_HOSTNAME}/in/register/api`,
+        `https://${LIKE_CO_HOSTNAME}/in/register`,
         'signin',
-        'width=540,height=680,menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes',
+        'width=540,height=600,menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes',
       );
       this.isLoginTooltipOpen = true;
     },
