@@ -125,60 +125,6 @@
             </i18n>
           </div>
 
-          <div
-            v-if="!isLoggedIn"
-            class="login-tooltip"
-          >
-            <div>
-              <div class="login-tooltip__trigger-wrapper">
-                <transition
-                  name="login-tooltip__trigger--flip"
-                  mode="out-in"
-                >
-                  <button
-                    v-if="isLoginTooltipOpen"
-                    key="close"
-                    class="login-tooltip__trigger login-tooltip__trigger--close"
-                    @click="isLoginTooltipOpen = false"
-                  >
-                    <simple-svg
-                      :filepath="CloseButtonIcon"
-                      fill="currentColor"
-                      stroke="transparent"
-                    />
-                  </button>
-                  <button
-                    v-else
-                    key="open"
-                    class="login-tooltip__trigger login-tooltip__trigger--open"
-                    @click="isLoginTooltipOpen = true"
-                  >
-                    <simple-svg
-                      :filepath="QuestionButtonIcon"
-                      fill="currentColor"
-                      stroke="transparent"
-                    />
-                  </button>
-                </transition>
-              </div>
-              <div class="login-tooltip__bubble-wrapper">
-                <transition name="login-tooltip__bubble--pop-up">
-                  <i18n
-                    v-if="isLoginTooltipOpen"
-                    tag="div"
-                    path="Embed.label.loginAdvice"
-                    class="login-tooltip__bubble"
-                  >
-                    <a
-                      place="login"
-                      @click.prevent="onClickLoginButton"
-                    >{{ $t('Embed.button.login') }}</a>
-                  </i18n>
-                </transition>
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
     </transition>
@@ -186,11 +132,9 @@
     <like-button
       :like-count="likeCount"
       :total-like="totalLike"
-      :is-toggled="shouldShowBackside"
+      :is-togglable="false"
       :is-super-like="isSuperLike"
-      @toggle="onToggleLikeButton"
       @like="onClickLike"
-      @super-like="onClickSuperLike"
       @click-stats="onClickLikeStats"
     />
 
@@ -199,11 +143,6 @@
         :username="id"
         :platforms="platforms"
         :limit="5"
-      />
-
-      <embed-create-widget-button
-        :link="getReferralLink"
-        is-button
       />
     </footer>
 
@@ -253,7 +192,6 @@ export default {
       LIKE_CO_HOSTNAME,
 
       isLoggedIn: false,
-      isLoginTooltipOpen: false,
       likeCount: 0,
       likeSent: 0,
       totalLike: 0,
@@ -301,30 +239,12 @@ export default {
         'signin',
         'width=540,height=600,menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes',
       );
-      this.isLoginTooltipOpen = true;
     },
     onClickLike() {
-      if (!this.isLoggedIn && !this.isMobile) {
-        this.isLoginTooltipOpen = true;
-      }
-      if (this.isSuperLike) {
-        this.shouldShowBackside = true;
-      } else {
+      if (!this.isSuperLike) {
         this.likeCount += 1;
       }
       debouncedOnClick(this);
-    },
-    onToggleLikeButton(isSuperLike) {
-      this.shouldShowBackside = isSuperLike;
-      logTrackerEvent(this, 'LikeButtonFlow', 'toggleLikeButton', 'toggleLikeButton', 1);
-    },
-    onClickSuperLike(e) {
-      if (
-        this.shouldShowBackside
-        && this.$refs.superLikeButton
-      ) {
-        this.$refs.superLikeButton.click(e);
-      }
     },
     onClickLikeStats() {
       const { id } = this.$route.params;

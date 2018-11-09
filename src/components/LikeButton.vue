@@ -124,6 +124,10 @@ export default {
       type: [Boolean, String],
       default: false,
     },
+    isTogglable: {
+      type: [Boolean, String],
+      default: true,
+    },
     isSuperLike: {
       type: [Boolean, String],
       default: false,
@@ -163,7 +167,7 @@ export default {
       return this.knobProgress === 1;
     },
     isKnobMovable() {
-      return !checkIsMobileClient();
+      return this.isTogglable && !checkIsMobileClient();
     },
   },
   watch: {
