@@ -22,3 +22,13 @@ export const apiPostLikeButton = (id, referrer, count = 1) => axios.post(
 );
 
 export const apiQueryCoinGeckoInfo = () => axios.get('https://api.coingecko.com/api/v3/coins/likecoin?localization=false', { withCredentials: false });
+
+export const apiGetPageTitle = url => axios.get(url, {
+  withCredentials: false,
+  headers: {
+    Accept: 'text/html',
+  },
+}).then((res) => {
+  const matches = res.data && res.data.match(/<title>(.*?)<\/title>/);
+  return matches ? matches[1] : '';
+});
