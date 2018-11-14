@@ -5,7 +5,7 @@ export const apiGetUserMinById = id => axios.get(`${LIKECOIN_API}/api/users/id/$
 
 export const apiGetSocialListById = (id, type = '') => axios.get(`${LIKECOIN_API}/api/social/list/${id}?type=${type}`);
 
-export const apiGetLikeButtonMyStatus = (id, referrer) => axios.get(`${LIKECOIN_MISC_API_BASE}/api/like/likebutton/${id}/self?referrer=${encodeURIComponent(referrer)}`);
+export const apiGetLikeButtonMyStatus = (id, referrer, is3rdPartyCookieSupport) => axios.get(`${LIKECOIN_MISC_API_BASE}/api/like/likebutton/${id}/self?referrer=${encodeURIComponent(referrer)}&cookie=${is3rdPartyCookieSupport}`);
 
 export const apiGetLikeButtonTotalCount = (id, referrer) => axios.get(`${LIKECOIN_MISC_API_BASE}/api/like/likebutton/${id}/total?referrer=${encodeURIComponent(referrer)}`);
 
@@ -16,8 +16,8 @@ export const apiPostLikeLink = (id, referrer, payload) => axios.post(
   payload,
 );
 
-export const apiPostLikeButton = (id, referrer, count = 1) => axios.post(
-  `${LIKECOIN_MISC_API_BASE}/api/like/likebutton/${id}/${count}?referrer=${encodeURIComponent(referrer)}`,
+export const apiPostLikeButton = (id, referrer, count = 1, is3rdPartyCookieSupport) => axios.post(
+  `${LIKECOIN_MISC_API_BASE}/api/like/likebutton/${id}/${count}?referrer=${encodeURIComponent(referrer)}&cookie=${is3rdPartyCookieSupport}`,
   {},
 );
 

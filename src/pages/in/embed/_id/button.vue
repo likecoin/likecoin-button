@@ -172,7 +172,9 @@ const debouncedOnClick = debounce((that) => {
   /* eslint-disable no-param-reassign */
   const count = that.likeCount - that.likeSent;
   that.likeSent += count;
-  if (count > 0) apiPostLikeButton(that.id, that.referrer, count);
+  if (count > 0) {
+    apiPostLikeButton(that.id, that.referrer, count, that.getIs3rdPartyCookieSupport());
+  }
   that.totalLike += count;
   /* eslint-enable no-param-reassign */
 }, 500);
@@ -223,7 +225,7 @@ export default {
     async updateUser() {
       try {
         const [{ data: myData }, { data: totalData }] = await Promise.all([
-          apiGetLikeButtonMyStatus(this.id, this.referrer),
+          apiGetLikeButtonMyStatus(this.id, this.referrer, this.getIs3rdPartyCookieSupport()),
           apiGetLikeButtonTotalCount(this.id, this.referrer),
         ]);
         const { liker, count } = myData;
@@ -237,6 +239,7 @@ export default {
       }
     },
     onClickLoginButton() {
+      logTrackerEvent(this, 'LikeButtonFlow', 'popupLikeButton', 'popupLikeButton', 1);
       if (!isIOS() && this.getIs3rdPartyCookieSupport()) {
         // Case 1: User has not log in and 3rd party cookie is not blocked
         window.open(
@@ -261,6 +264,7 @@ export default {
           this.likeCount += 1;
         }
         debouncedOnClick(this);
+        logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike', 1);
       } else {
         this.onClickLoginButton();
       }

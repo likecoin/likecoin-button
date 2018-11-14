@@ -65,6 +65,7 @@ import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
 
 import mixin from '~/components/embed/mixin';
 import LikeButton from '~/components/LikeButton';
+import { logTrackerEvent } from '@/util/EventLogger';
 
 const debounce = require('lodash.debounce');
 
@@ -72,7 +73,8 @@ const debouncedOnClick = debounce((that) => {
   /* eslint-disable no-param-reassign */
   const count = that.likeCount - that.likeSent;
   that.likeSent += count;
-  if (count > 0) apiPostLikeButton(that.id, that.referrer, count);
+  const is3rdPartyCookieSupport = false;
+  if (count > 0) apiPostLikeButton(that.id, that.referrer, count, is3rdPartyCookieSupport);
   that.totalLike += count;
   /* eslint-enable no-param-reassign */
 }, 500);
@@ -144,6 +146,7 @@ export default {
         this.likeCount += 1;
       }
       debouncedOnClick(this);
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike', 1);
     },
   },
 };
