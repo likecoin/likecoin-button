@@ -275,7 +275,7 @@ export default {
       }
     },
     onPressKnob(e) {
-      if (!this.isKnobMovable) return;
+      if (checkIsMobileClient()) return;
 
       this.setClientX(e);
       this.lastClientX = this.clientX;
