@@ -225,5 +225,9 @@ $badge-width: 485px;
 
     transform: translate(-50%);
   }
+
+  :global(.like-button-knob) {
+    outline-style: none;
+  }
 }
 </style>
