@@ -73,8 +73,8 @@ const debouncedOnClick = debounce((that) => {
   /* eslint-disable no-param-reassign */
   const count = that.likeCount - that.likeSent;
   that.likeSent += count;
-  const is3rdPartyCookieSupport = false;
-  if (count > 0) apiPostLikeButton(that.id, that.referrer, count, is3rdPartyCookieSupport);
+  const isCookieSupport = false; // Assume this page is loaded in a pop-up, set to false
+  if (count > 0) apiPostLikeButton(that.id, that.referrer, count, isCookieSupport);
   that.totalLike += count;
   /* eslint-enable no-param-reassign */
 }, 500);
