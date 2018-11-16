@@ -77,6 +77,8 @@ module.exports = {
           'https://js.intercomcdn.com',
         ],
         'frame-src': [
+          'https://like.co',
+          'https://rinkeby.like.co',
           'https://www.google.com/',
           'https://recaptcha.net',
           'https://www.recaptcha.net',
@@ -127,6 +129,9 @@ module.exports = {
         component: resolve(__dirname, 'pages/_id/index.vue'),
       });
     },
+    middleware: [
+      'cookie',
+    ],
   },
   modules: [
     ['@nuxtjs/google-tag-manager', {
