@@ -172,7 +172,9 @@ const debouncedOnClick = debounce((that) => {
   /* eslint-disable no-param-reassign */
   const count = that.likeCount - that.likeSent;
   that.likeSent += count;
-  if (count > 0) apiPostLikeButton(that.id, that.referrer, count);
+  if (count > 0) {
+    apiPostLikeButton(that.id, that.referrer, count, that.getIsCookieSupport());
+  }
   that.totalLike += count;
   /* eslint-enable no-param-reassign */
 }, 500);
@@ -217,13 +219,13 @@ export default {
     window.removeEventListener('message', this.handleWindowMessage);
   },
   methods: {
-    getIs3rdPartyCookieSupport() {
+    getIsCookieSupport() {
       return /likecoin_cookie=true/.test(document.cookie);
     },
     async updateUser() {
       try {
         const [{ data: myData }, { data: totalData }] = await Promise.all([
-          apiGetLikeButtonMyStatus(this.id, this.referrer),
+          apiGetLikeButtonMyStatus(this.id, this.referrer, this.getIsCookieSupport()),
           apiGetLikeButtonTotalCount(this.id, this.referrer),
         ]);
         const { liker, count } = myData;
@@ -237,7 +239,8 @@ export default {
       }
     },
     onClickLoginButton() {
-      if (!isIOS() && this.getIs3rdPartyCookieSupport()) {
+      logTrackerEvent(this, 'LikeButtonFlow', 'popupLikeButton', 'popupLikeButton', 1);
+      if (!isIOS() && this.getIsCookieSupport()) {
         // Case 1: User has not log in and 3rd party cookie is not blocked
         window.open(
           `https://${LIKE_CO_HOSTNAME}/in/register?referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(this.$route.params.id)}`,
@@ -261,6 +264,7 @@ export default {
           this.likeCount += 1;
         }
         debouncedOnClick(this);
+        logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike', 1);
       } else {
         this.onClickLoginButton();
       }
