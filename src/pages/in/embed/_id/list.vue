@@ -2,6 +2,18 @@
   <div class="likee-list-page">
     <div class="lc-container">
       <like-form>
+        <template
+          v-if="shouldShowBackButton"
+          slot="header-left"
+        >
+          <a
+            href="#"
+            @click="$router.go(-1)"
+          >
+            {{ $t('general.back') }}
+          </a>
+        </template>
+
         <template slot="header-right">
           <a
             href="https://like.co/"
@@ -115,6 +127,9 @@ export default {
   computed: {
     referrer() {
       return this.$route.query.referrer;
+    },
+    shouldShowBackButton() {
+      return this.$route.query.show_back === '1';
     },
   },
   mounted() {

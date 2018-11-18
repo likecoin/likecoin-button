@@ -43,6 +43,7 @@
             :is-togglable="false"
             :is-super-like="isMaxLike"
             @like="onClickLike"
+            @click-stats="onClickLikeStats"
           />
         </div>
 
@@ -147,6 +148,19 @@ export default {
       }
       debouncedOnClick(this);
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike', 1);
+    },
+    onClickLikeStats() {
+      const { id } = this.$route.params;
+      const { referrer } = this.$route.query;
+      this.$router.push({
+        name: 'in-embed-id-list',
+        params: { id },
+        query: {
+          referrer,
+          show_back: '1',
+        },
+      });
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickLikeStats', 'clickLikeStats', 1);
     },
   },
 };
