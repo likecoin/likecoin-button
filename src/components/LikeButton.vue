@@ -183,16 +183,16 @@ export default {
   mounted() {
     if (this.isKnobMovable) {
       document.addEventListener('mousemove', this.onMovingKnob);
-      document.addEventListener('mouseleave', this.onReleaseKnob);
-      document.addEventListener('mouseup', this.onReleaseKnob);
     }
+    document.addEventListener('mouseleave', this.onReleaseKnob);
+    document.addEventListener('mouseup', this.onReleaseKnob);
   },
   beforeDestroy() {
     if (this.isKnobMovable) {
       document.removeEventListener('mousemove', this.onMovingKnob);
-      document.removeEventListener('mouseleave', this.onReleaseKnob);
-      document.removeEventListener('mouseup', this.onReleaseKnob);
     }
+    document.removeEventListener('mouseleave', this.onReleaseKnob);
+    document.removeEventListener('mouseup', this.onReleaseKnob);
 
     if (this.bubbleTimer) {
       clearTimeout(this.bubbleTimer);
