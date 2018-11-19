@@ -291,7 +291,14 @@ export default {
         const { data } = event;
         switch (data.action) {
           case 'LOGGED_IN':
-            this.updateUser();
+            this.updateUser().then(() => {
+              // Click LikeButton after login
+              this.$nextTick(() => {
+                if (this.likeCount <= 0 && this.$refs.likeButton) {
+                  this.$refs.likeButton.onPressedKnob();
+                }
+              });
+            });
             break;
 
           default:
