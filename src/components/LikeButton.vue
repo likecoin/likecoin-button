@@ -124,6 +124,10 @@ export default {
       type: [Boolean, String],
       default: false,
     },
+    isTogglable: {
+      type: [Boolean, String],
+      default: true,
+    },
     isSuperLike: {
       type: [Boolean, String],
       default: false,
@@ -163,7 +167,7 @@ export default {
       return this.knobProgress === 1;
     },
     isKnobMovable() {
-      return !checkIsMobileClient();
+      return this.isTogglable && !checkIsMobileClient();
     },
   },
   watch: {
@@ -179,16 +183,16 @@ export default {
   mounted() {
     if (this.isKnobMovable) {
       document.addEventListener('mousemove', this.onMovingKnob);
-      document.addEventListener('mouseleave', this.onReleaseKnob);
-      document.addEventListener('mouseup', this.onReleaseKnob);
     }
+    document.addEventListener('mouseleave', this.onReleaseKnob);
+    document.addEventListener('mouseup', this.onReleaseKnob);
   },
   beforeDestroy() {
     if (this.isKnobMovable) {
       document.removeEventListener('mousemove', this.onMovingKnob);
-      document.removeEventListener('mouseleave', this.onReleaseKnob);
-      document.removeEventListener('mouseup', this.onReleaseKnob);
     }
+    document.removeEventListener('mouseleave', this.onReleaseKnob);
+    document.removeEventListener('mouseup', this.onReleaseKnob);
 
     if (this.bubbleTimer) {
       clearTimeout(this.bubbleTimer);
@@ -271,7 +275,7 @@ export default {
       }
     },
     onPressKnob(e) {
-      if (!this.isKnobMovable) return;
+      if (checkIsMobileClient()) return;
 
       this.setClientX(e);
       this.lastClientX = this.clientX;

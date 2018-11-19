@@ -110,10 +110,8 @@
               path="Embed.label.clickLikeButtonNoLogin"
             >
               <a
-                :href="getReferralLink"
-                target="_blank"
-                rel="noopener"
                 place="action"
+                @click.prevent="onClickLoginButton"
               >{{ $t('Embed.label.registerNow') }}</a>
             </i18n>
             <i18n
@@ -127,63 +125,6 @@
             </i18n>
           </div>
 
-          <div
-            v-if="!isLoggedIn"
-            class="login-tooltip"
-          >
-            <div>
-              <div class="login-tooltip__trigger-wrapper">
-                <transition
-                  name="login-tooltip__trigger--flip"
-                  mode="out-in"
-                >
-                  <button
-                    v-if="isLoginTooltipOpen"
-                    key="close"
-                    class="login-tooltip__trigger login-tooltip__trigger--close"
-                    @click="isLoginTooltipOpen = false"
-                  >
-                    <simple-svg
-                      :filepath="CloseButtonIcon"
-                      fill="currentColor"
-                      stroke="transparent"
-                    />
-                  </button>
-                  <button
-                    v-else
-                    key="open"
-                    class="login-tooltip__trigger login-tooltip__trigger--open"
-                    @click="isLoginTooltipOpen = true"
-                  >
-                    <simple-svg
-                      :filepath="QuestionButtonIcon"
-                      fill="currentColor"
-                      stroke="transparent"
-                    />
-                  </button>
-                </transition>
-              </div>
-              <div class="login-tooltip__bubble-wrapper">
-                <transition name="login-tooltip__bubble--pop-up">
-                  <i18n
-                    v-if="isLoginTooltipOpen"
-                    tag="div"
-                    path="Embed.label.loginAdvice"
-                    class="login-tooltip__bubble"
-                  >
-                    <a
-                      :href="`https://${LIKE_CO_HOSTNAME}/in`"
-                      target="_blank"
-                      rel="noopener"
-                      place="login"
-                      @click="isLoginTooltipOpen = false"
-                    >{{ $t('Embed.button.login') }}</a>
-                  </i18n>
-                </transition>
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
     </transition>
@@ -191,11 +132,9 @@
     <like-button
       :like-count="likeCount"
       :total-like="totalLike"
-      :is-toggled="shouldShowBackside"
+      :is-togglable="false"
       :is-super-like="isSuperLike"
-      @toggle="onToggleLikeButton"
       @like="onClickLike"
-      @super-like="onClickSuperLike"
       @click-stats="onClickLikeStats"
     />
 
@@ -204,11 +143,6 @@
         :username="id"
         :platforms="platforms"
         :limit="5"
-      />
-
-      <embed-create-widget-button
-        :link="getReferralLink"
-        is-button
       />
     </footer>
 
@@ -223,7 +157,7 @@ import {
 } from '@/util/api/api';
 
 import { LIKE_CO_HOSTNAME } from '@/constant';
-import { checkIsMobileClient } from '~/util/client';
+import { checkIsMobileClient, isIOS } from '~/util/client';
 
 import CloseButtonIcon from '~/assets/like-button/close-btn.svg';
 import QuestionButtonIcon from '~/assets/like-button/question-btn.svg';
@@ -238,7 +172,9 @@ const debouncedOnClick = debounce((that) => {
   /* eslint-disable no-param-reassign */
   const count = that.likeCount - that.likeSent;
   that.likeSent += count;
-  if (count > 0) apiPostLikeButton(that.id, that.referrer, count);
+  if (count > 0) {
+    apiPostLikeButton(that.id, that.referrer, count, that.getIsCookieSupport());
+  }
   that.totalLike += count;
   /* eslint-enable no-param-reassign */
 }, 500);
@@ -258,7 +194,6 @@ export default {
       LIKE_CO_HOSTNAME,
 
       isLoggedIn: false,
-      isLoginTooltipOpen: false,
       likeCount: 0,
       likeSent: 0,
       totalLike: 0,
@@ -278,12 +213,19 @@ export default {
   },
   mounted() {
     this.updateUser();
+    window.addEventListener('message', this.handleWindowMessage);
+  },
+  beforeDestroy() {
+    window.removeEventListener('message', this.handleWindowMessage);
   },
   methods: {
+    getIsCookieSupport() {
+      return /likecoin_cookie=true/.test(document.cookie);
+    },
     async updateUser() {
       try {
         const [{ data: myData }, { data: totalData }] = await Promise.all([
-          apiGetLikeButtonMyStatus(this.id, this.referrer),
+          apiGetLikeButtonMyStatus(this.id, this.referrer, this.getIsCookieSupport()),
           apiGetLikeButtonTotalCount(this.id, this.referrer),
         ]);
         const { liker, count } = myData;
@@ -296,27 +238,35 @@ export default {
         console.error(err); // eslint-disable-line no-console
       }
     },
-    onClickLike() {
-      if (!this.isLoggedIn && !this.isMobile) {
-        this.isLoginTooltipOpen = true;
-      }
-      if (this.isSuperLike) {
-        this.shouldShowBackside = true;
+    onClickLoginButton() {
+      logTrackerEvent(this, 'LikeButtonFlow', 'popupLikeButton', 'popupLikeButton', 1);
+      if (!isIOS() && this.getIsCookieSupport()) {
+        // Case 1: User has not log in and 3rd party cookie is not blocked
+        window.open(
+          `https://${LIKE_CO_HOSTNAME}/in/register?referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(this.$route.params.id)}`,
+          'signin',
+          'width=540,height=600,menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes',
+        );
       } else {
-        this.likeCount += 1;
+        // Case 2: User has not log in and 3rd party cookie is blocked
+        const { id } = this.$route.params;
+        window.open(
+          `/in/like/${id}/?referrer=${encodeURIComponent(this.referrer)}`,
+          'like',
+          'menubar=no,location=no,width=576,height=768',
+        );
       }
-      debouncedOnClick(this);
     },
-    onToggleLikeButton(isSuperLike) {
-      this.shouldShowBackside = isSuperLike;
-      logTrackerEvent(this, 'LikeButtonFlow', 'toggleLikeButton', 'toggleLikeButton', 1);
-    },
-    onClickSuperLike(e) {
-      if (
-        this.shouldShowBackside
-        && this.$refs.superLikeButton
-      ) {
-        this.$refs.superLikeButton.click(e);
+    onClickLike() {
+      if (this.isLoggedIn) {
+        // Case 3: User has logged in
+        if (!this.isSuperLike) {
+          this.likeCount += 1;
+        }
+        debouncedOnClick(this);
+        logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike', 1);
+      } else {
+        this.onClickLoginButton();
       }
     },
     onClickLikeStats() {
@@ -334,6 +284,19 @@ export default {
     },
     onClickFrontDisplayName() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickFrontDisplayName', 'clickFrontDisplayName', 1);
+    },
+    handleWindowMessage(event) {
+      if (event.origin !== `https://${LIKE_CO_HOSTNAME}`) return;
+      if (event.data) {
+        const { data } = event;
+        switch (data.action) {
+          case 'LOGGED_IN':
+            this.updateUser();
+            break;
+
+          default:
+        }
+      }
     },
   },
 };
