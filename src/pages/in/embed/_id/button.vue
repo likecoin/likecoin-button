@@ -157,7 +157,7 @@ import {
 } from '@/util/api/api';
 
 import { LIKE_CO_HOSTNAME } from '@/constant';
-import { checkIsMobileClient, isIOS } from '~/util/client';
+import { checkIsMobileClient } from '~/util/client';
 
 import CloseButtonIcon from '~/assets/like-button/close-btn.svg';
 import QuestionButtonIcon from '~/assets/like-button/question-btn.svg';
@@ -240,7 +240,7 @@ export default {
     },
     onClickLoginButton() {
       logTrackerEvent(this, 'LikeButtonFlow', 'popupLikeButton', 'popupLikeButton', 1);
-      if (!isIOS() && this.getIsCookieSupport()) {
+      if (this.getIsCookieSupport()) {
         // Case 1: User has not log in and 3rd party cookie is not blocked
         window.open(
           `https://${LIKE_CO_HOSTNAME}/in/register?referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(this.$route.params.id)}`,
