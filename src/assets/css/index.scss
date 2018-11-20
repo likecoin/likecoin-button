@@ -12,6 +12,7 @@ body {
 }
 
 a {
+  cursor: pointer;
   transition: color 0.25s ease;
 
   color: $like-green;
