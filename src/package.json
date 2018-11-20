@@ -44,7 +44,7 @@
     "sass-loader": "^7.0.3",
     "stylelint": "^9.3.0",
     "stylelint-config-recommended-scss": "^3.2.0",
-    "stylelint-order": "^1.0.0",
+    "stylelint-order": "^2.0.0",
     "stylelint-scss": "^3.1.3"
   }
 }
