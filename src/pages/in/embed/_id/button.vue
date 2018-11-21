@@ -214,6 +214,11 @@ export default {
   mounted() {
     this.updateUser();
     window.addEventListener('message', this.handleWindowMessage);
+    if (this.getIsCookieSupport()) {
+      logTrackerEvent(this, 'LikeButton', 'isCookieSupportTrue', 'isCookieSupportTrue', 1);
+    } else {
+      logTrackerEvent(this, 'LikeButton', 'isCookieSupportFalse', 'isCookieSupportFalse', 1);
+    }
   },
   beforeDestroy() {
     window.removeEventListener('message', this.handleWindowMessage);
