@@ -1,7 +1,11 @@
 <template>
   <div class="lc-page-wrapper">
 
-    <header class="lc-page-header" />
+    <header class="lc-page-header">
+      <div class="lc-page-header__left-section">
+        <a @click="onClickBackButton">{{ $t('general.back') }}</a>
+      </div>
+    </header>
 
     <div class="lc-page-content">
       <div
@@ -140,6 +144,9 @@ export default {
         console.error(err); // eslint-disable-line no-console
       }
     },
+    onClickBackButton() {
+      window.close();
+    },
     onClickLike() {
       if (this.isMaxLike) {
         this.shouldShowBackside = true;
@@ -172,9 +179,27 @@ export default {
 $badge-width: 485px;
 
 .lc-page-header {
+  position: relative;
+
   height: 64px;
 
   background-image: linear-gradient(251deg, #d2f0f0, #f0e6b4);
+
+  &__left-section {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+
+    display: flex;
+    align-items: center;
+
+    padding-left: 16px;
+
+    a {
+      font-size: 16px;
+    }
+  }
 }
 
 .referrer-title {
