@@ -36,10 +36,13 @@
       "createMyWidget": "LikeWidgetを作成する",
       "createMyButton": "LikeButtonを作成する",
       "clickLikeButton": "新しいLikeButtonをLike！しよう",
+      "clickLikeButtonNoLogin": " {action}、「いいね」すると",
       "rewardUserWithLikeToken": "LIKEトークンで{user}に報酬を与える",
       "supportUser": " {user}を応援しよう！",
+      "supportUserNoLogin": "{user}を応援しよう！",
       "loginAdvice": " {login}すると、好きなクリエーターがより多くのLikeCoinを受け取る",
-      "numLikesForArticle": " {numOfLikees}読者から{numOfLikes}Like"
+      "numLikesForArticle": " {numOfLikees}読者から{numOfLikes}Like",
+      "registerNow": "今すぐ登録"
     },
     "button": {
       "login": "LikeCoin IDにログイン",
