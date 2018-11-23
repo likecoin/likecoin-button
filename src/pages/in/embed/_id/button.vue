@@ -247,6 +247,7 @@ export default {
       logTrackerEvent(this, 'LikeButtonFlow', 'popupLikeButton', 'popupLikeButton', 1);
       if (this.getIsCookieSupport()) {
         // Case 1: User has not log in and 3rd party cookie is not blocked
+        logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp', 1);
         window.open(
           `https://${LIKE_CO_HOSTNAME}/in/register?referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(this.$route.params.id)}`,
           'signin',
@@ -254,6 +255,7 @@ export default {
         );
       } else {
         // Case 2: User has not log in and 3rd party cookie is blocked
+        logTrackerEvent(this, 'LikeButtonFlow', 'popupLike', 'popupLike', 1);
         const { id } = this.$route.params;
         window.open(
           `/in/like/${id}/?referrer=${encodeURIComponent(this.referrer)}`,
