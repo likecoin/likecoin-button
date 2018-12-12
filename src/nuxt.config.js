@@ -27,6 +27,10 @@ module.exports = {
       { src: '/vendor/fb/pixel.js' },
     ],
     link: [
+      { rel: 'preload', href: 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Material+Icons', as: 'style' },
+      { rel: 'preload', href: 'https://www.recaptcha.net/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit', as: 'script' },
+      { rel: 'preload', href: '/vendor/fb/pixel.js', as: 'script' },
+      { rel: 'preconnect', href: 'https://connect.facebook.net', crossorigin: undefined },
       { rel: 'icon', type: 'image/png', href: '/favicon.png' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Material+Icons' },
     ],
