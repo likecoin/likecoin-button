@@ -1,9 +1,10 @@
 /* eslint import/no-extraneous-dependencies: "off" */
+const { IS_TESTNET } = process.env;
 
 module.exports = {
   env: {
     SENTRY_DSN: process.env.SENTRY_DSN,
-    IS_TESTNET: process.env.IS_TESTNET,
+    IS_TESTNET,
   },
   /*
   ** Headers of the page
@@ -125,7 +126,15 @@ module.exports = {
       pageTracking: true,
     }],
     '@nuxtjs/sentry',
+    '@likecoin/nuxt-google-optimize',
   ],
+  googleOptimize: {
+    externalExperimentsSrc:
+      `https://${IS_TESTNET ? 'rinkeby.' : ''}like.co/api/experiments/list`,
+    cookieDomain: process.NODE_ENV === 'production'
+      ? `${IS_TESTNET ? '.rinkeby' : ''}.like.co`
+      : '',
+  },
   /*
   ** Build configuration
   */

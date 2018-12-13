@@ -19,6 +19,7 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
+    "@likecoin/nuxt-google-optimize": "^0.5.3-like.3",
     "@nuxtjs/google-tag-manager": "^2.0.0",
     "@nuxtjs/sentry": "^2.0.0",
     "axios": "^0.18.0",
