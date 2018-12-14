@@ -137,7 +137,7 @@ module.exports = {
   googleOptimize: {
     externalExperimentsSrc:
       `https://${IS_TESTNET ? 'rinkeby.' : ''}like.co/api/experiments/list`,
-    cookieDomain: process.NODE_ENV === 'production'
+    cookieDomain: process.env.NODE_ENV === 'production'
       ? `${IS_TESTNET ? '.rinkeby' : ''}.like.co`
       : '',
     useFetch: true,
