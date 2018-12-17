@@ -4,7 +4,7 @@
       'like-button',
       {
         'like-button--liked': likeCount > 0,
-        'like-button--super-like': isLocalSuperLike,
+        'like-button--max-like': isLocalMaxLike,
         'like-button--pressed': isPressingKnob,
         'like-button--long-pressed': isLongPressingKnob,
       },
@@ -56,13 +56,25 @@
             </transition>
 
             <div class="like-button-knob__border" />
-            <div class="like-button-knob__content">
+            <transition-group
+              class="like-button-knob__content"
+              name="like-button-knob__content-"
+              tag="div"
+              mode="out-in"
+            >
+              <div
+                v-if="isMax && isShowMax"
+                key="max"
+                class="max-label"
+              >MAX</div>
               <simple-svg
+                v-else
+                key="clap"
                 :filepath="LikeClapIcon"
                 fill="currentColor"
                 stroke="transparent"
               />
-            </div>
+            </transition-group>
             <transition name="like-button__like-count-bubble-">
               <div
                 v-if="isShowBubble"
@@ -70,10 +82,10 @@
                 :class="[
                   'like-button__like-count-bubble',
                   {
-                    'like-button__like-count-bubble--max': isSuperLike,
+                    'like-button__like-count-bubble--max': isMax,
                   }
                 ]"
-              >{{ isSuperLike ? 'MAX' : `+${likeCount}` }}</div>
+              >{{ isMax ? 'MAX' : `+${likeCount}` }}</div>
             </transition>
           </button>
         </div>
@@ -128,7 +140,11 @@ export default {
       type: [Boolean, String],
       default: true,
     },
-    isSuperLike: {
+    isMax: {
+      type: [Boolean, String],
+      default: false,
+    },
+    isShowMax: {
       type: [Boolean, String],
       default: false,
     },
@@ -163,7 +179,7 @@ export default {
       }
       return `${totalLike.toLocaleString('en')}${suffix}`;
     },
-    isLocalSuperLike() {
+    isLocalMaxLike() {
       return this.knobProgress === 1;
     },
     isKnobMovable() {
@@ -242,27 +258,20 @@ export default {
     onPressedKnob(e) {
       if (this.hasMovedKnob) return;
 
-      if (this.knobProgress === 1) {
-        this.$emit('super-like', e, true);
-      } else if (this.knobProgress === 0) {
-        this.isShowBubble = true;
-        this.bubbleTimer = setTimeout(() => {
-          this.isShowBubble = false;
-        }, 500);
+      this.isShowBubble = true;
+      this.bubbleTimer = setTimeout(() => {
+        this.isShowBubble = false;
+      }, 500);
 
-        this.isShowClapEffect = true;
-        this.$nextTick(() => {
-          this.isShowClapEffect = false;
-        });
+      this.isShowClapEffect = true;
+      this.$nextTick(() => {
+        this.isShowClapEffect = false;
+      });
 
-        if (this.isSuperLike) {
-          if (this.isKnobMovable && !this.isLongPressingKnob) {
-            this.knobProgress = 1;
-          }
-        } else {
-          this.$emit('like', e);
-        }
+      if (this.isMax && this.isKnobMovable && !this.isLongPressingKnob) {
+        this.knobProgress = 1;
       }
+      this.$emit('like', e);
     },
     onMovingKnob(e) {
       if (!this.isPressingKnob) return;
@@ -281,7 +290,7 @@ export default {
       this.lastClientX = this.clientX;
       this.isPressingKnob = true;
       this.hasMovedKnob = false;
-      if (!this.isLocalSuperLike) {
+      if (!this.isLocalMaxLike) {
         this.longPressTimer = setInterval(() => {
           this.isLongPressingKnob = true;
           this.onPressedKnob(e);
@@ -295,7 +304,7 @@ export default {
 
       this.isPressingKnob = false;
       this.snapKnobProgress();
-      this.$emit('toggle', this.isLocalSuperLike);
+      this.$emit('toggle', this.isLocalMaxLike);
       this.hasMovedKnob = false;
     },
     onLeaveKnob() {
@@ -303,7 +312,7 @@ export default {
     },
     onClickTrack() {
       this.knobProgress = this.knobProgress > 0.5 ? 0 : 1;
-      this.$emit('toggle', this.isLocalSuperLike);
+      this.$emit('toggle', this.isLocalMaxLike);
     },
   },
 };
@@ -364,7 +373,7 @@ $like-button-like-count-size: 24;
       border-radius: normalized($like-button-slide-track-height);
       background-color: #E6E6E6;
 
-      .like-button--liked:not(.like-button--super-like) & {
+      .like-button--liked:not(.like-button--max-like) & {
         @keyframes sliding-animation {
           0% { background-position-x: 100%; }
           100% { background-position-x: -100%; }
@@ -425,7 +434,7 @@ $like-button-like-count-size: 24;
     }
     .like-button--pressed &,
     .like-button--liked &,
-    .like-button--super-like & {
+    .like-button--max-like & {
       color: white !important;
     }
     .like-button--pressed & {
@@ -454,7 +463,7 @@ $like-button-like-count-size: 24;
         box-shadow: normalized(2) normalized(4) normalized(6) 0 rgba(0, 0, 0, 0.25);
       }
       .like-button--liked &,
-      .like-button--super-like & {
+      .like-button--max-like & {
         transform: scale(1.02);
       }
       .like-button-knob:hover &,
@@ -463,7 +472,7 @@ $like-button-like-count-size: 24;
       }
       .like-button--pressed &,
       .like-button--liked &,
-      .like-button--super-like & {
+      .like-button--max-like & {
         background: linear-gradient(47deg, #d2f0f0, #f0e6b4);
         box-shadow: 0 normalized(2) normalized(6) 0 rgba(0, 0, 0, 0.25);
       }
@@ -474,17 +483,45 @@ $like-button-like-count-size: 24;
 
       width: normalized($like-button-size - $like-button-ring-width * 2);
       height: normalized($like-button-size - $like-button-ring-width * 2);
-      padding: normalized(12);
 
       transition: background-color 0.2s ease;
 
       border-radius: 50%;
       background-color: white;
 
+      font-size: normalized(22);
+      line-height: normalized(22);
+
       .like-button--pressed &,
       .like-button--liked &,
-      .like-button--super-like & {
+      .like-button--max-like & {
         background-color: $like-green;
+      }
+
+      &--enter-active,
+      &--leave-active {
+        transition-duration: 0.25s;
+        transition-property: transform, opacity;
+      }
+      &--enter,
+      &--leave-to {
+        transform: scale(0);
+
+        opacity: 0;
+      }
+
+      > * {
+        position: absolute;
+        top: normalized(12);
+        right: normalized(12);
+        bottom: normalized(12);
+        left: normalized(12);
+
+        &.max-label {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
       }
     }
   }

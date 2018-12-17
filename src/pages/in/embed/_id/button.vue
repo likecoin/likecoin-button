@@ -34,6 +34,7 @@
           </div>
 
           <div class="text-content">
+            <!-- Super Like
             <i18n
               tag="div"
               class="text-content__subtitle"
@@ -50,18 +51,26 @@
               {{ amount }} LIKE
               <span class="amount-in-usd">= USD {{ amountInUSD }}</span>
             </div>
+            -->
+
+            <div class="text-content__subtitle">
+              {{ $t('Embed.back.preRegister.subtitle') }}
+            </div>
+            <div class="text-content__title text-content__title--civic-liker">
+              {{ $t('Embed.back.preRegister.title') }}
+            </div>
+
           </div>
 
-          <div class="embed-superlike-button-wrapper">
+          <div class="embed-cta-button-wrapper">
             <a
-              id="embed-superlike-button"
-              ref="superLikeButton"
-              :href="getUserPath"
+              id="embed-cta-button"
+              :href="`https://${LIKE_CO_HOSTNAME}/in/civic`"
               target="_blank"
             >
               <div class="button-content-wrapper">
                 <div class="button-content">
-                  {{ $t('Embed.button.sendLike') }}
+                  {{ $t('Embed.back.preRegister.button') }}
                 </div>
               </div>
             </a>
@@ -137,7 +146,8 @@
       :like-count="likeCount"
       :total-like="totalLike"
       :is-togglable="false"
-      :is-super-like="isSuperLike"
+      :is-max="isMaxLike"
+      :is-show-max="shouldShowBackside"
       @like="onClickLike"
       @click-stats="onClickLikeStats"
     />
@@ -208,7 +218,7 @@ export default {
     referrer() {
       return this.$route.query.referrer || document.referrer || '';
     },
-    isSuperLike() {
+    isMaxLike() {
       return (this.likeCount >= 5);
     },
     isMobile() {
@@ -271,11 +281,15 @@ export default {
     onClickLike() {
       if (this.isLoggedIn) {
         // Case 3: User has logged in
-        if (!this.isSuperLike) {
+        if (!this.isMaxLike) {
           this.likeCount += 1;
+          debouncedOnClick(this);
+          logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike', 1);
         }
-        debouncedOnClick(this);
-        logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike', 1);
+
+        if (this.isMaxLike) {
+          this.shouldShowBackside = true;
+        }
       } else {
         this.onClickLoginButton();
       }
@@ -410,7 +424,7 @@ $close-btn-width: 56;
   }
 }
 
-#embed-superlike-button {
+#embed-cta-button {
   @keyframes super-like-button-shake {
     0%, 86% { transform: rotateZ(0deg); }
     88% { transform: rotateZ(2deg); }
@@ -430,21 +444,23 @@ $close-btn-width: 56;
 
 .text-content {
   &__title {
-    font-size: normalized(24);
-    line-height: normalized(24.5);
+    &#{&}--amount {
+      color: $like-green;
 
-    &--amount {
-        color: $like-green;
+      .amount-in-usd {
+        margin-left: normalized(6);
 
-        .amount-in-usd {
-          margin-left: normalized(6);
+        color: $like-gray-5;
 
-          color: $like-gray-5;
-
-          font-size: normalized(10);
-          line-height: normalized(10.5);
-        }
+        font-size: normalized(10);
+        line-height: normalized(10.5);
       }
+    }
+
+    &#{&}--civic-liker {
+      font-size: normalized(24);
+      line-height: normalized(24.5);
+    }
   }
 }
 

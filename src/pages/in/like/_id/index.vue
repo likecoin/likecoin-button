@@ -48,7 +48,7 @@
             :like-count="likeCount"
             :total-like="totalLike"
             :is-togglable="false"
-            :is-super-like="isMaxLike"
+            :is-max="isMaxLike"
             @like="onClickLike"
             @click-stats="onClickLikeStats"
           />

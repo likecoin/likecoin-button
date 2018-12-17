@@ -28,6 +28,13 @@
     }
   },
   "Embed": {
+    "back": {
+      "preRegister": {
+        "title": "立即預先登記",
+        "subtitle": "進一步支持創作",
+        "button": "讚賞公民"
+      }
+    },
     "label": {
       "support": "支持",
       "providedBy": "by LikeCoin 化讚為賞回饋創作",
@@ -46,7 +53,6 @@
     },
     "button": {
       "login": "登入 LikeCoin ID",
-      "sendLike": "賞",
       "showMore": "顯示更多"
     }
   }

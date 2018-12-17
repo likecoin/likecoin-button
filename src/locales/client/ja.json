@@ -28,6 +28,11 @@
     }
   },
   "Embed": {
+    "back": {
+      "preRegister": {
+        "button": "いいね国民"
+      }
+    },
     "label": {
       "support": "応援しよう！",
       "providedBy": "LikeCoinでクリエーターに報酬を与える。",
@@ -46,7 +51,6 @@
     },
     "button": {
       "login": "LikeCoin IDにログイン",
-      "sendLike": "与える",
       "showMore": "もっと見る"
     }
   }

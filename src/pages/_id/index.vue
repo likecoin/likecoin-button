@@ -94,7 +94,7 @@
         v-else
         class="like-form__info"
       >
-        <div class="like-form__info--super-like">
+        <div class="like-form__info--max-like">
           <i18n
             path="LikeButton.label.considerSuperLike"
             tag="span"
@@ -379,7 +379,7 @@ export default {
       color: #fc5757;
     }
 
-    &--super-like {
+    &--max-like {
       display: flex;
       flex-direction: column;
 
