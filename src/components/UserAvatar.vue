@@ -4,10 +4,11 @@
       name="lc-transition-default"
       mode="out-in"
     >
-      <img
+      <lc-avatar
         v-if="user.avatar"
         :src="user.avatar"
-      >
+        :halo="avatarHalo"
+      />
       <div
         v-else
         class="user-avatar__placeholder--image"
@@ -39,6 +40,8 @@
 <script>
 import { LIKE_CO_HOSTNAME } from '@/constant';
 
+import { getAvatarHaloTypeFromUser } from '~/util/user';
+
 export default {
   name: 'user-avatar',
   props: {
@@ -57,6 +60,11 @@ export default {
       },
     };
   },
+  computed: {
+    avatarHalo() {
+      return getAvatarHaloTypeFromUser(this.user);
+    },
+  },
 };
 </script>
 
@@ -73,16 +81,11 @@ $placeholder-gradient: linear-gradient(to right, #eee 8%, #ddd 24%, #eee 32%);
   align-items: center;
   flex-direction: row;
 
-  img,
   &__placeholder--image {
     width: $user-avatar-image-size;
     height: $user-avatar-image-size;
 
     border-radius: 50%;
-  }
-
-  img {
-    background-color: $like-white;
   }
 
   &__placeholder {
@@ -98,16 +101,9 @@ $placeholder-gradient: linear-gradient(to right, #eee 8%, #ddd 24%, #eee 32%);
   }
 
   a {
-    max-width: calc(100% - #{$user-avatar-image-size});
-
-    &:not(:hover) {
-      text-decoration: none;
-    }
-  }
-
-  span {
     display: block;
 
+    max-width: calc(100% - #{$user-avatar-image-size});
     margin-left: 12px;
 
     word-wrap: break-word;
@@ -116,6 +112,10 @@ $placeholder-gradient: linear-gradient(to right, #eee 8%, #ddd 24%, #eee 32%);
 
     font-size: 18px;
     font-weight: 600;
+
+    &:not(:hover) {
+      text-decoration: none;
+    }
   }
 }
 </style>

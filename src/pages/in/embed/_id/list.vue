@@ -142,6 +142,7 @@ export default {
           const { data } = await apiGetUserMinById(r.id);
           Vue.set(r, 'avatar', data.avatar);
           Vue.set(r, 'displayName', data.displayName);
+          Vue.set(r, 'isPreRegCivicLiker', data.isPreRegCivicLiker);
         } catch (err) {
           console.error(err);
         }
@@ -161,8 +162,7 @@ $user-avatar-image-size: 48px;
 .likee-list-page {
   .user-avatar {
     min-height: 72px;
-    padding-top: 16px;
-    padding-bottom: 8px;
+    padding: 16px 8px;
 
     border-bottom: 1px solid #e6e6e6;
   }

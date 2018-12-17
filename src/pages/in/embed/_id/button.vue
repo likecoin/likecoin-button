@@ -6,6 +6,7 @@
       `likecoin-embed--logged-${isLoggedIn ? 'in' : 'out'}`,
       {
         'likecoin-embed--flipped': shouldShowBackside,
+        'likecoin-embed--with-halo': avatarHalo !== 'none',
       },
     ]"
   >
@@ -74,7 +75,10 @@
       >
         <div class="likecoin-embed__badge__content">
 
-          <embed-user-info :avatar="avatar" />
+          <embed-user-info
+            :avatar="avatar"
+            :avatar-halo="avatarHalo"
+          />
 
           <!-- Front upper part, Logged in -->
           <!-- Mobile -->
@@ -323,6 +327,10 @@ $close-btn-width: 56;
 
 .likecoin-embed {
   perspective: 800px;
+
+  &#{&}--with-halo {
+    margin-top: normalized(20);
+  }
 
   &__badge {
     backface-visibility: hidden;

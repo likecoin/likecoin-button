@@ -19,7 +19,10 @@
 
         <div class="like-panel">
           <div class="like-panel__badge">
-            <embed-user-info :avatar="avatar" />
+            <embed-user-info
+              :avatar="avatar"
+              :avatar-halo="avatarHalo"
+            />
 
             <div class="text-content">
               <div class="text-content__subtitle">
@@ -240,6 +243,10 @@ $badge-width: 485px;
 }
 
 .text-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
   padding: 16px;
 
   &__subtitle {
