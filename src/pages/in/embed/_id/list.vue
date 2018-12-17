@@ -93,6 +93,7 @@ const checkValidDomainNotIP = (url) => {
   const parts = match[1].split('.');
   const isIP = (parts.length === 4 && parts.every((part) => {
     try {
+      if (!/^\d{1,3}$/.match(part)) return false;
       const partNum = Number(part);
       return partNum >= 0 && partNum <= 255;
     } catch (err) {
@@ -131,7 +132,7 @@ export default {
     ] = await Promise.all(promises);
     let title = '';
     if (html) {
-      const match = html.match('<title>(.*?)</title>');
+      const match = html.match(/<title(?:[^>]*)>(.*?)<\/title>/);
       if (match && match[1]) [, title] = match;
     }
     return {
