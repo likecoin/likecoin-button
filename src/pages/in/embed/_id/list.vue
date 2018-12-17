@@ -131,7 +131,7 @@ export default {
     ] = await Promise.all(promises);
     let title = '';
     if (html) {
-      const match = html.match('<title>(.*?)</title>');
+      const match = html.match(/<title(?: [a-zA-Z0-9-="']+)?>(.*?)<\/title>/);
       if (match && match[1]) [, title] = match;
     }
     return {
