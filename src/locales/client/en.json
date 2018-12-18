@@ -28,6 +28,13 @@
     }
   },
   "Embed": {
+    "back": {
+      "preRegister": {
+        "title": "Pre-register now",
+        "subtitle": "To further support creation",
+        "button": "Civic Liker"
+      }
+    },
     "label": {
       "support": "Support",
       "providedBy": "by LikeCoin reinvented LikeButton",
@@ -46,7 +53,6 @@
     },
     "button": {
       "login": "Login to LikeCoin ID",
-      "sendLike": "Reward",
       "showMore": "show more"
     }
   }

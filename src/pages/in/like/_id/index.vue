@@ -19,7 +19,10 @@
 
         <div class="like-panel">
           <div class="like-panel__badge">
-            <embed-user-info :avatar="avatar" />
+            <embed-user-info
+              :avatar="avatar"
+              :avatar-halo="avatarHalo"
+            />
 
             <div class="text-content">
               <div class="text-content__subtitle">
@@ -45,7 +48,7 @@
             :like-count="likeCount"
             :total-like="totalLike"
             :is-togglable="false"
-            :is-super-like="isMaxLike"
+            :is-max="isMaxLike"
             @like="onClickLike"
             @click-stats="onClickLikeStats"
           />
@@ -240,6 +243,10 @@ $badge-width: 485px;
 }
 
 .text-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
   padding: 16px;
 
   &__subtitle {

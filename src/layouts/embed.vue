@@ -26,7 +26,7 @@ html[likecoin-embed] {
 
   // Show button border when cursor fall into root element
   &:hover {
-    .embed-superlike-button-wrapper::before {
+    .embed-cta-button-wrapper::before {
       opacity: 1;
     }
   }
@@ -86,7 +86,7 @@ html[likecoin-embed] {
     }
   }
 
-  .embed-superlike-button-wrapper {
+  .embed-cta-button-wrapper {
     position: absolute;
     right: 0;
 
@@ -168,7 +168,7 @@ html[likecoin-embed] {
   }
 }
 
-#embed-superlike-button {
+#embed-cta-button {
   position: relative;
 
   display: flex;

@@ -28,6 +28,13 @@
     }
   },
   "Embed": {
+    "back": {
+      "preRegister": {
+        "title": "立即预先登记",
+        "subtitle": "进一步支持创作",
+        "button": "赞赏公民"
+      }
+    },
     "label": {
       "support": "支持",
       "providedBy": "by LikeCoin 化赞为赏回馈创作",
@@ -43,7 +50,6 @@
     },
     "button": {
       "login": "登入 LikeCoin ID",
-      "sendLike": "赏",
       "showMore": "显示更多"
     }
   }

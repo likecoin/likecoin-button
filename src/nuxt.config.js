@@ -48,6 +48,7 @@ module.exports = {
   loading: { color: '#3B8070' },
   plugins: [
     { src: '~/plugins/vuetify' },
+    { src: '~/plugins/likecoin-ui-vue' },
     { src: '~/plugins/vue-simple-svg' },
     { src: '~/plugins/vue-i18n' },
   ],
@@ -192,5 +193,6 @@ module.exports = {
   */
   css: [
     { src: '~/assets/css/index.scss', lang: 'scss' },
+    { src: '@likecoin/ui-vue/dist/ui-vue.css', lang: 'css' },
   ],
 };

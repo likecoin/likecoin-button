@@ -14,6 +14,8 @@ import {
   apiGetPageTitle,
 } from '~/util/api/api';
 
+import { getAvatarHaloTypeFromUser } from '~/util/user';
+
 export default {
   components: {
     EmbedCreateWidgetButton,
@@ -51,6 +53,7 @@ export default {
       const {
         displayName,
         avatar,
+        isPreRegCivicLiker,
       } = res[0].data;
 
       let amountInUSD;
@@ -64,6 +67,8 @@ export default {
         id,
         displayName,
         avatar,
+        avatarHalo: getAvatarHaloTypeFromUser({ isPreRegCivicLiker }),
+        isPreRegCivicLiker,
         amount,
         amountInUSD,
         platforms: res[1].data,

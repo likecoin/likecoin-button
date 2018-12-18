@@ -2,7 +2,7 @@
   <like-button
     :like-count="likeCount"
     :total-like="totalLike"
-    :is-super-like="isSuperLike"
+    :is-max="isMaxLike"
     :is-toggled="isToggled"
     @like="onClickLike"
     @click-stats="onClickLikeStats"
@@ -55,7 +55,7 @@ export default {
     referrer() {
       return this.$route.query.referrer || document.referrer || '';
     },
-    isSuperLike() {
+    isMaxLike() {
       return (this.likeCount >= 5);
     },
   },
@@ -105,7 +105,7 @@ export default {
       }, 300);
     },
     onClickLike() {
-      if (!this.isSuperLike) {
+      if (!this.isMaxLike) {
         this.likeCount += 1;
       } else {
         this.toggleLikeButton();

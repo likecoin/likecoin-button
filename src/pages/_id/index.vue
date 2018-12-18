@@ -49,7 +49,11 @@
             rel="noopener noreferrer"
             target="_blank"
           >
-            <img :src="avatar">
+            <lc-avatar
+              :src="avatar"
+              :halo="avatarHalo"
+              size="100"
+            />
           </a>
         </div>
         <div class="like-form__user__detail">
@@ -90,7 +94,7 @@
         v-else
         class="like-form__info"
       >
-        <div class="like-form__info--super-like">
+        <div class="like-form__info--max-like">
           <i18n
             path="LikeButton.label.considerSuperLike"
             tag="span"
@@ -145,6 +149,7 @@ import {
 import LikeForm from '@/components/LikeForm';
 import LoadingIndicator from '@/components/LoadingIndicator';
 import { logTrackerEvent } from '@/util/EventLogger';
+import { getAvatarHaloTypeFromUser } from '@/util/user';
 
 import BackIcon from '@/assets/icons/arrow.svg';
 
@@ -192,9 +197,14 @@ export default {
     }
     return apiGetUserMinById(params.id)
       .then((res) => {
-        const { avatar, displayName } = res.data;
+        const {
+          avatar,
+          displayName,
+          isPreRegCivicLiker,
+        } = res.data;
         return {
           avatar,
+          avatarHalo: getAvatarHaloTypeFromUser({ isPreRegCivicLiker }),
           displayName: displayName || params.id,
         };
       })
@@ -306,23 +316,6 @@ export default {
       text-align: center;
     }
 
-    &__avatar {
-      overflow: hidden;
-      flex-shrink: 0;
-
-      width: 80px;
-      height: 80px;
-      margin: 10px 0;
-
-      border-radius: 50%;
-      box-shadow: 0 0 1px #9b9b9b;
-
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-
     &__detail {
       margin-left: 20px;
 
@@ -386,7 +379,7 @@ export default {
       color: #fc5757;
     }
 
-    &--super-like {
+    &--max-like {
       display: flex;
       flex-direction: column;
 
