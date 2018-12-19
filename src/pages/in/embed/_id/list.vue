@@ -93,7 +93,7 @@ const checkValidDomainNotIP = (url) => {
   const parts = match[1].split('.');
   const isIP = (parts.length === 4 && parts.every((part) => {
     try {
-      if (!/^\d{1,3}$/.match(part)) return false;
+      if (!part.match(/^\d{1,3}$/)) return false;
       const partNum = Number(part);
       return partNum >= 0 && partNum <= 255;
     } catch (err) {
