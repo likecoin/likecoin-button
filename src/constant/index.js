@@ -18,3 +18,6 @@ export const W3C_EMAIL_REGEX = '^[a-zA-Z0-9.!#$%&\'*/=?^_`{|}~-]+@[a-zA-Z0-9](?:
 
 /* TEMP: reformat medium referrer into medium post */
 export const MEDIUM_REGEX = /^(?:https?:\/\/)?[^/]*\/media\/[a-zA-Z0-9_]+(?:\?postId=([a-zA-Z0-9_]+))?/;
+
+export const CIVIC_LIKER_START_DATE = 1546387200000; // 2019-01-02T08:00:00+0800
+export const CIVIC_LIKER_TRIAL_END_DATE = 1548950399000; // 2019-01-31T23:59:59+0800

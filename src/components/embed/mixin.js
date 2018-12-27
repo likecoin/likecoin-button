@@ -54,6 +54,8 @@ export default {
         displayName,
         avatar,
         isPreRegCivicLiker,
+        isSubscribedCivicLiker,
+        civicLikerSince,
       } = res[0].data;
 
       let amountInUSD;
@@ -67,8 +69,10 @@ export default {
         id,
         displayName,
         avatar,
-        avatarHalo: getAvatarHaloTypeFromUser({ isPreRegCivicLiker }),
+        avatarHalo: getAvatarHaloTypeFromUser(res[0].data),
         isPreRegCivicLiker,
+        isSubscribedCivicLiker,
+        civicLikerSince,
         amount,
         amountInUSD,
         platforms: res[1].data,
