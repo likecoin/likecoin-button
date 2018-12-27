@@ -166,6 +166,8 @@ export default {
           Vue.set(r, 'avatar', data.avatar);
           Vue.set(r, 'displayName', data.displayName);
           Vue.set(r, 'isPreRegCivicLiker', data.isPreRegCivicLiker);
+          Vue.set(r, 'isSubscribedCivicLiker', data.isSubscribedCivicLiker);
+          Vue.set(r, 'civicLikerSince', data.civicLikerSince);
         } catch (err) {
           console.error(err);
         }

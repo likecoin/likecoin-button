@@ -30,8 +30,12 @@
   "Embed": {
     "back": {
       "preRegister": {
-        "title": "立即预先登记",
+        "title": "立即预先登记"
+      },
+      "civicLiker": {
+        "title": "立即登记",
         "subtitle": "进一步支持创作",
+        "registered": "感谢你支持创作",
         "button": "赞赏公民"
       }
     },

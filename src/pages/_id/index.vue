@@ -200,11 +200,10 @@ export default {
         const {
           avatar,
           displayName,
-          isPreRegCivicLiker,
         } = res.data;
         return {
           avatar,
-          avatarHalo: getAvatarHaloTypeFromUser({ isPreRegCivicLiker }),
+          avatarHalo: getAvatarHaloTypeFromUser(res.data),
           displayName: displayName || params.id,
         };
       })
