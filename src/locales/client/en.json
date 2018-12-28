@@ -31,7 +31,12 @@
     "back": {
       "preRegister": {
         "title": "Pre-register now",
+        "subtitle": "To further support creation"
+      },
+      "civicLiker": {
+        "title": "Register now",
         "subtitle": "To further support creation",
+        "registered": "Thank you for your support",
         "button": "Civic Liker"
       }
     },

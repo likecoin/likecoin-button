@@ -53,11 +53,14 @@
             </div>
             -->
 
-            <div class="text-content__subtitle">
-              {{ $t('Embed.back.preRegister.subtitle') }}
+            <div
+              v-if="backSubtitle"
+              class="text-content__subtitle"
+            >
+              {{ backSubtitle }}
             </div>
             <div class="text-content__title text-content__title--civic-liker">
-              {{ $t('Embed.back.preRegister.title') }}
+              {{ backTitle }}
             </div>
 
           </div>
@@ -70,7 +73,7 @@
             >
               <div class="button-content-wrapper">
                 <div class="button-content">
-                  {{ $t('Embed.back.preRegister.button') }}
+                  {{ $t('Embed.back.civicLiker.button') }}
                 </div>
               </div>
             </a>
@@ -170,7 +173,10 @@ import {
   apiGetLikeButtonTotalCount,
 } from '@/util/api/api';
 
-import { LIKE_CO_HOSTNAME } from '@/constant';
+import {
+  LIKE_CO_HOSTNAME,
+  CIVIC_LIKER_START_DATE,
+} from '@/constant';
 import { checkIsMobileClient } from '~/util/client';
 
 import CloseButtonIcon from '~/assets/like-button/close-btn.svg';
@@ -223,6 +229,28 @@ export default {
     },
     isMobile() {
       return checkIsMobileClient();
+    },
+    backTitle() {
+      if (this.isSubscribedCivicLiker) {
+        return this.$t('Embed.back.civicLiker.registered');
+      }
+
+      return this.$t(
+        Date.now() < CIVIC_LIKER_START_DATE
+          ? 'Embed.back.preRegister.title'
+          : 'Embed.back.civicLiker.title',
+      );
+    },
+    backSubtitle() {
+      if (this.isSubscribedCivicLiker) {
+        return '';
+      }
+
+      return this.$t(
+        Date.now() < CIVIC_LIKER_START_DATE
+          ? 'Embed.back.preRegister.subtitle'
+          : 'Embed.back.civicLiker.subtitle',
+      );
     },
   },
   mounted() {
