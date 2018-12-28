@@ -30,7 +30,8 @@
   "Embed": {
     "back": {
       "preRegister": {
-        "title": "立即預先登記"
+        "title": "立即預先登記",
+        "subtitle": "進一步支持創作"
       },
       "civicLiker": {
         "title": "立即登記",

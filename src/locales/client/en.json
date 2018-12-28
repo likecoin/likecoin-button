@@ -30,7 +30,8 @@
   "Embed": {
     "back": {
       "preRegister": {
-        "title": "Pre-register now"
+        "title": "Pre-register now",
+        "subtitle": "To further support creation"
       },
       "civicLiker": {
         "title": "Register now",
