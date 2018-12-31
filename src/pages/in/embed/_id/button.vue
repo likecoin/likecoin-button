@@ -68,7 +68,7 @@
           <div class="embed-cta-button-wrapper">
             <a
               id="embed-cta-button"
-              :href="`https://${LIKE_CO_HOSTNAME}/in/civic`"
+              :href="`https://${LIKE_CO_HOSTNAME}/in/civic?referrer=${encodeURIComponent(referrer)}&from=${encodeURIComponent($route.params.id)}`"
               target="_blank"
             >
               <div class="button-content-wrapper">
