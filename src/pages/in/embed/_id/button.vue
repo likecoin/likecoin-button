@@ -175,7 +175,6 @@ import {
 
 import {
   LIKE_CO_HOSTNAME,
-  CIVIC_LIKER_START_DATE,
 } from '@/constant';
 import { checkIsMobileClient } from '~/util/client';
 
@@ -214,6 +213,7 @@ export default {
       LIKE_CO_HOSTNAME,
 
       isLoggedIn: false,
+      isSubscribed: false,
       likeCount: 0,
       likeSent: 0,
       totalLike: 0,
@@ -231,29 +231,13 @@ export default {
       return checkIsMobileClient();
     },
     isFlipped() {
-      return this.shouldShowBackside && !this.isSubscribedCivicLiker;
+      return this.shouldShowBackside && !this.isSubscribed;
     },
     backTitle() {
-      if (this.isSubscribedCivicLiker) {
-        return this.$t('Embed.back.civicLiker.registered');
-      }
-
-      return this.$t(
-        Date.now() < CIVIC_LIKER_START_DATE
-          ? 'Embed.back.preRegister.title'
-          : 'Embed.back.civicLiker.title',
-      );
+      return this.$t('Embed.back.civicLiker.title');
     },
     backSubtitle() {
-      if (this.isSubscribedCivicLiker) {
-        return '';
-      }
-
-      return this.$t(
-        Date.now() < CIVIC_LIKER_START_DATE
-          ? 'Embed.back.preRegister.subtitle'
-          : 'Embed.back.civicLiker.subtitle',
-      );
+      return this.$t('Embed.back.civicLiker.subtitle');
     },
   },
   mounted() {
@@ -278,9 +262,10 @@ export default {
           apiGetLikeButtonMyStatus(this.id, this.referrer, this.getIsCookieSupport()),
           apiGetLikeButtonTotalCount(this.id, this.referrer),
         ]);
-        const { liker, count } = myData;
+        const { liker, count, isSubscribed } = myData;
         const { total } = totalData;
         this.isLoggedIn = !!liker;
+        this.isSubscribed = isSubscribed;
         this.totalLike = total;
         this.likeCount = count;
         this.likeSent = count;
