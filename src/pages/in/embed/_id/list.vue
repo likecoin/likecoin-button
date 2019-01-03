@@ -34,7 +34,7 @@
 
         <div
           :class="['likee-list-page__list', { expand: isShowAll }]"
-          :style="{ maxHeight: `${Math.ceil(likees.length / 2) * 74}px` }"
+          :style="{ maxHeight: `${Math.ceil(likees.length / 2) * 89}px` }"
         >
 
           <user-avatar

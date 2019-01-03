@@ -5,7 +5,7 @@
       'likecoin-embed--button',
       `likecoin-embed--logged-${isLoggedIn ? 'in' : 'out'}`,
       {
-        'likecoin-embed--flipped': shouldShowBackside,
+        'likecoin-embed--flipped': isFlipped,
         'likecoin-embed--with-halo': avatarHalo !== 'none',
       },
     ]"
@@ -16,7 +16,7 @@
       mode="out-in"
     >
       <div
-        v-if="shouldShowBackside"
+        v-if="isFlipped"
         key="back"
         class="likecoin-embed__badge likecoin-embed__badge--back"
       >
@@ -150,7 +150,7 @@
       :total-like="totalLike"
       :is-togglable="false"
       :is-max="isMaxLike"
-      :is-show-max="shouldShowBackside"
+      :is-show-max="isFlipped"
       @like="onClickLike"
       @click-stats="onClickLikeStats"
     />
@@ -229,6 +229,9 @@ export default {
     },
     isMobile() {
       return checkIsMobileClient();
+    },
+    isFlipped() {
+      return this.shouldShowBackside && !this.isSubscribedCivicLiker;
     },
     backTitle() {
       if (this.isSubscribedCivicLiker) {
@@ -371,7 +374,7 @@ $close-btn-width: 56;
   perspective: 800px;
 
   &#{&}--with-halo {
-    margin-top: normalized(20);
+    margin-top: normalized(24);
   }
 
   &__badge {
