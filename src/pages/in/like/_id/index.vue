@@ -247,6 +247,7 @@ $badge-width: 485px;
   flex-direction: column;
   justify-content: center;
 
+  margin-top: 8px;
   padding: 16px;
 
   &__subtitle {

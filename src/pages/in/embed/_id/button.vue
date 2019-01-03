@@ -371,7 +371,7 @@ $close-btn-width: 56;
   perspective: 800px;
 
   &#{&}--with-halo {
-    margin-top: normalized(20);
+    margin-top: normalized(24);
   }
 
   &__badge {
