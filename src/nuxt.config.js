@@ -47,6 +47,7 @@ module.exports = {
   */
   loading: { color: '#3B8070' },
   plugins: [
+    { src: '~/plugins/polyfill', ssr: false },
     { src: '~/plugins/vuetify' },
     { src: '~/plugins/likecoin-ui-vue' },
     { src: '~/plugins/vue-simple-svg' },
