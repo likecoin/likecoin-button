@@ -154,7 +154,7 @@ module.exports = {
     babel: {
       presets: ({ isServer }) => [
         [
-          '@nuxtjs/babel-preset-app',
+          '@nuxt/babel-preset-app',
           {
             targets: isServer
               ? { node: '8.11.1' }
