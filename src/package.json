@@ -24,6 +24,8 @@
     "@nuxtjs/google-tag-manager": "^2.1.1",
     "@nuxtjs/sentry": "^2.1.0",
     "axios": "^0.18.0",
+    "classlist-polyfill": "^1.2.0",
+    "core-js": "^2.6.1",
     "lodash.debounce": "^4.0.8",
     "nuxt": "^2.3.4",
     "vue-i18n": "^8.0.0",
