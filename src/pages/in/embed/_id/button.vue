@@ -73,7 +73,7 @@
             >
               <div class="button-content-wrapper">
                 <div class="button-content">
-                  {{ $t('Embed.back.civicLiker.button') }}
+                  {{ backCTAButtonTitle }}
                 </div>
               </div>
             </a>
@@ -214,6 +214,7 @@ export default {
 
       isLoggedIn: false,
       isSubscribed: false,
+      isTrialSubscriber: false,
       likeCount: 0,
       likeSent: 0,
       totalLike: 0,
@@ -231,13 +232,22 @@ export default {
       return checkIsMobileClient();
     },
     isFlipped() {
-      return this.shouldShowBackside && !this.isSubscribed;
+      return this.shouldShowBackside && (!this.isSubscribed || this.isTrialSubscriber);
     },
     backTitle() {
+      if (this.isTrialSubscriber) {
+        return this.$t('Embed.back.civicLiker.trial.title');
+      }
       return this.$t('Embed.back.civicLiker.title');
     },
     backSubtitle() {
       return this.$t('Embed.back.civicLiker.subtitle');
+    },
+    backCTAButtonTitle() {
+      if (this.isTrialSubscriber) {
+        return this.$t('Embed.back.civicLiker.trial.button');
+      }
+      return this.$t('Embed.back.civicLiker.button');
     },
   },
   mounted() {
@@ -262,10 +272,16 @@ export default {
           apiGetLikeButtonMyStatus(this.id, this.referrer, this.getIsCookieSupport()),
           apiGetLikeButtonTotalCount(this.id, this.referrer),
         ]);
-        const { liker, count, isSubscribed } = myData;
+        const {
+          liker,
+          count,
+          isSubscribed,
+          isTrialSubscriber,
+        } = myData;
         const { total } = totalData;
         this.isLoggedIn = !!liker;
         this.isSubscribed = isSubscribed;
+        this.isTrialSubscriber = isTrialSubscriber;
         this.totalLike = total;
         this.likeCount = count;
         this.likeSent = count;
