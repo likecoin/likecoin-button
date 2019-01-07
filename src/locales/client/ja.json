@@ -30,7 +30,10 @@
   "Embed": {
     "back": {
       "civicLiker": {
-        "button": "いいね国民"
+        "button": "いいね国民",
+        "trial": {
+          "button": "適用する"
+        }
       }
     },
     "label": {
