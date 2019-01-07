@@ -250,8 +250,10 @@ export default {
       return this.$t('Embed.back.civicLiker.button');
     },
   },
-  mounted() {
+  created() {
     this.updateUser();
+  },
+  mounted() {
     window.addEventListener('message', this.handleWindowMessage);
     if (this.getIsCookieSupport()) {
       logTrackerEvent(this, 'LikeButton', 'isCookieSupportTrue', 'isCookieSupportTrue', 1);
