@@ -155,7 +155,7 @@ export default {
       return this.$route.query.show_back === '1';
     },
   },
-  mounted() {
+  created() {
     this.fetchList();
   },
   methods: {
