@@ -75,6 +75,14 @@
                 stroke="transparent"
               />
             </transition-group>
+
+            <transition name="like-button__like-count-label-">
+              <div
+                v-if="likeCount >= 1"
+                class="like-button__like-count-label"
+              >{{ likeCount }}</div>
+            </transition>
+
             <transition name="like-button__like-count-bubble-">
               <div
                 v-if="isShowBubble"
@@ -522,6 +530,38 @@ $like-button-like-count-size: 24;
           align-items: center;
           justify-content: center;
         }
+      }
+    }
+  }
+
+  &__like-count-label {
+    position: absolute;
+    right: normalized(-2);
+    bottom: normalized(-2);
+
+    width: normalized(24);
+    height: normalized(24);
+
+    text-align: center;
+
+    color: $like-green;
+    border: solid normalized(2) $like-light-blue;
+    border-radius: 50%;
+    background: white;
+
+    font-size: normalized(12);
+    font-weight: 600;
+    line-height: 1.6;
+
+    &-- {
+      &enter-active {
+        transition-timing-function: ease-out;
+        transition-duration: 0.15s;
+      }
+      &enter {
+        transform: scale(0);
+
+        opacity: 0;
       }
     }
   }
