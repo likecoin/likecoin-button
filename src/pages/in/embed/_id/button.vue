@@ -223,7 +223,7 @@ export default {
   },
   computed: {
     referrer() {
-      return this.$route.query.referrer || document.referrer || '';
+      return this.$route.query.referrer || (process.client && document.referrer) || '';
     },
     isMaxLike() {
       return (this.likeCount >= 5);
@@ -251,7 +251,9 @@ export default {
     },
   },
   created() {
-    this.updateUser();
+    if (process.client) {
+      this.updateUser();
+    }
   },
   mounted() {
     window.addEventListener('message', this.handleWindowMessage);
