@@ -134,16 +134,16 @@ module.exports = {
       pageTracking: true,
     }],
     '@nuxtjs/sentry',
-    '@likecoin/nuxt-google-optimize',
+    // '@likecoin/nuxt-google-optimize',
   ],
-  googleOptimize: {
-    externalExperimentsSrc:
-      `https://${IS_TESTNET ? 'rinkeby.' : ''}like.co/api/experiments/list`,
-    cookieDomain: process.env.NODE_ENV === 'production'
-      ? `${IS_TESTNET ? '.rinkeby' : ''}.like.co`
-      : '',
-    useFetch: true,
-  },
+  // googleOptimize: {
+  //   externalExperimentsSrc:
+  //     `https://${IS_TESTNET ? 'rinkeby.' : ''}like.co/api/experiments/list`,
+  //   cookieDomain: process.env.NODE_ENV === 'production'
+  //     ? `${IS_TESTNET ? '.rinkeby' : ''}.like.co`
+  //     : '',
+  //   useFetch: true,
+  // },
   /*
   ** Build configuration
   */
