@@ -60,7 +60,9 @@ export default {
     },
   },
   created() {
-    this.updateUser();
+    if (process.client) {
+      this.updateUser();
+    }
   },
   beforeDestroy() {
     this.clearUntoggleTimer();

@@ -117,7 +117,9 @@ export default {
     },
   },
   created() {
-    this.updateUser();
+    if (process.client) {
+      this.updateUser();
+    }
   },
   methods: {
     async updateUser() {
