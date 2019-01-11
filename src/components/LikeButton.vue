@@ -2,6 +2,7 @@
   <div
     :class="[
       'like-button',
+      `like-button--${layout}`,
       {
         'like-button--liked': likeCount > 0,
         'like-button--max-like': isLocalMaxLike,
@@ -56,6 +57,7 @@
             </transition>
 
             <div class="like-button-knob__border" />
+
             <transition-group
               class="like-button-knob__content"
               name="like-button-knob__content-"
@@ -103,6 +105,7 @@
           @click="$emit('click-stats')"
         >
           <simple-svg
+            v-if="layout === 'row'"
             :filepath="LikeTextIcon"
             class="like-button-stats__text-logo"
             fill="currentColor"
@@ -128,6 +131,11 @@ import ClapEffectIcon from '~/assets/like-button/clap-effect.svg';
 import LikeClapIcon from '~/assets/like-button/like-clap.svg';
 import LikeTextIcon from '~/assets/like-button/like-text.svg';
 
+
+const LAYOUT = {
+  ROW: 'row',
+  COLUMN: 'column',
+};
 
 export default {
   name: 'like-button',
@@ -155,6 +163,13 @@ export default {
     isShowMax: {
       type: [Boolean, String],
       default: false,
+    },
+    layout: {
+      type: String,
+      default: LAYOUT.ROW,
+      validator(value) {
+        return LAYOUT[value.toUpperCase()] === value;
+      },
     },
   },
   data() {
@@ -348,6 +363,10 @@ $like-button-like-count-size: 24;
 
     margin: normalized(10);
     margin-right: normalized(90);
+
+    .like-button--column & {
+      flex-direction: column;
+    }
   }
 
   &-slide-track {
@@ -659,8 +678,16 @@ $like-button-like-count-size: 24;
   }
 
   &-stats {
-    margin-top: calc(50% - #{normalized(13)});
-    margin-left: normalized(12);
+    .like-button--row & {
+      margin-top: calc(50% - #{normalized(13)});
+      margin-left: normalized(12);
+    }
+    .like-button--column & {
+      width: 100%;
+      margin-top: normalized(4);
+
+      text-align: center;
+    }
 
     cursor: pointer;
 
