@@ -10,7 +10,6 @@
     ]"
   >
     <div>
-
       <ul>
         <li
           v-for="socialMedia in socialMediaList"
@@ -28,39 +27,27 @@
             type="button"
             @click="onClickButton(socialMedia)"
           >
-            <simple-svg
-              :filepath="getIconPath(socialMedia.id)"
-              fill="white"
-              width="36px"
-              height="36px"
-            />
+            <component :is="getIconComponentName(socialMedia.id)" />
           </button>
         </li>
-
-        <!-- Will not show until settings page is finished
-        <li v-if="isMini">
-          <md-button
-            class="social-media-connect__add-button md-icon-button"
-            type="button"
-            :to="{ name: 'in-settings' }"
-          >
-            <simple-svg
-              :filepath="getIconPath('add')"
-              fill="#C0C0C0"
-              width="22px"
-              height="22px"
-            />
-          </md-button>
-        </li>
-        -->
       </ul>
-
     </div>
   </div>
 </template>
 
 <script>
 import LikeCoinIcon from '~/assets/icons/likecoin.svg';
+import FacebookIcon from '~/assets/icons/social-media/facebook.svg';
+import FlickrIcon from '~/assets/icons/social-media/flickr.svg';
+// import InstagramIcon from '~/assets/icons/social-media/instagram.svg';
+import MediumIcon from '~/assets/icons/social-media/medium.svg';
+import TwitterIcon from '~/assets/icons/social-media/twitter.svg';
+import LinkBlogIcon from '~/assets/icons/social-media/link/blog.svg';
+import LinkContactIcon from '~/assets/icons/social-media/link/contact.svg';
+import LinkLinkIcon from '~/assets/icons/social-media/link/link.svg';
+import LinkMailIcon from '~/assets/icons/social-media/link/mail.svg';
+import LinkPhotoIcon from '~/assets/icons/social-media/link/photo.svg';
+import LinkProfileIcon from '~/assets/icons/social-media/link/profile.svg';
 
 import { W3C_EMAIL_REGEX } from '~/constant';
 import { openURL } from '~/util/client';
@@ -101,10 +88,22 @@ const SOCIAL_MEDIA_LIST = [
   */
 ];
 
-const iconFolder = require.context('../assets/icons/social-media/');
-
 export default {
   name: 'social-media-connect',
+  components: {
+    LikeCoinIcon,
+    FacebookIcon,
+    FlickrIcon,
+    // InstagramIcon,
+    MediumIcon,
+    TwitterIcon,
+    LinkBlogIcon,
+    LinkContactIcon,
+    LinkLinkIcon,
+    LinkMailIcon,
+    LinkPhotoIcon,
+    LinkProfileIcon,
+  },
   props: {
     type: {
       type: String,
@@ -156,15 +155,14 @@ export default {
     },
   },
   methods: {
-    getIconPath(id) {
-      try {
-        const filePath = this.platforms[id] && this.platforms[id].isExternalLink
-          ? `link/${this.platforms[id].iconType}`
-          : id;
-        return iconFolder(`./${filePath}.svg`);
-      } catch (err) {
-        return LikeCoinIcon;
+    getIconComponentName(id) {
+      const isLink = this.platforms[id] && this.platforms[id].isExternalLink;
+      let name = isLink ? this.platforms[id].iconType : id;
+      name = `${isLink ? 'Link' : ''}${name.replace(/^./, s => s.toUpperCase())}Icon`;
+      if (this.$options.components[name]) {
+        return name;
       }
+      return 'LikeCoinIcon';
     },
     getIsConnected(id) {
       return !!this.platforms[id];
@@ -244,6 +242,12 @@ $hover-color-map: (
 
     background-color: $like-gray-5;
 
+    > svg {
+      display: block;
+
+      fill: white;
+    }
+
     &:hover {
       background-color: darken($like-gray-5, 10);
     }
@@ -281,6 +285,13 @@ $hover-color-map: (
 }
 
 button[class*=social-media-connect__button--link] {
-  background-color: transparent !important;
+  background-color: transparent;
+
+  &:hover {
+    background-color: darken(white, 15);
+  }
+  &:active {
+    background-color: darken(white, 30);
+  }
 }
 </style>

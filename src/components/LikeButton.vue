@@ -47,11 +47,7 @@
                 v-if="isShowClapEffect"
                 class="like-button__clap-effect"
               >
-                <simple-svg
-                  :filepath="ClapEffectIcon"
-                  fill="currentColor"
-                  stroke="transparent"
-                />
+                <clap-effect-icon />
               </div>
             </transition>
 
@@ -67,13 +63,12 @@
                 key="max"
                 class="max-label"
               >MAX</div>
-              <simple-svg
+              <div
                 v-else
                 key="clap"
-                :filepath="LikeClapIcon"
-                fill="currentColor"
-                stroke="transparent"
-              />
+              >
+                <like-clap-icon />
+              </div>
             </transition-group>
             <transition name="like-button__like-count-bubble-">
               <div
@@ -94,12 +89,7 @@
           class="like-button-stats"
           @click="$emit('click-stats')"
         >
-          <simple-svg
-            :filepath="LikeTextIcon"
-            class="like-button-stats__text-logo"
-            fill="currentColor"
-            stroke="transparent"
-          />
+          <like-text-icon class="like-button-stats__text-logo" />
           <span
             v-if="totalLike > 0"
             class="like-button-stats__total-like"
@@ -123,6 +113,11 @@ import LikeTextIcon from '~/assets/like-button/like-text.svg';
 
 export default {
   name: 'like-button',
+  components: {
+    ClapEffectIcon,
+    LikeClapIcon,
+    LikeTextIcon,
+  },
   props: {
     likeCount: {
       type: Number,
@@ -151,10 +146,6 @@ export default {
   },
   data() {
     return {
-      ClapEffectIcon,
-      LikeClapIcon,
-      LikeTextIcon,
-
       isShowBubble: false,
       isShowClapEffect: false,
       isPressingKnob: false,
@@ -517,6 +508,8 @@ $like-button-like-count-size: 24;
         bottom: normalized(12);
         left: normalized(12);
 
+        fill: currentColor;
+
         &.max-label {
           display: flex;
           align-items: center;
@@ -624,6 +617,8 @@ $like-button-like-count-size: 24;
 
     cursor: pointer;
 
+    font-size: 0;
+
     &:active {
       transform: translateY(normalized(1));
     }
@@ -634,10 +629,10 @@ $like-button-like-count-size: 24;
 
       transition: color 0.2s ease;
 
-      color: $like-gray-5;
+      fill: $like-gray-5;
 
       .like-button-wrapper:hover & {
-        color: $like-green;
+        fill: $like-green;
       }
     }
 
