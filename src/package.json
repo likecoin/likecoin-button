@@ -28,9 +28,9 @@
     "core-js": "^2.6.1",
     "lodash.debounce": "^4.0.8",
     "nuxt": "^2.3.4",
+    "nuxt-svg-loader": "^1.0.0",
     "vue-i18n": "^8.0.0",
     "vue-recaptcha": "^1.1.1",
-    "vue-simple-svg": "^1.3.2",
     "vuetify": "^1.0.19"
   },
   "devDependencies": {

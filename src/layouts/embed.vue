@@ -144,8 +144,7 @@ html[likecoin-embed] {
 
       margin: 0;
 
-      :global(svg),
-      :global(.simple-svg-wrapper) {
+      :global(svg) {
         width: $social-media-button-size !important;
         height: $social-media-button-size !important;
       }

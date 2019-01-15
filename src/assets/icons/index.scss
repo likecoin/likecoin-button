@@ -962,17 +962,6 @@ span.bold {
 }
 
 
-.simple-svg-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  > svg {
-    flex: 1;
-  }
-}
-
-
 .lc-article {
   & + & {
     margin-top: 64px;

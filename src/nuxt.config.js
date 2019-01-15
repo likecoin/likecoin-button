@@ -50,7 +50,6 @@ module.exports = {
     { src: '~/plugins/polyfill', ssr: false },
     { src: '~/plugins/vuetify' },
     { src: '~/plugins/likecoin-ui-vue' },
-    { src: '~/plugins/vue-simple-svg' },
     { src: '~/plugins/vue-i18n' },
   ],
   render: {
@@ -134,6 +133,7 @@ module.exports = {
       pageTracking: true,
     }],
     '@nuxtjs/sentry',
+    'nuxt-svg-loader',
     // '@likecoin/nuxt-google-optimize',
   ],
   // googleOptimize: {

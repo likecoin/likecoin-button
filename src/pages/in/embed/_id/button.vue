@@ -26,11 +26,7 @@
             class="likecoin-embed__badge__close-btn"
             @click="onClickCloseButton"
           >
-            <simple-svg
-              :filepath="CloseButtonIcon"
-              fill="currentColor"
-              stroke="transparent"
-            />
+            <close-button-icon />
           </div>
 
           <div class="text-content">
@@ -179,7 +175,6 @@ import {
 import { checkIsMobileClient } from '~/util/client';
 
 import CloseButtonIcon from '~/assets/like-button/close-btn.svg';
-import QuestionButtonIcon from '~/assets/like-button/question-btn.svg';
 
 import mixin from '~/components/embed/mixin';
 import LikeButton from '~/components/LikeButton';
@@ -203,13 +198,11 @@ export default {
   layout: 'embed',
   components: {
     LikeButton,
+    CloseButtonIcon,
   },
   mixins: [mixin],
   data() {
     return {
-      CloseButtonIcon,
-      QuestionButtonIcon,
-
       LIKE_CO_HOSTNAME,
 
       isLoggedIn: false,
@@ -445,11 +438,11 @@ $close-btn-width: 56;
         background-color: rgba(white, 0.7);
       }
 
-      > div {
+      > svg {
         width: normalized(28);
         height: normalized(28);
 
-        color: $like-green;
+        fill: $like-green;
       }
     }
   }
