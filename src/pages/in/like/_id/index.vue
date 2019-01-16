@@ -67,6 +67,7 @@ import {
   apiPostLikeButton,
   apiGetLikeButtonMyStatus,
   apiGetLikeButtonTotalCount,
+  apiGetPageTitle,
 } from '@/util/api/api';
 
 import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
@@ -100,6 +101,11 @@ export default {
       likeSent: 0,
       totalLike: 0,
     };
+  },
+  async asyncData({ query }) {
+    const { referrer = '' } = query;
+    const referrerTitle = await apiGetPageTitle(referrer);
+    return { referrerTitle };
   },
   head() {
     return {
