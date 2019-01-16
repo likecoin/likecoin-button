@@ -14,7 +14,7 @@
       class="done-page__back-button"
       @click="$router.go(-1)"
     >
-      <img :src="BackIcon">
+      <back-icon />
       <span>
         {{ $t('general.back') }}
       </span>
@@ -158,6 +158,7 @@ const PENDING_LIKE_INTERVAL = 200;
 export default {
   name: 'id',
   components: {
+    BackIcon,
     LikeForm,
     LoadingIndicator,
     VueRecaptcha,
@@ -171,7 +172,6 @@ export default {
       isNotFound: false,
       timeStarted: Date.now(),
       updateTimer: null,
-      BackIcon,
     };
   },
   computed: {

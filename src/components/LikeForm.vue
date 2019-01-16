@@ -6,10 +6,7 @@
         <slot name="header-left" />
       </div>
 
-      <img
-        :src="LikeCoinIcon"
-        class="like-form__header__icon"
-      >
+      <like-coin-icon class="like-form__header__icon" />
 
       <div class="like-form__header__right">
         <slot name="header-right" />
@@ -30,10 +27,8 @@ import LikeCoinIcon from '../assets/logo/color-icon-label.svg';
 
 export default {
   name: 'like-form',
-  data() {
-    return {
-      LikeCoinIcon,
-    };
+  components: {
+    LikeCoinIcon,
   },
 };
 </script>
