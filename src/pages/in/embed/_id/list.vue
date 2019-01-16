@@ -156,7 +156,9 @@ export default {
     },
   },
   created() {
-    this.fetchList();
+    if (process.client) {
+      this.fetchList();
+    }
   },
   methods: {
     async fetchList() {
