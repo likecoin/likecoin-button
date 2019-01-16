@@ -11,7 +11,6 @@ import {
   apiGetUserMinById,
   apiGetSocialListById,
   apiQueryCoinGeckoInfo,
-  apiGetPageTitle,
 } from '~/util/api/api';
 
 import { getAvatarHaloTypeFromUser } from '~/util/user';
@@ -48,7 +47,6 @@ export default {
       !amount && apiQueryCoinGeckoInfo()
         .then(res => res.data.market_data.current_price.usd)
         .catch(() => 0.0082625),
-      apiGetPageTitle(referrer),
     ]).then((res) => {
       const {
         displayName,
@@ -76,7 +74,6 @@ export default {
         amount,
         amountInUSD,
         platforms: res[1].data,
-        referrerTitle: res[3],
       };
     }).catch((err) => {
       console.error(err); // eslint-disable-line no-console
