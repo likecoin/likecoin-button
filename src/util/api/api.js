@@ -35,6 +35,6 @@ export const apiGetPageTitle = url => axios.get(url, {
     Accept: 'text/html',
   },
 }).then((res) => {
-  const matches = res.data && res.data.match(/<title>(.*?)<\/title>/);
+  const matches = res.data && res.data.match(/<title(?:[^>]*)>(.*?)<\/title>/);
   return matches ? matches[1] : '';
 }).catch(() => '');

@@ -70,8 +70,6 @@
 <script>
 import Vue from 'vue'; // eslint-disable-line import/no-extraneous-dependencies
 
-import axios from '~/plugins/axios';
-
 import LikeForm from '~/components/LikeForm';
 import UserAvatar from '~/components/UserAvatar';
 
@@ -79,6 +77,7 @@ import {
   apiGetUserMinById,
   apiGetLikeButtonLikerList,
   apiGetLikeButtonTotalCount,
+  apiGetPageTitle,
 } from '@/util/api/api';
 import { checkValidDomainNotIP } from '@/util/url';
 import { MEDIUM_REGEX } from '~/constant';
@@ -102,19 +101,14 @@ export default {
 
       /* Try to get html to fetch title below */
       if (checkValidDomainNotIP(url)) {
-        promises.push(axios.get(url, { responseType: 'text', headers: { Accept: 'text/html' } }).catch(() => ''));
+        promises.push(apiGetPageTitle(url));
       }
     }
     const [
       { data: likees },
       { data: totalData },
-      { data: html } = {},
+      title,
     ] = await Promise.all(promises);
-    let title = '';
-    if (html) {
-      const match = html.match(/<title(?:[^>]*)>(.*?)<\/title>/);
-      if (match && match[1]) [, title] = match;
-    }
     return {
       title,
       isShowAll: likees.length <= 8,
