@@ -105,14 +105,20 @@ export default {
       referrerTitle: '',
     };
   },
-  async asyncData({ query }) {
-    const { referrer = '' } = query;
-    const url = encodeURI(query.referrer);
-    if (checkValidDomainNotIP(url)) {
-      const referrerTitle = await apiGetPageTitle(referrer);
-      return { referrerTitle };
-    }
-    return { referrerTitle: '' };
+  asyncData(ctx) {
+    return Promise.all([
+      mixin.asyncData(ctx),
+      () => {
+        const { query } = ctx;
+        const { referrer = '' } = query;
+        const url = encodeURI(query.referrer);
+        if (checkValidDomainNotIP(url)) {
+          return apiGetPageTitle(referrer)
+            .then(referrerTitle => ({ referrerTitle }));
+        }
+        return { referrerTitle: '' };
+      },
+    ]).then(res => ({ ...res[0], ...res[1] }));
   },
   head() {
     return {
