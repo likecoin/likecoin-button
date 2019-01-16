@@ -70,6 +70,8 @@ import {
   apiGetPageTitle,
 } from '@/util/api/api';
 
+import { checkValidDomainNotIP } from '@/util/url';
+
 import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
 
 import mixin from '~/components/embed/mixin';
@@ -100,12 +102,17 @@ export default {
       likeCount: 0,
       likeSent: 0,
       totalLike: 0,
+      referrerTitle: '',
     };
   },
   async asyncData({ query }) {
     const { referrer = '' } = query;
-    const referrerTitle = await apiGetPageTitle(referrer);
-    return { referrerTitle };
+    const url = encodeURI(query.referrer);
+    if (checkValidDomainNotIP(url)) {
+      const referrerTitle = await apiGetPageTitle(referrer);
+      return { referrerTitle };
+    }
+    return { referrerTitle: '' };
   },
   head() {
     return {
