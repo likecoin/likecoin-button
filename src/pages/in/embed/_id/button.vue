@@ -218,6 +218,13 @@ export default {
     referrer() {
       return this.$route.query.referrer || (process.client && document.referrer) || '';
     },
+    registerURL() {
+      return `https://${LIKE_CO_HOSTNAME}/in/register?referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(this.$route.params.id)}`;
+    },
+    popupLikeURL() {
+      const { id } = this.$route.params;
+      return `/in/like/${id}/?referrer=${encodeURIComponent(this.referrer)}`;
+    },
     isMaxLike() {
       return (this.likeCount >= 5);
     },
@@ -242,6 +249,15 @@ export default {
       }
       return this.$t('Embed.back.civicLiker.button');
     },
+  },
+  head() {
+    return {
+      // should do this dynamically, but seems head() reactivity is bugged
+      link: [
+        { rel: 'prefetch', href: this.popupLikeURL },
+        { rel: 'prefetch', href: this.registerURL },
+      ],
+    };
   },
   created() {
     if (process.client) {
@@ -292,16 +308,15 @@ export default {
         // Case 1: User has not log in and 3rd party cookie is not blocked
         logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp', 1);
         window.open(
-          `https://${LIKE_CO_HOSTNAME}/in/register?referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(this.$route.params.id)}`,
+          this.registerURL,
           'signin',
           'width=540,height=600,menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes',
         );
       } else {
         // Case 2: User has not log in and 3rd party cookie is blocked
         logTrackerEvent(this, 'LikeButtonFlow', 'popupLike', 'popupLike', 1);
-        const { id } = this.$route.params;
         window.open(
-          `/in/like/${id}/?referrer=${encodeURIComponent(this.referrer)}`,
+          this.popupLikeURL,
           'like',
           'menubar=no,location=no,width=576,height=768',
         );
