@@ -80,7 +80,6 @@ import {
   apiGetPageTitle,
 } from '@/util/api/api';
 import { checkValidDomainNotIP } from '@/util/url';
-import { MEDIUM_REGEX } from '~/constant';
 
 export default {
   name: 'embed-id-list',
@@ -95,13 +94,10 @@ export default {
       apiGetLikeButtonTotalCount(params.id, query.referrer),
     ];
     if (query.referrer) {
-      let url = encodeURI(query.referrer);
-      const match = query.referrer.match(MEDIUM_REGEX);
-      if (match && match[1]) url = `https://medium.com/p/${match[1]}`;
-
+      const url = encodeURI(query.referrer);
       /* Try to get html to fetch title below */
       if (checkValidDomainNotIP(url)) {
-        promises.push(apiGetPageTitle(url));
+        promises.push(apiGetPageTitle(query.referrer));
       }
     }
     const [

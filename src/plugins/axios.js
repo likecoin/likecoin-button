@@ -1,7 +1,6 @@
 import * as axios from 'axios';
 
 const options = {
-  withCredentials: true,
   timeout: 20000,
 };
 // The server-side needs a full url to works
