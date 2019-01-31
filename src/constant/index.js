@@ -22,4 +22,13 @@ export const MEDIUM_REGEX = /^(?:https?:\/\/)?[^/]*\/media\/[a-zA-Z0-9_]+(?:\?po
 export const CIVIC_LIKER_START_DATE = 1546300800000; // 2019-01-01T08:00:00+0800
 export const CIVIC_LIKER_TRIAL_END_DATE = 1548950399000; // 2019-01-31T23:59:59+0800
 
-export const QUERY_STRING_TO_REMOVE = ['fbclid', 'gclid', 'gi'];
+export const QUERY_STRING_TO_REMOVE = [
+  'fbclid',
+  'gclid',
+  'gi',
+  'utm_source',
+  'utm_medium',
+  'utm_campaign',
+  'utm_term',
+  'utm_content',
+];
