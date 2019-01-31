@@ -216,7 +216,7 @@ export default {
   },
   computed: {
     referrer() {
-      return this.$route.query.referrer || (process.client && document.referrer) || '';
+      return this.urlReferrer || (process.client && document.referrer) || '';
     },
     registerURL() {
       return `https://${LIKE_CO_HOSTNAME}/in/register?referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(this.$route.params.id)}`;
@@ -340,7 +340,7 @@ export default {
     },
     onClickLikeStats() {
       const { id } = this.$route.params;
-      const { referrer } = this.$route.query;
+      const referrer = this.urlReferrer;
       window.open(
         `/in/embed/${id}/list${referrer ? `?referrer=${encodeURIComponent(referrer)}` : ''}`,
         '_blank',

@@ -14,6 +14,7 @@ import {
 } from '~/util/api/api';
 
 import { getAvatarHaloTypeFromUser } from '~/util/user';
+import { handleQueryStringInUrl } from '~/util/url';
 
 export default {
   components: {
@@ -83,15 +84,17 @@ export default {
   computed: {
     getUserPath() {
       const amount = this.amount ? `/${this.amount}` : '';
-      const referrer = this.urlReferrer ? `/?referrer=${this.urlReferrer}` : '';
+      const referrer = this.urlReferrer ? `/?referrer=${encodeURIComponent(this.urlReferrer)}` : '';
       return `https://${LIKE_CO_HOSTNAME}/${this.id}${amount}${referrer}`;
     },
     urlReferrer() {
       const { query } = this.$route;
-      return query.referrer || '';
+      let { referrer = '' } = query;
+      referrer = handleQueryStringInUrl(referrer);
+      return referrer;
     },
     getReferralLink() {
-      const referrer = this.urlReferrer ? `/?referrer=${this.urlReferrer}` : '';
+      const referrer = this.urlReferrer ? `/?referrer=${encodeURIComponent(this.urlReferrer)}` : '';
       return `https://${LIKE_CO_HOSTNAME}/ref/${this.id}${referrer}`;
     },
   },

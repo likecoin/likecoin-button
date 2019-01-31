@@ -79,7 +79,7 @@ import {
   apiGetLikeButtonTotalCount,
   apiGetPageTitle,
 } from '@/util/api/api';
-import { checkValidDomainNotIP } from '@/util/url';
+import { checkValidDomainNotIP, handleQueryStringInUrl } from '@/util/url';
 
 export default {
   name: 'embed-id-list',
@@ -89,15 +89,16 @@ export default {
     UserAvatar,
   },
   async asyncData({ params, query }) {
+    const referrer = handleQueryStringInUrl(query.referrer);
     const promises = [
-      apiGetLikeButtonLikerList(params.id, query.referrer),
-      apiGetLikeButtonTotalCount(params.id, query.referrer),
+      apiGetLikeButtonLikerList(params.id, referrer),
+      apiGetLikeButtonTotalCount(params.id, referrer),
     ];
-    if (query.referrer) {
-      const url = encodeURI(query.referrer);
+    if (referrer) {
+      const url = encodeURI(referrer);
       /* Try to get html to fetch title below */
       if (checkValidDomainNotIP(url)) {
-        promises.push(apiGetPageTitle(query.referrer));
+        promises.push(apiGetPageTitle(referrer));
       }
     }
     const [
@@ -118,8 +119,14 @@ export default {
     };
   },
   computed: {
+    urlReferrer() {
+      const { query } = this.$route;
+      let { referrer = '' } = query;
+      referrer = handleQueryStringInUrl(referrer);
+      return referrer;
+    },
     referrer() {
-      return this.$route.query.referrer;
+      return this.urlReferrer;
     },
     shouldShowBackButton() {
       return this.$route.query.show_back === '1';

@@ -150,6 +150,7 @@ import LikeForm from '@/components/LikeForm';
 import LoadingIndicator from '@/components/LoadingIndicator';
 import { logTrackerEvent } from '@/util/EventLogger';
 import { getAvatarHaloTypeFromUser } from '@/util/user';
+import { handleQueryStringInUrl } from '@/util/url';
 
 import BackIcon from '@/assets/icons/arrow.svg';
 
@@ -178,8 +179,14 @@ export default {
     likee() {
       return this.$route.params.id;
     },
+    urlReferrer() {
+      const { query } = this.$route;
+      let { referrer = '' } = query;
+      referrer = handleQueryStringInUrl(referrer);
+      return referrer;
+    },
     referrer() {
-      return this.$route.query.referrer || document.referrer || '';
+      return this.urlReferrer || document.referrer || '';
     },
     isDonePage() {
       return this.$route.name === 'id-done';

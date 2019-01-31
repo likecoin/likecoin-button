@@ -27,6 +27,7 @@
     "nuxt-start": "^2.3.4",
     "nuxt-svg-loader": "^1.0.1",
     "source-map-support": "^0.5.4",
+    "url-parse": "^1.4.4",
     "vue": "^2.5.17",
     "vue-i18n": "^8.0.0",
     "vue-meta": "^1.5.5",
