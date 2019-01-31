@@ -70,7 +70,7 @@ import {
   apiGetPageTitle,
 } from '@/util/api/api';
 
-import { checkValidDomainNotIP } from '@/util/url';
+import { checkValidDomainNotIP, handleQueryStringInUrl } from '@/util/url';
 
 import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
 
@@ -110,8 +110,9 @@ export default {
       mixin.asyncData(ctx),
       () => {
         const { query } = ctx;
-        const { referrer = '' } = query;
-        const url = encodeURI(query.referrer);
+        let { referrer = '' } = query;
+        referrer = handleQueryStringInUrl(referrer);
+        const url = encodeURI(referrer);
         if (checkValidDomainNotIP(url)) {
           return apiGetPageTitle(referrer)
             .then(referrerTitle => ({ referrerTitle }));
@@ -129,7 +130,7 @@ export default {
   },
   computed: {
     referrer() {
-      return this.$route.query.referrer || document.referrer || '';
+      return this.urlReferrer || (process.client && document.referrer) || '';
     },
     isMaxLike() {
       return (this.likeCount >= 5);

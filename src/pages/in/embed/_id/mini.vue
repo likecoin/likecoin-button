@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     referrer() {
-      return this.$route.query.referrer || document.referrer || '';
+      return this.urlReferrer || (process.client && document.referrer) || '';
     },
     isMaxLike() {
       return (this.likeCount >= 5);
@@ -116,7 +116,7 @@ export default {
     },
     onClickLikeStats() {
       const { id } = this.$route.params;
-      const { referrer } = this.$route.query;
+      const referrer = this.urlReferrer;
       window.open(
         `/in/embed/${id}/list${referrer ? `?referrer=${encodeURIComponent(referrer)}` : ''}`,
         LIKE_STATS_WINDOW_NAME,
