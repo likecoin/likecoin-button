@@ -395,7 +395,7 @@ $close-btn-width: 56;
     transform-style: preserve-3d;
 
     .likecoin-embed--logged-out & {
-      background: #e6e6e6;
+      background: linear-gradient(70deg, #e6e6e6 60%, #d2f0f0, #f0e6b4);
     }
 
     &--back {
