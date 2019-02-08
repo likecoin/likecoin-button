@@ -277,7 +277,7 @@ export default {
   },
   methods: {
     getIsCookieSupport() {
-      return /likecoin_cookie=true/.test(document.cookie);
+      return process.client && navigator.cookieEnabled;
     },
     async updateUser() {
       try {

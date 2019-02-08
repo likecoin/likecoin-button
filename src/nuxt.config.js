@@ -122,9 +122,6 @@ module.exports = {
         component: resolve(__dirname, 'pages/_id/index.vue'),
       });
     },
-    middleware: [
-      'cookie',
-    ],
   },
   modules: [
     ['@nuxtjs/google-tag-manager', {
