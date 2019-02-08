@@ -255,7 +255,6 @@ export default {
       // should do this dynamically, but seems head() reactivity is bugged
       link: [
         { rel: 'prefetch', href: this.popupLikeURL },
-        { rel: 'prefetch', href: this.registerURL },
       ],
     };
   },
@@ -395,7 +394,7 @@ $close-btn-width: 56;
     transform-style: preserve-3d;
 
     .likecoin-embed--logged-out & {
-      background: linear-gradient(70deg, #e6e6e6 60%, #d2f0f0, #f0e6b4);
+      background: #e6e6e6;
     }
 
     &--back {
