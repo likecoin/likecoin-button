@@ -159,7 +159,11 @@ export default {
         this.totalLike = total;
         this.likeCount = count;
         this.likeSent = count;
-
+        if (this.$sentry) {
+          this.$sentry.configureScope((scope) => {
+            scope.setUser({ id: liker });
+          });
+        }
         this.$nextTick(() => {
           if (this.likeCount <= 0 && this.$refs.likeButton) {
             this.$refs.likeButton.onPressedKnob();
