@@ -172,7 +172,7 @@ import {
 import {
   LIKE_CO_HOSTNAME,
 } from '@/constant';
-import { checkIsMobileClient } from '~/util/client';
+import { checkIsMobileClient, checkHasStorageAPIAccess } from '~/util/client';
 
 import CloseButtonIcon from '~/assets/like-button/close-btn.svg';
 
@@ -187,7 +187,7 @@ const debouncedOnClick = debounce((that) => {
   const count = that.likeCount - that.likeSent;
   that.likeSent += count;
   if (count > 0) {
-    apiPostLikeButton(that.id, that.referrer, count, that.getIsCookieSupport());
+    apiPostLikeButton(that.id, that.referrer, count, that.hasCookieSupport);
   }
   that.totalLike += count;
   /* eslint-enable no-param-reassign */
@@ -212,6 +212,7 @@ export default {
       likeSent: 0,
       totalLike: 0,
       shouldShowBackside: false,
+      hasCookieSupport: false,
     };
   },
   computed: {
@@ -258,14 +259,11 @@ export default {
       ],
     };
   },
-  created() {
-    if (process.client) {
-      this.updateUser();
-    }
-  },
-  mounted() {
+  async mounted() {
     window.addEventListener('message', this.handleWindowMessage);
-    if (this.getIsCookieSupport()) {
+    this.hasCookieSupport = await this.getIsCookieSupport();
+    await this.updateUser();
+    if (this.hasCookieSupport) {
       logTrackerEvent(this, 'LikeButton', 'isCookieSupportTrue', 'isCookieSupportTrue', 1);
     } else {
       logTrackerEvent(this, 'LikeButton', 'isCookieSupportFalse', 'isCookieSupportFalse', 1);
@@ -275,13 +273,14 @@ export default {
     window.removeEventListener('message', this.handleWindowMessage);
   },
   methods: {
-    getIsCookieSupport() {
-      return process.client && navigator.cookieEnabled;
+    async getIsCookieSupport() {
+      const res = process.client && navigator.cookieEnabled && await checkHasStorageAPIAccess();
+      return res;
     },
     async updateUser() {
       try {
         const [{ data: myData }, { data: totalData }] = await Promise.all([
-          apiGetLikeButtonMyStatus(this.id, this.referrer, this.getIsCookieSupport()),
+          apiGetLikeButtonMyStatus(this.id, this.referrer, this.hasCookieSupport),
           apiGetLikeButtonTotalCount(this.id, this.referrer),
         ]);
         const {
@@ -308,7 +307,7 @@ export default {
     },
     onClickLoginButton() {
       logTrackerEvent(this, 'LikeButtonFlow', 'popupLikeButton', 'popupLikeButton', 1);
-      if (this.getIsCookieSupport()) {
+      if (this.hasCookieSupport) {
         // Case 1: User has not log in and 3rd party cookie is not blocked
         logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp', 1);
         window.open(

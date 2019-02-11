@@ -37,3 +37,15 @@ export function openURL(vue, url, name, specs, replace) {
     if (w) w.opener = null;
   }
 }
+
+export async function checkHasStorageAPIAccess() {
+  // https://webkit.org/blog/8311/intelligent-tracking-prevention-2-0/
+  // TODO: try to request for storageAPI access
+  if (typeof document.hasStorageAccess !== 'function') return true;
+  try {
+    const res = await document.hasStorageAccess();
+    return res;
+  } catch (err) {
+    return false;
+  }
+}
