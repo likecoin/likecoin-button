@@ -80,6 +80,11 @@ export default {
         this.totalLike = total;
         this.likeCount = count;
         this.likeSent = count;
+        if (this.$sentry) {
+          this.$sentry.configureScope((scope) => {
+            scope.setUser({ id: liker });
+          });
+        }
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
       }
