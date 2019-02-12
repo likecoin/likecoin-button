@@ -23,20 +23,14 @@ module.exports = {
       { hid: 'og_image_height', property: 'og:image:height', content: '630' },
       { hid: 'theme-color', name: 'theme-color', content: '#D2F0F0' },
     ],
-    script: [
-      { src: 'https://www.recaptcha.net/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit', async: true, defer: true },
-      { src: '/vendor/fb/pixel.js' },
-    ],
     link: [
       { rel: 'preload', href: 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Material+Icons', as: 'style' },
-      { rel: 'preload', href: '/vendor/fb/pixel.js', as: 'script' },
       // {
       //   rel: 'preload',
       //   href: `https://${IS_TESTNET ? 'rinkeby.' : ''}like.co/api/experiments/list`,
       //   as: 'fetch',
       //   crossorigin: 'anonymous',
       // },
-      { rel: 'preconnect', href: 'https://connect.facebook.net' },
       { rel: 'icon', type: 'image/png', href: '/favicon.png' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Material+Icons' },
     ],
