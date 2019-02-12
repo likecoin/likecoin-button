@@ -238,6 +238,9 @@ export default {
           content: this.$t('LikeButton.head.description'),
         },
       ],
+      script: [
+        { src: 'https://www.recaptcha.net/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit', async: true, defer: true },
+      ],
     };
   },
   mounted() {

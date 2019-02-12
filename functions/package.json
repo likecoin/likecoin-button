@@ -15,7 +15,7 @@
   "dependencies": {
     "@likecoin/nuxt-google-optimize": "^0.5.3-like.7",
     "@likecoin/ui-vue": "^0.6.0",
-    "@nuxtjs/google-tag-manager": "^2.1.1",
+    "@nuxtjs/google-tag-manager": "^2.1.4",
     "@nuxtjs/sentry": "^2.1.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
