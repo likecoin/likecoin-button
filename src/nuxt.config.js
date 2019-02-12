@@ -121,6 +121,7 @@ module.exports = {
     ['@nuxtjs/google-tag-manager', {
       id: process.env.GTM_ID || 'GTM-XXXXXXX',
       pageTracking: true,
+      respectDoNotTrack: true,
     }],
     '@nuxtjs/sentry',
     'nuxt-svg-loader',
