@@ -164,7 +164,6 @@
 
 <script>
 import {
-  apiPostLikeButton,
   apiGetLikeButtonMyStatus,
   apiGetLikeButtonTotalCount,
 } from '@/util/api/api';
@@ -179,19 +178,6 @@ import CloseButtonIcon from '~/assets/like-button/close-btn.svg';
 import mixin from '~/components/embed/mixin';
 import LikeButton from '~/components/LikeButton';
 import { logTrackerEvent } from '@/util/EventLogger';
-
-const debounce = require('lodash.debounce');
-
-const debouncedOnClick = debounce((that) => {
-  /* eslint-disable no-param-reassign */
-  const count = that.likeCount - that.likeSent;
-  that.likeSent += count;
-  if (count > 0) {
-    apiPostLikeButton(that.id, that.referrer, count, that.hasCookieSupport);
-  }
-  that.totalLike += count;
-  /* eslint-enable no-param-reassign */
-}, 500);
 
 export default {
   name: 'embed-id-button',
@@ -208,11 +194,7 @@ export default {
       isLoggedIn: false,
       isSubscribed: false,
       isTrialSubscriber: false,
-      likeCount: 0,
-      likeSent: 0,
-      totalLike: 0,
       shouldShowBackside: false,
-      hasCookieSupport: false,
     };
   },
   computed: {
@@ -225,9 +207,6 @@ export default {
     popupLikeURL() {
       const { id } = this.$route.params;
       return `/in/like/${id}/?referrer=${encodeURIComponent(this.referrer)}`;
-    },
-    isMaxLike() {
-      return (this.likeCount >= 5);
     },
     isMobile() {
       return checkIsMobileClient();
@@ -329,8 +308,7 @@ export default {
       if (this.isLoggedIn) {
         // Case 3: User has logged in
         if (!this.isMaxLike) {
-          this.likeCount += 1;
-          debouncedOnClick(this);
+          this.like();
           logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike', 1);
         }
 

@@ -8,6 +8,7 @@ import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
 import SocialMediaConnect from '~/components/SocialMediaConnect';
 
 import {
+  apiPostLikeButton,
   apiGetUserMinById,
   apiGetSocialListById,
   apiQueryCoinGeckoInfo,
@@ -15,6 +16,19 @@ import {
 
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 import { handleQueryStringInUrl } from '~/util/url';
+
+const MAX_LIKE = 5;
+
+const debounce = require('lodash.debounce');
+
+const debouncedOnClick = debounce((that) => {
+  /* eslint-disable no-param-reassign */
+  const count = that.likeCount - that.likeSent;
+  that.likeSent += count;
+  if (count > 0) apiPostLikeButton(that.id, that.referrer, count, that.hasCookieSupport);
+  that.totalLike += count;
+  /* eslint-enable no-param-reassign */
+}, 500);
 
 export default {
   components: {
@@ -81,6 +95,14 @@ export default {
       error({ statusCode: 404, message: '' });
     });
   },
+  data() {
+    return {
+      like_count: 0,
+      likeSent: 0,
+      totalLike: 0,
+      hasCookieSupport: false,
+    };
+  },
   computed: {
     getUserPath() {
       const amount = this.amount ? `/${this.amount}` : '';
@@ -96,6 +118,23 @@ export default {
     getReferralLink() {
       const referrer = this.urlReferrer ? `/?referrer=${encodeURIComponent(this.urlReferrer)}` : '';
       return `https://${LIKE_CO_HOSTNAME}/ref/${this.id}${referrer}`;
+    },
+    likeCount: {
+      get() {
+        return this.like_count;
+      },
+      set(value) {
+        this.like_count = Math.min(MAX_LIKE, value);
+      },
+    },
+    isMaxLike() {
+      return this.likeCount >= MAX_LIKE;
+    },
+  },
+  methods: {
+    like() {
+      this.likeCount += 1;
+      debouncedOnClick(this);
     },
   },
 };

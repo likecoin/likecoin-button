@@ -12,7 +12,6 @@
 
 <script>
 import {
-  apiPostLikeButton,
   apiGetLikeButtonMyStatus,
   apiGetLikeButtonTotalCount,
 } from '@/util/api/api';
@@ -22,16 +21,6 @@ import LikeButton from '~/components/LikeButton';
 
 import { LIKECOIN_MISC_API_BASE } from '~/constant/index';
 
-const debounce = require('lodash.debounce');
-
-const debouncedOnClick = debounce((that) => {
-  /* eslint-disable no-param-reassign */
-  const count = that.likeCount - that.likeSent;
-  that.likeSent += count;
-  if (count > 0) apiPostLikeButton(that.id, that.referrer, count);
-  that.totalLike += count;
-  /* eslint-enable no-param-reassign */
-}, 500);
 const LIKE_STATS_WINDOW_NAME = 'LIKER_LIST_STATS_WINDOW';
 const SUPER_LIKE_WINDOW_NAME = 'SUPER_LIKE_WINDOW';
 
@@ -46,17 +35,11 @@ export default {
     return {
       isLoggedIn: false,
       isToggled: false,
-      likeCount: 0,
-      likeSent: 0,
-      totalLike: 0,
     };
   },
   computed: {
     referrer() {
       return this.urlReferrer || (process.client && document.referrer) || '';
-    },
-    isMaxLike() {
-      return (this.likeCount >= 5);
     },
   },
   created() {
@@ -112,12 +95,11 @@ export default {
       }, 300);
     },
     onClickLike() {
-      if (!this.isMaxLike) {
-        this.likeCount += 1;
-      } else {
+      if (this.isMaxLike) {
         this.toggleLikeButton();
+      } else {
+        this.like();
       }
-      debouncedOnClick(this);
     },
     onClickLikeStats() {
       const { id } = this.$route.params;
