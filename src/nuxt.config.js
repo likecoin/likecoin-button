@@ -150,7 +150,7 @@ module.exports = {
           {
             targets: isServer
               ? { node: '8.11.1' }
-              : { browsers: ['defaults'] },
+              : 'ie 11, > 0.5%, Firefox ESR',
           },
         ],
       ],
