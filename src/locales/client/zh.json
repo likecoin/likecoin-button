@@ -36,6 +36,10 @@
         "trial": {
           "title": "@:Embed.back.civicLiker.title",
           "button": "@:Embed.back.civicLiker.button"
+        },
+        "paid": {
+          "title": "贈送讚賞幣支持作者",
+          "button": "贈送"
         }
       }
     },

@@ -30,24 +30,6 @@
           </div>
 
           <div class="text-content">
-            <!-- Super Like
-            <i18n
-              tag="div"
-              class="text-content__subtitle"
-              path="Embed.label.rewardUserWithLikeToken"
-            >
-              <a
-                :href="getUserPath"
-                place="user"
-                rel="noopener noreferrer"
-                target="_blank"
-              >{{ displayName }}</a>
-            </i18n>
-            <div class="text-content__title text-content__title--amount">
-              {{ amount }} LIKE
-              <span class="amount-in-usd">= USD {{ amountInUSD }}</span>
-            </div>
-            -->
 
             <div
               v-if="backSubtitle"
@@ -64,8 +46,7 @@
           <div class="embed-cta-button-wrapper">
             <a
               id="embed-cta-button"
-              :href="`https://${LIKE_CO_HOSTNAME}/in/civic?referrer=${encodeURIComponent(referrer)}&from=${encodeURIComponent($route.params.id)}`"
-              target="_blank"
+              @click="onClickBackCTAButton"
             >
               <div class="button-content-wrapper">
                 <div class="button-content">
@@ -205,8 +186,6 @@ export default {
   mixins: [mixin],
   data() {
     return {
-      LIKE_CO_HOSTNAME,
-
       isLoggedIn: false,
       isSubscribed: false,
       isTrialSubscriber: false,
@@ -228,20 +207,29 @@ export default {
       return checkIsMobileClient();
     },
     isFlipped() {
-      return this.shouldShowBackside && (!this.isSubscribed || this.isTrialSubscriber);
+      return this.shouldShowBackside;
     },
     backTitle() {
       if (this.isTrialSubscriber) {
         return this.$t('Embed.back.civicLiker.trial.title');
       }
+      if (this.isSubscribed) {
+        return this.$t('Embed.back.civicLiker.paid.title');
+      }
       return this.$t('Embed.back.civicLiker.title');
     },
     backSubtitle() {
+      if (this.isSubscribed && !this.isTrialSubscriber) {
+        return '';
+      }
       return this.$t('Embed.back.civicLiker.subtitle');
     },
     backCTAButtonTitle() {
       if (this.isTrialSubscriber) {
         return this.$t('Embed.back.civicLiker.trial.button');
+      }
+      if (this.isSubscribed) {
+        return this.$t('Embed.back.civicLiker.paid.button');
       }
       return this.$t('Embed.back.civicLiker.button');
     },
@@ -350,6 +338,17 @@ export default {
     },
     onClickFrontDisplayName() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickFrontDisplayName', 'clickFrontDisplayName', 1);
+    },
+    onClickBackCTAButton() {
+      const { id } = this.$route.params;
+      if (this.isSubscribed && !this.isTrialSubscriber) {
+        window.open(`https://${LIKE_CO_HOSTNAME}/${id}`, '_blank');
+        return;
+      }
+      window.open(
+        `https://${LIKE_CO_HOSTNAME}/in/civic?referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(id)}`,
+        '_blank',
+      );
     },
     handleWindowMessage(event) {
       if (event.origin !== `https://${LIKE_CO_HOSTNAME}`) return;
