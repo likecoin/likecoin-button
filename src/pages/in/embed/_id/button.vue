@@ -22,7 +22,9 @@
       >
         <div class="likecoin-embed__badge__content">
 
+          <!-- Don't show close button-->
           <div
+            v-if="false"
             class="likecoin-embed__badge__close-btn"
             @click="onClickCloseButton"
           >
@@ -403,8 +405,8 @@ $close-btn-width: 56;
     &--back {
       margin-right: normalized($button-width / 2 + $button-shadow-width);
 
-      .likecoin-embed__badge__content {
-        padding-left: normalized($close-btn-width + 24);
+      .text-content {
+        padding-left: normalized(24);
       }
     }
 
@@ -459,6 +461,10 @@ $close-btn-width: 56;
         height: normalized(28);
 
         fill: $like-green;
+      }
+
+      & + .text-content {
+        padding-left: normalized($close-btn-width + 24);
       }
     }
   }
