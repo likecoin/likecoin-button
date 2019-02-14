@@ -30,13 +30,12 @@
   "Embed": {
     "back": {
       "civicLiker": {
-        "title": "立即登記",
-        "subtitle": "進一步支持創作",
-        "registered": "感謝你支持創作",
-        "button": "讚賞公民",
+        "title": "立即成為讚賞公民",
+        "subtitle": "少喝一杯咖啡，共創一個生態",
+        "button": "升級",
         "trial": {
-          "title": "立即申請為正式讚賞公民",
-          "button": "申請"
+          "title": "@:Embed.back.civicLiker.title",
+          "button": "@:Embed.back.civicLiker.button"
         }
       }
     },
@@ -47,14 +46,14 @@
       "title": "化讚為賞 回饋創作",
       "createMyWidget": "創建我的 LikeWidget",
       "createMyButton": "創建我的 LikeButton",
-      "clickLikeButton": "點擊全新的 LikeButton",
-      "clickLikeButtonNoLogin": " {action} ，你的點讚將化為我的收入",
+      "clickLikeButton": "請鼓掌支持我",
+      "clickLikeButtonNoLogin": "請登入，並為我鼓掌",
       "rewardUserWithLikeToken": "以 LIKE 代幣讚賞 {user}",
       "supportUser": "支持 {user}",
-      "supportUserNoLogin": "來支持我 {user}",
+      "supportUserNoLogin": "支持 {user}",
       "loginAdvice": "{login} 你讚好的作者能獲得更多 LikeCoin",
       "numLikesForArticle": "從 {numOfLikees} 人獲得 {numOfLikes} Like",
-      "registerNow": "立即註冊"
+      "registerNow": "登入"
     },
     "button": {
       "login": "登入 LikeCoin ID",

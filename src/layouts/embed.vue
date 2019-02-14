@@ -65,6 +65,8 @@ html[likecoin-embed] {
   .text-content {
     position: relative;
 
+    flex-grow: 1;
+
     letter-spacing: 0;
 
     &__subtitle {
@@ -87,7 +89,7 @@ html[likecoin-embed] {
   }
 
   .embed-cta-button-wrapper {
-    position: absolute;
+    position: relative;
     right: 0;
 
     display: flex;
@@ -226,6 +228,8 @@ html[likecoin-embed] {
       align-items: center;
       flex-grow: 1;
       justify-content: center;
+
+      padding: 0 normalized(12);
 
       border-radius: inherit;
     }

@@ -30,13 +30,12 @@
   "Embed": {
     "back": {
       "civicLiker": {
-        "title": "Register now",
-        "subtitle": "To further support creation",
-        "registered": "Thank you for your support",
-        "button": "Civic Liker",
+        "title": "Upgrade to Civic Liker now",
+        "subtitle": "Trade a coffee for a better world",
+        "button": "Upgrade",
         "trial": {
-          "title": "Register to Paid Civic Liker now",
-          "button": "Register"
+          "title": "@:Embed.back.civicLiker.title",
+          "button": "@:Embed.back.civicLiker.button"
         }
       }
     },
@@ -47,14 +46,14 @@
       "title": "Reward the writer with LIKE token",
       "createMyWidget": "Create my LikeWidget",
       "createMyButton": "Create my LikeButton",
-      "clickLikeButton": "Click the reinvented LikeButton to",
-      "clickLikeButtonNoLogin": " {action} , clap for me to",
+      "clickLikeButton": "Clap for me to support my work",
+      "clickLikeButtonNoLogin": "Register now and clap for me",
       "rewardUserWithLikeToken": "Reward {user} with LIKE token",
       "supportUser": "Support {user}",
       "supportUserNoLogin": "Support {user}",
       "loginAdvice": "{login} the writer you like will generate more LikeCoin",
       "numLikesForArticle": "{numOfLikes} Like from {numOfLikees} people",
-      "registerNow": "Register now"
+      "registerNow": "Register"
     },
     "button": {
       "login": "Login to LikeCoin ID",

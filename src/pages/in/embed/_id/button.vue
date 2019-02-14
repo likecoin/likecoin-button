@@ -137,6 +137,22 @@
             </i18n>
           </div>
 
+          <div
+            v-if="!isLoggedIn"
+            class="embed-cta-button-wrapper"
+          >
+            <a
+              id="embed-cta-button"
+              @click="onClickLoginButton"
+            >
+              <div class="button-content-wrapper">
+                <div class="button-content">
+                  {{ $t('Embed.label.registerNow') }}
+                </div>
+              </div>
+            </a>
+          </div>
+
         </div>
       </div>
     </transition>
@@ -379,11 +395,16 @@ $close-btn-width: 56;
       background: linear-gradient(70deg, #e6e6e6 60%, #d2f0f0, #f0e6b4);
     }
 
+    &--front {
+      .likecoin-embed--logged-out & {
+        margin-right: normalized($button-width / 2 + $button-shadow-width);
+      }
+    }
+
     &--back {
       margin-right: normalized($button-width / 2 + $button-shadow-width);
 
       .likecoin-embed__badge__content {
-        padding-right: normalized($button-width / 2 + $button-shadow-width);
         padding-left: normalized($close-btn-width + 24);
       }
     }
