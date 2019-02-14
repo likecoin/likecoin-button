@@ -361,7 +361,7 @@ export default {
             this.updateUser().then(() => {
               // Click LikeButton after login
               this.$nextTick(() => {
-                if (this.likeCount <= 0 && this.$refs.likeButton) {
+                if (this.$refs.likeButton) {
                   this.$refs.likeButton.onPressedKnob();
                 }
               });
