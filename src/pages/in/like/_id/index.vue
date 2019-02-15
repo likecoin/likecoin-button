@@ -64,7 +64,6 @@
 import { LIKE_CO_HOSTNAME } from '@/constant';
 
 import {
-  apiPostLikeButton,
   apiGetLikeButtonMyStatus,
   apiGetLikeButtonTotalCount,
   apiGetPageTitle,
@@ -78,18 +77,6 @@ import mixin from '~/components/embed/mixin';
 import LikeButton from '~/components/LikeButton';
 import { logTrackerEvent } from '@/util/EventLogger';
 
-const debounce = require('lodash.debounce');
-
-const debouncedOnClick = debounce((that) => {
-  /* eslint-disable no-param-reassign */
-  const count = that.likeCount - that.likeSent;
-  that.likeSent += count;
-  const isCookieSupport = false; // Assume this page is loaded in a pop-up, set to false
-  if (count > 0) apiPostLikeButton(that.id, that.referrer, count, isCookieSupport);
-  that.totalLike += count;
-  /* eslint-enable no-param-reassign */
-}, 500);
-
 export default {
   components: {
     LikeButton,
@@ -99,9 +86,6 @@ export default {
   data() {
     return {
       isLoggedIn: false,
-      likeCount: 0,
-      likeSent: 0,
-      totalLike: 0,
       referrerTitle: '',
     };
   },
@@ -180,9 +164,8 @@ export default {
       if (this.isMaxLike) {
         this.shouldShowBackside = true;
       } else {
-        this.likeCount += 1;
+        this.like();
       }
-      debouncedOnClick(this);
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike', 1);
     },
     onClickLikeStats() {

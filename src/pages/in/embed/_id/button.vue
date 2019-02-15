@@ -22,7 +22,9 @@
       >
         <div class="likecoin-embed__badge__content">
 
+          <!-- Don't show close button-->
           <div
+            v-if="false"
             class="likecoin-embed__badge__close-btn"
             @click="onClickCloseButton"
           >
@@ -30,24 +32,6 @@
           </div>
 
           <div class="text-content">
-            <!-- Super Like
-            <i18n
-              tag="div"
-              class="text-content__subtitle"
-              path="Embed.label.rewardUserWithLikeToken"
-            >
-              <a
-                :href="getUserPath"
-                place="user"
-                rel="noopener noreferrer"
-                target="_blank"
-              >{{ displayName }}</a>
-            </i18n>
-            <div class="text-content__title text-content__title--amount">
-              {{ amount }} LIKE
-              <span class="amount-in-usd">= USD {{ amountInUSD }}</span>
-            </div>
-            -->
 
             <div
               v-if="backSubtitle"
@@ -64,8 +48,7 @@
           <div class="embed-cta-button-wrapper">
             <a
               id="embed-cta-button"
-              :href="`https://${LIKE_CO_HOSTNAME}/in/civic?referrer=${encodeURIComponent(referrer)}&from=${encodeURIComponent($route.params.id)}`"
-              target="_blank"
+              @click="onClickBackCTAButton"
             >
               <div class="button-content-wrapper">
                 <div class="button-content">
@@ -137,6 +120,22 @@
             </i18n>
           </div>
 
+          <div
+            v-if="!isLoggedIn"
+            class="embed-cta-button-wrapper"
+          >
+            <a
+              id="embed-cta-button"
+              @click="onClickLoginButton"
+            >
+              <div class="button-content-wrapper">
+                <div class="button-content">
+                  {{ $t('Embed.label.registerNow') }}
+                </div>
+              </div>
+            </a>
+          </div>
+
         </div>
       </div>
     </transition>
@@ -164,7 +163,6 @@
 
 <script>
 import {
-  apiPostLikeButton,
   apiGetLikeButtonMyStatus,
   apiGetLikeButtonTotalCount,
 } from '@/util/api/api';
@@ -180,19 +178,6 @@ import mixin from '~/components/embed/mixin';
 import LikeButton from '~/components/LikeButton';
 import { logTrackerEvent } from '@/util/EventLogger';
 
-const debounce = require('lodash.debounce');
-
-const debouncedOnClick = debounce((that) => {
-  /* eslint-disable no-param-reassign */
-  const count = that.likeCount - that.likeSent;
-  that.likeSent += count;
-  if (count > 0) {
-    apiPostLikeButton(that.id, that.referrer, count, that.hasCookieSupport);
-  }
-  that.totalLike += count;
-  /* eslint-enable no-param-reassign */
-}, 500);
-
 export default {
   name: 'embed-id-button',
   layout: 'embed',
@@ -203,16 +188,10 @@ export default {
   mixins: [mixin],
   data() {
     return {
-      LIKE_CO_HOSTNAME,
-
       isLoggedIn: false,
       isSubscribed: false,
       isTrialSubscriber: false,
-      likeCount: 0,
-      likeSent: 0,
-      totalLike: 0,
       shouldShowBackside: false,
-      hasCookieSupport: false,
     };
   },
   computed: {
@@ -226,27 +205,33 @@ export default {
       const { id } = this.$route.params;
       return `/in/like/${id}/?referrer=${encodeURIComponent(this.referrer)}`;
     },
-    isMaxLike() {
-      return (this.likeCount >= 5);
-    },
     isMobile() {
       return checkIsMobileClient();
     },
     isFlipped() {
-      return this.shouldShowBackside && (!this.isSubscribed || this.isTrialSubscriber);
+      return this.shouldShowBackside;
     },
     backTitle() {
       if (this.isTrialSubscriber) {
         return this.$t('Embed.back.civicLiker.trial.title');
       }
+      if (this.isSubscribed) {
+        return this.$t('Embed.back.civicLiker.paid.title');
+      }
       return this.$t('Embed.back.civicLiker.title');
     },
     backSubtitle() {
+      if (this.isSubscribed && !this.isTrialSubscriber) {
+        return '';
+      }
       return this.$t('Embed.back.civicLiker.subtitle');
     },
     backCTAButtonTitle() {
       if (this.isTrialSubscriber) {
         return this.$t('Embed.back.civicLiker.trial.button');
+      }
+      if (this.isSubscribed) {
+        return this.$t('Embed.back.civicLiker.paid.button');
       }
       return this.$t('Embed.back.civicLiker.button');
     },
@@ -329,8 +314,7 @@ export default {
       if (this.isLoggedIn) {
         // Case 3: User has logged in
         if (!this.isMaxLike) {
-          this.likeCount += 1;
-          debouncedOnClick(this);
+          this.like();
           logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike', 1);
         }
 
@@ -357,6 +341,17 @@ export default {
     onClickFrontDisplayName() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickFrontDisplayName', 'clickFrontDisplayName', 1);
     },
+    onClickBackCTAButton() {
+      const { id } = this.$route.params;
+      if (this.isSubscribed && !this.isTrialSubscriber) {
+        window.open(`https://${LIKE_CO_HOSTNAME}/${id}`, '_blank');
+        return;
+      }
+      window.open(
+        `https://${LIKE_CO_HOSTNAME}/in/civic?referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(id)}`,
+        '_blank',
+      );
+    },
     handleWindowMessage(event) {
       if (event.origin !== `https://${LIKE_CO_HOSTNAME}`) return;
       if (event.data) {
@@ -366,7 +361,7 @@ export default {
             this.updateUser().then(() => {
               // Click LikeButton after login
               this.$nextTick(() => {
-                if (this.likeCount <= 0 && this.$refs.likeButton) {
+                if (this.$refs.likeButton) {
                   this.$refs.likeButton.onPressedKnob();
                 }
               });
@@ -398,15 +393,20 @@ $close-btn-width: 56;
     transform-style: preserve-3d;
 
     .likecoin-embed--logged-out & {
-      background: #e6e6e6;
+      background: linear-gradient(70deg, #e6e6e6 60%, #d2f0f0, #f0e6b4);
+    }
+
+    &--front {
+      .likecoin-embed--logged-out & {
+        margin-right: normalized($button-width / 2 + $button-shadow-width);
+      }
     }
 
     &--back {
       margin-right: normalized($button-width / 2 + $button-shadow-width);
 
-      .likecoin-embed__badge__content {
-        padding-right: normalized($button-width / 2 + $button-shadow-width);
-        padding-left: normalized($close-btn-width + 24);
+      .text-content {
+        padding-left: normalized(24);
       }
     }
 
@@ -461,6 +461,10 @@ $close-btn-width: 56;
         height: normalized(28);
 
         fill: $like-green;
+      }
+
+      & + .text-content {
+        padding-left: normalized($close-btn-width + 24);
       }
     }
   }
