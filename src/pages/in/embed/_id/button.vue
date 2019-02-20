@@ -192,6 +192,7 @@ export default {
       isSubscribed: false,
       isTrialSubscriber: false,
       shouldShowBackside: false,
+      isUserFetched: false,
     };
   },
   computed: {
@@ -237,14 +238,22 @@ export default {
     },
   },
   head() {
+    const link = [];
+    if (this.isUserFetched && !this.isLoggedIn) {
+      if (this.hasCookieSupport) {
+        if (!(window.doNotTrack || navigator.doNotTrack)) { // do not prefetch if DNT
+          link.push({ rel: 'prefetch', href: this.registerURL });
+        }
+      } else {
+        link.push({ rel: 'prefetch', href: this.popupLikeURL });
+      }
+    }
     return {
-      // should do this dynamically, but seems head() reactivity is bugged
-      link: [
-        { rel: 'prefetch', href: this.popupLikeURL },
-      ],
+      link,
     };
   },
   async mounted() {
+    this.isUserFetched = false;
     window.addEventListener('message', this.handleWindowMessage);
     this.hasCookieSupport = await this.getIsCookieSupport();
     await this.updateUser();
@@ -253,6 +262,7 @@ export default {
     } else {
       logTrackerEvent(this, 'LikeButton', 'isCookieSupportFalse', 'isCookieSupportFalse', 1);
     }
+    this.isUserFetched = true;
   },
   beforeDestroy() {
     window.removeEventListener('message', this.handleWindowMessage);
