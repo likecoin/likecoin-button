@@ -59,7 +59,7 @@
                     path="Embed.label.supportUser"
                   >
                     <a
-                      :href="getUserPath"
+                      :href="superLikeURL"
                       place="user"
                       rel="noopener noreferrer"
                       target="_blank"
@@ -117,11 +117,7 @@
 </template>
 
 <script>
-import { LIKE_CO_HOSTNAME } from '@/constant';
-
 import {
-  apiGetLikeButtonMyStatus,
-  apiGetLikeButtonTotalCount,
   apiGetPageTitle,
 } from '@/util/api/api';
 
@@ -129,7 +125,7 @@ import { checkValidDomainNotIP, handleQueryStringInUrl } from '@/util/url';
 
 import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
 
-import mixin from '~/components/embed/mixin';
+import mixin from '~/mixins/embed';
 import LikeButton from '~/components/LikeButton';
 import { logTrackerEvent } from '@/util/EventLogger';
 
@@ -141,9 +137,6 @@ export default {
   mixins: [mixin],
   data() {
     return {
-      isLoggedIn: false,
-      isSubscribed: false,
-      isTrialSubscriber: false,
       referrerTitle: '',
 
       contentKey: 'loading',
@@ -176,9 +169,6 @@ export default {
     };
   },
   computed: {
-    referrer() {
-      return this.urlReferrer || (process.client && document.referrer) || '';
-    },
     textContentProps() {
       return {
         key: this.contentKey,
@@ -216,13 +206,23 @@ export default {
       return this.$t('Embed.back.civicLiker.button');
     },
   },
-  created() {
-    if (process.client) {
-      this.updateUser();
-    }
-  },
-  mounted() {
+  async mounted() {
     this.resizeListener = window.addEventListener('resize', this.setContentHeight);
+
+    await this.updateUserSignInStatus();
+    if (!this.isLoggedIn) {
+      this.signIn({ isNewWindow: false });
+      return;
+    }
+
+    this.contentKey = 'loggedIn';
+    this.$nextTick(() => {
+      this.setContentHeight();
+
+      if (this.likeCount <= 0 && this.$refs.likeButton) {
+        this.$refs.likeButton.onPressedKnob();
+      }
+    });
   },
   beforeDestroy() {
     if (this.resizeListener) {
@@ -230,48 +230,6 @@ export default {
     }
   },
   methods: {
-    async updateUser() {
-      try {
-        const [{ data: myData }, { data: totalData }] = await Promise.all([
-          apiGetLikeButtonMyStatus(this.id, this.referrer),
-          apiGetLikeButtonTotalCount(this.id, this.referrer),
-        ]);
-        const {
-          liker,
-          count,
-          isSubscribed,
-          isTrialSubscriber,
-        } = myData;
-        this.isLoggedIn = !!liker;
-        this.isSubscribed = isSubscribed;
-        this.isTrialSubscriber = isTrialSubscriber;
-        if (this.isLoggedIn) {
-          this.contentKey = 'loggedIn';
-        } else {
-          window.location = `https://${LIKE_CO_HOSTNAME}/in/register?redirect=${encodeURIComponent(window.location.href)}&referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(this.$route.params.id)}&is_popup=1`;
-          return;
-        }
-
-        const { total } = totalData;
-        this.totalLike = total;
-        this.likeCount = count;
-        this.likeSent = count;
-        if (this.$sentry) {
-          this.$sentry.configureScope((scope) => {
-            scope.setUser({ id: liker });
-          });
-        }
-        this.$nextTick(() => {
-          this.setContentHeight();
-
-          if (this.likeCount <= 0 && this.$refs.likeButton) {
-            this.$refs.likeButton.onPressedKnob();
-          }
-        });
-      } catch (err) {
-        console.error(err); // eslint-disable-line no-console
-      }
-    },
     setContentHeight() {
       const elem = this.$refs[this.contentKey];
       if (elem) {
@@ -294,28 +252,15 @@ export default {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike', 1);
     },
     onClickLikeStats() {
-      const { id } = this.$route.params;
-      const { referrer } = this.$route.query;
-      this.$router.push({
-        name: 'in-embed-id-list',
-        params: { id },
-        query: {
-          referrer,
-          show_back: '1',
-        },
-      });
+      this.openLikeStats({ isNewWindow: false });
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLikeStats', 'clickLikeStats', 1);
     },
     onClickCTAButton() {
-      const { id } = this.$route.params;
       if (this.isSubscribed && !this.isTrialSubscriber) {
-        window.open(`https://${LIKE_CO_HOSTNAME}/${id}`, '_blank');
-        return;
+        this.superLike();
+      } else {
+        this.convertLikerToCivicLiker();
       }
-      window.open(
-        `https://${LIKE_CO_HOSTNAME}/in/civic?referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(id)}`,
-        '_blank',
-      );
     },
   },
 };

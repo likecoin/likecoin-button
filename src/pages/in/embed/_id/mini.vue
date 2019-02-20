@@ -11,18 +11,8 @@
 </template>
 
 <script>
-import {
-  apiGetLikeButtonMyStatus,
-  apiGetLikeButtonTotalCount,
-} from '@/util/api/api';
-
-import mixin from '~/components/embed/mixin';
+import mixin from '~/mixins/embed';
 import LikeButton from '~/components/LikeButton';
-
-import { LIKECOIN_MISC_API_BASE } from '~/constant/index';
-
-const LIKE_STATS_WINDOW_NAME = 'LIKER_LIST_STATS_WINDOW';
-const SUPER_LIKE_WINDOW_NAME = 'SUPER_LIKE_WINDOW';
 
 export default {
   name: 'embed-id-mini',
@@ -33,45 +23,16 @@ export default {
   mixins: [mixin],
   data() {
     return {
-      isLoggedIn: false,
       isToggled: false,
     };
   },
-  computed: {
-    referrer() {
-      return this.urlReferrer || (process.client && document.referrer) || '';
-    },
-  },
-  created() {
-    if (process.client) {
-      this.updateUser();
-    }
+  mounted() {
+    this.updateUserSignInStatus();
   },
   beforeDestroy() {
     this.clearUntoggleTimer();
   },
   methods: {
-    async updateUser() {
-      try {
-        const [{ data: myData }, { data: totalData }] = await Promise.all([
-          apiGetLikeButtonMyStatus(this.id, this.referrer),
-          apiGetLikeButtonTotalCount(this.id, this.referrer),
-        ]);
-        const { liker, count } = myData;
-        const { total } = totalData;
-        this.isLoggedIn = !!liker;
-        this.totalLike = total;
-        this.likeCount = count;
-        this.likeSent = count;
-        if (this.$sentry) {
-          this.$sentry.configureScope((scope) => {
-            scope.setUser({ id: liker });
-          });
-        }
-      } catch (err) {
-        console.error(err); // eslint-disable-line no-console
-      }
-    },
     clearUntoggleTimer() {
       if (this.untoggleTimer) {
         clearTimeout(this.untoggleTimer);
@@ -81,11 +42,7 @@ export default {
     toggleLikeButton() {
       // interactions when toggled like button or super like
       this.isToggled = true;
-      window.open(
-        `${LIKECOIN_MISC_API_BASE}/${this.id}/${this.amount}`,
-        SUPER_LIKE_WINDOW_NAME,
-        'menubar=no,location=no,width=415,height=768',
-      );
+      this.superLike();
       this.untoggleLikeButton();
     },
     untoggleLikeButton() {
@@ -102,13 +59,7 @@ export default {
       }
     },
     onClickLikeStats() {
-      const { id } = this.$route.params;
-      const referrer = this.urlReferrer;
-      window.open(
-        `/in/embed/${id}/list${referrer ? `?referrer=${encodeURIComponent(referrer)}` : ''}`,
-        LIKE_STATS_WINDOW_NAME,
-        'menubar=no,location=no,width=576,height=768',
-      );
+      this.openLikeStats();
     },
     onToggle(isToggled) {
       if (isToggled) {
