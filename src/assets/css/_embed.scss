@@ -10,8 +10,8 @@ $avatar-vertical-offset: 12;
 
 $button-border-width: 4;
 $button-shadow-width: 6;
-$button-width: 108 + $button-border-width * 2;
-$button-height: 42 + $button-border-width * 2;
+$button-width: 108;
+$button-height: 42;
 
 @function normalized($value: $full-width) {
   @return $value / $full-width * 1rem;
