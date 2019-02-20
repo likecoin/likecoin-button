@@ -151,17 +151,17 @@ export default {
   asyncData(ctx) {
     return Promise.all([
       mixin.asyncData(ctx),
-      () => {
+      (async () => {
         const { query } = ctx;
         let { referrer = '' } = query;
         referrer = handleQueryStringInUrl(referrer);
         const url = encodeURI(referrer);
         if (checkValidDomainNotIP(url)) {
-          return apiGetPageTitle(referrer)
-            .then(referrerTitle => ({ referrerTitle }));
+          const referrerTitle = await apiGetPageTitle(referrer);
+          return { referrerTitle };
         }
-        return { referrerTitle: '' };
-      },
+        return {};
+      })(),
     ]).then(res => ({ ...res[0], ...res[1] }));
   },
   head() {
