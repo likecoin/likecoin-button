@@ -18,9 +18,10 @@
           <div class="like-panel__badge">
 
             <embed-user-info
-              v-if="isLoggedIn"
+              v-if="avatar"
               :avatar="avatar"
               :avatar-halo="avatarHalo"
+              :style="userInfoStyle"
             />
 
             <div
@@ -36,6 +37,9 @@
                   v-if="contentKey === 'loading'"
                   v-bind="textContentProps"
                 >
+                  <div class="text-content__subtitle">
+                    {{ $t('general.loading') }}
+                  </div>
                   <no-ssr>
                     <lc-loading-indicator />
                   </no-ssr>
@@ -144,7 +148,7 @@ export default {
 
       contentKey: 'loading',
       contentStyle: {
-        height: 0,
+        height: '65px',
       },
     };
   },
@@ -182,6 +186,11 @@ export default {
         class: 'text-content',
       };
     },
+    userInfoStyle() {
+      const style = { marginTop: '-80px' };
+      if (this.avatarHalo !== 'none') style.marginBottom = 0;
+      return style;
+    },
     ctaTitle() {
       if (this.isTrialSubscriber) {
         return this.$t('Embed.back.civicLiker.trial.title');
@@ -213,8 +222,6 @@ export default {
     }
   },
   mounted() {
-    // Initialize content height
-    this.setContentHeight();
     this.resizeListener = window.addEventListener('resize', this.setContentHeight);
   },
   beforeDestroy() {
@@ -373,11 +380,6 @@ $badge-width: 485px;
     border-radius: 8px;
     background-image: linear-gradient(78deg, #d2f0f0, #f0e6b4);
   }
-}
-
-.embed-user-info {
-  margin-top: -80px;
-  margin-bottom: 0;
 }
 
 .lc-loading-indicator {

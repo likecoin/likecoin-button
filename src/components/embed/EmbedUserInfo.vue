@@ -1,5 +1,8 @@
 <template>
-  <div :class="rootClass">
+  <div
+    :class="rootClass"
+    v-bind="this.$attrs"
+  >
     <div class="embed-user-info__avatar">
       <lc-avatar
         :src="avatar"

@@ -3,7 +3,8 @@
     "error": "错误",
     "no": "不",
     "ok": "好",
-    "back": "返回"
+    "back": "返回",
+    "loading": "载入中"
   },
   "LikeButton": {
     "head": {

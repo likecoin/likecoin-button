@@ -3,7 +3,8 @@
     "error": "Error",
     "no": "No",
     "ok": "OK",
-    "back": "Back"
+    "back": "Back",
+    "loading": "Loading"
   },
   "LikeButton": {
     "head": {
