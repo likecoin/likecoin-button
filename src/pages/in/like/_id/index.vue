@@ -8,10 +8,7 @@
     </header>
 
     <div class="lc-page-content">
-      <div
-        v-if="isLoggedIn"
-        class="like-single-page"
-      >
+      <div class="like-single-page">
 
         <h1 class="referrer-title">
           {{ referrerTitle }}
@@ -19,31 +16,86 @@
 
         <div class="like-panel">
           <div class="like-panel__badge">
+
             <embed-user-info
+              v-if="isLoggedIn"
               :avatar="avatar"
               :avatar-halo="avatarHalo"
             />
 
-            <div class="text-content">
-              <div class="text-content__subtitle">
-                {{ $t('Embed.label.clickLikeButton') }}
-              </div>
-              <i18n
-                tag="div"
-                class="text-content__title"
-                path="Embed.label.supportUser"
+            <div
+              :style="contentStyle"
+              class="text-content-wrapper"
+            >
+              <transition
+                name="text-content-"
+                @enter="setContentHeight"
               >
-                <a
-                  :href="getUserPath"
-                  place="user"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >{{ displayName }}</a>
-              </i18n>
+                <!-- Loading -->
+                <div
+                  v-if="contentKey === 'loading'"
+                  v-bind="textContentProps"
+                >
+                  <no-ssr>
+                    <lc-loading-indicator />
+                  </no-ssr>
+                </div>
+
+                <!-- Logged In -->
+                <div
+                  v-else-if="contentKey === 'loggedIn'"
+                  v-bind="textContentProps"
+                >
+                  <div class="text-content__subtitle">
+                    {{ $t('Embed.label.clickLikeButton') }}
+                  </div>
+                  <i18n
+                    tag="div"
+                    class="text-content__title"
+                    path="Embed.label.supportUser"
+                  >
+                    <a
+                      :href="getUserPath"
+                      place="user"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >{{ displayName }}</a>
+                  </i18n>
+                </div>
+
+                <!-- Max Liked -->
+                <div
+                  v-else-if="contentKey === 'cta'"
+                  v-bind="textContentProps"
+                >
+                  <div
+                    v-if="ctaSubtitle"
+                    class="text-content__subtitle"
+                  >
+                    {{ ctaSubtitle }}
+                  </div>
+                  <div class="text-content__title text-content__title--civic-liker">
+                    {{ ctaTitle }}
+                  </div>
+
+                  <a
+                    id="embed-cta-button"
+                    @click="onClickCTAButton"
+                  >
+                    <div class="button-content-wrapper">
+                      <div class="button-content">
+                        {{ ctaButtonTitle }}
+                      </div>
+                    </div>
+                  </a>
+                </div>
+
+              </transition>
             </div>
           </div>
 
           <like-button
+            v-if="isLoggedIn"
             ref="likeButton"
             :like-count="likeCount"
             :total-like="totalLike"
@@ -86,7 +138,14 @@ export default {
   data() {
     return {
       isLoggedIn: false,
+      isSubscribed: false,
+      isTrialSubscriber: false,
       referrerTitle: '',
+
+      contentKey: 'loading',
+      contentStyle: {
+        height: 0,
+      },
     };
   },
   asyncData(ctx) {
@@ -116,13 +175,51 @@ export default {
     referrer() {
       return this.urlReferrer || (process.client && document.referrer) || '';
     },
-    isMaxLike() {
-      return (this.likeCount >= 5);
+    textContentProps() {
+      return {
+        key: this.contentKey,
+        ref: this.contentKey,
+        class: 'text-content',
+      };
+    },
+    ctaTitle() {
+      if (this.isTrialSubscriber) {
+        return this.$t('Embed.back.civicLiker.trial.title');
+      }
+      if (this.isSubscribed) {
+        return this.$t('Embed.back.civicLiker.paid.title');
+      }
+      return this.$t('Embed.back.civicLiker.title');
+    },
+    ctaSubtitle() {
+      if (this.isSubscribed && !this.isTrialSubscriber) {
+        return '';
+      }
+      return this.$t('Embed.back.civicLiker.subtitle');
+    },
+    ctaButtonTitle() {
+      if (this.isTrialSubscriber) {
+        return this.$t('Embed.back.civicLiker.trial.button');
+      }
+      if (this.isSubscribed) {
+        return this.$t('Embed.back.civicLiker.paid.button');
+      }
+      return this.$t('Embed.back.civicLiker.button');
     },
   },
   created() {
     if (process.client) {
       this.updateUser();
+    }
+  },
+  mounted() {
+    // Initialize content height
+    this.setContentHeight();
+    this.resizeListener = window.addEventListener('resize', this.setContentHeight);
+  },
+  beforeDestroy() {
+    if (this.resizeListener) {
+      window.removeEventListener('resize', this.setContentHeight);
     }
   },
   methods: {
@@ -132,9 +229,18 @@ export default {
           apiGetLikeButtonMyStatus(this.id, this.referrer),
           apiGetLikeButtonTotalCount(this.id, this.referrer),
         ]);
-        const { liker, count } = myData;
+        const {
+          liker,
+          count,
+          isSubscribed,
+          isTrialSubscriber,
+        } = myData;
         this.isLoggedIn = !!liker;
-        if (!this.isLoggedIn) {
+        this.isSubscribed = isSubscribed;
+        this.isTrialSubscriber = isTrialSubscriber;
+        if (this.isLoggedIn) {
+          this.contentKey = 'loggedIn';
+        } else {
           window.location = `https://${LIKE_CO_HOSTNAME}/in/register?redirect=${encodeURIComponent(window.location.href)}&referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(this.$route.params.id)}`;
           return;
         }
@@ -149,6 +255,8 @@ export default {
           });
         }
         this.$nextTick(() => {
+          this.setContentHeight();
+
           if (this.likeCount <= 0 && this.$refs.likeButton) {
             this.$refs.likeButton.onPressedKnob();
           }
@@ -157,14 +265,24 @@ export default {
         console.error(err); // eslint-disable-line no-console
       }
     },
+    setContentHeight() {
+      const elem = this.$refs[this.contentKey];
+      if (elem) {
+        this.contentStyle = {
+          height: `${elem.offsetHeight}px`,
+        };
+      }
+    },
     onClickBackButton() {
       window.close();
     },
     onClickLike() {
-      if (this.isMaxLike) {
-        this.shouldShowBackside = true;
-      } else {
+      if (!this.isMaxLike) {
         this.like();
+      }
+
+      if (this.isMaxLike) {
+        this.contentKey = 'cta';
       }
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike', 1);
     },
@@ -181,6 +299,17 @@ export default {
       });
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLikeStats', 'clickLikeStats', 1);
     },
+    onClickCTAButton() {
+      const { id } = this.$route.params;
+      if (this.isSubscribed && !this.isTrialSubscriber) {
+        window.open(`https://${LIKE_CO_HOSTNAME}/${id}`, '_blank');
+        return;
+      }
+      window.open(
+        `https://${LIKE_CO_HOSTNAME}/in/civic?referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(id)}`,
+        '_blank',
+      );
+    },
   },
 };
 </script>
@@ -193,7 +322,7 @@ $badge-width: 485px;
 .lc-page-header {
   position: relative;
 
-  height: 64px;
+  height: 52px;
 
   background-image: linear-gradient(251deg, #d2f0f0, #f0e6b4);
 
@@ -228,36 +357,74 @@ $badge-width: 485px;
 }
 
 .like-panel {
-  max-width: $badge-width;
-  margin: 0 auto;
+  padding: 0 12px;
 
   &__badge {
     display: flex;
+    align-items: center;
+    flex-direction: column;
 
-    margin-top: 24px;
+    max-width: 270px;
+    margin: 0 auto;
+    margin-top: 104px;
 
+    text-align: center;
+
+    border-radius: 8px;
     background-image: linear-gradient(78deg, #d2f0f0, #f0e6b4);
-
-    @media (min-width: $badge-width + 1px) {
-      border-radius: 8px;
-    }
-
-    @media (max-width: $badge-width) {
-      align-items: center;
-      flex-direction: column;
-
-      text-align: center;
-    }
   }
 }
 
+.embed-user-info {
+  margin-top: -80px;
+  margin-bottom: 0;
+}
+
+.lc-loading-indicator {
+  margin: 0 auto;
+
+  color: $like-green;
+
+  font-size: 14px;
+}
+
 .text-content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
 
-  margin-top: 8px;
+  width: 100%;
   padding: 16px;
+
+  &-wrapper {
+    position: relative;
+
+    overflow: hidden;
+
+    width: 100%;
+
+    transition: height 1s ease;
+  }
+
+  &-- {
+    &enter-active,
+    &leave-active {
+      transition-duration: 1s;
+      transition-property: opacity, transform;
+    }
+
+    &enter,
+    &leave-to {
+      transform: scale(0.7);
+
+      opacity: 0;
+    }
+  }
 
   &__subtitle {
     font-size: 16px;
@@ -270,20 +437,17 @@ $badge-width: 485px;
   }
 }
 
+#embed-cta-button {
+  margin-top: 8px;
+}
+
 .like-button {
   position: absolute;
+  left: 50%;
 
   margin-top: -18px;
 
-  @media (min-width: $badge-width + 1px) {
-    margin-left: 44px;
-  }
-
-  @media (max-width: $badge-width) {
-    left: 50%;
-
-    transform: translate(-50%);
-  }
+  transform: translate(-50%);
 
   :global(.like-button-knob) {
     outline-style: none;
