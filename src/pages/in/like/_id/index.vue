@@ -22,6 +22,8 @@
               :avatar="avatar"
               :avatar-halo="avatarHalo"
               :style="userInfoStyle"
+              @click-avatar="onClickAvatar"
+              @click-avatar-halo="onClickAvatarHalo"
             />
 
             <div
@@ -261,6 +263,12 @@ export default {
       } else {
         this.convertLikerToCivicLiker();
       }
+    },
+    onClickAvatar() {
+      this.superLike();
+    },
+    onClickAvatarHalo() {
+      this.convertLikerToCivicLiker();
     },
   },
 };

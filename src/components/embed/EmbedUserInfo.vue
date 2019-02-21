@@ -1,14 +1,18 @@
 <template>
   <div
     :class="rootClass"
-    v-bind="this.$attrs"
+    v-bind="$attrs"
   >
     <div class="embed-user-info__avatar">
       <lc-avatar
         :src="avatar"
         :halo="avatarHalo"
+        :is-clickable="isAvatarClickable"
+        :is-halo-clickable="isAvatarHaloClickable"
         size="large"
         is-full-width
+        @click="onClickAvatar"
+        @click-halo="onClickAvatarHalo"
       />
     </div>
 
@@ -57,6 +61,20 @@ export default {
           'embed-user-info--with-halo': this.avatarHalo !== 'none',
         },
       ];
+    },
+    isAvatarClickable() {
+      return !!this.$listeners['click-avatar'];
+    },
+    isAvatarHaloClickable() {
+      return !!this.$listeners['click-avatar-halo'];
+    },
+  },
+  methods: {
+    onClickAvatar() {
+      this.$emit('click-avatar');
+    },
+    onClickAvatarHalo() {
+      this.$emit('click-avatar-halo');
     },
   },
 };

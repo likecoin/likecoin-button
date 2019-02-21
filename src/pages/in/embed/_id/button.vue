@@ -69,6 +69,8 @@
           <embed-user-info
             :avatar="avatar"
             :avatar-halo="avatarHalo"
+            @click-avatar="onClickAvatar"
+            @click-avatar-halo="onClickAvatarHalo"
           />
 
           <!-- Front upper part, Logged in -->
@@ -306,6 +308,12 @@ export default {
       } else {
         this.convertLikerToCivicLiker();
       }
+    },
+    onClickAvatar() {
+      this.superLike();
+    },
+    onClickAvatarHalo() {
+      this.convertLikerToCivicLiker();
     },
     handleWindowMessage(event) {
       if (event.origin !== `https://${LIKE_CO_HOSTNAME}`) return;
