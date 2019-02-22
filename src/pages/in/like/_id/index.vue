@@ -248,7 +248,7 @@ export default {
         if (this.isLoggedIn) {
           this.contentKey = 'loggedIn';
         } else {
-          window.location = `https://${LIKE_CO_HOSTNAME}/in/register?redirect=${encodeURIComponent(window.location.href)}&referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(this.$route.params.id)}`;
+          window.location = `https://${LIKE_CO_HOSTNAME}/in/register?redirect=${encodeURIComponent(window.location.href)}&referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(this.$route.params.id)}&is_popup=1`;
           return;
         }
 

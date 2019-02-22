@@ -200,7 +200,7 @@ export default {
       return this.urlReferrer || (process.client && document.referrer) || '';
     },
     registerURL() {
-      return `https://${LIKE_CO_HOSTNAME}/in/register?referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(this.$route.params.id)}`;
+      return `https://${LIKE_CO_HOSTNAME}/in/register?referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(this.$route.params.id)}&is_popup=1`;
     },
     popupLikeURL() {
       const { id } = this.$route.params;
