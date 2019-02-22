@@ -182,7 +182,9 @@ export default {
     urlReferrer() {
       const { query } = this.$route;
       let { referrer = '' } = query;
-      referrer = handleQueryStringInUrl(referrer);
+      if (referrer) {
+        referrer = handleQueryStringInUrl(referrer);
+      }
       return referrer;
     },
     referrer() {
