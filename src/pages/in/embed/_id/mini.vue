@@ -1,5 +1,6 @@
 <template>
   <like-button
+    ref="likeButton"
     :like-count="likeCount"
     :total-like="totalLike"
     :is-max="isMaxLike"
@@ -11,7 +12,7 @@
 </template>
 
 <script>
-import mixin from '~/mixins/embed';
+import mixin from '~/mixins/embed-button';
 import LikeButton from '~/components/LikeButton';
 
 export default {
@@ -25,9 +26,6 @@ export default {
     return {
       isToggled: false,
     };
-  },
-  mounted() {
-    this.updateUserSignInStatus();
   },
   beforeDestroy() {
     this.clearUntoggleTimer();
@@ -52,10 +50,20 @@ export default {
       }, 300);
     },
     onClickLike() {
-      if (this.isMaxLike) {
-        this.toggleLikeButton();
+      if (this.isLoggedIn) {
+        // Case 3: User has logged in
+        if (!this.isMaxLike) {
+          this.like();
+        }
+        if (this.isMaxLike) {
+          this.toggleLikeButton();
+        }
+      } else if (this.hasCookieSupport) {
+        // Case 1: User has not log in and 3rd party cookie is not blocked
+        this.signIn();
       } else {
-        this.like();
+        // Case 2: User has not log in and 3rd party cookie is blocked
+        this.popupLike();
       }
     },
     onClickLikeStats() {
