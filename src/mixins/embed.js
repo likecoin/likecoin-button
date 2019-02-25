@@ -15,6 +15,7 @@ import {
   apiGetLikeButtonMyStatus,
 } from '~/util/api/api';
 
+import { checkHasStorageAPIAccess } from '~/util/client';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 import { handleQueryStringInUrl } from '~/util/url';
 
@@ -138,6 +139,11 @@ export default {
     },
   },
   methods: {
+    async getIsCookieSupport() {
+      const res = process.client && navigator.cookieEnabled && await checkHasStorageAPIAccess();
+      return res;
+    },
+
     async updateUserSignInStatus() {
       try {
         const [{ data: myData }, { data: totalData }] = await Promise.all([

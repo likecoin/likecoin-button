@@ -165,14 +165,11 @@
 </template>
 
 <script>
-import {
-  LIKE_CO_HOSTNAME,
-} from '@/constant';
-import { checkIsMobileClient, checkHasStorageAPIAccess } from '~/util/client';
+import { checkIsMobileClient } from '~/util/client';
 
 import CloseButtonIcon from '~/assets/like-button/close-btn.svg';
 
-import mixin from '~/mixins/embed';
+import mixin from '~/mixins/embed-button';
 import LikeButton from '~/components/LikeButton';
 import { logTrackerEvent } from '@/util/EventLogger';
 
@@ -192,10 +189,6 @@ export default {
     };
   },
   computed: {
-    popupLikeURL() {
-      const { id } = this.$route.params;
-      return `/in/like/${id}/?referrer=${encodeURIComponent(this.referrer)}`;
-    },
     isMobile() {
       return checkIsMobileClient();
     },
@@ -227,40 +220,13 @@ export default {
       return this.$t('Embed.back.civicLiker.button');
     },
   },
-  head() {
-    const link = [];
-    if (this.isUserFetched && !this.isLoggedIn) {
-      if (this.hasCookieSupport) {
-        if (!(window.doNotTrack || navigator.doNotTrack)) { // do not prefetch if DNT
-          link.push({ rel: 'prefetch', href: this.signInURL });
-        }
-      } else {
-        link.push({ rel: 'prefetch', href: this.popupLikeURL });
-      }
-    }
-    return {
-      link,
-    };
-  },
-  async mounted() {
-    this.isUserFetched = false;
-    window.addEventListener('message', this.handleWindowMessage);
-    this.hasCookieSupport = await this.getIsCookieSupport();
-    await this.updateUserSignInStatus();
-    if (this.hasCookieSupport) {
-      logTrackerEvent(this, 'LikeButton', 'isCookieSupportTrue', 'isCookieSupportTrue', 1);
-    } else {
-      logTrackerEvent(this, 'LikeButton', 'isCookieSupportFalse', 'isCookieSupportFalse', 1);
-    }
-    this.isUserFetched = true;
-  },
-  beforeDestroy() {
-    window.removeEventListener('message', this.handleWindowMessage);
-  },
   methods: {
-    async getIsCookieSupport() {
-      const res = process.client && navigator.cookieEnabled && await checkHasStorageAPIAccess();
-      return res;
+    onCheckCookieSupport(isSupport) {
+      if (isSupport) {
+        logTrackerEvent(this, 'LikeButton', 'isCookieSupportTrue', 'isCookieSupportTrue', 1);
+      } else {
+        logTrackerEvent(this, 'LikeButton', 'isCookieSupportFalse', 'isCookieSupportFalse', 1);
+      }
     },
     onClickLoginButton() {
       logTrackerEvent(this, 'LikeButtonFlow', 'popupLikeButton', 'popupLikeButton', 1);
@@ -270,11 +236,7 @@ export default {
         logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp', 1);
       } else {
         // Case 2: User has not log in and 3rd party cookie is blocked
-        window.open(
-          this.popupLikeURL,
-          'like',
-          'menubar=no,location=no,width=576,height=768',
-        );
+        this.popupLike();
         logTrackerEvent(this, 'LikeButtonFlow', 'popupLike', 'popupLike', 1);
       }
     },
@@ -315,26 +277,6 @@ export default {
     },
     onClickAvatarHalo() {
       this.convertLikerToCivicLiker();
-    },
-    handleWindowMessage(event) {
-      if (event.origin !== `https://${LIKE_CO_HOSTNAME}`) return;
-      if (event.data) {
-        const { data } = event;
-        switch (data.action) {
-          case 'LOGGED_IN':
-            this.updateUserSignInStatus().then(() => {
-              // Click LikeButton after login
-              this.$nextTick(() => {
-                if (this.$refs.likeButton) {
-                  this.$refs.likeButton.onPressedKnob();
-                }
-              });
-            });
-            break;
-
-          default:
-        }
-      }
     },
   },
 };
