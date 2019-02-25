@@ -143,6 +143,7 @@
     </transition>
 
     <like-button
+      ref="likeButton"
       :like-count="likeCount"
       :total-like="totalLike"
       :is-togglable="false"
