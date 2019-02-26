@@ -69,6 +69,8 @@
           <embed-user-info
             :avatar="avatar"
             :avatar-halo="avatarHalo"
+            @click-avatar="onClickAvatar"
+            @click-avatar-halo="onClickAvatarHalo"
           />
 
           <!-- Front upper part, Logged in -->
@@ -86,7 +88,7 @@
               path="Embed.label.supportUser"
             >
               <a
-                :href="getUserPath"
+                :href="superLikeURL"
                 place="user"
                 rel="noopener noreferrer"
                 target="_blank"
@@ -141,6 +143,7 @@
     </transition>
 
     <like-button
+      ref="likeButton"
       :like-count="likeCount"
       :total-like="totalLike"
       :is-togglable="false"
@@ -162,19 +165,11 @@
 </template>
 
 <script>
-import {
-  apiGetLikeButtonMyStatus,
-  apiGetLikeButtonTotalCount,
-} from '@/util/api/api';
-
-import {
-  LIKE_CO_HOSTNAME,
-} from '@/constant';
-import { checkIsMobileClient, checkHasStorageAPIAccess } from '~/util/client';
+import { checkIsMobileClient } from '~/util/client';
 
 import CloseButtonIcon from '~/assets/like-button/close-btn.svg';
 
-import mixin from '~/components/embed/mixin';
+import mixin from '~/mixins/embed-button';
 import LikeButton from '~/components/LikeButton';
 import { logTrackerEvent } from '@/util/EventLogger';
 
@@ -188,24 +183,12 @@ export default {
   mixins: [mixin],
   data() {
     return {
-      isLoggedIn: false,
-      isSubscribed: false,
-      isTrialSubscriber: false,
+      isShowPopupAlert: false,
       shouldShowBackside: false,
       isUserFetched: false,
     };
   },
   computed: {
-    referrer() {
-      return this.urlReferrer || (process.client && document.referrer) || '';
-    },
-    registerURL() {
-      return `https://${LIKE_CO_HOSTNAME}/in/register?referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(this.$route.params.id)}&is_popup=1`;
-    },
-    popupLikeURL() {
-      const { id } = this.$route.params;
-      return `/in/like/${id}/?referrer=${encodeURIComponent(this.referrer)}`;
-    },
     isMobile() {
       return checkIsMobileClient();
     },
@@ -237,87 +220,24 @@ export default {
       return this.$t('Embed.back.civicLiker.button');
     },
   },
-  head() {
-    const link = [];
-    if (this.isUserFetched && !this.isLoggedIn) {
-      if (this.hasCookieSupport) {
-        if (!(window.doNotTrack || navigator.doNotTrack)) { // do not prefetch if DNT
-          link.push({ rel: 'prefetch', href: this.registerURL });
-        }
-      } else {
-        link.push({ rel: 'prefetch', href: this.popupLikeURL });
-      }
-    }
-    return {
-      link,
-    };
-  },
-  async mounted() {
-    this.isUserFetched = false;
-    window.addEventListener('message', this.handleWindowMessage);
-    this.hasCookieSupport = await this.getIsCookieSupport();
-    await this.updateUser();
-    if (this.hasCookieSupport) {
-      logTrackerEvent(this, 'LikeButton', 'isCookieSupportTrue', 'isCookieSupportTrue', 1);
-    } else {
-      logTrackerEvent(this, 'LikeButton', 'isCookieSupportFalse', 'isCookieSupportFalse', 1);
-    }
-    this.isUserFetched = true;
-  },
-  beforeDestroy() {
-    window.removeEventListener('message', this.handleWindowMessage);
-  },
   methods: {
-    async getIsCookieSupport() {
-      const res = process.client && navigator.cookieEnabled && await checkHasStorageAPIAccess();
-      return res;
-    },
-    async updateUser() {
-      try {
-        const [{ data: myData }, { data: totalData }] = await Promise.all([
-          apiGetLikeButtonMyStatus(this.id, this.referrer, this.hasCookieSupport),
-          apiGetLikeButtonTotalCount(this.id, this.referrer),
-        ]);
-        const {
-          liker,
-          count,
-          isSubscribed,
-          isTrialSubscriber,
-        } = myData;
-        const { total } = totalData;
-        this.isLoggedIn = !!liker;
-        this.isSubscribed = isSubscribed;
-        this.isTrialSubscriber = isTrialSubscriber;
-        this.totalLike = total;
-        this.likeCount = count;
-        this.likeSent = count;
-        if (this.$sentry) {
-          this.$sentry.configureScope((scope) => {
-            scope.setUser({ id: liker });
-          });
-        }
-      } catch (err) {
-        console.error(err); // eslint-disable-line no-console
+    onCheckCookieSupport(isSupport) {
+      if (isSupport) {
+        logTrackerEvent(this, 'LikeButton', 'isCookieSupportTrue', 'isCookieSupportTrue', 1);
+      } else {
+        logTrackerEvent(this, 'LikeButton', 'isCookieSupportFalse', 'isCookieSupportFalse', 1);
       }
     },
     onClickLoginButton() {
       logTrackerEvent(this, 'LikeButtonFlow', 'popupLikeButton', 'popupLikeButton', 1);
       if (this.hasCookieSupport) {
         // Case 1: User has not log in and 3rd party cookie is not blocked
+        this.signIn();
         logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp', 1);
-        window.open(
-          this.registerURL,
-          'signin',
-          'width=540,height=600,menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes',
-        );
       } else {
         // Case 2: User has not log in and 3rd party cookie is blocked
+        this.popupLike();
         logTrackerEvent(this, 'LikeButtonFlow', 'popupLike', 'popupLike', 1);
-        window.open(
-          this.popupLikeURL,
-          'like',
-          'menubar=no,location=no,width=576,height=768',
-        );
       }
     },
     onClickLike() {
@@ -336,13 +256,7 @@ export default {
       }
     },
     onClickLikeStats() {
-      const { id } = this.$route.params;
-      const referrer = this.urlReferrer;
-      window.open(
-        `/in/embed/${id}/list${referrer ? `?referrer=${encodeURIComponent(referrer)}` : ''}`,
-        '_blank',
-        'menubar=no,location=no,width=576,height=768',
-      );
+      this.openLikeStats();
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLikeStats', 'clickLikeStats', 1);
     },
     onClickCloseButton() {
@@ -352,35 +266,17 @@ export default {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickFrontDisplayName', 'clickFrontDisplayName', 1);
     },
     onClickBackCTAButton() {
-      const { id } = this.$route.params;
       if (this.isSubscribed && !this.isTrialSubscriber) {
-        window.open(`https://${LIKE_CO_HOSTNAME}/${id}`, '_blank');
-        return;
+        this.superLike();
+      } else {
+        this.convertLikerToCivicLiker();
       }
-      window.open(
-        `https://${LIKE_CO_HOSTNAME}/in/civic?referrer=${encodeURIComponent(this.referrer)}&from=${encodeURIComponent(id)}`,
-        '_blank',
-      );
     },
-    handleWindowMessage(event) {
-      if (event.origin !== `https://${LIKE_CO_HOSTNAME}`) return;
-      if (event.data) {
-        const { data } = event;
-        switch (data.action) {
-          case 'LOGGED_IN':
-            this.updateUser().then(() => {
-              // Click LikeButton after login
-              this.$nextTick(() => {
-                if (this.$refs.likeButton) {
-                  this.$refs.likeButton.onPressedKnob();
-                }
-              });
-            });
-            break;
-
-          default:
-        }
-      }
+    onClickAvatar() {
+      this.superLike();
+    },
+    onClickAvatarHalo() {
+      this.convertLikerToCivicLiker();
     },
   },
 };
