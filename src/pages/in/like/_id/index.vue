@@ -153,7 +153,9 @@ export default {
       (async () => {
         const { query } = ctx;
         let { referrer = '' } = query;
-        referrer = handleQueryStringInUrl(referrer);
+        if (referrer) {
+          referrer = handleQueryStringInUrl(referrer);
+        }
         const url = encodeURI(referrer);
         if (checkValidDomainNotIP(url)) {
           const referrerTitle = await apiGetPageTitle(referrer);
