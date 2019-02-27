@@ -1,7 +1,7 @@
 /* eslint import/no-extraneous-dependencies: "off" */
 const { IS_TESTNET } = process.env;
 
-module.exports = {
+const nuxtConfig = {
   env: {
     SENTRY_DSN: process.env.SENTRY_DSN,
     IS_TESTNET,
@@ -189,3 +189,6 @@ module.exports = {
     { src: '@likecoin/ui-vue/dist/ui-vue.css', lang: 'css' },
   ],
 };
+
+/* do not use es6 export since we directly require() it in functions */
+module.exports = nuxtConfig; // eslint-disable-line nuxt/no-cjs-in-config

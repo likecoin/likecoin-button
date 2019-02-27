@@ -1,6 +1,5 @@
 <template>
   <like-button
-    ref="likeButton"
     :like-count="likeCount"
     :total-like="totalLike"
     :is-max="isMaxLike"
@@ -8,6 +7,7 @@
     @like="onClickLike"
     @click-stats="onClickLikeStats"
     @toggle="onToggle"
+    ref="likeButton"
   />
 </template>
 

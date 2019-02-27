@@ -9,10 +9,10 @@
         :halo="avatarHalo"
         :is-clickable="isAvatarClickable"
         :is-halo-clickable="isAvatarHaloClickable"
-        size="large"
-        is-full-width
         @click="onClickAvatar"
         @click-halo="onClickAvatarHalo"
+        size="large"
+        is-full-width
       />
     </div>
 

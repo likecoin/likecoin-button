@@ -25,8 +25,8 @@
           <!-- Don't show close button-->
           <div
             v-if="false"
-            class="likecoin-embed__badge__close-btn"
             @click="onClickCloseButton"
+            class="likecoin-embed__badge__close-btn"
           >
             <close-button-icon />
           </div>
@@ -47,8 +47,8 @@
 
           <div class="embed-cta-button-wrapper">
             <a
-              id="embed-cta-button"
               @click="onClickBackCTAButton"
+              id="embed-cta-button"
             >
               <div class="button-content-wrapper">
                 <div class="button-content">
@@ -89,10 +89,10 @@
             >
               <a
                 :href="superLikeURL"
+                @click="onClickFrontDisplayName"
                 place="user"
                 rel="noopener noreferrer"
                 target="_blank"
-                @click="onClickFrontDisplayName"
               >{{ displayName }}</a>
             </i18n>
           </div>
@@ -107,8 +107,8 @@
               path="Embed.label.clickLikeButtonNoLogin"
             >
               <a
-                place="action"
                 @click.prevent="onClickLoginButton"
+                place="action"
               >{{ $t('Embed.label.registerNow') }}</a>
             </i18n>
             <i18n
@@ -127,8 +127,8 @@
             class="embed-cta-button-wrapper"
           >
             <a
-              id="embed-cta-button"
               @click="onClickLoginButton"
+              id="embed-cta-button"
             >
               <div class="button-content-wrapper">
                 <div class="button-content">
@@ -143,7 +143,6 @@
     </transition>
 
     <like-button
-      ref="likeButton"
       :like-count="likeCount"
       :total-like="totalLike"
       :is-togglable="false"
@@ -151,6 +150,7 @@
       :is-show-max="isFlipped"
       @like="onClickLike"
       @click-stats="onClickLikeStats"
+      ref="likeButton"
     />
 
     <footer>

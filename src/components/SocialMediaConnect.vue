@@ -24,9 +24,10 @@
               }`,
             ]"
             :title="getSocialMediaTitle(socialMedia)"
-            type="button"
             @click="onClickButton(socialMedia)"
+            type="button"
           >
+            <!-- eslint-disable-next-line vue/require-component-is -->
             <component :is="getIconComponentName(socialMedia.id)" />
           </button>
         </li>
@@ -91,6 +92,7 @@ const SOCIAL_MEDIA_LIST = [
 export default {
   name: 'social-media-connect',
   components: {
+    /* eslint-disable vue/no-unused-components */
     LikeCoinIcon,
     FacebookIcon,
     FlickrIcon,
@@ -103,6 +105,7 @@ export default {
     LinkMailIcon,
     LinkPhotoIcon,
     LinkProfileIcon,
+    /* eslint-enable vue/no-unused-components */
   },
   props: {
     type: {
