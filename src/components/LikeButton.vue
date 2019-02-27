@@ -31,12 +31,12 @@
           class="like-button-knob-wrapper"
         >
           <button
-            ref="button"
             :style="{ marginLeft: `${knobProgress * 100}%` }"
-            class="like-button-knob"
             @mousedown="onPressKnob"
             @mouseup="onPressedKnob"
             @mouseleave="onLeaveKnob"
+            ref="button"
+            class="like-button-knob"
           >
             <transition
               v-for="i in 12"
@@ -94,8 +94,8 @@
         </div>
 
         <div
-          class="like-button-stats"
           @click="$emit('click-stats')"
+          class="like-button-stats"
         >
           <like-text-icon class="like-button-stats__text-logo" />
           <span

@@ -2,17 +2,17 @@
   <div class="lc-container">
     <vue-recaptcha
       v-if="!isDonePage"
-      ref="invisibleRecaptcha"
-      size="invisible"
-      sitekey="6Le9w10UAAAAANsMwDA5YuiwCudW8YKu2RGI8Hcl"
       @verify="onCaptchaVerify"
       @expired="onCaptchaExpired"
       @render="onCaptchaRender"
+      ref="invisibleRecaptcha"
+      size="invisible"
+      sitekey="6Le9w10UAAAAANsMwDA5YuiwCudW8YKu2RGI8Hcl"
     />
     <div
       v-else
-      class="done-page__back-button"
       @click="$router.go(-1)"
+      class="done-page__back-button"
     >
       <back-icon />
       <span>

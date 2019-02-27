@@ -1,7 +1,7 @@
 /* eslint import/no-extraneous-dependencies: "off" */
 const { IS_TESTNET } = process.env;
 
-module.exports = {
+const nuxtConfig = {
   env: {
     SENTRY_DSN: process.env.SENTRY_DSN,
     IS_TESTNET,
@@ -49,59 +49,57 @@ module.exports = {
     csp: {
       enabled: true,
       hashAlgorithm: 'sha256',
-      // policies: {
-      //   'default-src': [
-      //     "'self'",
-      //     'data:',
-      //     'blob:',
-      //     '*',
-      //   ],
-      //   'script-src': [
-      allowedSources: [
-        "'self'",
-        /* gtm inline code */
-        "'sha256-X3ZM8SMe34uV9LglkNh69UN/Vkuo+blzT0E7mN1rUnQ='",
-        "'unsafe-inline'", // ignored by browser with sha support
-        'www.google-analytics.com',
-        'www.googletagmanager.com',
-        'www.googleadservices.com',
-        'cdn.mouseflow.com',
-        'ajax.googleapis.com',
-        '*.google.com',
-        'www.recaptcha.net',
-        'www.gstatic.com',
-        'www.gstatic.cn',
-        'cdn.mouseflow.com',
-        'ajax.googleapis.com',
-        'js.intercomcdn.com',
-        'connect.facebook.net',
-        'use.typekit.net',
-        '*.intercom.io',
-      ],
-      //   ],
-      //   'frame-src': [
-      //     'like.co',
-      //     '*.like.co',
-      //     'www.google.com',
-      //     'www.recaptcha.net',
-      //     '*.facebook.com',
-      //     '*.facebook.net',
-      //   ],
-      //   'connect-src': [
-      //     "'self'",
-      //     'data:',
-      //     '*',
-      //     'wss://*.intercom.io',
-      //   ],
-      //   'style-src': [
-      //     "'self'",
-      //     "'unsafe-inline'",
-      //     'fonts.googleapis.com',
-      //   ],
-      //   'report-uri': [
-      //     process.env.SENTRY_REPORT_URI,
-      //   ],
-      // },
+      policies: {
+        'default-src': [
+          "'self'",
+          'data:',
+          'blob:',
+          '*',
+        ],
+        'script-src': [
+          "'self'",
+          /* gtm inline code */
+          "'sha256-X3ZM8SMe34uV9LglkNh69UN/Vkuo+blzT0E7mN1rUnQ='",
+          "'unsafe-inline'", // ignored by browser with sha support
+          'www.google-analytics.com',
+          'www.googletagmanager.com',
+          'www.googleadservices.com',
+          'cdn.mouseflow.com',
+          'ajax.googleapis.com',
+          '*.google.com',
+          'www.recaptcha.net',
+          'www.gstatic.com',
+          'www.gstatic.cn',
+          'cdn.mouseflow.com',
+          'ajax.googleapis.com',
+          'js.intercomcdn.com',
+          'connect.facebook.net',
+          'use.typekit.net',
+          '*.intercom.io',
+        ],
+        'frame-src': [
+          'like.co',
+          '*.like.co',
+          'www.google.com',
+          'www.recaptcha.net',
+          '*.facebook.com',
+          '*.facebook.net',
+        ],
+        'connect-src': [
+          "'self'",
+          'data:',
+          '*',
+          'wss://*.intercom.io',
+        ],
+        'style-src': [
+          "'self'",
+          "'unsafe-inline'",
+          'fonts.googleapis.com',
+        ],
+        'report-uri': [
+          process.env.SENTRY_REPORT_URI,
+        ],
+      },
     },
   },
   router: {
@@ -189,3 +187,6 @@ module.exports = {
     { src: '@likecoin/ui-vue/dist/ui-vue.css', lang: 'css' },
   ],
 };
+
+/* do not use es6 export since we directly require() it in functions */
+module.exports = nuxtConfig; // eslint-disable-line nuxt/no-cjs-in-config

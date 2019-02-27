@@ -7,8 +7,8 @@
           slot="header-left"
         >
           <a
-            href="#"
             @click="$router.go(-1)"
+            href="#"
           >
             {{ $t('general.back') }}
           </a>

@@ -31,8 +31,8 @@
               class="text-content-wrapper"
             >
               <transition
-                name="text-content-"
                 @enter="setContentHeight"
+                name="text-content-"
               >
                 <!-- Loading -->
                 <div
@@ -85,8 +85,8 @@
                   </div>
 
                   <a
-                    id="embed-cta-button"
                     @click="onClickCTAButton"
+                    id="embed-cta-button"
                   >
                     <div class="button-content-wrapper">
                       <div class="button-content">
@@ -102,13 +102,13 @@
 
           <like-button
             v-if="isLoggedIn"
-            ref="likeButton"
             :like-count="likeCount"
             :total-like="totalLike"
             :is-togglable="false"
             :is-max="isMaxLike"
             @like="onClickLike"
             @click-stats="onClickLikeStats"
+            ref="likeButton"
           />
         </div>
 
