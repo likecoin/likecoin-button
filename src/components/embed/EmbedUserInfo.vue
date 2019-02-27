@@ -90,22 +90,20 @@ $normal-x-margin: 8;
 
   flex-shrink: 0;
 
-  width: #{$avatar-size}em;
-  height: #{$avatar-size}em;
-  margin: #{-$avatar-vertical-offset}em #{$normal-x-margin}em;
-
-  font-size: normalized(1);
+  width: normalized($avatar-size);
+  height: normalized($avatar-size);
+  margin: normalized(-$avatar-vertical-offset) normalized($normal-x-margin);
 
   &--with-halo {
-    margin-right: #{$normal-x-margin + 10}em;
-    margin-left: #{$normal-x-margin + 6}em;
+    margin-right: normalized($normal-x-margin + 10);
+    margin-left: normalized($normal-x-margin + 6);
   }
 
   &__avatar {
     position: relative;
 
-    width: #{$avatar-size}em;
-    height: #{$avatar-size}em;
+    width: normalized($avatar-size);
+    height: normalized($avatar-size);
 
     :global(.lc-avatar__content__halo) {
       position: absolute;
@@ -122,17 +120,13 @@ $normal-x-margin: 8;
     justify-content: center;
 
     min-width: 100%;
-    margin-top: #{(4 / 18)}em;
+    margin-top: normalized(4);
 
     letter-spacing: 0;
 
-    font-size: 18em;
+    font-size: normalized(18);
     font-weight: 600;
-    line-height: #{(18.5 / 18)}em;
-
-    .embed-user-info--with-halo & {
-      margin-top: #{(12 / 18)}em;
-    }
+    line-height: normalized(18.5);
 
     a {
       display: inline-block;
