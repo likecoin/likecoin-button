@@ -38,18 +38,7 @@
             ref="button"
             class="like-button-knob"
           >
-            <transition
-              v-for="i in 12"
-              :key="i"
-              name="like-button__clap-effect-"
-            >
-              <div
-                v-if="isShowClapEffect"
-                class="like-button__clap-effect"
-              >
-                <clap-effect-icon />
-              </div>
-            </transition>
+            <ClapEffect ref="clapEffect" />
 
             <div class="like-button-knob__border" />
             <transition-group
@@ -114,15 +103,15 @@ import _debounce from 'lodash.debounce';
 
 import { checkIsMobileClient } from '~/util/client';
 
-import ClapEffectIcon from '~/assets/like-button/clap-effect.svg';
 import LikeClapIcon from '~/assets/like-button/like-clap.svg';
 import LikeTextIcon from '~/assets/like-button/like-text.svg';
 
+import ClapEffect from './LikeButtonClapEffect';
 
 export default {
   name: 'like-button',
   components: {
-    ClapEffectIcon,
+    ClapEffect,
     LikeClapIcon,
     LikeTextIcon,
   },
@@ -155,7 +144,6 @@ export default {
   data() {
     return {
       isShowBubble: false,
-      isShowClapEffect: false,
       isPressingKnob: false,
       isLongPressingKnob: false,
       hasMovedKnob: false,
@@ -262,15 +250,14 @@ export default {
         this.isShowBubble = false;
       }, 500);
 
-      this.isShowClapEffect = true;
-      this.$nextTick(() => {
-        this.isShowClapEffect = false;
-      });
-
       if (this.isMax && this.isKnobMovable && !this.isLongPressingKnob) {
         this.knobProgress = 1;
       }
       this.$emit('like', e);
+
+      if (this.$refs.clapEffect) {
+        this.$refs.clapEffect.animate();
+      }
     },
     onMovingKnob(e) {
       if (!this.isPressingKnob) return;
@@ -339,6 +326,12 @@ $like-button-like-count-size: 24;
 
     margin: normalized(10);
     margin-right: normalized(90);
+  }
+
+  &-clap-effect {
+    margin: normalized(-24);
+
+    fill: $like-green;
   }
 
   &-slide-track {
@@ -609,46 +602,6 @@ $like-button-like-count-size: 24;
       &leave-to {
         opacity: 0;
       }
-    }
-  }
-
-  &__clap-effect {
-    position: absolute;
-    top: calc(50% - #{normalized(8)});
-    left: calc(50% - #{normalized(5)});
-
-    width: normalized(10);
-    height: normalized(16);
-
-    color: $like-green;
-
-    @for $i from 1 through 12 {
-      &:nth-child(#{$i}) {
-        transform: rotateZ(-15deg + 30deg * $i);
-      }
-    }
-
-    &-- {
-      &leave-active {
-        transition-delay: 0.2s;
-        transition-timing-function: linear;
-        transition-duration: 0.1s;
-        transition-property: opacity;
-      }
-      &leave-to {
-        opacity: 0;
-      }
-    }
-
-    > div {
-      @keyframes clap-effect-triangle {
-        0% {  transform: translateY(normalized(-32)); }
-        100% { transform: translateY(normalized(-72)); }
-      }
-
-      animation-name: clap-effect-triangle;
-      animation-duration: 0.3s;
-      animation-timing-function: linear;
     }
   }
 

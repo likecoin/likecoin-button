@@ -183,7 +183,6 @@ export default {
   mixins: [mixin],
   data() {
     return {
-      isShowPopupAlert: false,
       shouldShowBackside: false,
       isUserFetched: false,
     };
