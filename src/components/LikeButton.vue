@@ -69,14 +69,15 @@
 
             <transition name="like-button__like-count-bubble-">
               <div
-                v-if="isShowBubble"
-                :key="likeCount"
+                v-if="isShowLikeCountBubble && likeCount > 0"
                 :class="[
                   'like-button__like-count-bubble',
                   {
                     'like-button__like-count-bubble--max': isMax,
                   }
                 ]"
+                key="likeCountBubble"
+                ref="likeCountBubble"
               >{{ isMax ? 'MAX' : `+${likeCount}` }}</div>
             </transition>
           </button>
@@ -100,6 +101,7 @@
 
 <script>
 import _debounce from 'lodash.debounce';
+import { TweenMax } from 'gsap';
 
 import { checkIsMobileClient } from '~/util/client';
 
@@ -143,7 +145,7 @@ export default {
   },
   data() {
     return {
-      isShowBubble: false,
+      isShowLikeCountBubble: false,
       isPressingKnob: false,
       isLongPressingKnob: false,
       hasMovedKnob: false,
@@ -220,6 +222,17 @@ export default {
     setClientX(e) {
       this.clientX = e.targetTouches ? e.targetTouches[0].clientX : e.clientX;
     },
+    showLikeCountBubble() {
+      this.isShowLikeCountBubble = true;
+      if (this.bubbleTimer) clearTimeout(this.bubbleTimer);
+      this.bubbleTimer = setTimeout(() => {
+        this.isShowLikeCountBubble = false;
+      }, 500);
+
+      // If the bubble has already shown, scale the bubble a little bit bigger
+      const { likeCountBubble: el } = this.$refs;
+      if (el) TweenMax.to(el, 0.1, { scale: 1.1 }).reverse(0);
+    },
     clearLongPress() {
       this.isLongPressingKnob = false;
       if (this.longPressTimer) {
@@ -245,11 +258,6 @@ export default {
     onPressedKnob(e) {
       if (this.hasMovedKnob) return;
 
-      this.isShowBubble = true;
-      this.bubbleTimer = setTimeout(() => {
-        this.isShowBubble = false;
-      }, 500);
-
       if (this.isMax && this.isKnobMovable && !this.isLongPressingKnob) {
         this.knobProgress = 1;
       }
@@ -258,6 +266,8 @@ export default {
       if (this.$refs.clapEffect) {
         this.$refs.clapEffect.animate();
       }
+
+      this.showLikeCountBubble();
     },
     onMovingKnob(e) {
       if (!this.isPressingKnob) return;
@@ -564,6 +574,7 @@ $like-button-like-count-size: 24;
     padding: normalized(4);
 
     transition-property: opacity, transform;
+    backface-visibility: hidden;
 
     text-align: center;
 
