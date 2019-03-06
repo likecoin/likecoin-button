@@ -4,6 +4,7 @@
     :total-like="totalLike"
     :is-max="isMaxLike"
     :is-toggled="isToggled"
+    :href="popupLikeURL"
     @like="onClickLike"
     @click-stats="onClickLikeStats"
     @toggle="onToggle"

@@ -30,13 +30,16 @@
           ref="knobWrapper"
           class="like-button-knob-wrapper"
         >
-          <button
+          <a
             :style="{ marginLeft: `${knobProgress * 100}%` }"
+            :href="$attrs.href"
             @mousedown="onPressKnob"
             @mouseup="onPressedKnob"
             @mouseleave="onLeaveKnob"
+            @click="onClickKnob"
             ref="button"
             class="like-button-knob"
+            target="_blank"
           >
             <ClapEffect ref="clapEffect" />
 
@@ -80,7 +83,7 @@
                 ref="likeCountBubble"
               >{{ isMax ? 'MAX' : `+${likeCount}` }}</div>
             </transition>
-          </button>
+          </a>
         </div>
 
         <div
@@ -277,6 +280,11 @@ export default {
       } else if (!this.hasMovedKnob) {
         this.knobProgress = this.knobProgress > 0.5 ? 0 : 1;
         this.hasMovedKnob = true;
+      }
+    },
+    onClickKnob(e) {
+      if (e && typeof e.preventDefault === 'function') {
+        e.preventDefault();
       }
     },
     onPressKnob(e) {
