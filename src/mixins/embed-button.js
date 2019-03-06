@@ -1,6 +1,9 @@
 import {
   LIKE_CO_HOSTNAME,
 } from '@/constant';
+
+import { getAvatarHaloTypeFromUser } from '~/util/user';
+
 import mixin from './embed';
 
 export default {
@@ -53,21 +56,37 @@ export default {
 
     async handleWindowMessage(event) {
       if (event.origin !== `https://${LIKE_CO_HOSTNAME}`) return;
-      if (event.data) {
-        const { data } = event;
-        switch (data.action) {
-          case 'LOGGED_IN':
-            await this.updateUserSignInStatus();
-            // Click LikeButton after signing in
-            this.$nextTick(() => {
-              if (this.$refs.likeButton) {
-                this.$refs.likeButton.onPressedKnob();
-              }
-            });
-            break;
 
-          default:
+      const { data } = event;
+      if (typeof data !== 'object') return;
+
+      switch (data.action) {
+        case 'LOGGED_IN':
+          await this.updateUserSignInStatus();
+          // Click LikeButton after signing in
+          this.$nextTick(() => {
+            if (this.$refs.likeButton) {
+              this.$refs.likeButton.onPressedKnob();
+            }
+          });
+          break;
+
+        // For preview usage
+        case 'PREVIEW': {
+          if (!this.$route.name.endsWith('-preview')) return;
+
+          const { user, platforms } = data.content;
+          if (user) {
+            if (user.user) this.id = user.user;
+            if (user.displayName) this.displayName = user.displayName;
+            if (user.avatar) this.avatar = user.avatar;
+            this.avatarHalo = getAvatarHaloTypeFromUser(user);
+          }
+          if (platforms) this.platforms = platforms;
+          break;
         }
+
+        default:
       }
     },
   },
