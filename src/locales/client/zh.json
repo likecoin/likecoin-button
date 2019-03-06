@@ -3,6 +3,7 @@
     "error": "錯誤",
     "no": "不",
     "ok": "好",
+    "cancel": "取消",
     "back": "返回",
     "loading": "載入中"
   },
@@ -64,5 +65,9 @@
       "login": "登入 LikeCoin ID",
       "showMore": "顯示更多"
     }
+  },
+  "PopupOverlay": {
+    "title": "請在「彈出式視窗」中點讚支持作者",
+    "link": "為何出現彈出式視窗"
   }
 }

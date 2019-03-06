@@ -42,11 +42,13 @@ export default {
   },
   methods: {
     popupLike() {
-      window.open(
+      const w = window.open(
         this.popupLikeURL,
         'like',
         'menubar=no,location=no,width=576,height=768',
       );
+
+      this.$root.$emit('openPopupNoticeOverlay', w);
     },
 
     async handleWindowMessage(event) {
