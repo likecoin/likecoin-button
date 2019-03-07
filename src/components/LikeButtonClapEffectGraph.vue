@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { TweenMax, TimelineMax } from 'gsap';
+import { TimelineMax } from 'gsap';
 
 function getRandomInRange(min, max) {
   return Math.random() * (max - min) + min;
@@ -38,7 +38,7 @@ export default {
     yMax: 50,
     yMin: 45,
     scaleMax: 1,
-    scaleMin: 0.5,
+    scaleMin: 0.75,
   },
   mounted() {
     this.animate();
@@ -51,6 +51,10 @@ export default {
       const allTriangles = [...graph.children].map(g => g.children);
       if (allTriangles.length === 0) return;
 
+      const {
+        yMax, yMin, scaleMax, scaleMin,
+      } = this.$options.triangle;
+
       const tl = new TimelineMax({ repeat: 0 });
       tl
         // Reset rotation of the graph
@@ -60,23 +64,11 @@ export default {
         })
         // Reset triangles' position
         .to(allTriangles, 0, { opacity: 1, scale: 0 })
-        .add('beforeExplode');
-
-      const {
-        yMax, yMin, scaleMax, scaleMin,
-      } = this.$options.triangle;
-      allTriangles.forEach((triangle) => {
         // Animate triangle explosion
-        tl.add(
-          TweenMax.to(triangle, 0.25, {
-            y: getRandomInRange(yMin, yMax),
-            scale: getRandomInRange(scaleMin, scaleMax),
-          }),
-          'beforeExplode',
-        );
-      });
-
-      tl
+        .to(allTriangles, 0.25, {
+          y: getRandomInRange(yMin, yMax),
+          scale: getRandomInRange(scaleMin, scaleMax),
+        })
         // Fade away triangles
         .to(allTriangles, 0.25, { opacity: 0 })
         .eventCallback('onComplete', () => {
