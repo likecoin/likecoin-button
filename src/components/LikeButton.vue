@@ -30,26 +30,18 @@
           ref="knobWrapper"
           class="like-button-knob-wrapper"
         >
-          <button
+          <a
             :style="{ marginLeft: `${knobProgress * 100}%` }"
+            :href="$attrs.href"
             @mousedown="onPressKnob"
             @mouseup="onPressedKnob"
             @mouseleave="onLeaveKnob"
+            @click="onClickKnob"
             ref="button"
             class="like-button-knob"
+            target="_blank"
           >
-            <transition
-              v-for="i in 12"
-              :key="i"
-              name="like-button__clap-effect-"
-            >
-              <div
-                v-if="isShowClapEffect"
-                class="like-button__clap-effect"
-              >
-                <clap-effect-icon />
-              </div>
-            </transition>
+            <ClapEffect ref="clapEffect" />
 
             <div class="like-button-knob__border" />
             <transition-group
@@ -80,17 +72,18 @@
 
             <transition name="like-button__like-count-bubble-">
               <div
-                v-if="isShowBubble"
-                :key="likeCount"
+                v-if="isShowLikeCountBubble && likeCount > 0"
                 :class="[
                   'like-button__like-count-bubble',
                   {
                     'like-button__like-count-bubble--max': isMax,
                   }
                 ]"
+                key="likeCountBubble"
+                ref="likeCountBubble"
               >{{ isMax ? 'MAX' : `+${likeCount}` }}</div>
             </transition>
-          </button>
+          </a>
         </div>
 
         <div
@@ -111,18 +104,19 @@
 
 <script>
 import _debounce from 'lodash.debounce';
+import { TweenMax } from 'gsap';
 
 import { checkIsMobileClient } from '~/util/client';
 
-import ClapEffectIcon from '~/assets/like-button/clap-effect.svg';
 import LikeClapIcon from '~/assets/like-button/like-clap.svg';
 import LikeTextIcon from '~/assets/like-button/like-text.svg';
 
+import ClapEffect from './LikeButtonClapEffect';
 
 export default {
   name: 'like-button',
   components: {
-    ClapEffectIcon,
+    ClapEffect,
     LikeClapIcon,
     LikeTextIcon,
   },
@@ -154,8 +148,7 @@ export default {
   },
   data() {
     return {
-      isShowBubble: false,
-      isShowClapEffect: false,
+      isShowLikeCountBubble: false,
       isPressingKnob: false,
       isLongPressingKnob: false,
       hasMovedKnob: false,
@@ -232,6 +225,17 @@ export default {
     setClientX(e) {
       this.clientX = e.targetTouches ? e.targetTouches[0].clientX : e.clientX;
     },
+    showLikeCountBubble() {
+      this.isShowLikeCountBubble = true;
+      if (this.bubbleTimer) clearTimeout(this.bubbleTimer);
+      this.bubbleTimer = setTimeout(() => {
+        this.isShowLikeCountBubble = false;
+      }, 500);
+
+      // If the bubble has already shown, scale the bubble a little bit bigger
+      const { likeCountBubble: el } = this.$refs;
+      if (el) TweenMax.to(el, 0.1, { scale: 1.1 }).reverse(0);
+    },
     clearLongPress() {
       this.isLongPressingKnob = false;
       if (this.longPressTimer) {
@@ -257,20 +261,16 @@ export default {
     onPressedKnob(e) {
       if (this.hasMovedKnob) return;
 
-      this.isShowBubble = true;
-      this.bubbleTimer = setTimeout(() => {
-        this.isShowBubble = false;
-      }, 500);
-
-      this.isShowClapEffect = true;
-      this.$nextTick(() => {
-        this.isShowClapEffect = false;
-      });
-
       if (this.isMax && this.isKnobMovable && !this.isLongPressingKnob) {
         this.knobProgress = 1;
       }
       this.$emit('like', e);
+
+      if (this.$refs.clapEffect) {
+        this.$refs.clapEffect.animate();
+      }
+
+      this.showLikeCountBubble();
     },
     onMovingKnob(e) {
       if (!this.isPressingKnob) return;
@@ -280,6 +280,11 @@ export default {
       } else if (!this.hasMovedKnob) {
         this.knobProgress = this.knobProgress > 0.5 ? 0 : 1;
         this.hasMovedKnob = true;
+      }
+    },
+    onClickKnob(e) {
+      if (e && typeof e.preventDefault === 'function') {
+        e.preventDefault();
       }
     },
     onPressKnob(e) {
@@ -339,6 +344,12 @@ $like-button-like-count-size: 24;
 
     margin: normalized(10);
     margin-right: normalized(90);
+  }
+
+  &-clap-effect {
+    margin: normalized(-24);
+
+    fill: $like-green;
   }
 
   &-slide-track {
@@ -571,6 +582,7 @@ $like-button-like-count-size: 24;
     padding: normalized(4);
 
     transition-property: opacity, transform;
+    backface-visibility: hidden;
 
     text-align: center;
 
@@ -609,46 +621,6 @@ $like-button-like-count-size: 24;
       &leave-to {
         opacity: 0;
       }
-    }
-  }
-
-  &__clap-effect {
-    position: absolute;
-    top: calc(50% - #{normalized(8)});
-    left: calc(50% - #{normalized(5)});
-
-    width: normalized(10);
-    height: normalized(16);
-
-    color: $like-green;
-
-    @for $i from 1 through 12 {
-      &:nth-child(#{$i}) {
-        transform: rotateZ(-15deg + 30deg * $i);
-      }
-    }
-
-    &-- {
-      &leave-active {
-        transition-delay: 0.2s;
-        transition-timing-function: linear;
-        transition-duration: 0.1s;
-        transition-property: opacity;
-      }
-      &leave-to {
-        opacity: 0;
-      }
-    }
-
-    > div {
-      @keyframes clap-effect-triangle {
-        0% {  transform: translateY(normalized(-32)); }
-        100% { transform: translateY(normalized(-72)); }
-      }
-
-      animation-name: clap-effect-triangle;
-      animation-duration: 0.3s;
-      animation-timing-function: linear;
     }
   }
 

@@ -107,6 +107,11 @@ const nuxtConfig = {
   router: {
     extendRoutes(routes, resolve) {
       routes.push({
+        name: 'in-embed-id-button-preview',
+        path: '/in/embed/:id/button/preview',
+        component: resolve(__dirname, 'pages/in/embed/_id/button.vue'),
+      });
+      routes.push({
         name: 'in-embed-id-button-amount',
         path: '/in/embed/:id/button/:amount?',
         component: resolve(__dirname, 'pages/in/embed/_id/button.vue'),

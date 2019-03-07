@@ -1,9 +1,19 @@
 <template>
-  <nuxt />
+  <div>
+    <nuxt />
+
+    <PopupNoticeOverlay
+      :is-show="isShowPopupNoticeOverlay"
+      @cancel="closePopupNoticeOverlay"
+    />
+  </div>
 </template>
 
 <script>
+import popupNoticeOverlayMixin from '~/mixins/popup-notice-overlay';
+
 export default {
+  mixins: [popupNoticeOverlayMixin],
   head() {
     return {
       htmlAttrs: {

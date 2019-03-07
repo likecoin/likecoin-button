@@ -107,8 +107,10 @@
               path="Embed.label.clickLikeButtonNoLogin"
             >
               <a
-                @click.prevent="onClickLoginButton"
+                :href="popupLikeURL"
+                @click="onClickLoginButton"
                 place="action"
+                target="_blank"
               >{{ $t('Embed.label.registerNow') }}</a>
             </i18n>
             <i18n
@@ -127,8 +129,10 @@
             class="embed-cta-button-wrapper"
           >
             <a
+              :href="popupLikeURL"
               @click="onClickLoginButton"
               id="embed-cta-button"
+              target="_blank"
             >
               <div class="button-content-wrapper">
                 <div class="button-content">
@@ -148,6 +152,7 @@
       :is-togglable="false"
       :is-max="isMaxLike"
       :is-show-max="isFlipped"
+      :href="popupLikeURL"
       @like="onClickLike"
       @click-stats="onClickLikeStats"
       ref="likeButton"
@@ -183,7 +188,6 @@ export default {
   mixins: [mixin],
   data() {
     return {
-      isShowPopupAlert: false,
       shouldShowBackside: false,
       isUserFetched: false,
     };
@@ -228,7 +232,11 @@ export default {
         logTrackerEvent(this, 'LikeButton', 'isCookieSupportFalse', 'isCookieSupportFalse', 1);
       }
     },
-    onClickLoginButton() {
+    onClickLoginButton(e) {
+      if (e && typeof e.preventDefault === 'function') {
+        e.preventDefault();
+      }
+
       logTrackerEvent(this, 'LikeButtonFlow', 'popupLikeButton', 'popupLikeButton', 1);
       if (this.hasCookieSupport) {
         // Case 1: User has not log in and 3rd party cookie is not blocked
@@ -240,7 +248,7 @@ export default {
         logTrackerEvent(this, 'LikeButtonFlow', 'popupLike', 'popupLike', 1);
       }
     },
-    onClickLike() {
+    onClickLike(e) {
       if (this.isLoggedIn) {
         // Case 3: User has logged in
         if (!this.isMaxLike) {
@@ -252,7 +260,7 @@ export default {
           this.shouldShowBackside = true;
         }
       } else {
-        this.onClickLoginButton();
+        this.onClickLoginButton(e);
       }
     },
     onClickLikeStats() {

@@ -15,21 +15,19 @@
           v-for="socialMedia in socialMediaList"
           :key="socialMedia.id"
         >
-          <button
+          <a
             :class="[
               'social-media-connect__button',
               `social-media-connect__button--${socialMedia.id}`,
-              `social-media-connect__button--${
-                getIsConnected(socialMedia.id) ? 'connected' : 'disconnected'
-              }`,
+              `social-media-connect__button--connected`,
             ]"
-            :title="getSocialMediaTitle(socialMedia)"
+            :href="socialMedia.url"
             @click="onClickButton(socialMedia)"
-            type="button"
+            target="_blank"
           >
             <!-- eslint-disable-next-line vue/require-component-is -->
             <component :is="getIconComponentName(socialMedia.id)" />
-          </button>
+          </a>
         </li>
       </ul>
     </div>
@@ -51,7 +49,6 @@ import LinkPhotoIcon from '~/assets/icons/social-media/link/photo.svg';
 import LinkProfileIcon from '~/assets/icons/social-media/link/profile.svg';
 
 import { W3C_EMAIL_REGEX } from '~/constant';
-import { openURL } from '~/util/client';
 import { logTrackerEvent } from '@/util/EventLogger';
 
 function getUrlWithPrefix(url) {
@@ -61,7 +58,6 @@ function getUrlWithPrefix(url) {
 const TYPE = {
   READONLY: 'readonly',
   MINI: 'mini',
-  LARGE: 'large',
 };
 
 const SOCIAL_MEDIA_LIST = [
@@ -137,15 +133,25 @@ export default {
       return this.type === TYPE.MINI;
     },
     socialMediaList() {
-      const platforms = SOCIAL_MEDIA_LIST
-        .filter(({ id, tier }) => {
-          const isConnected = this.getIsConnected(id);
-          return (
-            (this.type === TYPE.READONLY && isConnected)
-            || (this.type === TYPE.MINI && (isConnected || tier === 1))
-            || this.type === TYPE.LARGE
-          );
+      const platforms = [];
+
+      SOCIAL_MEDIA_LIST.forEach(({ id }) => {
+        const platform = this.platforms[id];
+        if (!platform) return;
+
+        let { url } = platform;
+        const isEmail = new RegExp(W3C_EMAIL_REGEX).test(url);
+        if (isEmail) {
+          url = `mailto:${url}`;
+        } else {
+          url = getUrlWithPrefix(url);
+        }
+
+        platforms.push({
+          id,
+          url,
         });
+      });
 
       const links = Object.keys(this.platforms)
         .filter(id => this.platforms[id].isExternalLink)
@@ -154,7 +160,9 @@ export default {
         this.platforms[id1].order - this.platforms[id2].order
       ));
 
-      return [...platforms, ...links].slice(0, this.limit);
+      return platforms
+        .concat(links)
+        .slice(0, this.limit);
     },
   },
   methods: {
@@ -167,29 +175,8 @@ export default {
       }
       return 'LikeCoinIcon';
     },
-    getIsConnected(id) {
-      return !!this.platforms[id];
-    },
     onClickButton(socialMedia) {
-      const isConnected = this.getIsConnected(socialMedia.id);
-      let url = this.getSocialMediaUrl(socialMedia);
-      const isEmail = new RegExp(W3C_EMAIL_REGEX).test(url);
-      if (isEmail) {
-        url = `mailto:${url}`;
-      } else {
-        url = getUrlWithPrefix(url);
-      }
-      if (isConnected && url) {
-        openURL(
-          this,
-          url,
-          '_blank',
-        );
-      }
       logTrackerEvent(this, 'LikeButtonFlow', 'clickSocial', 'clickSocial', this.getSocialMediaTitle(socialMedia));
-    },
-    getSocialMediaUrl({ id }) {
-      return this.platforms[id].url;
     },
     getSocialMediaTitle({ id }) {
       const platform = this.platforms[id];
@@ -287,7 +274,7 @@ $hover-color-map: (
   }
 }
 
-button[class*=social-media-connect__button--link] {
+a[class*=social-media-connect__button--link] {
   background-color: transparent;
 
   &:hover {
