@@ -15,8 +15,7 @@
       <g
         v-for="i in $options.triangle.count"
         :key="i"
-        :transform="`rotate(${i * 360 / $options.triangle.count})`"
-        style="transform-origin: 50% 50%"
+        :transform="`rotate(${i * 360 / $options.triangle.count}, 50, 50)`"
       >
         <use xlink:href="#clap-effect-path" />
       </g>
