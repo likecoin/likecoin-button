@@ -17,6 +17,9 @@ export default {
     popupLikeURL() {
       return `/in/like/${this.id}/?referrer=${encodeURIComponent(this.referrer)}`;
     },
+    isPreview() {
+      return this.$route.name.endsWith('-preview');
+    },
   },
   head() {
     const link = [];
@@ -35,6 +38,8 @@ export default {
   },
   async mounted() {
     window.addEventListener('message', this.handleWindowMessage);
+    if (this.isPreview) return;
+
     this.hasCookieSupport = await this.getIsCookieSupport();
     await this.updateUserSignInStatus();
     if (this.onCheckCookieSupport) this.onCheckCookieSupport(this.hasCookieSupport);
@@ -73,7 +78,7 @@ export default {
 
         // For preview usage
         case 'PREVIEW': {
-          if (!this.$route.name.endsWith('-preview')) return;
+          if (!this.isPreview) return;
 
           const { user, platforms } = data.content;
           if (user) {
