@@ -68,6 +68,7 @@
   },
   "PopupOverlay": {
     "title": "Let’s clap in the pop-up window",
+    "titleForIOSInApp": "Let's clap in the pop-up window by performing 3D touch on the clap button",
     "link": "Why does pop-up appear?"
   }
 }

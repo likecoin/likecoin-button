@@ -8,7 +8,7 @@
       <div class="popup-notice-overlay-dialog">
 
         <div class="popup-notice-overlay-dialog__body">
-          <span style="font-size: 1.5em">{{ $t('PopupOverlay.title') }}</span><br>
+          <span style="font-size: 1.5em">{{ title }}</span><br>
           <!--
           <a
             href="#"
@@ -36,6 +36,18 @@ export default {
     isShow: {
       type: [Boolean, String],
       default: false,
+    },
+    isIosInApp: {
+      type: [Boolean, String],
+      default: false,
+    },
+  },
+  computed: {
+    title() {
+      if (this.isIosInApp) {
+        return this.$t('PopupOverlay.titleForIOSInApp');
+      }
+      return this.$t('PopupOverlay.title');
     },
   },
   methods: {

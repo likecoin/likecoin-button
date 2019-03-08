@@ -4,6 +4,7 @@
 
     <PopupNoticeOverlay
       :is-show="isShowPopupNoticeOverlay"
+      :is-ios-in-app="isIOSInApp"
       @cancel="closePopupNoticeOverlay"
     />
   </div>

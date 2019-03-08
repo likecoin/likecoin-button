@@ -19,6 +19,13 @@ export function checkIsTrustClient() {
   return window.web3 && window.web3.currentProvider.isTrust;
 }
 
+export function checkIsIOSInApp() {
+  if (!global.window) return false;
+  const ua = global.window.navigator.userAgent;
+  if (!/iPhone|iPad|iPod/i.test(ua)) return false;
+  return !/Safari/i.test(ua);
+}
+
 export function isAndroid() {
   if (!navigator) return false;
   return /(android)/i.test(navigator.userAgent);
