@@ -1,5 +1,7 @@
 import PopupNoticeOverlay from '~/components/PopupNoticeOverlay';
 
+import { checkIsIOSInApp } from '~/util/client';
+
 export default {
   components: {
     PopupNoticeOverlay,
@@ -7,11 +9,14 @@ export default {
   data() {
     return {
       isShowPopupNoticeOverlay: false,
+      isIOSInApp: false,
     };
   },
   mounted() {
     this.$root.$on('openPopupNoticeOverlay', this.openPopupNoticeOverlay);
     this.$root.$on('closePopupNoticeOverlay', this.closePopupNoticeOverlay);
+
+    this.isIOSInApp = checkIsIOSInApp();
   },
   beforeDestroy() {
     if (this.checkPopupWindowCloseTimer) {
@@ -23,7 +28,9 @@ export default {
       this.popupWindow = popupWindow;
       this.isShowPopupNoticeOverlay = true;
 
-      this.checkPopupWindowCloseTimer = setInterval(this.checkPopupWindowClose, 250);
+      if (!this.isIOSInApp) {
+        this.checkPopupWindowCloseTimer = setInterval(this.checkPopupWindowClose, 250);
+      }
     },
     closePopupNoticeOverlay() {
       this.isShowPopupNoticeOverlay = false;
