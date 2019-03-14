@@ -20,7 +20,7 @@
       "doYouKnow": {
         "title": "知っていますか： ",
         "login": " {loginPage}でログインしている場合、好きなクリエーターがより多くの LIKE を受け取る",
-        "likecoinId": "LikeCoin ID"
+        "likecoinId": "Liker ID"
       },
       "backToHome": "ホームページに戻る"
     },
@@ -54,7 +54,7 @@
       "registerNow": "登録"
     },
     "button": {
-      "login": "LikeCoin IDにログイン",
+      "login": "Liker IDにログイン",
       "showMore": "もっと見る"
     }
   }

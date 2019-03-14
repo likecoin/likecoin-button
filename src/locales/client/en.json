@@ -21,7 +21,7 @@
       "doYouKnow": {
         "title": "Do you know: ",
         "login": "Content creator will receive more LikeCoin if you login with {loginPage}",
-        "likecoinId": "LikeCoin ID"
+        "likecoinId": "Liker ID"
       },
       "backToHome": "Back to homepage"
     },
@@ -62,7 +62,7 @@
       "registerNow": "Register"
     },
     "button": {
-      "login": "Login to LikeCoin ID",
+      "login": "Login to Liker ID",
       "showMore": "show more"
     }
   },

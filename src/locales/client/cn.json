@@ -20,7 +20,7 @@
       "doYouKnow": {
         "title": "你知道吗： ",
         "login": "登入 {loginPage} ，可让作者获得更多 LikeCoin。",
-        "likecoinId": "LikeCoin ID"
+        "likecoinId": "Liker ID"
       },
       "backToHome": "返回主页"
     },
@@ -55,7 +55,7 @@
       "numLikesForArticle": "从 {numOfLikees} 人获得 {numOfLikes} Like"
     },
     "button": {
-      "login": "登入 LikeCoin ID",
+      "login": "登入 Liker ID",
       "showMore": "显示更多"
     }
   }
