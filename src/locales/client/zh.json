@@ -21,7 +21,7 @@
       "doYouKnow": {
         "title": "你知道嗎： ",
         "login": "登入 {loginPage} ，可讓作者獲得更多 LikeCoin。",
-        "likecoinId": "LikeCoin ID"
+        "likecoinId": "Liker ID"
       },
       "backToHome": "返回主頁"
     },
@@ -62,7 +62,7 @@
       "registerNow": "登入"
     },
     "button": {
-      "login": "登入 LikeCoin ID",
+      "login": "登入 Liker ID",
       "showMore": "顯示更多"
     }
   },
