@@ -60,38 +60,57 @@ export default {
     },
 
     async handleWindowMessage(event) {
-      if (event.origin !== `https://${LIKE_CO_HOSTNAME}`) return;
-
       const { data } = event;
       if (typeof data !== 'object') return;
 
-      switch (data.action) {
-        case 'LOGGED_IN':
-          await this.updateUserSignInStatus();
-          // Click LikeButton after signing in
-          this.$nextTick(() => {
-            if (this.$refs.likeButton) {
-              this.$refs.likeButton.onPressedKnob();
-            }
-          });
-          break;
-
-        // For preview usage
-        case 'PREVIEW': {
-          if (!this.isPreview) return;
-
-          const { user, platforms } = data.content;
-          if (user) {
-            if (user.user) this.id = user.user;
-            if (user.displayName) this.displayName = user.displayName;
-            if (user.avatar) this.avatar = user.avatar;
-            this.avatarHalo = getAvatarHaloTypeFromUser(user);
+      /* public acitons */
+      if (event.source === window.parent || event.source === window.top) {
+        switch (data.action) {
+          case 'SET_REFERRER': {
+            const { referrer } = data.content;
+            if (referrer === undefined) return;
+            this.$router.replace({
+              name: this.$route.name,
+              params: this.$route.params,
+              hash: this.$route.hash,
+              query: { ...this.$route.query, referrer },
+            });
+            break;
           }
-          if (platforms) this.platforms = platforms;
-          break;
+          default:
         }
+      }
 
-        default:
+      /* private actions */
+      if (event.origin === `https://${LIKE_CO_HOSTNAME}`) {
+        switch (data.action) {
+          case 'LOGGED_IN':
+            await this.updateUserSignInStatus();
+            // Click LikeButton after signing in
+            this.$nextTick(() => {
+              if (this.$refs.likeButton) {
+                this.$refs.likeButton.onPressedKnob();
+              }
+            });
+            break;
+
+          // For preview usage
+          case 'PREVIEW': {
+            if (!this.isPreview) return;
+
+            const { user, platforms } = data.content;
+            if (user) {
+              if (user.user) this.id = user.user;
+              if (user.displayName) this.displayName = user.displayName;
+              if (user.avatar) this.avatar = user.avatar;
+              this.avatarHalo = getAvatarHaloTypeFromUser(user);
+            }
+            if (platforms) this.platforms = platforms;
+            break;
+          }
+
+          default:
+        }
       }
     },
   },
