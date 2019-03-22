@@ -2,11 +2,13 @@
   <div>
     <nuxt />
 
-    <PopupNoticeOverlay
-      :is-show="isShowPopupNoticeOverlay"
-      :is-ios-in-app="isIOSInApp"
-      @cancel="closePopupNoticeOverlay"
-    />
+    <no-ssr>
+      <PopupNoticeOverlay
+        :is-show="isShowPopupNoticeOverlay"
+        :is-ios-in-app="isIOSInApp"
+        @cancel="closePopupNoticeOverlay"
+      />
+    </no-ssr>
   </div>
 </template>
 

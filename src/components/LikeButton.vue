@@ -41,7 +41,7 @@
             class="like-button-knob"
             target="_blank"
           >
-            <ClapEffect ref="clapEffect" />
+            <no-ssr><ClapEffect ref="clapEffect" /></no-ssr>
 
             <div class="like-button-knob__border" />
             <transition-group
