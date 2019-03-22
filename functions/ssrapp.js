@@ -20,6 +20,6 @@ const nuxt = new Nuxt(config);
 
 module.exports = functions.https.onRequest((req, res) => {
   res.removeHeader('X-Powered-By');
-  res.set('Cache-Control', 'public, max-age=600, s-maxage=600, stale-if-error=604800, stale-while-revalidate=604800');
+  res.set('Cache-Control', 'public, max-age=600, must-revalidate');
   return nuxt.render(req, res);
 });
