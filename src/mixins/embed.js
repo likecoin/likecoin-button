@@ -142,7 +142,16 @@ export default {
   },
   methods: {
     async getIsCookieSupport() {
-      const res = process.client && navigator.cookieEnabled && await checkHasStorageAPIAccess();
+      let res = false;
+      try {
+        res = process.client
+          && navigator.cookieEnabled
+          && (document.cookie && /likecoin_cookie=true/.test(document.cookie))
+          && await checkHasStorageAPIAccess();
+      } catch (err) {
+        console.error(err);
+        return false;
+      }
       return res;
     },
 
