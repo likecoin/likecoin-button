@@ -1,5 +1,13 @@
 const functions = require('firebase-functions');
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const helmet = require('helmet');
 const { Nuxt } = require('nuxt-start');
+
+function setNoCacheHeader(req, res, next) {
+  res.setHeader('Cache-Control', 'public, max-age=600, must-revalidate');
+  next();
+}
 
 if ((functions.config().likeco || {}).testmode) {
   process.env.IS_TESTNET = true;
@@ -18,8 +26,12 @@ const config = {
 };
 const nuxt = new Nuxt(config);
 
-module.exports = functions.https.onRequest((req, res) => {
-  res.removeHeader('X-Powered-By');
-  res.set('Cache-Control', 'public, max-age=600, must-revalidate');
-  return nuxt.render(req, res);
-});
+const app = express();
+app.use(helmet({
+  frameguard: false,
+}));
+app.use(cookieParser());
+app.use(setNoCacheHeader);
+app.use(nuxt.render);
+
+module.exports = functions.https.onRequest(app);
