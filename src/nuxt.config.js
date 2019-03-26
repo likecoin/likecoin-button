@@ -136,6 +136,7 @@ const nuxtConfig = {
     'nuxt-svg-loader',
     // '@likecoin/nuxt-google-optimize',
   ],
+  sentry: {},
   // googleOptimize: {
   //   externalExperimentsSrc:
   //     `https://${IS_TESTNET ? 'rinkeby.' : ''}like.co/api/experiments/list`,
@@ -147,7 +148,6 @@ const nuxtConfig = {
   /*
   ** Build configuration
   */
-  buildDir: 'nuxt',
   build: {
     extractCSS: true,
     /* BUG: cannot parallel with extractCSS */
@@ -167,18 +167,8 @@ const nuxtConfig = {
     /*
     ** Run ESLint on save
     */
-    extend(config, { isClient }) {
-      if (process.env.RELEASE && process.env.SENTRY_AUTH_TOKEN) {
-        /* eslint-disable-next-line global-require, import/no-unresolved */
-        const SentryPlugin = require('@sentry/webpack-plugin');
-        if (isClient) config.devtool = '#source-map'; // eslint-disable-line no-param-reassign
-        config.plugins.push(new SentryPlugin({
-          release: process.env.RELEASE,
-          include: ['nuxt/dist'],
-          ignore: ['node_modules', 'nuxt/dist/server-bundle.json', 'nuxt/dist/img', 'nuxt/dist'],
-          configFile: '.sentryclirc',
-        }));
-      }
+    extend(config, { isClient, isDev }) {
+      /* eslint-disable no-param-reassign */
       if (isClient) {
         config.module.rules.push({
           enforce: 'pre',
@@ -186,7 +176,9 @@ const nuxtConfig = {
           loader: 'eslint-loader',
           exclude: /(node_modules|nuxt)/,
         });
+        if (!isDev) config.devtool = '#source-map';
       }
+      /* eslint-enable no-param-reassign */
     },
   },
   /*

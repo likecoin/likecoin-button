@@ -2,12 +2,12 @@
   "functions": {
     "source": "functions/dist",
     "predeploy": [
-      "npm --prefix src run lint && npm --prefix src run build && rm -rf functions/nuxt && cp -r src/nuxt/ functions/nuxt/ && cp src/nuxt.config.js functions/ && npm --prefix functions run lint && npm --prefix functions run package "
+      "npm --prefix src run lint && npm --prefix src run build && rm -rf functions/nuxt && cp -r src/.nuxt/ functions/nuxt/ && cp src/nuxt.config.js functions/ && npm --prefix functions run lint && npm --prefix functions run package "
     ]
   },
   "hosting": {
     "predeploy": [
-      "rm -rf public/* && cp -r src/nuxt/dist/client public/_nuxt && cp -a src/static/. public/ && cp -a public_base/. public/"
+      "rm -rf public/* && cp -r src/.nuxt/dist/client public/_nuxt && cp -a src/static/. public/ && cp -a public_base/. public/"
     ],
     "public": "public",
     "ignore": [
