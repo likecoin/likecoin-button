@@ -29,7 +29,15 @@ const debouncedOnClick = debounce((that) => {
   /* eslint-disable no-param-reassign */
   const count = that.likeCount - that.likeSent;
   that.likeSent += count;
-  if (count > 0) apiPostLikeButton(that.id, that.referrer, count, that.hasCookieSupport);
+  if (count > 0) {
+    apiPostLikeButton(
+      that.id,
+      that.referrer,
+      count,
+      that.hasCookieSupport,
+      that.documentReferrer,
+    );
+  }
   that.totalLike += count;
   /* eslint-enable no-param-reassign */
 }, 500);
@@ -110,8 +118,20 @@ export default {
       }
       return referrer;
     },
+    documentReferrer() {
+      if (!process.client) return '';
+      let windowReferrer = '';
+      try {
+        if (window.opener) {
+          windowReferrer = (window.opener.document || {}).referrer;
+        }
+      } catch (err) {
+        // no op
+      }
+      return windowReferrer || document.referrer || '';
+    },
     referrer() {
-      return this.urlReferrer || (process.client && document.referrer) || '';
+      return this.urlReferrer || '';
     },
     referrerQueryString() {
       const { id, referrer } = this;

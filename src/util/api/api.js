@@ -17,18 +17,24 @@ export const apiGetLikeButtonTotalCount = (id, referrer) => axios.get(`${LIKECOI
 
 export const apiGetLikeButtonLikerList = (id, referrer) => axios.get(`${LIKECOIN_MISC_API_BASE}/api/like/likebutton/${id}/list?referrer=${encodeURIComponent(referrer)}`);
 
-export const apiPostLikeLink = (id, referrer, payload) => axios.post(
+export const apiPostLikeLink = (id, referrer, payload, documentReferrer) => axios.post(
   `${LIKECOIN_MISC_API_BASE}/api/like/likelink/${id}?referrer=${encodeURIComponent(referrer)}`,
   payload,
-  { withCredentials: true },
+  {
+    headers: { 'Document-Referrer': documentReferrer },
+    withCredentials: true,
+  },
 );
 
-export const apiPostLikeButton = (id, referrer, count = 1, isCookieSupport) => {
+export const apiPostLikeButton = (id, referrer, count = 1, isCookieSupport, documentReferrer) => {
   const cookieParam = isCookieSupport !== undefined ? `&cookie_support=${isCookieSupport ? 1 : 0}` : '';
   return axios.post(
     `${LIKECOIN_MISC_API_BASE}/api/like/likebutton/${id}/${count}?referrer=${encodeURIComponent(referrer)}${cookieParam}`,
     {},
-    { withCredentials: true },
+    {
+      headers: { 'Document-Referrer': documentReferrer },
+      withCredentials: true,
+    },
   );
 };
 
