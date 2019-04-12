@@ -179,6 +179,18 @@ export default {
     likee() {
       return this.$route.params.id;
     },
+    documentReferrer() {
+      if (!process.client) return '';
+      let windowReferrer = '';
+      try {
+        if (window.opener) {
+          windowReferrer = (window.opener.document || {}).referrer;
+        }
+      } catch (err) {
+        // no op
+      }
+      return windowReferrer || document.referrer || '';
+    },
     urlReferrer() {
       const { query } = this.$route;
       let { referrer = '' } = query;
@@ -188,7 +200,7 @@ export default {
       return referrer;
     },
     referrer() {
-      return this.urlReferrer || document.referrer || '';
+      return this.urlReferrer || this.documentReferrer || '';
     },
     isDonePage() {
       return this.$route.name === 'id-done';
@@ -269,6 +281,7 @@ export default {
           this.likee,
           this.referrer,
           { reCaptchaResponse: this.reCaptchaResponse },
+          this.documentReferrer,
         );
       } catch (err) {
         if (err.response && err.response.status === 404) {
