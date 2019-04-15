@@ -48,6 +48,11 @@ export default {
   beforeDestroy() {
     window.removeEventListener('message', this.handleWindowMessage);
   },
+  watch: {
+    referrer() {
+      this.updateUserSignInStatus();
+    },
+  },
   methods: {
     popupLike() {
       const w = window.open(
