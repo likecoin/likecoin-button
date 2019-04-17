@@ -143,7 +143,7 @@ export default {
         const isEmail = new RegExp(W3C_EMAIL_REGEX).test(url);
         if (isEmail) {
           url = `mailto:${url}`;
-        } else {
+        } else if (url) {
           url = getUrlWithPrefix(url);
         }
 
