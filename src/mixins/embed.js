@@ -206,11 +206,12 @@ export default {
 
     signIn(options = { isNewWindow: true }) {
       if (options.isNewWindow) {
-        window.open(
+        const w = window.open(
           this.signInURL,
           'signin',
           'width=540,height=600,menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes',
         );
+        this.$root.$emit('openPopupNoticeOverlay', w);
       } else {
         window.location = `${this.signInURL}&redirect=${encodeURIComponent(window.location.href)}`;
       }
