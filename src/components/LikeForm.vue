@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import LikeCoinIcon from '../assets/logo/color-icon-label.svg';
+import LikeCoinIcon from '../assets/logo/color-icon-plain.svg';
 
 export default {
   name: 'like-form',
@@ -34,8 +34,8 @@ export default {
 </script>
 
 <style lang="scss">
-$header-icon-width: 128px;
-$header-icon-height: 166px;
+$header-icon-width: 96px;
+$header-icon-height: $header-icon-width;
 $header-height: 48px;
 
 .like-form {
