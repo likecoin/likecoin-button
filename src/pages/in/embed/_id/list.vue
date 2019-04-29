@@ -16,7 +16,7 @@
 
         <template slot="header-right">
           <a
-            href="https://like.co/"
+            :href="aboutURL"
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -129,6 +129,9 @@ export default {
     },
     referrer() {
       return this.urlReferrer;
+    },
+    aboutURL() {
+      return `https://liker.land/civic?from=${this.$route.params.id}&referrer=${encodeURIComponent(this.referrer)}`;
     },
     shouldShowBackButton() {
       return this.$route.query.show_back === '1';
