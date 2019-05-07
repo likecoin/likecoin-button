@@ -164,6 +164,7 @@ const nuxtConfig = {
         ],
       ],
     },
+    transpile: ['gsap'],
     /*
     ** Run ESLint on save
     */
