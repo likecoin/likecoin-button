@@ -80,7 +80,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "~assets/css/embed";
 
 $normal-x-margin: 8;
@@ -105,7 +105,7 @@ $normal-x-margin: 8;
     width: normalized($avatar-size);
     height: normalized($avatar-size);
 
-    :global(.lc-avatar__content__halo) {
+    .lc-avatar__content__halo {
       position: absolute;
 
       font-size: 0;

@@ -315,14 +315,14 @@ export default {
 @import "~assets/css/mixin";
 
 .like-form {
-  :global(.like-form__header) {
+  /deep/ .like-form__header {
     @include background-image-sliding-animation-x(
       linear-gradient(260deg, #d2f0f0, #f0e6b4)
     );
   }
 
   &.like-form--done {
-    :global(.like-form__header) {
+    /deep/ .like-form__header {
       animation: none;
 
       background-size: auto;
