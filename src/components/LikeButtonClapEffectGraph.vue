@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { TimelineMax } from 'gsap';
+import { TimelineMax } from 'gsap/all';
 
 function getRandomInRange(min, max) {
   return Math.random() * (max - min) + min;

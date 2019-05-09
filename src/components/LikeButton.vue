@@ -104,7 +104,7 @@
 
 <script>
 import _debounce from 'lodash.debounce';
-import { TweenMax } from 'gsap';
+import { TweenLite, CSSPlugin } from 'gsap/all';
 
 import { checkIsMobileClient } from '~/util/client';
 
@@ -188,6 +188,9 @@ export default {
       }
     },
   },
+  created() {
+    this.$options.CSSPlugin = CSSPlugin; // make tree shake happy
+  },
   mounted() {
     if (this.isKnobMovable) {
       document.addEventListener('mousemove', this.onMovingKnob);
@@ -234,7 +237,7 @@ export default {
 
       // If the bubble has already shown, scale the bubble a little bit bigger
       const { likeCountBubble: el } = this.$refs;
-      if (el) TweenMax.to(el, 0.1, { scale: 1.1 }).reverse(0);
+      if (el) TweenLite.to(el, 0.1, { scale: 1.1 }).reverse(0);
     },
     clearLongPress() {
       this.isLongPressingKnob = false;
