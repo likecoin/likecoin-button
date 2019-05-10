@@ -1,170 +1,170 @@
 <template>
-  <div
-    :class="[
-      'likecoin-embed',
-      'likecoin-embed--button',
-      `likecoin-embed--logged-${isLoggedIn ? 'in' : 'out'}`,
-      {
-        'likecoin-embed--flipped': isFlipped,
-        'likecoin-embed--with-halo': avatarHalo !== 'none',
-      },
-    ]"
-  >
+  <div :class="rootClass">
 
-    <transition
-      name="likecoin-embed__badge-flip-"
-      mode="out-in"
-    >
-      <div
-        v-if="isFlipped"
-        key="back"
-        class="likecoin-embed__badge likecoin-embed__badge--back"
+    <!-- BEGIN - Version 2 -->
+    <template v-if="version === 2">
+      Test
+    </template>
+    <!-- END - Version 2 -->
+
+    <!-- BEGIN - Version 1 -->
+    <template v-else>
+      <transition
+        name="likecoin-embed__badge-flip-"
+        mode="out-in"
       >
-        <div class="likecoin-embed__badge__content">
+        <div
+          v-if="isFlipped"
+          key="back"
+          class="likecoin-embed__badge likecoin-embed__badge--back"
+        >
+          <div class="likecoin-embed__badge__content">
 
-          <!-- Don't show close button-->
-          <div
-            v-if="false"
-            @click="onClickCloseButton"
-            class="likecoin-embed__badge__close-btn"
-          >
-            <close-button-icon />
-          </div>
-
-          <div class="text-content">
-
+            <!-- Don't show close button-->
             <div
-              v-if="backSubtitle"
-              class="text-content__subtitle"
+              v-if="false"
+              @click="onClickCloseButton"
+              class="likecoin-embed__badge__close-btn"
             >
-              {{ backSubtitle }}
-            </div>
-            <div class="text-content__title text-content__title--civic-liker">
-              {{ backTitle }}
+              <close-button-icon />
             </div>
 
-          </div>
+            <div class="text-content">
 
-          <div class="embed-cta-button-wrapper">
-            <a
-              @click="onClickBackCTAButton"
-              id="embed-cta-button"
-            >
-              <div class="button-content-wrapper">
-                <div class="button-content">
-                  {{ backCTAButtonTitle }}
-                </div>
+              <div
+                v-if="backSubtitle"
+                class="text-content__subtitle"
+              >
+                {{ backSubtitle }}
               </div>
-            </a>
+              <div class="text-content__title text-content__title--civic-liker">
+                {{ backTitle }}
+              </div>
+
+            </div>
+
+            <div class="embed-cta-button-wrapper">
+              <a
+                @click="onClickBackCTAButton"
+                id="embed-cta-button"
+              >
+                <div class="button-content-wrapper">
+                  <div class="button-content">
+                    {{ backCTAButtonTitle }}
+                  </div>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        v-else
-        key="front"
-        class="likecoin-embed__badge likecoin-embed__badge--front"
-      >
-        <div class="likecoin-embed__badge__content">
+        <div
+          v-else
+          key="front"
+          class="likecoin-embed__badge likecoin-embed__badge--front"
+        >
+          <div class="likecoin-embed__badge__content">
 
-          <embed-user-info
-            :avatar="avatar"
-            :avatar-halo="avatarHalo"
-            @click-avatar="onClickAvatar"
-            @click-avatar-halo="onClickAvatarHalo"
-          />
+            <embed-user-info
+              :avatar="avatar"
+              :avatar-halo="avatarHalo"
+              @click-avatar="onClickAvatar"
+              @click-avatar-halo="onClickAvatarHalo"
+            />
 
-          <!-- Front upper part, Logged in -->
-          <!-- Mobile -->
-          <div
-            v-if="isLoggedIn || isMobile"
-            class="text-content"
-          >
-            <div class="text-content__subtitle">
-              {{ $t('Embed.label.clickLikeButton') }}
-            </div>
-            <i18n
-              tag="div"
-              class="text-content__title"
-              path="Embed.label.supportUser"
+            <!-- Front upper part, Logged in -->
+            <!-- Mobile -->
+            <div
+              v-if="isLoggedIn || isMobile"
+              class="text-content"
             >
-              <a
-                :href="superLikeURL"
-                @click="onClickFrontDisplayName"
-                place="user"
-                rel="noopener noreferrer"
-                target="_blank"
-              >{{ displayName }}</a>
-            </i18n>
-          </div>
-          <!-- Front upper part, Logged out -->
-          <div
-            v-else
-            class="text-content"
-          >
-            <i18n
-              tag="div"
-              class="text-content__subtitle"
-              path="Embed.label.clickLikeButtonNoLogin"
+              <div class="text-content__subtitle">
+                {{ $t('Embed.label.clickLikeButton') }}
+              </div>
+              <i18n
+                tag="div"
+                class="text-content__title"
+                path="Embed.label.supportUser"
+              >
+                <a
+                  :href="superLikeURL"
+                  @click="onClickFrontDisplayName"
+                  place="user"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >{{ displayName }}</a>
+              </i18n>
+            </div>
+            <!-- Front upper part, Logged out -->
+            <div
+              v-else
+              class="text-content"
+            >
+              <i18n
+                tag="div"
+                class="text-content__subtitle"
+                path="Embed.label.clickLikeButtonNoLogin"
+              >
+                <a
+                  :href="popupLikeURL"
+                  @click="onClickLoginButton"
+                  place="action"
+                  target="_blank"
+                >{{ $t('Embed.label.registerNow') }}</a>
+              </i18n>
+              <i18n
+                tag="div"
+                class="text-content__title"
+                path="Embed.label.supportUserNoLogin"
+              >
+                <span
+                  place="user"
+                >{{ displayName }}</span>
+              </i18n>
+            </div>
+
+            <div
+              v-if="!isLoggedIn"
+              class="embed-cta-button-wrapper"
             >
               <a
                 :href="popupLikeURL"
                 @click="onClickLoginButton"
-                place="action"
+                id="embed-cta-button"
                 target="_blank"
-              >{{ $t('Embed.label.registerNow') }}</a>
-            </i18n>
-            <i18n
-              tag="div"
-              class="text-content__title"
-              path="Embed.label.supportUserNoLogin"
-            >
-              <span
-                place="user"
-              >{{ displayName }}</span>
-            </i18n>
-          </div>
-
-          <div
-            v-if="!isLoggedIn"
-            class="embed-cta-button-wrapper"
-          >
-            <a
-              :href="popupLikeURL"
-              @click="onClickLoginButton"
-              id="embed-cta-button"
-              target="_blank"
-            >
-              <div class="button-content-wrapper">
-                <div class="button-content">
-                  {{ $t('Embed.label.registerNow') }}
+              >
+                <div class="button-content-wrapper">
+                  <div class="button-content">
+                    {{ $t('Embed.label.registerNow') }}
+                  </div>
                 </div>
-              </div>
-            </a>
+              </a>
+            </div>
+
           </div>
-
         </div>
-      </div>
-    </transition>
+      </transition>
 
-    <like-button
-      :like-count="likeCount"
-      :total-like="totalLike"
-      :is-togglable="false"
-      :is-max="isMaxLike"
-      :is-show-max="isFlipped"
-      :href="popupLikeURL"
-      @like="onClickLike"
-      @click-stats="onClickLikeStats"
-      ref="likeButton"
-    />
-
-    <footer>
-      <social-media-connect
-        :username="id"
-        :platforms="platforms"
-        :limit="5"
+      <like-button
+        :like-count="likeCount"
+        :total-like="totalLike"
+        :is-togglable="false"
+        :is-max="isMaxLike"
+        :is-show-max="isFlipped"
+        :href="popupLikeURL"
+        @like="onClickLike"
+        @click-stats="onClickLikeStats"
+        ref="likeButton"
       />
-    </footer>
+
+      <footer>
+        <social-media-connect
+          :username="id"
+          :platforms="platforms"
+          :limit="5"
+        />
+      </footer>
+    </template>
+    <!-- END - Version 1 -->
 
   </div>
 </template>
@@ -193,11 +193,24 @@ export default {
     };
   },
   computed: {
+    version: () => 1,
     isMobile() {
       return checkIsMobileClient();
     },
     isFlipped() {
       return this.shouldShowBackside;
+    },
+    rootClass() {
+      return [
+        'likecoin-embed',
+        'likecoin-embed--button',
+        `likecoin-emded--button-v${this.version}`,
+        `likecoin-embed--logged-${this.isLoggedIn ? 'in' : 'out'}`,
+        {
+          'likecoin-embed--flipped': this.isFlipped,
+          'likecoin-embed--with-halo': this.avatarHalo !== 'none',
+        },
+      ];
     },
     backTitle() {
       if (this.isTrialSubscriber) {
@@ -290,16 +303,34 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "~assets/css/embed";
 
 $close-btn-width: 56;
 
+#embed-cta-button {
+  @keyframes super-like-button-shake {
+    0%, 86% { transform: rotateZ(0deg); }
+    88% { transform: rotateZ(2deg); }
+    90% { transform: rotateZ(-2deg); }
+    92% { transform: rotateZ(3deg); }
+    94% { transform: rotateZ(-3deg); }
+    98% { transform: rotateZ(1deg); }
+    100% { transform: rotateZ(0deg); }
+  }
+  animation-name: super-like-button-shake;
+  animation-duration: 3s;
+  animation-timing-function: ease-out;
+  animation-delay: -2s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+}
+
 .likecoin-embed {
   perspective: 800px;
 
-  &#{&}--with-halo {
-    margin-top: normalized(24);
+  &--with-halo {
+    margin-top: normalized(24) !important;
   }
 
   &__badge {
@@ -387,211 +418,193 @@ $close-btn-width: 56;
   footer {
     margin-right: normalized($button-border-width + $button-shadow-width);
   }
-}
 
-#embed-cta-button {
-  @keyframes super-like-button-shake {
-    0%, 86% { transform: rotateZ(0deg); }
-    88% { transform: rotateZ(2deg); }
-    90% { transform: rotateZ(-2deg); }
-    92% { transform: rotateZ(3deg); }
-    94% { transform: rotateZ(-3deg); }
-    98% { transform: rotateZ(1deg); }
-    100% { transform: rotateZ(0deg); }
-  }
-  animation-name: super-like-button-shake;
-  animation-duration: 3s;
-  animation-timing-function: ease-out;
-  animation-delay: -2s;
-  animation-iteration-count: infinite;
-  animation-fill-mode: forwards;
-}
+  .text-content {
+    &__title {
+      &#{&}--amount {
+        color: $like-green;
 
-.text-content {
-  &__title {
-    &#{&}--amount {
-      color: $like-green;
+        .amount-in-usd {
+          margin-left: normalized(6);
 
-      .amount-in-usd {
-        margin-left: normalized(6);
+          color: $like-gray-5;
 
-        color: $like-gray-5;
-
-        font-size: normalized(10);
-        line-height: normalized(10.5);
+          font-size: normalized(10);
+          line-height: normalized(10.5);
+        }
       }
-    }
 
-    &#{&}--civic-liker {
-      font-size: normalized(24);
-      line-height: normalized(24.5);
+      &#{&}--civic-liker {
+        font-size: normalized(24);
+        line-height: normalized(24.5);
+      }
     }
   }
-}
 
-.login-tooltip {
-  position: absolute;
-  right: 0;
+  .login-tooltip {
+    position: absolute;
+    right: 0;
 
-  margin-right: normalized(12);
-
-  > div {
-    position: relative;
-  }
-
-  &__trigger {
-    display: block;
-
-    width: normalized(16);
-    height: normalized(16);
-
-    transition-timing-function: ease;
-    transition-duration: 0.25s;
-    transition-property: transform, background, color;
-
-    border: none;
-    border-radius: 50%;
-
-    @media screen and (max-width: 414px) {
-      width: normalized(18);
-      height: normalized(18);
-    }
-
-    &--flip- {
-      &enter-active {
-        transition-timing-function: ease-out;
-        transition-duration: 0.15s;
-      }
-      &leave-active {
-        transition-timing-function: ease-in;
-        transition-duration: 0.05s;
-      }
-      &enter,
-      &leave-to {
-        transform: scale(0);
-      }
-    }
-
-    &--open {
-      color: #9b9b9b;
-      background: none;
-
-      &:hover {
-        color: darken(#9b9b9b, 10);
-      }
-      &:active {
-        color: darken(#9b9b9b, 20);
-      }
-    }
-
-    &--close {
-      color: white;
-      background: $like-green;
-
-      &:hover {
-        color: darken(white, 20);
-        background: darken($like-green, 5);
-      }
-      &:active {
-        color: darken(white, 50);
-        background: darken($like-green, 15);
-      }
-    }
+    margin-right: normalized(12);
 
     > div {
-      width: inherit;
-      height: inherit;
+      position: relative;
+    }
+
+    &__trigger {
+      display: block;
+
+      width: normalized(16);
+      height: normalized(16);
+
+      transition-timing-function: ease;
+      transition-duration: 0.25s;
+      transition-property: transform, background, color;
+
+      border: none;
+      border-radius: 50%;
+
+      @media screen and (max-width: 414px) {
+        width: normalized(18);
+        height: normalized(18);
+      }
+
+      &--flip- {
+        &enter-active {
+          transition-timing-function: ease-out;
+          transition-duration: 0.15s;
+        }
+        &leave-active {
+          transition-timing-function: ease-in;
+          transition-duration: 0.05s;
+        }
+        &enter,
+        &leave-to {
+          transform: scale(0);
+        }
+      }
+
+      &--open {
+        color: #9b9b9b;
+        background: none;
+
+        &:hover {
+          color: darken(#9b9b9b, 10);
+        }
+        &:active {
+          color: darken(#9b9b9b, 20);
+        }
+      }
+
+      &--close {
+        color: white;
+        background: $like-green;
+
+        &:hover {
+          color: darken(white, 20);
+          background: darken($like-green, 5);
+        }
+        &:active {
+          color: darken(white, 50);
+          background: darken($like-green, 15);
+        }
+      }
+
+      > div {
+        width: inherit;
+        height: inherit;
+      }
+    }
+
+    &__bubble {
+      &-wrapper {
+        position: absolute;
+        top: 50%;
+        right: calc(100% + #{normalized(4.5)});
+
+        transform: translateY(-50%);
+      }
+
+      position: relative;
+
+      width: normalized(208);
+
+      margin-right: normalized(8);
+      padding: normalized(8) normalized(12);
+
+      transform-origin: center right;
+
+      color: #9b9b9b;
+
+      border-radius: normalized(6);
+      background-color: white;
+
+      font-size: normalized(10);
+      line-height: normalized(14);
+
+      @media screen and (max-width: 414px) {
+        width: normalized(260);
+
+        font-size: normalized(12);
+        line-height: normalized(16);
+      }
+
+      &--pop-up- {
+        &enter-active {
+          transition-timing-function: ease-out;
+          transition-duration: 0.2s;
+        }
+        &leave-active {
+          transition-timing-function: ease-in;
+          transition-duration: 0.1s;
+        }
+        &enter,
+        &leave-to {
+          transform: scale(0);
+        }
+      }
+
+      // Triangle
+      &::before {
+        position: absolute;
+        top: 50%;
+        left: 100%;
+
+        width: 0;
+        height: 0;
+
+        content: '';
+
+        transform: translateY(-50%);
+
+        border-top: normalized(8) solid transparent;
+        border-bottom: normalized(8) solid transparent;
+        border-left: normalized(8) solid white;
+      }
+
+      a {
+        text-decoration: underline;
+
+        font-weight: 600;
+      }
     }
   }
 
-  &__bubble {
-    &-wrapper {
-      position: absolute;
-      top: 50%;
-      right: calc(100% + #{normalized(4.5)});
+  .like-button {
+    position: absolute;
 
-      transform: translateY(-50%);
-    }
-
-    position: relative;
-
-    width: normalized(208);
-
-    margin-right: normalized(8);
-    padding: normalized(8) normalized(12);
-
-    transform-origin: center right;
-
-    color: #9b9b9b;
-
-    border-radius: normalized(6);
-    background-color: white;
-
-    font-size: normalized(10);
-    line-height: normalized(14);
-
-    @media screen and (max-width: 414px) {
-      width: normalized(260);
-
-      font-size: normalized(12);
-      line-height: normalized(16);
-    }
-
-    &--pop-up- {
-      &enter-active {
-        transition-timing-function: ease-out;
-        transition-duration: 0.2s;
-      }
-      &leave-active {
-        transition-timing-function: ease-in;
-        transition-duration: 0.1s;
-      }
-      &enter,
-      &leave-to {
-        transform: scale(0);
-      }
-    }
-
-    // Triangle
-    &::before {
-      position: absolute;
-      top: 50%;
-      left: 100%;
-
-      width: 0;
-      height: 0;
-
-      content: '';
-
-      transform: translateY(-50%);
-
-      border-top: normalized(8) solid transparent;
-      border-bottom: normalized(8) solid transparent;
-      border-left: normalized(8) solid white;
-    }
-
-    a {
-      text-decoration: underline;
-
-      font-weight: 600;
-    }
+    margin-top: normalized(-18);
+    margin-left: normalized(44);
   }
-}
 
-.like-button {
-  position: absolute;
+  .social-media-connect {
+    transition: opacity 0.3s ease;
 
-  margin-top: normalized(-18);
-  margin-left: normalized(44);
-}
+    .likecoin-embed--flipped & {
+      pointer-events: none;
 
-.social-media-connect {
-  transition: opacity 0.3s ease;
-
-  .likecoin-embed--flipped & {
-    pointer-events: none;
-
-    opacity: 0;
+      opacity: 0;
+    }
   }
 }
 </style>
