@@ -216,6 +216,7 @@ export default {
     await this.updateUserSignInStatus();
     if (!this.isLoggedIn) {
       this.signIn({ isNewWindow: false });
+      logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp', 1);
       return;
     }
 

@@ -16,7 +16,7 @@ export function logTrackerEvent(
       label,
       value,
     });
-    if (window.fbq) window.fbq('track', action);
+    if (window.fbq) window.fbq('track', `${category}_${action}`);
   } catch (err) {
     console.error('logging error:');
     console.error(err);
