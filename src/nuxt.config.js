@@ -23,8 +23,12 @@ const nuxtConfig = {
       { hid: 'og_image_height', property: 'og:image:height', content: '630' },
       { hid: 'theme-color', name: 'theme-color', content: '#D2F0F0' },
     ],
+    script: [
+      { src: '/vendor/fb/pixel.js', async: true },
+    ],
     link: [
       { rel: 'preload', href: 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Material+Icons', as: 'style' },
+      { rel: 'preload', href: '/vendor/fb/pixel.js', as: 'script' },
       // {
       //   rel: 'preload',
       //   href: `https://${IS_TESTNET ? 'rinkeby.' : ''}like.co/api/experiments/list`,
