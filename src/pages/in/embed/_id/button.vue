@@ -1,150 +1,107 @@
-<template>
-  <div :class="rootClass">
+<template lang="pug">
+  div(:class="rootClass")
 
-    <!-- BEGIN - Version 2 -->
-    <template v-if="version === 2">
-      Test
-    </template>
-    <!-- END - Version 2 -->
+    //- BEGIN - Version 2
+    template(v-if="version === 2")
+      | Test
+    //- END - Version 2
 
-    <!-- BEGIN - Version 1 -->
-    <template v-else>
-      <transition
+    //- BEGIN - Version 1
+    template(v-else)
+      Transition(
         name="likecoin-embed__badge-flip-"
         mode="out-in"
-      >
-        <div
+      )
+        .likecoin-embed__badge.likecoin-embed__badge--back(
           v-if="isFlipped"
           key="back"
-          class="likecoin-embed__badge likecoin-embed__badge--back"
-        >
-          <div class="likecoin-embed__badge__content">
+        )
+          .likecoin-embed__badge__content
 
-            <!-- Don't show close button-->
-            <div
+            //- Don't show close button
+            .likecoin-embed__badge__close-btn(
               v-if="false"
               @click="onClickCloseButton"
-              class="likecoin-embed__badge__close-btn"
-            >
-              <close-button-icon />
-            </div>
+            )
+              close-button-icon
 
-            <div class="text-content">
+            .text-content
+              .text-content__subtitle(v-if="backSubtitle") {{ backSubtitle }}
+              .text-content__title.text-content__title--civic-liker {{ backTitle }}
 
-              <div
-                v-if="backSubtitle"
-                class="text-content__subtitle"
-              >
-                {{ backSubtitle }}
-              </div>
-              <div class="text-content__title text-content__title--civic-liker">
-                {{ backTitle }}
-              </div>
 
-            </div>
-
-            <div class="embed-cta-button-wrapper">
-              <a
+            .embed-cta-button-wrapper
+              a#embed-cta-button(
                 @click="onClickBackCTAButton"
-                id="embed-cta-button"
-              >
-                <div class="button-content-wrapper">
-                  <div class="button-content">
-                    {{ backCTAButtonTitle }}
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-        <div
+              )
+                .button-content-wrapper
+                  .button-content {{ backCTAButtonTitle }}
+
+        .likecoin-embed__badge.likecoin-embed__badge--front(
           v-else
           key="front"
-          class="likecoin-embed__badge likecoin-embed__badge--front"
-        >
-          <div class="likecoin-embed__badge__content">
+        )
+          .likecoin-embed__badge__content
 
-            <embed-user-info
+            EmbedUserInfo(
               :avatar="avatar"
               :avatar-halo="avatarHalo"
               @click-avatar="onClickAvatar"
               @click-avatar-halo="onClickAvatarHalo"
-            />
+            )
 
-            <!-- Front upper part, Logged in -->
-            <!-- Mobile -->
-            <div
+            //- Front upper part, Logged in
+            //- Mobile
+            .text-content(
               v-if="isLoggedIn || isMobile"
-              class="text-content"
-            >
-              <div class="text-content__subtitle">
-                {{ $t('Embed.label.clickLikeButton') }}
-              </div>
-              <i18n
+            )
+              .text-content__subtitle {{ $t('Embed.label.clickLikeButton') }}
+              i18n.text-content__title(
                 tag="div"
-                class="text-content__title"
                 path="Embed.label.supportUser"
-              >
-                <a
+              )
+                a(
                   :href="superLikeURL"
-                  @click="onClickFrontDisplayName"
                   place="user"
-                  rel="noopener noreferrer"
                   target="_blank"
-                >{{ displayName }}</a>
-              </i18n>
-            </div>
-            <!-- Front upper part, Logged out -->
-            <div
-              v-else
-              class="text-content"
-            >
-              <i18n
+                  rel="noopener noreferrer"
+                  @click="onClickFrontDisplayName"
+                )
+                  | {{ displayName }}
+
+            //- Front upper part, Logged out
+            .text-content(v-else)
+              i18n.text-content__subtitle(
                 tag="div"
-                class="text-content__subtitle"
                 path="Embed.label.clickLikeButtonNoLogin"
-              >
-                <a
+              )
+                a(
                   :href="popupLikeURL"
-                  @click="onClickLoginButton"
                   place="action"
                   target="_blank"
-                >{{ $t('Embed.label.registerNow') }}</a>
-              </i18n>
-              <i18n
+                  @click="onClickLoginButton"
+                )
+                  | {{ $t('Embed.label.registerNow') }}
+              i18n.text-content__title(
                 tag="div"
-                class="text-content__title"
                 path="Embed.label.supportUserNoLogin"
-              >
-                <span
-                  place="user"
-                >{{ displayName }}</span>
-              </i18n>
-            </div>
+              )
+                span(place="user") {{ displayName }}
 
-            <div
+            .embed-cta-button-wrapper(
               v-if="!isLoggedIn"
-              class="embed-cta-button-wrapper"
-            >
-              <a
-                :href="popupLikeURL"
-                @click="onClickLoginButton"
+            )
+              a(
                 id="embed-cta-button"
+                :href="popupLikeURL"
                 target="_blank"
-              >
-                <div class="button-content-wrapper">
-                  <div class="button-content">
-                    {{ $t('Embed.label.registerNow') }}
-                  </div>
-                </div>
-              </a>
-            </div>
+                @click="onClickLoginButton"
+              )
+                .button-content-wrapper
+                  .button-content {{ $t('Embed.label.registerNow') }}
 
-          </div>
-        </div>
-      </transition>
-
-      <like-button
+      LikeButton(
+        ref="likeButton"
         :like-count="likeCount"
         :total-like="totalLike"
         :is-togglable="false"
@@ -153,20 +110,16 @@
         :href="popupLikeURL"
         @like="onClickLike"
         @click-stats="onClickLikeStats"
-        ref="likeButton"
-      />
+      )
 
-      <footer>
-        <social-media-connect
+      footer
+        SocialMediaConnect(
           :username="id"
           :platforms="platforms"
           :limit="5"
-        />
-      </footer>
-    </template>
-    <!-- END - Version 1 -->
+        )
+    //- END - Version 1
 
-  </div>
 </template>
 
 <script>
