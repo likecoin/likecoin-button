@@ -6,6 +6,7 @@ import {
 import EmbedCreateWidgetButton from '~/components/embed/EmbedCreateWidgetButton';
 import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
 import SocialMediaConnect from '~/components/SocialMediaConnect';
+import { logTrackerEvent } from '@/util/EventLogger';
 
 import {
   apiPostLikeButton,
@@ -215,6 +216,7 @@ export default {
       } else {
         window.location = `${this.signInURL}&redirect=${encodeURIComponent(window.location.href)}`;
       }
+      logTrackerEvent(this, 'LikeButtonFlow', 'triggerSignUpIn', 'triggerSignUpIn', 1);
     },
 
     like() {

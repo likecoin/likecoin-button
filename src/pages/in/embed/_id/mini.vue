@@ -15,6 +15,7 @@
 <script>
 import mixin from '~/mixins/embed-button';
 import LikeButton from '~/components/LikeButton';
+import { logTrackerEvent } from '@/util/EventLogger';
 
 export default {
   name: 'embed-id-mini',
@@ -62,9 +63,11 @@ export default {
       } else if (this.hasCookieSupport) {
         // Case 1: User has not log in and 3rd party cookie is not blocked
         this.signIn();
+        logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp', 1);
       } else {
         // Case 2: User has not log in and 3rd party cookie is blocked
         this.popupLike();
+        logTrackerEvent(this, 'LikeButtonFlow', 'popupLike', 'popupLike', 1);
       }
     },
     onClickLikeStats() {
