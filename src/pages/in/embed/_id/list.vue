@@ -88,34 +88,11 @@ export default {
     LikeForm,
     UserAvatar,
   },
-  async asyncData({ params, query }) {
-    const referrer = handleQueryStringInUrl(query.referrer);
-    const promises = [
-      apiGetLikeButtonLikerList(params.id, referrer),
-      apiGetLikeButtonTotalCount(params.id, referrer),
-    ];
-    if (referrer) {
-      const url = encodeURI(referrer);
-      /* Try to get html to fetch title below */
-      if (checkValidDomainNotIP(url)) {
-        promises.push(apiGetPageTitle(referrer));
-      }
-    }
-    const [
-      { data: likees },
-      { data: totalData },
-      title,
-    ] = await Promise.all(promises);
-    return {
-      title,
-      isShowAll: likees.length <= 8,
-      numOfLikes: totalData.total,
-      likees: likees.map(id => ({ id })),
-    };
-  },
   data() {
     return {
-      isShowAll: false,
+      title: '',
+      numOfLikes: 0,
+      likees: [],
     };
   },
   computed: {
@@ -136,11 +113,33 @@ export default {
     shouldShowBackButton() {
       return this.$route.query.show_back === '1';
     },
+    isShowAll() {
+      return this.likees.length <= 8;
+    },
   },
-  created() {
-    if (process.client) {
-      this.fetchList();
+  async mounted() {
+    const { params, query } = this.$route;
+    const referrer = handleQueryStringInUrl(query.referrer);
+    const promises = [
+      apiGetLikeButtonLikerList(params.id, referrer),
+      apiGetLikeButtonTotalCount(params.id, referrer),
+    ];
+    if (referrer) {
+      const url = encodeURI(referrer);
+      /* Try to get html to fetch title below */
+      if (checkValidDomainNotIP(url)) {
+        promises.push(apiGetPageTitle(referrer));
+      }
     }
+    const [
+      { data: likees },
+      { data: totalData },
+      title,
+    ] = await Promise.all(promises);
+    this.title = title;
+    this.numOfLikes = totalData.total;
+    this.likees = likees.map(id => ({ id }));
+    this.fetchList();
   },
   methods: {
     async fetchList() {
