@@ -28,7 +28,7 @@
     "core-js": "^2.6.5",
     "gsap": "^2.1.1",
     "lodash.debounce": "^4.0.8",
-    "nuxt": "^2.4.5",
+    "nuxt": "^2.6.3",
     "nuxt-svg-loader": "^1.0.1",
     "url-parse": "^1.4.4",
     "vue-i18n": "^8.8.2",

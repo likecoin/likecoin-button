@@ -29,7 +29,7 @@
     "helmet": "^3.16.0",
     "lodash": "^4.17.11",
     "lodash.debounce": "^4.0.8",
-    "nuxt-start": "^2.4.5",
+    "nuxt-start": "^2.6.3",
     "nuxt-svg-loader": "^1.0.1",
     "source-map-support": "^0.5.10",
     "url-parse": "^1.4.4",
