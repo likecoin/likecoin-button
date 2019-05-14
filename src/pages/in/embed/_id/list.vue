@@ -90,6 +90,7 @@ export default {
   },
   data() {
     return {
+      isShowAll: false,
       title: '',
       numOfLikes: 0,
       likees: [],
@@ -112,9 +113,6 @@ export default {
     },
     shouldShowBackButton() {
       return this.$route.query.show_back === '1';
-    },
-    isShowAll() {
-      return this.likees.length <= 8;
     },
   },
   async mounted() {
@@ -139,6 +137,7 @@ export default {
     this.title = title;
     this.numOfLikes = totalData.total;
     this.likees = likees.map(id => ({ id }));
+    this.isShowAll = likees.length <= 8;
     this.fetchList();
   },
   methods: {
