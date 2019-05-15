@@ -92,7 +92,7 @@
         >
           <like-text-icon class="like-button-stats__text-logo" />
           <span
-            v-if="totalLike > 0"
+            v-if="isShowTotalLike && totalLike > 0"
             class="like-button-stats__total-like"
           >{{ formattedTotalLike }}</span>
         </div>
@@ -128,6 +128,10 @@ export default {
     totalLike: {
       type: Number,
       default: 0,
+    },
+    isShowTotalLike: {
+      type: [Boolean, String],
+      default: true,
     },
     isToggled: {
       type: [Boolean, String],
