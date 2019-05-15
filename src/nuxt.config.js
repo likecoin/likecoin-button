@@ -132,17 +132,14 @@ const nuxtConfig = {
     }],
     '@nuxtjs/sentry',
     'nuxt-svg-loader',
-    // '@likecoin/nuxt-google-optimize',
+    '@likecoin/nuxt-google-optimize',
   ],
   sentry: {},
-  // googleOptimize: {
-  //   externalExperimentsSrc:
-  //     `https://${IS_TESTNET ? 'rinkeby.' : ''}like.co/api/experiments/list`,
-  //   cookieDomain: process.env.NODE_ENV === 'production'
-  //     ? `${IS_TESTNET ? '.rinkeby' : ''}.like.co`
-  //     : '',
-  //   useFetch: true,
-  // },
+  googleOptimize: {
+    // externalExperimentsSrc: '/api/experiments/list',
+    useFetch: true,
+    maxAge: 604800, // 1 week
+  },
   /*
   ** Build configuration
   */
