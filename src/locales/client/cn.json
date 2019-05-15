@@ -58,5 +58,11 @@
       "login": "登入 Liker ID",
       "showMore": "显示更多"
     }
+  },
+  "EmbedV2": {
+    "badge": {
+      "login": "读者登入按赞<br>作者获得收入"
+    },
+    "likeCountLabel": "{n}人已点赞"
   }
 }

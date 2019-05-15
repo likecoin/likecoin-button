@@ -1,9 +1,62 @@
 <template lang="pug">
+  mixin LikeButton(isShowTotalLike="true")
+    LikeButton(
+      ref="likeButton"
+      :like-count="likeCount"
+      :total-like="totalLike"
+      :is-togglable="false"
+      :is-max="isMaxLike"
+      :is-show-max="isFlipped"
+      :is-show-total-like=isShowTotalLike
+      :href="popupLikeURL"
+      @like="onClickLike"
+      @click-stats="onClickLikeStats"
+    )
+
+  mixin SocialMediaConnect
+    SocialMediaConnect(
+      :username="id"
+      :platforms="platforms"
+      :limit="5"
+    )
+      block
+
   div(:class="rootClass")
 
     //- BEGIN - Version 2
     template(v-if="version === 2")
-      | Test
+      .likecoin-embed__layout
+        .likecoin-embed__layout-left
+          Transition(
+            name="likecoin-embed__cta-badge-"
+            mode="out-in"
+          )
+            .likecoin-embed__cta-badge(
+              :key="v2State"
+              v-html="v2CTABadgeText"
+            )
+        .likecoin-embed__layout-right.likecoin-embed__like-button-wrapper
+          +LikeButton("false")
+
+      .likecoin-embed__layout
+        .likecoin-embed__layout-left
+          +SocialMediaConnect
+            template(#before)
+              li.likecoin-embed__avatar
+                LcAvatar(
+                  :src="avatar"
+                  :halo="avatarHalo"
+                  :is-clickable="true"
+                  :is-halo-clickable="true"
+                  size="large"
+                  @click="onClickAvatar"
+                  @click-halo="onClickAvatarHalo"
+                )
+        .likecoin-embed__layout-right.likecoin-embed__like-count-wrapper
+          button.likecoin-embed__like-count(
+            @click="onClickLikeStats"
+          )
+            | {{ $tc('EmbedV2.likeCountLabel', totalLike, { n: totalLike }) }}
     //- END - Version 2
 
     //- BEGIN - Version 1
@@ -100,24 +153,10 @@
                 .button-content-wrapper
                   .button-content {{ $t('Embed.label.registerNow') }}
 
-      LikeButton(
-        ref="likeButton"
-        :like-count="likeCount"
-        :total-like="totalLike"
-        :is-togglable="false"
-        :is-max="isMaxLike"
-        :is-show-max="isFlipped"
-        :href="popupLikeURL"
-        @like="onClickLike"
-        @click-stats="onClickLikeStats"
-      )
+      +LikeButton
 
       footer
-        SocialMediaConnect(
-          :username="id"
-          :platforms="platforms"
-          :limit="5"
-        )
+        +SocialMediaConnect
     //- END - Version 1
 
 </template>
@@ -146,7 +185,7 @@ export default {
     };
   },
   computed: {
-    version: () => 1,
+    version: () => 2,
     isMobile() {
       return checkIsMobileClient();
     },
@@ -157,7 +196,7 @@ export default {
       return [
         'likecoin-embed',
         'likecoin-embed--button',
-        `likecoin-emded--button-v${this.version}`,
+        `likecoin-embed--button-v${this.version}`,
         `likecoin-embed--logged-${this.isLoggedIn ? 'in' : 'out'}`,
         {
           'likecoin-embed--flipped': this.isFlipped,
@@ -188,6 +227,12 @@ export default {
         return this.$t('Embed.back.civicLiker.paid.button');
       }
       return this.$t('Embed.back.civicLiker.button');
+    },
+    v2State() {
+      return 'login';
+    },
+    v2CTABadgeText() {
+      return this.$t(`EmbedV2.badge.${this.v2State}`);
     },
   },
   methods: {
@@ -557,6 +602,124 @@ $close-btn-width: 56;
       pointer-events: none;
 
       opacity: 0;
+    }
+  }
+}
+
+.likecoin-embed--button-v2.likecoin-embed {
+  margin-top: normalized(72) !important;
+
+  .likecoin-embed {
+    &__layout {
+      display: flex;
+    }
+
+    &__layout-left {
+      width: normalized(288);
+    }
+
+    &__cta-badge {
+      height: 100%;
+      min-height: normalized(100);
+      padding: normalized(16) normalized(20);
+
+      border-radius: normalized(8);
+      background-image: linear-gradient(56deg,#d2f0f0, #f0e6b4 65%);
+
+      font-size: normalized(22);
+
+      &-- {
+        &enter-active,
+        &leave-active {
+          transition-duration: 0.4s;
+          transition-property: opacity, transform;
+        }
+        &enter-active {
+          transition-timing-function: ease-out;
+        }
+        &leave-active {
+          transition-timing-function: ease-in;
+        }
+        &enter,
+        &leave-to {
+          opacity: 0;
+        }
+        &enter {
+          transform: scale(0.6) rotateX(-90deg);
+        }
+        &leave-to {
+          transform: scale(0.6) rotateX(90deg);
+        }
+      }
+    }
+
+    &__like-button-wrapper {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    &__avatar {
+      margin-top: normalized(6);
+      margin-right: normalized(4);
+      margin-bottom: normalized(6);
+
+      font-size: 0;
+
+      .lc-avatar__content {
+        width: normalized(48) !important;
+      }
+    }
+
+    &__like-count {
+      margin-left: normalized(24);
+      padding: normalized(4);
+
+      cursor: pointer;
+      transition: opacity 0.25s ease;
+
+      font-family: inherit;
+      font-size: normalized(14);
+      font-weight: 600;
+
+      &:hover {
+        opacity: 0.75;
+      }
+
+      &:active {
+        opacity: 0.5;
+      }
+
+      &-wrapper {
+        font-size: 0;
+      }
+    }
+  }
+
+  .like-button {
+    position: relative;
+
+    margin: 0;
+    margin-left: normalized(6);
+  }
+
+  .social-media-connect {
+    margin-right: 0;
+
+    > div {
+      margin-left: 0;
+    }
+
+    ul {
+      align-items: center;
+    }
+  }
+
+  &.likecoin-embed--logged-out {
+    .likecoin-embed {
+      &__cta-badge {
+        background: linear-gradient(70deg, #e6e6e6 60%, #d2f0f0, #f0e6b4);
+      }
     }
   }
 }

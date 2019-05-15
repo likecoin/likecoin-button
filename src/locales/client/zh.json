@@ -66,6 +66,12 @@
       "showMore": "顯示更多"
     }
   },
+  "EmbedV2": {
+    "badge": {
+      "login": "讀者登入按讚<br>作者獲得收入"
+    },
+    "likeCountLabel": "{n}人已點讚"
+  },
   "PopupOverlay": {
     "title": "請在「彈出式視窗」中點讚支持作者",
     "titleForIOSInApp": "請使用3D Touch按拍手鍵，然後在彈出視窗中點讚支持作者",

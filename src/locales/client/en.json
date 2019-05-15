@@ -66,6 +66,12 @@
       "showMore": "show more"
     }
   },
+  "EmbedV2": {
+    "badge": {
+      "login": "As a Liker, every Like is a reward to creators"
+    },
+    "likeCountLabel": "{n} Like | {n} Likes"
+  },
   "PopupOverlay": {
     "title": "Let’s clap in the pop-up window",
     "titleForIOSInApp": "Let's clap in the pop-up window by performing 3D touch on the clap button",
