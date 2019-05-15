@@ -86,13 +86,14 @@
           </a>
         </div>
 
-        <div
-          @click="$emit('click-stats')"
-          class="like-button-stats"
-        >
-          <like-text-icon class="like-button-stats__text-logo" />
+        <div class="like-button-stats">
+          <like-text-icon
+            @click="onPressedKnob"
+            class="like-button-stats__text-logo"
+          />
           <span
             v-if="isShowTotalLike && totalLike > 0"
+            @click="$emit('click-stats')"
             class="like-button-stats__total-like"
           >{{ formattedTotalLike }}</span>
         </div>
@@ -635,19 +636,27 @@ $like-button-like-count-size: 24;
     margin-top: calc(50% - #{normalized(13)});
     margin-left: normalized(12);
 
-    cursor: pointer;
-
     font-size: 0;
 
-    &:active {
-      transform: translateY(normalized(1));
+    &__text-logo,
+    &__total-like {
+      display: inline-block;
+
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        opacity: 0.75;
+      }
+
+      &:active {
+        transform: translateY(normalized(1));
+      }
     }
 
     &__text-logo {
       width: normalized(58);
       height: normalized(24);
-
-      transition: color 0.2s ease;
 
       fill: $like-gray-5;
 
@@ -657,8 +666,6 @@ $like-button-like-count-size: 24;
     }
 
     &__total-like {
-      display: block;
-
       margin-top: normalized(4);
 
       color: $like-green;
