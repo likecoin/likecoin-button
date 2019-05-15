@@ -607,7 +607,7 @@ $close-btn-width: 56;
 }
 
 .likecoin-embed--button-v2.likecoin-embed {
-  margin-top: normalized(72) !important;
+  margin-top: normalized(30) !important;
 
   .likecoin-embed {
     &__layout {
