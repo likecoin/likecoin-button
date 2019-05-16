@@ -68,7 +68,16 @@
   },
   "EmbedV2": {
     "badge": {
-      "login": "As a Liker, every Like is a reward to creators"
+      "muggle": "As a Liker, every Like is a reward to creators",
+      "liker0": "@:EmbedV2.badge.muggle",
+      "liker1": "@:EmbedV2.badge.muggle",
+      "liker5": "@:EmbedV2.badge.muggle",
+      "civicLikerTrial0": "@:EmbedV2.badge.muggle",
+      "civicLikerTrial1": "@:EmbedV2.badge.muggle",
+      "civicLikerTrial5": "@:EmbedV2.badge.muggle",
+      "civicLikerPaid0": "@:EmbedV2.badge.muggle",
+      "civicLikerPaid1": "@:EmbedV2.badge.muggle",
+      "civicLikerPaid5": "@:EmbedV2.badge.muggle"
     },
     "likeCountLabel": "{n} Like | {n} Likes"
   },

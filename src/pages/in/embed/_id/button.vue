@@ -229,7 +229,37 @@ export default {
       return this.$t('Embed.back.civicLiker.button');
     },
     v2State() {
-      return 'login';
+      if (!this.isLoggedIn) {
+        return 'muggle';
+      }
+
+      if (!this.isSubscribed) {
+        if (this.likeCount < 1) {
+          return 'liker0';
+        }
+        if (this.likeCount < 5) {
+          return 'liker1';
+        }
+        return 'liker5';
+      }
+
+      if (this.isTrialSubscriber) {
+        if (this.likeCount < 1) {
+          return 'civicLikerTrial0';
+        }
+        if (this.likeCount < 5) {
+          return 'civicLikerTrial1';
+        }
+        return 'civicLikerTrial5';
+      }
+
+      if (this.likeCount < 1) {
+        return 'civicLikerPaid0';
+      }
+      if (this.likeCount < 5) {
+        return 'civicLikerPaid1';
+      }
+      return 'civicLikerPaid5';
     },
     v2CTABadgeText() {
       return this.$t(`EmbedV2.badge.${this.v2State}`);

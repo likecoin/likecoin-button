@@ -61,7 +61,16 @@
   },
   "EmbedV2": {
     "badge": {
-      "login": "读者登入按赞<br>作者获得收入"
+      "muggle": "读者登入按赞<br>作者获得收入",
+      "liker0": "@:EmbedV2.badge.muggle",
+      "liker1": "@:EmbedV2.badge.muggle",
+      "liker5": "@:EmbedV2.badge.muggle",
+      "civicLikerTrial0": "@:EmbedV2.badge.muggle",
+      "civicLikerTrial1": "@:EmbedV2.badge.muggle",
+      "civicLikerTrial5": "@:EmbedV2.badge.muggle",
+      "civicLikerPaid0": "@:EmbedV2.badge.muggle",
+      "civicLikerPaid1": "@:EmbedV2.badge.muggle",
+      "civicLikerPaid5": "@:EmbedV2.badge.muggle"
     },
     "likeCountLabel": "{n}人已点赞"
   }
