@@ -137,6 +137,7 @@ const nuxtConfig = {
   sentry: {},
   googleOptimize: {
     // externalExperimentsSrc: '/api/experiments/list',
+    cookieName: '__session',
     useFetch: true,
     maxAge: 604800, // 1 week
   },
