@@ -6,6 +6,7 @@ const { Nuxt } = require('nuxt-start');
 
 function setNoCacheHeader(req, res, next) {
   res.setHeader('Cache-Control', 'public, max-age=600, must-revalidate');
+  res.setHeader('Vary', 'Cookie, Accept-Language');
   next();
 }
 

@@ -185,7 +185,13 @@ export default {
     };
   },
   computed: {
-    version: () => 2,
+    version() {
+      if (!this.$exp) return 2;
+      const { name, $activeVariants } = this.$exp;
+      if (name === 'like-button-v2'
+        && $activeVariants.find(variant => variant.name === 'original')) return 1;
+      return 2;
+    },
     isMobile() {
       return checkIsMobileClient();
     },
