@@ -68,17 +68,20 @@
   },
   "EmbedV2": {
     "badge": {
-      "muggle": "As a Liker, every Like is a reward to creators",
-      "liker0": "@:EmbedV2.badge.muggle",
-      "liker1": "@:EmbedV2.badge.muggle",
-      "liker5": "@:EmbedV2.badge.muggle",
-      "civicLikerTrial0": "@:EmbedV2.badge.muggle",
-      "civicLikerTrial1": "@:EmbedV2.badge.muggle",
-      "civicLikerTrial5": "@:EmbedV2.badge.muggle",
-      "civicLikerPaid0": "@:EmbedV2.badge.muggle",
-      "civicLikerPaid1": "@:EmbedV2.badge.muggle",
-      "civicLikerPaid5": "@:EmbedV2.badge.muggle"
+      "muggle": "{becomeLiker}, Like for free to reward creators",
+      "liker0": "Help distribute Creators Fund with your Like",
+      "liker1": "@:EmbedV2.badge.civicLikerPaid1",
+      "liker5": "{becomeCivicLiker} to further support me and enjoy the benefits",
+      "civicLikerTrial0": "@:EmbedV2.badge.civicLikerPaid0",
+      "civicLikerTrial1": "@:EmbedV2.badge.civicLikerPaid1",
+      "civicLikerTrial5": "{becomePaidCivicLiker} to further support me and enjoy the benefits",
+      "civicLikerPaid0": "Distribute your own monthly fee in full amount with your Like",
+      "civicLikerPaid1": "You may Like a content for at most 5 times",
+      "civicLikerPaid5": "Liked 5 times. Thank you for your support"
     },
+    "becomeLiker": "Sign up as Liker",
+    "becomeCivicLiker": "Sign up as Civic Liker",
+    "becomePaidCivicLiker": "Sign up as Civic Liker",
     "likeCountLabel": "{n} Like | {n} Likes"
   },
   "PopupOverlay": {
