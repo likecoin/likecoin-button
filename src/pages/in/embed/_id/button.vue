@@ -31,10 +31,27 @@
             name="likecoin-embed__cta-badge-"
             mode="out-in"
           )
-            .likecoin-embed__cta-badge(
+            i18n.likecoin-embed__cta-badge(
               :key="v2State"
-              v-html="v2CTABadgeText"
+              :path="v2CTABadgeI18nPath"
+              tag="div"
             )
+              br(place="br")
+              a(
+                place="becomeLiker"
+                @click="onClickLoginButton"
+              )
+                | {{ $t('EmbedV2.becomeLiker') }}
+              a(
+                place="becomeCivicLiker"
+                @click="convertLikerToCivicLiker"
+              )
+                | {{ $t('EmbedV2.becomeCivicLiker') }}
+              a(
+                place="becomePaidCivicLiker"
+                @click="convertLikerToCivicLiker"
+              )
+                | {{ $t('EmbedV2.becomePaidCivicLiker') }}
         .likecoin-embed__layout-right.likecoin-embed__like-button-wrapper
           +LikeButton("false")
 
@@ -267,8 +284,8 @@ export default {
       }
       return 'civicLikerPaid5';
     },
-    v2CTABadgeText() {
-      return this.$t(`EmbedV2.badge.${this.v2State}`);
+    v2CTABadgeI18nPath() {
+      return `EmbedV2.badge.${this.v2State}`;
     },
   },
   methods: {

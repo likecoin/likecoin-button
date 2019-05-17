@@ -61,17 +61,20 @@
   },
   "EmbedV2": {
     "badge": {
-      "muggle": "读者登入按赞<br>作者获得收入",
-      "liker0": "@:EmbedV2.badge.muggle",
-      "liker1": "@:EmbedV2.badge.muggle",
-      "liker5": "@:EmbedV2.badge.muggle",
-      "civicLikerTrial0": "@:EmbedV2.badge.muggle",
-      "civicLikerTrial1": "@:EmbedV2.badge.muggle",
-      "civicLikerTrial5": "@:EmbedV2.badge.muggle",
-      "civicLikerPaid0": "@:EmbedV2.badge.muggle",
-      "civicLikerPaid1": "@:EmbedV2.badge.muggle",
-      "civicLikerPaid5": "@:EmbedV2.badge.muggle"
+      "muggle": "{becomeLiker} 免费按赞，帮助我获得收入",
+      "liker0": "Liker 每一按赞，我将获得收入",
+      "liker1": "@:EmbedV2.badge.civicLikerPaid1",
+      "liker5": "{becomeCivicLiker}，进一步回馈创作，加享福利",
+      "civicLikerTrial0": "@:EmbedV2.badge.civicLikerPaid0",
+      "civicLikerTrial1": "@:EmbedV2.badge.civicLikerPaid1",
+      "civicLikerTrial5": "{becomePaidCivicLiker}，进一步回馈创作，加享福利",
+      "civicLikerPaid0": "以 Like 分配你的月费，全数回馈作者",
+      "civicLikerPaid1": "谢谢支持。提醒一下，每内容最多按 Like 5 次",
+      "civicLikerPaid5": "已经按 Like 5 次，谢谢支持，我将获得回馈。"
     },
+    "becomeLiker": "登记 Liker",
+    "becomeCivicLiker": "成为赞赏公民",
+    "becomePaidCivicLiker": "正式成为赞赏公民",
     "likeCountLabel": "{n}人已点赞"
   }
 }
