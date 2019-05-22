@@ -11,6 +11,7 @@
   >
     <div>
       <ul>
+        <slot name="before" />
         <li
           v-for="socialMedia in socialMediaList"
           :key="socialMedia.id"

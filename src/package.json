@@ -19,7 +19,7 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "@likecoin/nuxt-google-optimize": "^0.5.3-like.8",
+    "@likecoin/nuxt-google-optimize": "^0.5.3-like.9",
     "@likecoin/ui-vue": "^0.7.1",
     "@nuxtjs/google-tag-manager": "^2.1.4",
     "@nuxtjs/sentry": "^3.0.0",
@@ -45,6 +45,8 @@
     "eslint-plugin-nuxt": "^0.4.2",
     "eslint-plugin-vue": "^5.2.2",
     "node-sass": "^4.11.0",
+    "pug": "^2.0.3",
+    "pug-plain-loader": "^1.0.0",
     "sass-loader": "^7.1.0",
     "stylelint": "^9.10.1",
     "stylelint-config-recommended-scss": "^3.2.0",

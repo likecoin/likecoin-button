@@ -66,6 +66,24 @@
       "showMore": "顯示更多"
     }
   },
+  "EmbedV2": {
+    "badge": {
+      "muggle": "{becomeLiker} 免費按讚，幫助我獲得收入",
+      "liker0": "Liker 每一按讚，我將獲得收入",
+      "liker1": "@:EmbedV2.badge.civicLikerPaid1",
+      "liker5": "{becomeCivicLiker}，進一步回饋創作，加享福利",
+      "civicLikerTrial0": "@:EmbedV2.badge.civicLikerPaid0",
+      "civicLikerTrial1": "@:EmbedV2.badge.civicLikerPaid1",
+      "civicLikerTrial5": "{becomePaidCivicLiker}，進一步回饋創作，加享福利",
+      "civicLikerPaid0": "以 Like 分配你的月費，全數回饋作者",
+      "civicLikerPaid1": "謝謝支持。提醒一下，每內容最多按 Like 5 次",
+      "civicLikerPaid5": "已經按 Like 5 次，謝謝支持，我將獲得回饋。"
+    },
+    "becomeLiker": "登記 Liker",
+    "becomeCivicLiker": "成為讚賞公民",
+    "becomePaidCivicLiker": "正式成為讚賞公民",
+    "likeCountLabel": "{n}人已按讚"
+  },
   "PopupOverlay": {
     "title": "請在「彈出式視窗」中點讚支持作者",
     "titleForIOSInApp": "請使用3D Touch按拍手鍵，然後在彈出視窗中點讚支持作者",

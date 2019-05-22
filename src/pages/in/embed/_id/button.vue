@@ -1,172 +1,181 @@
-<template>
-  <div
-    :class="[
-      'likecoin-embed',
-      'likecoin-embed--button',
-      `likecoin-embed--logged-${isLoggedIn ? 'in' : 'out'}`,
-      {
-        'likecoin-embed--flipped': isFlipped,
-        'likecoin-embed--with-halo': avatarHalo !== 'none',
-      },
-    ]"
-  >
-
-    <transition
-      name="likecoin-embed__badge-flip-"
-      mode="out-in"
-    >
-      <div
-        v-if="isFlipped"
-        key="back"
-        class="likecoin-embed__badge likecoin-embed__badge--back"
-      >
-        <div class="likecoin-embed__badge__content">
-
-          <!-- Don't show close button-->
-          <div
-            v-if="false"
-            @click="onClickCloseButton"
-            class="likecoin-embed__badge__close-btn"
-          >
-            <close-button-icon />
-          </div>
-
-          <div class="text-content">
-
-            <div
-              v-if="backSubtitle"
-              class="text-content__subtitle"
-            >
-              {{ backSubtitle }}
-            </div>
-            <div class="text-content__title text-content__title--civic-liker">
-              {{ backTitle }}
-            </div>
-
-          </div>
-
-          <div class="embed-cta-button-wrapper">
-            <a
-              @click="onClickBackCTAButton"
-              id="embed-cta-button"
-            >
-              <div class="button-content-wrapper">
-                <div class="button-content">
-                  {{ backCTAButtonTitle }}
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div
-        v-else
-        key="front"
-        class="likecoin-embed__badge likecoin-embed__badge--front"
-      >
-        <div class="likecoin-embed__badge__content">
-
-          <embed-user-info
-            :avatar="avatar"
-            :avatar-halo="avatarHalo"
-            @click-avatar="onClickAvatar"
-            @click-avatar-halo="onClickAvatarHalo"
-          />
-
-          <!-- Front upper part, Logged in -->
-          <!-- Mobile -->
-          <div
-            v-if="isLoggedIn || isMobile"
-            class="text-content"
-          >
-            <div class="text-content__subtitle">
-              {{ $t('Embed.label.clickLikeButton') }}
-            </div>
-            <i18n
-              tag="div"
-              class="text-content__title"
-              path="Embed.label.supportUser"
-            >
-              <a
-                :href="superLikeURL"
-                @click="onClickFrontDisplayName"
-                place="user"
-                rel="noopener noreferrer"
-                target="_blank"
-              >{{ displayName }}</a>
-            </i18n>
-          </div>
-          <!-- Front upper part, Logged out -->
-          <div
-            v-else
-            class="text-content"
-          >
-            <i18n
-              tag="div"
-              class="text-content__subtitle"
-              path="Embed.label.clickLikeButtonNoLogin"
-            >
-              <a
-                :href="popupLikeURL"
-                @click="onClickLoginButton"
-                place="action"
-                target="_blank"
-              >{{ $t('Embed.label.registerNow') }}</a>
-            </i18n>
-            <i18n
-              tag="div"
-              class="text-content__title"
-              path="Embed.label.supportUserNoLogin"
-            >
-              <span
-                place="user"
-              >{{ displayName }}</span>
-            </i18n>
-          </div>
-
-          <div
-            v-if="!isLoggedIn"
-            class="embed-cta-button-wrapper"
-          >
-            <a
-              :href="popupLikeURL"
-              @click="onClickLoginButton"
-              id="embed-cta-button"
-              target="_blank"
-            >
-              <div class="button-content-wrapper">
-                <div class="button-content">
-                  {{ $t('Embed.label.registerNow') }}
-                </div>
-              </div>
-            </a>
-          </div>
-
-        </div>
-      </div>
-    </transition>
-
-    <like-button
+<template lang="pug">
+  mixin LikeButton(isShowTotalLike="true")
+    LikeButton(
+      ref="likeButton"
       :like-count="likeCount"
       :total-like="totalLike"
       :is-togglable="false"
       :is-max="isMaxLike"
       :is-show-max="isFlipped"
+      :is-show-total-like=isShowTotalLike
       :href="popupLikeURL"
       @like="onClickLike"
       @click-stats="onClickLikeStats"
-      ref="likeButton"
-    />
+    )
 
-    <footer>
-      <social-media-connect
-        :username="id"
-        :platforms="platforms"
-        :limit="5"
-      />
-    </footer>
+  mixin SocialMediaConnect
+    SocialMediaConnect(
+      :username="id"
+      :platforms="platforms"
+      :limit="5"
+    )
+      block
 
-  </div>
+  div(:class="rootClass")
+
+    //- BEGIN - Version 2
+    template(v-if="version === 2")
+      .likecoin-embed__layout
+        .likecoin-embed__layout-left
+          Transition(
+            name="likecoin-embed__cta-badge-"
+            mode="out-in"
+          )
+            i18n.likecoin-embed__cta-badge(
+              :key="v2State"
+              :path="v2CTABadgeI18nPath"
+              tag="div"
+            )
+              br(place="br")
+              a(
+                place="becomeLiker"
+                @click="onClickLoginButton"
+              )
+                | {{ $t('EmbedV2.becomeLiker') }}
+              a(
+                place="becomeCivicLiker"
+                @click="convertLikerToCivicLiker"
+              )
+                | {{ $t('EmbedV2.becomeCivicLiker') }}
+              a(
+                place="becomePaidCivicLiker"
+                @click="convertLikerToCivicLiker"
+              )
+                | {{ $t('EmbedV2.becomePaidCivicLiker') }}
+        .likecoin-embed__layout-right.likecoin-embed__like-button-wrapper
+          +LikeButton("false")
+
+      .likecoin-embed__layout
+        .likecoin-embed__layout-left
+          +SocialMediaConnect
+            template(#before)
+              li.likecoin-embed__avatar
+                LcAvatar(
+                  :src="avatar"
+                  :halo="avatarHalo"
+                  :is-clickable="true"
+                  :is-halo-clickable="true"
+                  size="large"
+                  @click="onClickAvatar"
+                  @click-halo="onClickAvatarHalo"
+                )
+        .likecoin-embed__layout-right.likecoin-embed__like-count-wrapper
+          button.likecoin-embed__like-count(
+            @click="onClickLikeStats"
+          )
+            | {{ $tc('EmbedV2.likeCountLabel', totalLike, { n: totalLike }) }}
+    //- END - Version 2
+
+    //- BEGIN - Version 1
+    template(v-else)
+      Transition(
+        name="likecoin-embed__badge-flip-"
+        mode="out-in"
+      )
+        .likecoin-embed__badge.likecoin-embed__badge--back(
+          v-if="isFlipped"
+          key="back"
+        )
+          .likecoin-embed__badge__content
+
+            //- Don't show close button
+            .likecoin-embed__badge__close-btn(
+              v-if="false"
+              @click="onClickCloseButton"
+            )
+              close-button-icon
+
+            .text-content
+              .text-content__subtitle(v-if="backSubtitle") {{ backSubtitle }}
+              .text-content__title.text-content__title--civic-liker {{ backTitle }}
+
+
+            .embed-cta-button-wrapper
+              a#embed-cta-button(
+                @click="onClickBackCTAButton"
+              )
+                .button-content-wrapper
+                  .button-content {{ backCTAButtonTitle }}
+
+        .likecoin-embed__badge.likecoin-embed__badge--front(
+          v-else
+          key="front"
+        )
+          .likecoin-embed__badge__content
+
+            EmbedUserInfo(
+              :avatar="avatar"
+              :avatar-halo="avatarHalo"
+              @click-avatar="onClickAvatar"
+              @click-avatar-halo="onClickAvatarHalo"
+            )
+
+            //- Front upper part, Logged in
+            //- Mobile
+            .text-content(
+              v-if="isLoggedIn || isMobile"
+            )
+              .text-content__subtitle {{ $t('Embed.label.clickLikeButton') }}
+              i18n.text-content__title(
+                tag="div"
+                path="Embed.label.supportUser"
+              )
+                a(
+                  :href="superLikeURL"
+                  place="user"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  @click="onClickFrontDisplayName"
+                )
+                  | {{ displayName }}
+
+            //- Front upper part, Logged out
+            .text-content(v-else)
+              i18n.text-content__subtitle(
+                tag="div"
+                path="Embed.label.clickLikeButtonNoLogin"
+              )
+                a(
+                  :href="popupLikeURL"
+                  place="action"
+                  target="_blank"
+                  @click="onClickLoginButton"
+                )
+                  | {{ $t('Embed.label.registerNow') }}
+              i18n.text-content__title(
+                tag="div"
+                path="Embed.label.supportUserNoLogin"
+              )
+                span(place="user") {{ displayName }}
+
+            .embed-cta-button-wrapper(
+              v-if="!isLoggedIn"
+            )
+              a(
+                id="embed-cta-button"
+                :href="popupLikeURL"
+                target="_blank"
+                @click="onClickLoginButton"
+              )
+                .button-content-wrapper
+                  .button-content {{ $t('Embed.label.registerNow') }}
+
+      +LikeButton
+
+      footer
+        +SocialMediaConnect
+    //- END - Version 1
+
 </template>
 
 <script>
@@ -193,11 +202,30 @@ export default {
     };
   },
   computed: {
+    version() {
+      if (!this.$exp) return 2;
+      const { name, $activeVariants } = this.$exp;
+      if (name === 'like-button-v2'
+        && $activeVariants.find(variant => variant.name === 'original')) return 1;
+      return 2;
+    },
     isMobile() {
       return checkIsMobileClient();
     },
     isFlipped() {
       return this.shouldShowBackside;
+    },
+    rootClass() {
+      return [
+        'likecoin-embed',
+        'likecoin-embed--button',
+        `likecoin-embed--button-v${this.version}`,
+        `likecoin-embed--logged-${this.isLoggedIn ? 'in' : 'out'}`,
+        {
+          'likecoin-embed--flipped': this.isFlipped,
+          'likecoin-embed--with-halo': this.avatarHalo !== 'none',
+        },
+      ];
     },
     backTitle() {
       if (this.isTrialSubscriber) {
@@ -222,6 +250,42 @@ export default {
         return this.$t('Embed.back.civicLiker.paid.button');
       }
       return this.$t('Embed.back.civicLiker.button');
+    },
+    v2State() {
+      if (!this.isLoggedIn) {
+        return 'muggle';
+      }
+
+      if (!this.isSubscribed) {
+        if (this.likeCount < 1) {
+          return 'liker0';
+        }
+        if (this.likeCount < 5) {
+          return 'liker1';
+        }
+        return 'liker5';
+      }
+
+      if (this.isTrialSubscriber) {
+        if (this.likeCount < 1) {
+          return 'civicLikerTrial0';
+        }
+        if (this.likeCount < 5) {
+          return 'civicLikerTrial1';
+        }
+        return 'civicLikerTrial5';
+      }
+
+      if (this.likeCount < 1) {
+        return 'civicLikerPaid0';
+      }
+      if (this.likeCount < 5) {
+        return 'civicLikerPaid1';
+      }
+      return 'civicLikerPaid5';
+    },
+    v2CTABadgeI18nPath() {
+      return `EmbedV2.badge.${this.v2State}`;
     },
   },
   methods: {
@@ -290,16 +354,34 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "~assets/css/embed";
 
 $close-btn-width: 56;
 
+#embed-cta-button {
+  @keyframes super-like-button-shake {
+    0%, 86% { transform: rotateZ(0deg); }
+    88% { transform: rotateZ(2deg); }
+    90% { transform: rotateZ(-2deg); }
+    92% { transform: rotateZ(3deg); }
+    94% { transform: rotateZ(-3deg); }
+    98% { transform: rotateZ(1deg); }
+    100% { transform: rotateZ(0deg); }
+  }
+  animation-name: super-like-button-shake;
+  animation-duration: 3s;
+  animation-timing-function: ease-out;
+  animation-delay: -2s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+}
+
 .likecoin-embed {
   perspective: 800px;
 
-  &#{&}--with-halo {
-    margin-top: normalized(24);
+  &--with-halo {
+    margin-top: normalized(24) !important;
   }
 
   &__badge {
@@ -387,211 +469,311 @@ $close-btn-width: 56;
   footer {
     margin-right: normalized($button-border-width + $button-shadow-width);
   }
-}
 
-#embed-cta-button {
-  @keyframes super-like-button-shake {
-    0%, 86% { transform: rotateZ(0deg); }
-    88% { transform: rotateZ(2deg); }
-    90% { transform: rotateZ(-2deg); }
-    92% { transform: rotateZ(3deg); }
-    94% { transform: rotateZ(-3deg); }
-    98% { transform: rotateZ(1deg); }
-    100% { transform: rotateZ(0deg); }
-  }
-  animation-name: super-like-button-shake;
-  animation-duration: 3s;
-  animation-timing-function: ease-out;
-  animation-delay: -2s;
-  animation-iteration-count: infinite;
-  animation-fill-mode: forwards;
-}
+  .text-content {
+    &__title {
+      &#{&}--amount {
+        color: $like-green;
 
-.text-content {
-  &__title {
-    &#{&}--amount {
-      color: $like-green;
+        .amount-in-usd {
+          margin-left: normalized(6);
 
-      .amount-in-usd {
-        margin-left: normalized(6);
+          color: $like-gray-5;
 
-        color: $like-gray-5;
-
-        font-size: normalized(10);
-        line-height: normalized(10.5);
+          font-size: normalized(10);
+          line-height: normalized(10.5);
+        }
       }
-    }
 
-    &#{&}--civic-liker {
-      font-size: normalized(24);
-      line-height: normalized(24.5);
+      &#{&}--civic-liker {
+        font-size: normalized(24);
+        line-height: normalized(24.5);
+      }
     }
   }
-}
 
-.login-tooltip {
-  position: absolute;
-  right: 0;
+  .login-tooltip {
+    position: absolute;
+    right: 0;
 
-  margin-right: normalized(12);
-
-  > div {
-    position: relative;
-  }
-
-  &__trigger {
-    display: block;
-
-    width: normalized(16);
-    height: normalized(16);
-
-    transition-timing-function: ease;
-    transition-duration: 0.25s;
-    transition-property: transform, background, color;
-
-    border: none;
-    border-radius: 50%;
-
-    @media screen and (max-width: 414px) {
-      width: normalized(18);
-      height: normalized(18);
-    }
-
-    &--flip- {
-      &enter-active {
-        transition-timing-function: ease-out;
-        transition-duration: 0.15s;
-      }
-      &leave-active {
-        transition-timing-function: ease-in;
-        transition-duration: 0.05s;
-      }
-      &enter,
-      &leave-to {
-        transform: scale(0);
-      }
-    }
-
-    &--open {
-      color: #9b9b9b;
-      background: none;
-
-      &:hover {
-        color: darken(#9b9b9b, 10);
-      }
-      &:active {
-        color: darken(#9b9b9b, 20);
-      }
-    }
-
-    &--close {
-      color: white;
-      background: $like-green;
-
-      &:hover {
-        color: darken(white, 20);
-        background: darken($like-green, 5);
-      }
-      &:active {
-        color: darken(white, 50);
-        background: darken($like-green, 15);
-      }
-    }
+    margin-right: normalized(12);
 
     > div {
-      width: inherit;
-      height: inherit;
+      position: relative;
+    }
+
+    &__trigger {
+      display: block;
+
+      width: normalized(16);
+      height: normalized(16);
+
+      transition-timing-function: ease;
+      transition-duration: 0.25s;
+      transition-property: transform, background, color;
+
+      border: none;
+      border-radius: 50%;
+
+      @media screen and (max-width: 414px) {
+        width: normalized(18);
+        height: normalized(18);
+      }
+
+      &--flip- {
+        &enter-active {
+          transition-timing-function: ease-out;
+          transition-duration: 0.15s;
+        }
+        &leave-active {
+          transition-timing-function: ease-in;
+          transition-duration: 0.05s;
+        }
+        &enter,
+        &leave-to {
+          transform: scale(0);
+        }
+      }
+
+      &--open {
+        color: #9b9b9b;
+        background: none;
+
+        &:hover {
+          color: darken(#9b9b9b, 10);
+        }
+        &:active {
+          color: darken(#9b9b9b, 20);
+        }
+      }
+
+      &--close {
+        color: white;
+        background: $like-green;
+
+        &:hover {
+          color: darken(white, 20);
+          background: darken($like-green, 5);
+        }
+        &:active {
+          color: darken(white, 50);
+          background: darken($like-green, 15);
+        }
+      }
+
+      > div {
+        width: inherit;
+        height: inherit;
+      }
+    }
+
+    &__bubble {
+      &-wrapper {
+        position: absolute;
+        top: 50%;
+        right: calc(100% + #{normalized(4.5)});
+
+        transform: translateY(-50%);
+      }
+
+      position: relative;
+
+      width: normalized(208);
+
+      margin-right: normalized(8);
+      padding: normalized(8) normalized(12);
+
+      transform-origin: center right;
+
+      color: #9b9b9b;
+
+      border-radius: normalized(6);
+      background-color: white;
+
+      font-size: normalized(10);
+      line-height: normalized(14);
+
+      @media screen and (max-width: 414px) {
+        width: normalized(260);
+
+        font-size: normalized(12);
+        line-height: normalized(16);
+      }
+
+      &--pop-up- {
+        &enter-active {
+          transition-timing-function: ease-out;
+          transition-duration: 0.2s;
+        }
+        &leave-active {
+          transition-timing-function: ease-in;
+          transition-duration: 0.1s;
+        }
+        &enter,
+        &leave-to {
+          transform: scale(0);
+        }
+      }
+
+      // Triangle
+      &::before {
+        position: absolute;
+        top: 50%;
+        left: 100%;
+
+        width: 0;
+        height: 0;
+
+        content: '';
+
+        transform: translateY(-50%);
+
+        border-top: normalized(8) solid transparent;
+        border-bottom: normalized(8) solid transparent;
+        border-left: normalized(8) solid white;
+      }
+
+      a {
+        text-decoration: underline;
+
+        font-weight: 600;
+      }
     }
   }
 
-  &__bubble {
-    &-wrapper {
-      position: absolute;
-      top: 50%;
-      right: calc(100% + #{normalized(4.5)});
+  .like-button {
+    position: absolute;
 
-      transform: translateY(-50%);
+    margin-top: normalized(-18);
+    margin-left: normalized(44);
+  }
+
+  .social-media-connect {
+    transition: opacity 0.3s ease;
+
+    .likecoin-embed--flipped & {
+      pointer-events: none;
+
+      opacity: 0;
+    }
+  }
+}
+
+.likecoin-embed--button-v2.likecoin-embed {
+  margin-top: normalized(30) !important;
+
+  .likecoin-embed {
+    &__layout {
+      display: flex;
     }
 
+    &__layout-left {
+      width: normalized(288);
+    }
+
+    &__cta-badge {
+      height: 100%;
+      min-height: normalized(100);
+      padding: normalized(16) normalized(20);
+
+      border-radius: normalized(8);
+      background-image: linear-gradient(56deg,#d2f0f0, #f0e6b4 65%);
+
+      font-size: normalized(22);
+
+      &-- {
+        &enter-active,
+        &leave-active {
+          transition-duration: 0.4s;
+          transition-property: opacity, transform;
+        }
+        &enter-active {
+          transition-timing-function: ease-out;
+        }
+        &leave-active {
+          transition-timing-function: ease-in;
+        }
+        &enter,
+        &leave-to {
+          opacity: 0;
+        }
+        &enter {
+          transform: scale(0.6) rotateX(-90deg);
+        }
+        &leave-to {
+          transform: scale(0.6) rotateX(90deg);
+        }
+      }
+    }
+
+    &__like-button-wrapper {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    &__avatar {
+      margin-top: normalized(6);
+      margin-right: normalized(4);
+      margin-bottom: normalized(6);
+
+      font-size: 0;
+
+      .lc-avatar__content {
+        width: normalized(48) !important;
+      }
+    }
+
+    &__like-count {
+      margin-left: normalized(24);
+      padding: normalized(4);
+
+      cursor: pointer;
+      transition: opacity 0.25s ease;
+
+      font-family: inherit;
+      font-size: normalized(14);
+      font-weight: 600;
+
+      &:hover {
+        opacity: 0.75;
+      }
+
+      &:active {
+        opacity: 0.5;
+      }
+
+      &-wrapper {
+        font-size: 0;
+      }
+    }
+  }
+
+  .like-button {
     position: relative;
 
-    width: normalized(208);
+    margin: 0;
+    margin-left: normalized(6);
+  }
 
-    margin-right: normalized(8);
-    padding: normalized(8) normalized(12);
+  .social-media-connect {
+    margin-right: 0;
 
-    transform-origin: center right;
-
-    color: #9b9b9b;
-
-    border-radius: normalized(6);
-    background-color: white;
-
-    font-size: normalized(10);
-    line-height: normalized(14);
-
-    @media screen and (max-width: 414px) {
-      width: normalized(260);
-
-      font-size: normalized(12);
-      line-height: normalized(16);
+    > div {
+      margin-left: 0;
     }
 
-    &--pop-up- {
-      &enter-active {
-        transition-timing-function: ease-out;
-        transition-duration: 0.2s;
-      }
-      &leave-active {
-        transition-timing-function: ease-in;
-        transition-duration: 0.1s;
-      }
-      &enter,
-      &leave-to {
-        transform: scale(0);
-      }
-    }
-
-    // Triangle
-    &::before {
-      position: absolute;
-      top: 50%;
-      left: 100%;
-
-      width: 0;
-      height: 0;
-
-      content: '';
-
-      transform: translateY(-50%);
-
-      border-top: normalized(8) solid transparent;
-      border-bottom: normalized(8) solid transparent;
-      border-left: normalized(8) solid white;
-    }
-
-    a {
-      text-decoration: underline;
-
-      font-weight: 600;
+    ul {
+      align-items: center;
     }
   }
-}
 
-.like-button {
-  position: absolute;
-
-  margin-top: normalized(-18);
-  margin-left: normalized(44);
-}
-
-.social-media-connect {
-  transition: opacity 0.3s ease;
-
-  .likecoin-embed--flipped & {
-    pointer-events: none;
-
-    opacity: 0;
+  &.likecoin-embed--logged-out {
+    .likecoin-embed {
+      &__cta-badge {
+        background: linear-gradient(70deg, #e6e6e6 60%, #d2f0f0, #f0e6b4);
+      }
+    }
   }
 }
 </style>

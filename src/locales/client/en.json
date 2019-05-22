@@ -66,6 +66,24 @@
       "showMore": "show more"
     }
   },
+  "EmbedV2": {
+    "badge": {
+      "muggle": "{becomeLiker}, Like for free to reward creators",
+      "liker0": "Help distribute Creators Fund with your Like",
+      "liker1": "@:EmbedV2.badge.civicLikerPaid1",
+      "liker5": "{becomeCivicLiker} to further support me and enjoy the benefits",
+      "civicLikerTrial0": "@:EmbedV2.badge.civicLikerPaid0",
+      "civicLikerTrial1": "@:EmbedV2.badge.civicLikerPaid1",
+      "civicLikerTrial5": "{becomePaidCivicLiker} to further support me and enjoy the benefits",
+      "civicLikerPaid0": "Distribute your own monthly fee in full amount with your Like",
+      "civicLikerPaid1": "You may Like a content for at most 5 times",
+      "civicLikerPaid5": "Liked 5 times. Thank you for your support"
+    },
+    "becomeLiker": "Sign up as Liker",
+    "becomeCivicLiker": "Sign up as Civic Liker",
+    "becomePaidCivicLiker": "Sign up as Civic Liker",
+    "likeCountLabel": "{n} Like | {n} Likes"
+  },
   "PopupOverlay": {
     "title": "Let’s clap in the pop-up window",
     "titleForIOSInApp": "Let's clap in the pop-up window by performing 3D touch on the clap button",
