@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="socialMediaList.length > 0"
+    v-if="$slots.before || socialMediaList.length > 0"
     :class="[
       'social-media-connect',
       `social-media-connect--${type}`,
