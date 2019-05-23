@@ -10,6 +10,8 @@ export const EXTERNAL_HOSTNAME = IS_TESTNET ? 'button.rinkeby.like.co' : 'button
 
 export const LIKE_CO_HOSTNAME = IS_TESTNET ? 'rinkeby.like.co' : 'like.co';
 
+export const LIKER_LAND_URL_BASE = IS_TESTNET ? 'https://rinkeby.liker.land' : 'https://liker.land';
+
 /* use LIKE_CO_HOSTNAME for now to prevent CORS preflight problem
  should USE EXTERNAL_HOSTNAME in future */
 export const LIKECOIN_MISC_API_BASE = `https://${LIKE_CO_HOSTNAME}`;
