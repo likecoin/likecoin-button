@@ -8,8 +8,15 @@
       <div class="popup-notice-overlay-dialog">
 
         <div class="popup-notice-overlay-dialog__body">
-          <span style="font-size: 1.5em">{{ title }}</span><br>
+          <i18n
+            :path="titlePath"
+            tag="span"
+            style="font-size: 1.5em"
+          >
+            <br place="br">
+          </i18n>
           <!--
+          <br>
           <a
             href="#"
             target="_blank"
@@ -43,11 +50,11 @@ export default {
     },
   },
   computed: {
-    title() {
+    titlePath() {
       if (this.isIosInApp) {
-        return this.$t('PopupOverlay.titleForIOSInApp');
+        return 'PopupOverlay.titleForIOSInApp';
       }
-      return this.$t('PopupOverlay.title');
+      return 'PopupOverlay.title';
     },
   },
   methods: {
