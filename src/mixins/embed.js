@@ -1,5 +1,6 @@
 import {
   LIKE_CO_HOSTNAME,
+  LIKER_LAND_URL_BASE,
   MEDIUM_REGEX,
 } from '@/constant';
 
@@ -252,7 +253,7 @@ export default {
     },
     convertLikerToCivicLiker() {
       window.open(
-        `https://${LIKE_CO_HOSTNAME}/in/civic${this.isTrialSubscriber ? '/register' : ''}${this.referrerQueryString}`,
+        `${LIKER_LAND_URL_BASE}/civic${this.isTrialSubscriber ? '/register' : ''}${this.referrerQueryString}`,
         '_blank',
       );
     },
