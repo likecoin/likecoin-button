@@ -82,10 +82,10 @@
     "becomeLiker": "登記 Liker",
     "becomeCivicLiker": "成為讚賞公民",
     "becomePaidCivicLiker": "正式成為讚賞公民",
-    "likeCountLabel": "{n}人已按讚"
+    "likeCountLabel": "{n} Like | {n} Likes"
   },
   "PopupOverlay": {
-    "title": "請在「彈出式視窗」中點讚支持作者",
+    "title": "請在「彈出式視窗」中點讚支持作者{br}Please sign-in in the pop up window",
     "titleForIOSInApp": "請使用3D Touch按拍手鍵，然後在彈出視窗中點讚支持作者",
     "link": "為何出現彈出式視窗"
   }
