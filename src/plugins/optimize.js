@@ -5,15 +5,17 @@ import * as cookie from 'tiny-cookie';
 
 export default async ({ res }) => {
   try {
-    if (process.server && res.clearCookie) {
-      /* clear legacy cookie affecting a/b testing */
-      res.clearCookie('__session',
-        {
-          path: '/',
-          domain: '.like.co',
-          secure: true,
-          httpOnly: true,
-        });
+    if (process.server) {
+      if (res.clearCookie) {
+        /* clear legacy cookie affecting a/b testing */
+        res.clearCookie('__session',
+          {
+            path: '/',
+            domain: '.like.co',
+            secure: true,
+            httpOnly: true,
+          });
+      }
     } else {
       if (!document.cookie || !cookie.enabled()) return;
       const expId = cookie.get('__session');
