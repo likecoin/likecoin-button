@@ -731,6 +731,8 @@ $close-btn-width: 56;
       cursor: pointer;
       transition: opacity 0.25s ease;
 
+      background: none;
+
       font-family: inherit;
       font-size: normalized(14);
       font-weight: 600;
