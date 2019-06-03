@@ -50,15 +50,7 @@
               tag="div"
               mode="out-in"
             >
-              <div
-                v-if="isMax"
-                key="max"
-                class="max-label"
-              >MAX</div>
-              <div
-                v-else
-                key="clap"
-              >
+              <div key="clap">
                 <like-clap-icon />
               </div>
             </transition-group>
@@ -66,8 +58,11 @@
             <transition name="like-button__like-count-label-">
               <div
                 v-if="likeCount >= 1"
-                class="like-button__like-count-label"
-              >{{ likeCount }}</div>
+                :class="{
+                  'like-button__like-count-label': true,
+                  'like-button__like-count-label--max': isMax,
+                }"
+              >{{ isMax ? 'MAX' : likeCount }}</div>
             </transition>
 
             <transition name="like-button__like-count-bubble-">
@@ -576,6 +571,10 @@ $like-button-like-count-size: 24;
 
         opacity: 0;
       }
+    }
+
+    &--max {
+      font-size: normalized(8);
     }
   }
 
