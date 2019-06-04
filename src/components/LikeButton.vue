@@ -7,6 +7,7 @@
         'like-button--max-like': isLocalMaxLike,
         'like-button--pressed': isPressingKnob,
         'like-button--long-pressed': isLongPressingKnob,
+        [`like-button--version-${version}`]: true,
       },
     ]"
   >
@@ -117,6 +118,10 @@ export default {
     LikeTextIcon,
   },
   props: {
+    version: {
+      type: Number,
+      default: 1,
+    },
     likeCount: {
       type: Number,
       default: 0,
@@ -172,7 +177,7 @@ export default {
       return `${totalLike.toLocaleString('en')}${suffix}`;
     },
     isLocalMaxLike() {
-      return this.knobProgress === 1;
+      return this.isTogglable ? this.knobProgress === 1 : this.isMax;
     },
     isKnobMovable() {
       return this.isTogglable && !checkIsMobileClient();
@@ -537,6 +542,30 @@ $like-button-like-count-size: 24;
           align-items: center;
           justify-content: center;
         }
+      }
+    }
+
+    .like-button--version-2 & {
+      $like-button-ring-width: 4;
+      padding: normalized($like-button-ring-width);
+
+      &__content {
+        width: normalized($like-button-size - $like-button-ring-width * 2);
+        height: normalized($like-button-size - $like-button-ring-width * 2);
+
+        transition: color 0.25s ease;
+
+        color: white;
+        background-color: $like-green;
+      }
+
+      &__border {
+        background: #50e3c2;
+      }
+    }
+    .like-button--version-2.like-button--max-like & {
+      &__content {
+        color: #50e3c2;
       }
     }
   }
