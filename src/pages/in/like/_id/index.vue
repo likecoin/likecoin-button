@@ -129,6 +129,7 @@ import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
 
 import mixin from '~/mixins/embed';
 import LikeButton from '~/components/LikeButton';
+import { checkIsMobileClient, checkIsTrustClient } from '~/util/client';
 import { logTrackerEvent } from '@/util/EventLogger';
 
 export default {
@@ -251,7 +252,14 @@ export default {
         this.like();
       }
 
-      if (this.isMaxLike) {
+      const isPaidSubscriber = this.isSubscribed && !this.isTrialSubscriber;
+      if (
+        this.isMaxLike
+        && (
+          !isPaidSubscriber
+          || (isPaidSubscriber && (!checkIsMobileClient() || checkIsTrustClient()))
+        )
+      ) {
         this.contentKey = 'cta';
       }
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike', 1);
