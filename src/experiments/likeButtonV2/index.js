@@ -13,7 +13,7 @@ export default {
     return route.name === 'in-embed-id-button';
   },
   variants: [
-    { name: 'original', weight: 1 },
+    { name: 'original', weight: 9 },
     { name: 'v2', weight: 1 },
   ],
 };
