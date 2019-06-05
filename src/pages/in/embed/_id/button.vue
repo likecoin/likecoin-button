@@ -2,6 +2,7 @@
   mixin LikeButton(isShowTotalLike="true")
     LikeButton(
       ref="likeButton"
+      :version="version"
       :like-count="likeCount"
       :total-like="totalLike"
       :is-togglable="false"
@@ -24,157 +25,56 @@
   div(:class="rootClass")
 
     //- BEGIN - Version 2
-    template(v-if="version === 2")
-      .likecoin-embed__layout
-        .likecoin-embed__layout-left
-          Transition(
-            name="likecoin-embed__cta-badge-"
-            mode="out-in"
-          )
-            i18n.likecoin-embed__cta-badge(
-              :key="v2State"
-              :path="v2CTABadgeI18nPath"
-              tag="div"
-            )
-              br(place="br")
-              a(
-                place="becomeLiker"
-                @click="onClickLoginButton"
-              )
-                | {{ $t('EmbedV2.becomeLiker') }}
-              a(
-                place="becomeCivicLiker"
-                @click="convertLikerToCivicLiker"
-              )
-                | {{ $t('EmbedV2.becomeCivicLiker') }}
-              a(
-                place="becomePaidCivicLiker"
-                @click="convertLikerToCivicLiker"
-              )
-                | {{ $t('EmbedV2.becomePaidCivicLiker') }}
-        .likecoin-embed__layout-right.likecoin-embed__like-button-wrapper
-          +LikeButton("false")
-
-      .likecoin-embed__layout
-        .likecoin-embed__layout-left
-          +SocialMediaConnect
-            template(#before)
-              li.likecoin-embed__avatar
-                LcAvatar(
-                  :src="avatar"
-                  :halo="avatarHalo"
-                  :is-clickable="true"
-                  :is-halo-clickable="true"
-                  size="large"
-                  @click="onClickAvatar"
-                  @click-halo="onClickAvatarHalo"
-                )
-        .likecoin-embed__layout-right.likecoin-embed__like-count-wrapper
-          button.likecoin-embed__like-count(
-            @click="onClickLikeStats"
-          )
-            | {{ $tc('EmbedV2.likeCountLabel', totalLike, { n: totalLike }) }}
-    //- END - Version 2
-
-    //- BEGIN - Version 1
-    template(v-else)
-      Transition(
-        name="likecoin-embed__badge-flip-"
-        mode="out-in"
-      )
-        .likecoin-embed__badge.likecoin-embed__badge--back(
-          v-if="isFlipped"
-          key="back"
+    .likecoin-embed__layout
+      .likecoin-embed__layout-left
+        Transition(
+          name="likecoin-embed__cta-badge-"
+          mode="out-in"
         )
-          .likecoin-embed__badge__content
-
-            //- Don't show close button
-            .likecoin-embed__badge__close-btn(
-              v-if="false"
-              @click="onClickCloseButton"
+          i18n.likecoin-embed__cta-badge(
+            :key="v2State"
+            :path="v2CTABadgeI18nPath"
+            tag="div"
+          )
+            br(place="br")
+            a(
+              place="becomeLiker"
+              @click="onClickLoginButton"
             )
-              close-button-icon
-
-            .text-content
-              .text-content__subtitle(v-if="backSubtitle") {{ backSubtitle }}
-              .text-content__title.text-content__title--civic-liker {{ backTitle }}
-
-
-            .embed-cta-button-wrapper
-              a#embed-cta-button(
-                @click="onClickBackCTAButton"
-              )
-                .button-content-wrapper
-                  .button-content {{ backCTAButtonTitle }}
-
-        .likecoin-embed__badge.likecoin-embed__badge--front(
-          v-else
-          key="front"
-        )
-          .likecoin-embed__badge__content
-
-            EmbedUserInfo(
-              :avatar="avatar"
-              :avatar-halo="avatarHalo"
-              @click-avatar="onClickAvatar"
-              @click-avatar-halo="onClickAvatarHalo"
+              | {{ $t('EmbedV2.becomeLiker') }}
+            a(
+              place="becomeCivicLiker"
+              @click="convertLikerToCivicLiker"
             )
-
-            //- Front upper part, Logged in
-            //- Mobile
-            .text-content(
-              v-if="isLoggedIn || isMobile"
+              | {{ $t('EmbedV2.becomeCivicLiker') }}
+            a(
+              place="becomePaidCivicLiker"
+              @click="convertLikerToCivicLiker"
             )
-              .text-content__subtitle {{ $t('Embed.label.clickLikeButton') }}
-              i18n.text-content__title(
-                tag="div"
-                path="Embed.label.supportUser"
-              )
-                a(
-                  :href="superLikeURL"
-                  place="user"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  @click="onClickFrontDisplayName"
-                )
-                  | {{ displayName }}
+              | {{ $t('EmbedV2.becomePaidCivicLiker') }}
+      .likecoin-embed__layout-right.likecoin-embed__like-button-wrapper
+        +LikeButton("false")
 
-            //- Front upper part, Logged out
-            .text-content(v-else)
-              i18n.text-content__subtitle(
-                tag="div"
-                path="Embed.label.clickLikeButtonNoLogin"
-              )
-                a(
-                  :href="popupLikeURL"
-                  place="action"
-                  target="_blank"
-                  @click="onClickLoginButton"
-                )
-                  | {{ $t('Embed.label.registerNow') }}
-              i18n.text-content__title(
-                tag="div"
-                path="Embed.label.supportUserNoLogin"
-              )
-                span(place="user") {{ displayName }}
-
-            .embed-cta-button-wrapper(
-              v-if="!isLoggedIn"
-            )
-              a(
-                id="embed-cta-button"
-                :href="popupLikeURL"
-                target="_blank"
-                @click="onClickLoginButton"
-              )
-                .button-content-wrapper
-                  .button-content {{ $t('Embed.label.registerNow') }}
-
-      +LikeButton
-
-      footer
+    .likecoin-embed__layout
+      .likecoin-embed__layout-left
         +SocialMediaConnect
-    //- END - Version 1
+          template(#before)
+            li.likecoin-embed__avatar
+              LcAvatar(
+                :src="avatar"
+                :halo="avatarHalo"
+                :is-clickable="true"
+                :is-halo-clickable="true"
+                size="large"
+                @click="onClickAvatar"
+                @click-halo="onClickAvatarHalo"
+              )
+      .likecoin-embed__layout-right.likecoin-embed__like-count-wrapper
+        button.likecoin-embed__like-count(
+          @click="onClickLikeStats"
+        )
+          | {{ $tc('EmbedV2.likeCountLabel', totalLike, { n: totalLike }) }}
+    //- END - Version 2
 
 </template>
 
@@ -219,7 +119,7 @@ export default {
       return [
         'likecoin-embed',
         'likecoin-embed--button',
-        `likecoin-embed--button-v${this.version}`,
+        'likecoin-embed--button-v2',
         `likecoin-embed--logged-${this.isLoggedIn ? 'in' : 'out'}`,
         {
           'likecoin-embed--flipped': this.isFlipped,
