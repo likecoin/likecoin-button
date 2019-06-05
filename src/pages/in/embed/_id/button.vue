@@ -197,45 +197,54 @@ export default {
       }
     },
     onClickLoginButton(e) {
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickLoginButton', 'clickLoginButton(embed)', 1);
       if (e && typeof e.preventDefault === 'function') {
         e.preventDefault();
       }
-
-      logTrackerEvent(this, 'LikeButtonFlow', 'popupLikeButton', 'popupLikeButton', 1);
+      this.doLogin();
+    },
+    doLogin() {
       if (this.hasCookieSupport) {
         // Case 1: User has not log in and 3rd party cookie is not blocked
         this.signIn();
-        logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp', 1);
+        logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp(embed)', 1);
       } else {
         // Case 2: User has not log in and 3rd party cookie is blocked
         this.popupLike();
-        logTrackerEvent(this, 'LikeButtonFlow', 'popupLike', 'popupLike', 1);
+        logTrackerEvent(this, 'LikeButtonFlow', 'popupLike', 'popupLike(embed)', 1);
       }
     },
-    onClickLike(e) {
+    onClickLike() {
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickLikeButton', 'clickLikeButton(embed)', 1);
       if (this.isLoggedIn) {
         // Case 3: User has logged in
         if (!this.isMaxLike) {
           this.like();
-          logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike', 1);
+          logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike(embed)', 1);
         }
 
         if (this.isMaxLike) {
           this.shouldShowBackside = true;
         }
       } else {
-        this.onClickLoginButton(e);
+        this.doLogin();
       }
     },
     onClickLikeStats() {
       this.openLikeStats();
-      logTrackerEvent(this, 'LikeButtonFlow', 'clickLikeStats', 'clickLikeStats', 1);
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickLikeStats', 'clickLikeStats(embed)', 1);
     },
     onClickCloseButton() {
       this.shouldShowBackside = false;
     },
     onClickFrontDisplayName() {
-      logTrackerEvent(this, 'LikeButtonFlow', 'clickFrontDisplayName', 'clickFrontDisplayName', 1);
+      logTrackerEvent(
+        this,
+        'LikeButtonFlow',
+        'clickFrontDisplayName',
+        'clickFrontDisplayName(embed)',
+        1,
+      );
     },
     onClickBackCTAButton() {
       if (this.isSubscribed && !this.isTrialSubscriber) {
@@ -245,9 +254,11 @@ export default {
       }
     },
     onClickAvatar() {
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickAvatar', 'clickAvatar(embed)', 1);
       this.superLike();
     },
     onClickAvatarHalo() {
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickAvatarHalo', 'clickAvatarHalo(embed)', 1);
       this.convertLikerToCivicLiker();
     },
   },

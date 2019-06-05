@@ -244,9 +244,11 @@ export default {
       }
     },
     onClickBackButton() {
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickBackButton', 'clickBackButton(popup)', 1);
       window.close();
     },
     onClickLike() {
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike(popup)', 1);
       if (!this.isMaxLike) {
         this.like();
       }
@@ -254,23 +256,27 @@ export default {
       if (this.isMaxLike) {
         this.contentKey = 'cta';
       }
-      logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike', 1);
     },
     onClickLikeStats() {
       this.openLikeStats({ isNewWindow: false });
-      logTrackerEvent(this, 'LikeButtonFlow', 'clickLikeStats', 'clickLikeStats', 1);
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickLikeStats', 'clickLikeStats(popup)', 1);
     },
     onClickCTAButton() {
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickCTA', 'clickCTA(popup)', 1);
       if (this.isSubscribed && !this.isTrialSubscriber) {
+        logTrackerEvent(this, 'LikeButtonFlow', 'clickSuperLike', 'clickSuperLike(popup)', 1);
         this.superLike();
       } else {
+        logTrackerEvent(this, 'LikeButtonFlow', 'clickConvertCivicLiker', 'clickConvertCivicLiker(popup)', 1);
         this.convertLikerToCivicLiker();
       }
     },
     onClickAvatar() {
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickAvatar', 'clickAvatar(popup)', 1);
       this.superLike();
     },
     onClickAvatarHalo() {
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickAvatarHalo', 'clickAvatarHalo(popup)', 1);
       this.convertLikerToCivicLiker();
     },
   },
