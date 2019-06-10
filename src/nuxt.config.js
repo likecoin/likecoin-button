@@ -135,7 +135,19 @@ const nuxtConfig = {
     'nuxt-svg-loader',
     '@likecoin/nuxt-google-optimize',
   ],
-  sentry: {},
+  sentry: {
+    clientIntegrations: {
+      /*
+        default integrations with reportingObserver disabled
+        reporting is very noisy on CSP violation.
+      */
+      Dedupe: {},
+      ExtraErrorData: {},
+      // ReportingObserver: {},
+      RewriteFrames: {},
+      Vue: { attachProps: true },
+    },
+  },
   googleOptimize: {
     // externalExperimentsSrc: '/api/experiments/list',
     cookieName: '__session',
