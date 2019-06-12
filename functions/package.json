@@ -24,7 +24,7 @@
     "core-js": "^2.6.5",
     "express": "^4.16.4",
     "firebase-admin": "^7.0.0",
-    "firebase-functions": "^2.2.0",
+    "firebase-functions": "^3.0.0",
     "gsap": "^2.1.1",
     "helmet": "^3.16.0",
     "lodash": "^4.17.11",
