@@ -140,15 +140,8 @@ const nuxtConfig = {
   ],
   sentry: {
     clientIntegrations: {
-      /*
-        default integrations with reportingObserver disabled
-        reporting is very noisy on CSP violation.
-      */
-      Dedupe: {},
-      ExtraErrorData: {},
-      // ReportingObserver: {},
-      RewriteFrames: {},
-      Vue: { attachProps: true },
+      /* default integrations will still be added due to deep-merge */
+      ReportingObserver: false, // reporting is very noisy on CSP violation.
     },
   },
   googleOptimize: {
