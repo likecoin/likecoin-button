@@ -82,6 +82,7 @@
 import {
   checkIsMobileClient,
   checkHasStorageAPIAccess,
+  requestStorageAPIAccess,
   isAndroid,
   isFacebookBrowser,
 } from '~/util/client';
@@ -215,12 +216,7 @@ export default {
         this.popupLike();
         logTrackerEvent(this, 'LikeButtonFlow', 'popupLike', 'popupLike(embed)', 1);
         if (!(await checkHasStorageAPIAccess())) { // Try to request storage access
-          try {
-            await document.requestStorageAccess();
-            await this.updateUserSignInStatus();
-          } catch (err) {
-            console.error(err);
-          }
+          if (await requestStorageAPIAccess()) await this.updateUserSignInStatus();
         }
       } else {
         // User has not log in and 3rd party cookie is not blocked
