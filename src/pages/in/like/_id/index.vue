@@ -246,7 +246,12 @@ export default {
     },
     onClickBackButton() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickBackButton', 'clickBackButton(popup)', 1);
-      window.close();
+      try {
+        window.close();
+        window.history.back();
+      } catch (err) {
+        console.error(err);
+      }
     },
     onClickLike() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike(popup)', 1);

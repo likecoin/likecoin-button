@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { checkIsMobileClient } from '~/util/client';
+import { checkIsMobileClient, isAndroid, isFacebookBrowser } from '~/util/client';
 
 import CloseButtonIcon from '~/assets/like-button/close-btn.svg';
 
@@ -204,14 +204,15 @@ export default {
       this.doLogin();
     },
     doLogin() {
-      if (this.hasCookieSupport) {
-        // Case 1: User has not log in and 3rd party cookie is not blocked
-        this.signIn();
-        logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp(embed)', 1);
-      } else {
-        // Case 2: User has not log in and 3rd party cookie is blocked
+      if (!this.hasCookieSupport || (isAndroid() && isFacebookBrowser())) {
+        // User has not log in and 3rd party cookie is blocked
+        // or: android fb iab stuck when sign in new window, use like popup
         this.popupLike();
         logTrackerEvent(this, 'LikeButtonFlow', 'popupLike', 'popupLike(embed)', 1);
+      } else {
+        // User has not log in and 3rd party cookie is not blocked
+        this.signIn();
+        logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp(embed)', 1);
       }
     },
     onClickLike() {

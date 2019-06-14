@@ -3,6 +3,7 @@ import {
 } from '@/constant';
 
 import { getAvatarHaloTypeFromUser } from '~/util/user';
+import { isAndroid, isFacebookBrowser } from '~/util/client';
 
 import mixin from './embed';
 
@@ -55,12 +56,20 @@ export default {
   },
   methods: {
     popupLike() {
+      if (isAndroid() && isFacebookBrowser()) {
+        /* android fb iab stuck when open new window */
+        try {
+          window.top.location.href = this.popupLikeURL;
+          return;
+        } catch (err) {
+          console.error(err);
+        }
+      }
       const w = window.open(
         this.popupLikeURL,
         'like',
         'menubar=no,location=no,width=576,height=768',
       );
-
       this.$root.$emit('openPopupNoticeOverlay', w);
     },
 

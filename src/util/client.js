@@ -28,7 +28,12 @@ export function checkIsIOSInApp() {
 
 export function isAndroid() {
   if (!navigator) return false;
-  return /(android)/i.test(navigator.userAgent);
+  return /android/i.test(navigator.userAgent);
+}
+
+export function isFacebookBrowser() {
+  if (!navigator) return false;
+  return /FB_IAB/i.test(navigator.userAgent);
 }
 
 export function isIOS() {
