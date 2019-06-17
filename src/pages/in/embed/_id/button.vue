@@ -81,7 +81,6 @@
 <script>
 import {
   checkIsMobileClient,
-  checkHasStorageAPIAccess,
   requestStorageAPIAccess,
   isAndroid,
   isFacebookBrowser,
@@ -202,12 +201,12 @@ export default {
         logTrackerEvent(this, 'LikeButton', 'isCookieSupportFalse', 'isCookieSupportFalse', 1);
       }
     },
-    onClickLoginButton(e) {
+    async onClickLoginButton(e) {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLoginButton', 'clickLoginButton(embed)', 1);
       if (e && typeof e.preventDefault === 'function') {
         e.preventDefault();
       }
-      this.doLogin();
+      await this.doLogin();
     },
     async doLogin() {
       if (!this.hasCookieSupport || (isAndroid() && isFacebookBrowser())) {
@@ -215,8 +214,11 @@ export default {
         // or: android fb iab stuck when sign in new window, use like popup
         this.popupLike();
         logTrackerEvent(this, 'LikeButtonFlow', 'popupLike', 'popupLike(embed)', 1);
-        if (!(await checkHasStorageAPIAccess())) { // Try to request storage access
-          if (await requestStorageAPIAccess()) await this.updateUserSignInStatus();
+        if (!(this.hasStorageAPIAccess)) {
+          if (await requestStorageAPIAccess()) {
+            this.hasCookieSupport = await this.getIsCookieSupport();
+            await this.updateUserSignInStatus();
+          }
         }
       } else {
         // User has not log in and 3rd party cookie is not blocked
@@ -234,13 +236,13 @@ export default {
         this.shouldShowBackside = true;
       }
     },
-    onClickLike() {
+    async onClickLike() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLikeButton', 'clickLikeButton(embed)', 1);
       if (this.isLoggedIn) {
         // Case 3: User has logged in
         this.doLike();
       } else {
-        this.doLogin();
+        await this.doLogin();
       }
     },
     onClickLikeStats() {
