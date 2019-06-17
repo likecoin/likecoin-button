@@ -109,6 +109,7 @@ export default {
       totalLike: 0,
 
       hasCookieSupport: false,
+      hasStorageAPIAccess: false,
     };
   },
   computed: {
@@ -166,10 +167,11 @@ export default {
     async getIsCookieSupport() {
       let res = false;
       try {
+        this.hasStorageAPIAccess = await checkHasStorageAPIAccess();
         res = process.client
           && navigator.cookieEnabled
           && (document.cookie && /likecoin_cookie=true/.test(document.cookie))
-          && await checkHasStorageAPIAccess();
+          && this.hasStorageAPIAccess;
       } catch (err) {
         console.error(err);
         return false;

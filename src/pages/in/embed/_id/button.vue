@@ -79,7 +79,12 @@
 </template>
 
 <script>
-import { checkIsMobileClient, isAndroid, isFacebookBrowser } from '~/util/client';
+import {
+  checkIsMobileClient,
+  requestStorageAPIAccess,
+  isAndroid,
+  isFacebookBrowser,
+} from '~/util/client';
 
 import CloseButtonIcon from '~/assets/like-button/close-btn.svg';
 
@@ -196,39 +201,48 @@ export default {
         logTrackerEvent(this, 'LikeButton', 'isCookieSupportFalse', 'isCookieSupportFalse', 1);
       }
     },
-    onClickLoginButton(e) {
+    async onClickLoginButton(e) {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLoginButton', 'clickLoginButton(embed)', 1);
       if (e && typeof e.preventDefault === 'function') {
         e.preventDefault();
       }
-      this.doLogin();
+      await this.doLogin();
     },
-    doLogin() {
+    async doLogin() {
       if (!this.hasCookieSupport || (isAndroid() && isFacebookBrowser())) {
         // User has not log in and 3rd party cookie is blocked
         // or: android fb iab stuck when sign in new window, use like popup
         this.popupLike();
         logTrackerEvent(this, 'LikeButtonFlow', 'popupLike', 'popupLike(embed)', 1);
+        if (!(this.hasStorageAPIAccess)) {
+          if (await requestStorageAPIAccess()) {
+            this.hasCookieSupport = await this.getIsCookieSupport();
+            await this.updateUserSignInStatus();
+          }
+        }
       } else {
         // User has not log in and 3rd party cookie is not blocked
         this.signIn();
         logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp(embed)', 1);
       }
     },
-    onClickLike() {
+    doLike() {
+      if (!this.isMaxLike) {
+        this.like();
+        logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike(embed)', 1);
+      }
+
+      if (this.isMaxLike) {
+        this.shouldShowBackside = true;
+      }
+    },
+    async onClickLike() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLikeButton', 'clickLikeButton(embed)', 1);
       if (this.isLoggedIn) {
         // Case 3: User has logged in
-        if (!this.isMaxLike) {
-          this.like();
-          logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike(embed)', 1);
-        }
-
-        if (this.isMaxLike) {
-          this.shouldShowBackside = true;
-        }
+        this.doLike();
       } else {
-        this.doLogin();
+        await this.doLogin();
       }
     },
     onClickLikeStats() {

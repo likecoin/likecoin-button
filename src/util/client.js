@@ -58,6 +58,18 @@ export async function checkHasStorageAPIAccess() {
     const res = await document.hasStorageAccess();
     return res;
   } catch (err) {
+    console.error(err);
+    return false;
+  }
+}
+
+export async function requestStorageAPIAccess() {
+  if (typeof document.requestStorageAccess !== 'function') return false;
+  try {
+    const res = await document.requestStorageAccess();
+    return res || true;
+  } catch (err) {
+    console.error(err);
     return false;
   }
 }
