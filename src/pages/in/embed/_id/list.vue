@@ -1,5 +1,5 @@
 <template>
-  <div class="likee-list-page">
+  <div class="liker-list-page">
     <div class="lc-container">
       <like-form>
         <template
@@ -24,43 +24,51 @@
           </a>
         </template>
 
-        <span class="likee-list-page__content">
-          {{ $t('Embed.label.numLikesForArticle', {
-            numOfLikees: likees.length,
-            numOfLikes,
-          }) }}
-          <span v-if="title">— "{{ title }}"</span>
-        </span>
+        <template v-if="isFetched">
+          <span class="liker-list-page__content">
+            {{ $t('Embed.label.numLikesForArticle', {
+              numOflikers: likers.length,
+              numOfLikes,
+            }) }}
+            <span v-if="title">— "{{ title }}"</span>
+          </span>
 
-        <div
-          :class="['likee-list-page__list', { expand: isShowAll }]"
-          :style="{ maxHeight: `${Math.ceil(likees.length / 2) * 89}px` }"
-        >
-
-          <user-avatar
-            v-for="(likee, index) in likees"
-            :key="index"
-            :user="likee"
-          />
-
-          <transition name="lc-transition-default">
-            <div
-              v-if="!isShowAll"
-              class="overflow-overlay"
-            />
-          </transition>
-        </div>
-
-        <div
-          class="likee-list-page__show-more-btn-wrapper"
-        >
-          <button
-            v-if="!isShowAll"
-            @click="isShowAll = true"
+          <div
+            ref="likerList"
+            class="liker-list-page__list"
           >
-            {{ $t('Embed.button.showMore') }}
-          </button>
-        </div>
+            <ul>
+              <li
+                v-for="(liker, index) in likerList"
+                :key="index"
+              >
+                <user-avatar
+                  :user="liker"
+                />
+              </li>
+            </ul>
+
+            <transition name="lc-transition-default">
+              <div
+                v-if="!isShowAll"
+                class="liker-list-page__overflow-overlay"
+              />
+            </transition>
+          </div>
+
+          <div class="liker-list-page__show-more-btn-wrapper">
+            <button
+              v-if="!isShowAll"
+              @click="onClickMoreButton"
+            >
+              {{ $t('Embed.button.showMore') }}
+            </button>
+          </div>
+        </template>
+        <lc-loading-indicator
+          v-else
+          class="liker-list-page__loading-indicator"
+        />
       </like-form>
     </div>
   </div>
@@ -72,6 +80,8 @@ import Vue from 'vue'; // eslint-disable-line import/no-extraneous-dependencies
 
 import LikeForm from '~/components/LikeForm';
 import UserAvatar from '~/components/UserAvatar';
+
+import { TweenLite } from 'gsap/all';
 
 import {
   apiGetUserMinById,
@@ -88,12 +98,14 @@ export default {
     LikeForm,
     UserAvatar,
   },
+  COLLAPSED_LIKER_COUNT: 8,
   data() {
     return {
+      isFetched: false,
       isShowAll: false,
       title: '',
       numOfLikes: 0,
-      likees: [],
+      likers: [],
     };
   },
   computed: {
@@ -114,6 +126,11 @@ export default {
     shouldShowBackButton() {
       return this.$route.query.show_back === '1';
     },
+    likerList() {
+      return this.isShowAll
+        ? this.likers
+        : this.likers.slice(0, this.$options.COLLAPSED_LIKER_COUNT);
+    },
   },
   async mounted() {
     const { params, query } = this.$route;
@@ -130,19 +147,19 @@ export default {
       }
     }
     const [
-      { data: likees },
+      { data: likers },
       { data: totalData },
       title,
     ] = await Promise.all(promises);
     this.title = title;
     this.numOfLikes = totalData.total;
-    this.likees = likees.map(id => ({ id }));
-    this.isShowAll = likees.length <= 8;
+    this.likers = likers.map(id => ({ id }));
+    this.isShowAll = likers.length <= this.$options.COLLAPSED_LIKER_COUNT;
     this.fetchList();
   },
   methods: {
     async fetchList() {
-      this.likees.forEach(async (r) => {
+      this.likers.forEach(async (r) => {
         try {
           const { data } = await apiGetUserMinById(r.id);
           Vue.set(r, 'avatar', data.avatar);
@@ -152,7 +169,20 @@ export default {
           Vue.set(r, 'civicLikerSince', data.civicLikerSince);
         } catch (err) {
           console.error(err);
+        } finally {
+          this.isFetched = true;
         }
+      });
+    },
+    onClickMoreButton() {
+      const collapsedHeight = this.$refs.likerList.offsetHeight;
+      this.isShowAll = true;
+      this.$nextTick(() => {
+        TweenLite.from(this.$refs.likerList, 1, {
+          height: collapsedHeight,
+          ease: 'easeOutPower3',
+          clearProps: 'height',
+        });
       });
     },
   },
@@ -160,18 +190,26 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "~assets/css/variables";
 @import "~assets/css/mixin";
 
 $user-avatar-image-size: 48px;
 
-.likee-list-page {
+.liker-list-page {
   .user-avatar {
     min-height: 72px;
     padding: 16px 8px;
 
     border-bottom: 1px solid #e6e6e6;
+  }
+
+  &__loading-indicator {
+    display: block;
+
+    margin: 64px auto;
+
+    color: $like-green;
   }
 
   &__content {
@@ -184,39 +222,48 @@ $user-avatar-image-size: 48px;
   &__list {
     position: relative;
 
-    display: flex;
     overflow: hidden;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
 
     margin-top: 8px;
 
-    transition: max-height 0.25s ease-in-out;
+    ul {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
 
-    &:not(.expand) {
-      max-height: 272px !important;
+      margin: -8px;
+      padding: 0;
+
+      list-style: none;
+
+      li {
+        width: 50%;
+        padding: 0 8px;
+
+        @media screen and (max-width: 600px) {
+          width: 100%;
+        }
+      }
     }
+  }
 
-    > * {
-      width: calc(50% - 16px);
-    }
+  &__overflow-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
 
-    .overflow-overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
+    width: 100%;
+    height: 25%;
 
-      width: 100%;
-      height: calc(100% - 226px);
+    background-image: linear-gradient(to bottom, rgba($like-gray-1, 0), $like-gray-1 60%);
 
-      background-image: linear-gradient(to bottom, rgba(247, 247, 247, 0), $like-gray-1);
+    @media screen and (max-width: 600px) {
+      height: 10%;
     }
   }
 
   &__show-more-btn-wrapper {
-    margin-top: 12px;
-
     text-align: center;
 
     button {
