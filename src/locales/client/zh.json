@@ -58,7 +58,7 @@
       "supportUser": "支持 {user}",
       "supportUserNoLogin": "支持 {user}",
       "loginAdvice": "{login} 你讚好的作者能獲得更多 LikeCoin",
-      "numLikesForArticle": "從 {numOfLikees} 人獲得 {numOfLikes} Like",
+      "numLikesForArticle": "從 {numOfLikers} 人獲得 {numOfLikes} Like",
       "registerNow": "登入"
     },
     "button": {

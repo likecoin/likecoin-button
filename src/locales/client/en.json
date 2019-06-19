@@ -58,7 +58,7 @@
       "supportUser": "Support {user}",
       "supportUserNoLogin": "Support {user}",
       "loginAdvice": "{login} the writer you like will generate more LikeCoin",
-      "numLikesForArticle": "{numOfLikes} Like from {numOfLikees} people",
+      "numLikesForArticle": "{numOfLikes} Like from {numOfLikers} people",
       "registerNow": "Register"
     },
     "button": {

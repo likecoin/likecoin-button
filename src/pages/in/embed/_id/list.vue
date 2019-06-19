@@ -27,7 +27,7 @@
         <template v-if="isFetched">
           <span class="liker-list-page__content">
             {{ $t('Embed.label.numLikesForArticle', {
-              numOflikers: likers.length,
+              numOflikers,
               numOfLikes,
             }) }}
             <span v-if="title">— "{{ title }}"</span>
@@ -105,6 +105,7 @@ export default {
       isShowAll: false,
       title: '',
       numOfLikes: 0,
+      numOfLikers: 0,
       likers: [],
     };
   },
@@ -153,6 +154,7 @@ export default {
     ] = await Promise.all(promises);
     this.title = title;
     this.numOfLikes = totalData.total;
+    this.numOfLikers = totalData.totalLiker;
     this.likers = likers.map(id => ({ id }));
     this.isShowAll = likers.length <= this.$options.COLLAPSED_LIKER_COUNT;
     this.fetchList();

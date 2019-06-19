@@ -52,7 +52,7 @@
       "rewardUserWithLikeToken": "以 LIKE 代币赞赏 {user}",
       "supportUser": "支持 {user}",
       "loginAdvice": "{login} 你赞好的作者能获得更多 LikeCoin",
-      "numLikesForArticle": "从 {numOfLikees} 人获得 {numOfLikes} Like"
+      "numLikesForArticle": "从 {numOfLikers} 人获得 {numOfLikes} Like"
     },
     "button": {
       "login": "登入 Liker ID",

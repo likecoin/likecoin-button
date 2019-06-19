@@ -50,7 +50,7 @@
       "supportUser": " {user}を応援しよう！",
       "supportUserNoLogin": "{user}を応援しよう！",
       "loginAdvice": " {login}すると、好きなクリエーターがより多くのLikeCoinを受け取る",
-      "numLikesForArticle": " {numOfLikees}読者から{numOfLikes}Like",
+      "numLikesForArticle": " {numOfLikers}読者から{numOfLikes}Like",
       "registerNow": "登録"
     },
     "button": {
