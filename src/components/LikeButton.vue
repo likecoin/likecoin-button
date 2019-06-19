@@ -7,7 +7,7 @@
         'like-button--max-like': isLocalMaxLike,
         'like-button--pressed': isPressingKnob,
         'like-button--long-pressed': isLongPressingKnob,
-        [`like-button--version-${version}`]: true,
+        'like-button--version-2': true,
       },
     ]"
   >
