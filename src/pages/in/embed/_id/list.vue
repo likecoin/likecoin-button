@@ -27,7 +27,7 @@
         <template v-if="isFetched">
           <span class="liker-list-page__content">
             {{ $t('Embed.label.numLikesForArticle', {
-              numOflikers,
+              numOfLikers,
               numOfLikes,
             }) }}
             <span v-if="title">— "{{ title }}"</span>
