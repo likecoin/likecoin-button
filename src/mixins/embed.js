@@ -139,7 +139,7 @@ export default {
     referrerQueryString() {
       const { id, referrer } = this;
       const referrerQuery = `${referrer ? `&referrer=${encodeURIComponent(referrer)}` : ''}`;
-      return `?from=${encodeURIComponent(id)}${referrerQuery}`;
+      return `?from=${encodeURIComponent(id)}${referrerQuery}&utm_source=button`;
     },
 
     signInURL() {

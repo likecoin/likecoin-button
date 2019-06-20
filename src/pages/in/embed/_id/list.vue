@@ -122,7 +122,7 @@ export default {
       return this.urlReferrer;
     },
     aboutURL() {
-      return `https://liker.land/civic?from=${this.$route.params.id}&referrer=${encodeURIComponent(this.referrer)}`;
+      return `https://liker.land/civic?from=${this.$route.params.id}&referrer=${encodeURIComponent(this.referrer)}&utm_source=button`;
     },
     shouldShowBackButton() {
       return this.$route.query.show_back === '1';
