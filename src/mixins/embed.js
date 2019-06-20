@@ -7,7 +7,7 @@ import {
 import EmbedCreateWidgetButton from '~/components/embed/EmbedCreateWidgetButton';
 import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
 import SocialMediaConnect from '~/components/SocialMediaConnect';
-import { logTrackerEvent } from '@/util/EventLogger';
+import { setTrackerUserId, logTrackerEvent } from '@/util/EventLogger';
 
 import {
   apiPostLikeButton,
@@ -198,10 +198,13 @@ export default {
         this.totalLike = total;
         this.likeCount = count;
         this.likeSent = count;
-        if (this.$sentry) {
-          this.$sentry.configureScope((scope) => {
-            scope.setUser({ id: liker });
-          });
+        if (liker) {
+          if (this.$sentry) {
+            this.$sentry.configureScope((scope) => {
+              scope.setUser({ id: liker });
+            });
+          }
+          await setTrackerUserId(liker);
         }
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
