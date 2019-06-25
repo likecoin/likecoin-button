@@ -37,8 +37,10 @@
     .likecoin-embed__layout
       .likecoin-embed__layout-left.likecoin-embed__cta-badge-wrapper
         Transition(
-          name="likecoin-embed__cta-badge-"
+          :css="false"
           mode="out-in"
+          @enter="onCtaBadgeEnter"
+          @leave="onCtaBadgeLeave"
         )
           .likecoin-embed__cta-badge(
             :key="v2State"
@@ -90,6 +92,9 @@
 </template>
 
 <script>
+import { TimelineMax } from 'gsap/all';
+import { Elastic, Power2 } from 'gsap/EasePack';
+
 import {
   checkIsMobileClient,
   requestStorageAPIAccess,
@@ -209,6 +214,48 @@ export default {
     },
   },
   methods: {
+    onCtaBadgeEnter(el, onComplete) {
+      const tl = new TimelineMax({ onComplete });
+      if (this.version === 3) {
+        tl.from(el, 1, {
+          x: '10%',
+          scale: 0,
+          rotation: -10,
+          opacity: 0,
+          transformOrigin: '5% bottom',
+          ease: Elastic.easeOut,
+          clearProps: 'all',
+        });
+      } else {
+        tl.from(el, 0.4, {
+          scale: 0.6,
+          rotationX: -90,
+          opacity: 0,
+          ease: Power2.easeOut,
+        });
+      }
+    },
+    onCtaBadgeLeave(el, onComplete) {
+      const tl = new TimelineMax({ onComplete });
+      if (this.version === 3) {
+        tl.to(el, 1, {
+          x: '10%',
+          scale: 0,
+          rotation: -10,
+          opacity: 0,
+          transformOrigin: '5% bottom',
+          ease: Elastic.easeIn,
+          clearProps: 'all',
+        });
+      } else {
+        tl.to(el, 0.4, {
+          scale: 0.6,
+          rotationX: 90,
+          opacity: 0,
+          ease: Power2.easeIn,
+        });
+      }
+    },
     onCheckCookieSupport(isSupport) {
       if (isSupport) {
         logTrackerEvent(this, 'LikeButton', 'isCookieSupportTrue', 'isCookieSupportTrue', 1);
@@ -625,30 +672,6 @@ $close-btn-width: 56;
       > div {
         padding: normalized(16) normalized(20);
       }
-
-      &-- {
-        &enter-active,
-        &leave-active {
-          transition-duration: 0.4s;
-          transition-property: opacity, transform;
-        }
-        &enter-active {
-          transition-timing-function: ease-out;
-        }
-        &leave-active {
-          transition-timing-function: ease-in;
-        }
-        &enter,
-        &leave-to {
-          opacity: 0;
-        }
-        &enter {
-          transform: scale(0.6) rotateX(-90deg);
-        }
-        &leave-to {
-          transform: scale(0.6) rotateX(90deg);
-        }
-      }
     }
 
     &__like-button-wrapper {
@@ -736,18 +759,6 @@ $close-btn-width: 56;
 
       > div {
         padding-bottom: normalized(48);
-      }
-
-      &-- {
-        &enter-active,
-        &leave-active {
-          transition-duration: 0.2s;
-          transform-origin: normalized(48) bottom;
-        }
-        &enter,
-        &leave-to {
-          transform: translateX(normalized(24)) scale(0) rotateZ(-10deg);
-        }
       }
     }
 
