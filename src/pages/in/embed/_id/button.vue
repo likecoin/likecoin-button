@@ -102,8 +102,6 @@ import {
   isFacebookBrowser,
 } from '~/util/client';
 
-import CloseButtonIcon from '~/assets/like-button/close-btn.svg';
-
 import mixin from '~/mixins/embed-button';
 import LikeButton from '~/components/LikeButton';
 import { logTrackerEvent } from '@/util/EventLogger';
@@ -113,7 +111,6 @@ export default {
   layout: 'embed',
   components: {
     LikeButton,
-    CloseButtonIcon,
   },
   mixins: [mixin],
   data() {
@@ -345,8 +342,6 @@ export default {
 <style lang="scss">
 @import "~assets/css/embed";
 
-$close-btn-width: 56;
-
 #embed-cta-button {
   @keyframes super-like-button-shake {
     0%, 86% { transform: rotateZ(0deg); }
@@ -393,64 +388,6 @@ $close-btn-width: 56;
         padding-left: normalized(24);
       }
     }
-
-    &-flip-- {
-      &enter-active,
-      &leave-active {
-        transition-property: opacity, transform;
-      }
-      &enter-active {
-        transition-timing-function: ease-out;
-        transition-duration: 0.3s;
-      }
-      &leave-active {
-        transition-timing-function: ease-in;
-        transition-duration: 0.2s;
-      }
-      &enter {
-        transform: translateZ(normalized(-100)) rotateX(-90deg);
-      }
-      &leave-to {
-        transform: translateZ(normalized(-100)) rotateX(90deg);
-      }
-    }
-
-    &__close-btn {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      width: normalized($close-btn-width);
-
-      cursor: pointer;
-
-      transition: background-color 0.2s ease;
-
-      border-top-left-radius: $badge-border-radius;
-      border-bottom-left-radius: $badge-border-radius;
-
-      background-color: rgba(white, 0.5);
-
-      &:hover:not(:active) {
-        background-color: rgba(white, 0.7);
-      }
-
-      > svg {
-        width: normalized(28);
-        height: normalized(28);
-
-        fill: $like-green;
-      }
-
-      & + .text-content {
-        padding-left: normalized($close-btn-width + 24);
-      }
-    }
   }
 
   &__badge--front,
@@ -476,155 +413,6 @@ $close-btn-width: 56;
       &#{&}--civic-liker {
         font-size: normalized(24);
         line-height: normalized(24.5);
-      }
-    }
-  }
-
-  .login-tooltip {
-    position: absolute;
-    right: 0;
-
-    margin-right: normalized(12);
-
-    > div {
-      position: relative;
-    }
-
-    &__trigger {
-      display: block;
-
-      width: normalized(16);
-      height: normalized(16);
-
-      transition-timing-function: ease;
-      transition-duration: 0.25s;
-      transition-property: transform, background, color;
-
-      border: none;
-      border-radius: 50%;
-
-      @media screen and (max-width: 414px) {
-        width: normalized(18);
-        height: normalized(18);
-      }
-
-      &--flip- {
-        &enter-active {
-          transition-timing-function: ease-out;
-          transition-duration: 0.15s;
-        }
-        &leave-active {
-          transition-timing-function: ease-in;
-          transition-duration: 0.05s;
-        }
-        &enter,
-        &leave-to {
-          transform: scale(0);
-        }
-      }
-
-      &--open {
-        color: #9b9b9b;
-        background: none;
-
-        &:hover {
-          color: darken(#9b9b9b, 10);
-        }
-        &:active {
-          color: darken(#9b9b9b, 20);
-        }
-      }
-
-      &--close {
-        color: white;
-        background: $like-green;
-
-        &:hover {
-          color: darken(white, 20);
-          background: darken($like-green, 5);
-        }
-        &:active {
-          color: darken(white, 50);
-          background: darken($like-green, 15);
-        }
-      }
-
-      > div {
-        width: inherit;
-        height: inherit;
-      }
-    }
-
-    &__bubble {
-      &-wrapper {
-        position: absolute;
-        top: 50%;
-        right: calc(100% + #{normalized(4.5)});
-
-        transform: translateY(-50%);
-      }
-
-      position: relative;
-
-      width: normalized(208);
-
-      margin-right: normalized(8);
-      padding: normalized(8) normalized(12);
-
-      transform-origin: center right;
-
-      color: #9b9b9b;
-
-      border-radius: normalized(6);
-      background-color: white;
-
-      font-size: normalized(10);
-      line-height: normalized(14);
-
-      @media screen and (max-width: 414px) {
-        width: normalized(260);
-
-        font-size: normalized(12);
-        line-height: normalized(16);
-      }
-
-      &--pop-up- {
-        &enter-active {
-          transition-timing-function: ease-out;
-          transition-duration: 0.2s;
-        }
-        &leave-active {
-          transition-timing-function: ease-in;
-          transition-duration: 0.1s;
-        }
-        &enter,
-        &leave-to {
-          transform: scale(0);
-        }
-      }
-
-      // Triangle
-      &::before {
-        position: absolute;
-        top: 50%;
-        left: 100%;
-
-        width: 0;
-        height: 0;
-
-        content: '';
-
-        transform: translateY(-50%);
-
-        border-top: normalized(8) solid transparent;
-        border-bottom: normalized(8) solid transparent;
-        border-left: normalized(8) solid white;
-      }
-
-      a {
-        text-decoration: underline;
-
-        font-weight: 600;
       }
     }
   }
