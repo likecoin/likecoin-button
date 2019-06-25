@@ -24,34 +24,47 @@
 
   div(:class="rootClass")
 
+    svg(style="line-height:0;position:absolute;z-index:-1")
+      clipPath(
+        id="badge-clip"
+        clipPathUnits="objectBoundingBox"
+        preserveAspectRatio="xMinYMin none"
+        :transform="`scale(${1/288} ${1/104})`"
+      )
+        path(:d="badgeClipPath")
+
     //- BEGIN - Version 2
     .likecoin-embed__layout
-      .likecoin-embed__layout-left
+      .likecoin-embed__layout-left.likecoin-embed__cta-badge-wrapper
         Transition(
-          name="likecoin-embed__cta-badge-"
+          :css="false"
           mode="out-in"
+          @enter="onCtaBadgeEnter"
+          @leave="onCtaBadgeLeave"
         )
-          i18n.likecoin-embed__cta-badge(
+          .likecoin-embed__cta-badge(
             :key="v2State"
-            :path="v2CTABadgeI18nPath"
-            tag="div"
           )
-            br(place="br")
-            a(
-              place="becomeLiker"
-              @click="onClickLoginButton"
+            i18n(
+              :path="v2CTABadgeI18nPath"
+              tag="div"
             )
-              | {{ $t('EmbedV2.becomeLiker') }}
-            a(
-              place="becomeCivicLiker"
-              @click="convertLikerToCivicLiker"
-            )
-              | {{ $t('EmbedV2.becomeCivicLiker') }}
-            a(
-              place="becomePaidCivicLiker"
-              @click="convertLikerToCivicLiker"
-            )
-              | {{ $t('EmbedV2.becomePaidCivicLiker') }}
+              br(place="br")
+              a(
+                place="becomeLiker"
+                @click="onClickLoginButton"
+              )
+                | {{ $t('EmbedV2.becomeLiker') }}
+              a(
+                place="becomeCivicLiker"
+                @click="convertLikerToCivicLiker"
+              )
+                | {{ $t('EmbedV2.becomeCivicLiker') }}
+              a(
+                place="becomePaidCivicLiker"
+                @click="convertLikerToCivicLiker"
+              )
+                | {{ $t('EmbedV2.becomePaidCivicLiker') }}
       .likecoin-embed__layout-right.likecoin-embed__like-button-wrapper
         +LikeButton("false")
 
@@ -79,14 +92,15 @@
 </template>
 
 <script>
+import { TimelineMax } from 'gsap/all';
+import { Elastic, Power2 } from 'gsap/EasePack';
+
 import {
   checkIsMobileClient,
   requestStorageAPIAccess,
   isAndroid,
   isFacebookBrowser,
 } from '~/util/client';
-
-import CloseButtonIcon from '~/assets/like-button/close-btn.svg';
 
 import mixin from '~/mixins/embed-button';
 import LikeButton from '~/components/LikeButton';
@@ -97,7 +111,6 @@ export default {
   layout: 'embed',
   components: {
     LikeButton,
-    CloseButtonIcon,
   },
   mixins: [mixin],
   data() {
@@ -110,8 +123,8 @@ export default {
     version() {
       if (!this.$exp) return 2;
       const { name, $activeVariants } = this.$exp;
-      if (name === 'like-button-v2'
-        && $activeVariants.find(variant => variant.name === 'original')) return 1;
+      if (name === 'like-button-v3'
+        && $activeVariants.find(variant => variant.name === 'v3')) return 3;
       return 2;
     },
     isMobile() {
@@ -124,7 +137,7 @@ export default {
       return [
         'likecoin-embed',
         'likecoin-embed--button',
-        'likecoin-embed--button-v2',
+        `likecoin-embed--button-v${this.version}`,
         `likecoin-embed--logged-${this.isLoggedIn ? 'in' : 'out'}`,
         {
           'likecoin-embed--flipped': this.isFlipped,
@@ -192,8 +205,54 @@ export default {
     v2CTABadgeI18nPath() {
       return `EmbedV2.badge.${this.v2State}`;
     },
+
+    badgeClipPath() {
+      return 'M32.4,80c-1.8,7.8,2.9,18.2,11.6,20c1.5,0.3,1.2,2,0,2C19.4,103.1,9.9,89.1,9,80H8c-4.4,0-8-3.6-8-8V8c0-4.4,3.6-8,8-8h272c4.4,0,8,3.6,8,8v64c0,4.4-3.6,8-8,8H32.4z';
+    },
   },
   methods: {
+    onCtaBadgeEnter(el, onComplete) {
+      const tl = new TimelineMax({ onComplete });
+      if (this.version === 3) {
+        tl.from(el, 1, {
+          x: '10%',
+          scale: 0,
+          rotation: -10,
+          opacity: 0,
+          transformOrigin: '5% bottom',
+          ease: Elastic.easeOut,
+          clearProps: 'all',
+        });
+      } else {
+        tl.from(el, 0.4, {
+          scale: 0.6,
+          rotationX: -90,
+          opacity: 0,
+          ease: Power2.easeOut,
+        });
+      }
+    },
+    onCtaBadgeLeave(el, onComplete) {
+      const tl = new TimelineMax({ onComplete });
+      if (this.version === 3) {
+        tl.to(el, 1, {
+          x: '10%',
+          scale: 0,
+          rotation: -10,
+          opacity: 0,
+          transformOrigin: '5% bottom',
+          ease: Elastic.easeIn,
+          clearProps: 'all',
+        });
+      } else {
+        tl.to(el, 0.4, {
+          scale: 0.6,
+          rotationX: 90,
+          opacity: 0,
+          ease: Power2.easeIn,
+        });
+      }
+    },
     onCheckCookieSupport(isSupport) {
       if (isSupport) {
         logTrackerEvent(this, 'LikeButton', 'isCookieSupportTrue', 'isCookieSupportTrue', 1);
@@ -283,8 +342,6 @@ export default {
 <style lang="scss">
 @import "~assets/css/embed";
 
-$close-btn-width: 56;
-
 #embed-cta-button {
   @keyframes super-like-button-shake {
     0%, 86% { transform: rotateZ(0deg); }
@@ -331,64 +388,6 @@ $close-btn-width: 56;
         padding-left: normalized(24);
       }
     }
-
-    &-flip-- {
-      &enter-active,
-      &leave-active {
-        transition-property: opacity, transform;
-      }
-      &enter-active {
-        transition-timing-function: ease-out;
-        transition-duration: 0.3s;
-      }
-      &leave-active {
-        transition-timing-function: ease-in;
-        transition-duration: 0.2s;
-      }
-      &enter {
-        transform: translateZ(normalized(-100)) rotateX(-90deg);
-      }
-      &leave-to {
-        transform: translateZ(normalized(-100)) rotateX(90deg);
-      }
-    }
-
-    &__close-btn {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      width: normalized($close-btn-width);
-
-      cursor: pointer;
-
-      transition: background-color 0.2s ease;
-
-      border-top-left-radius: $badge-border-radius;
-      border-bottom-left-radius: $badge-border-radius;
-
-      background-color: rgba(white, 0.5);
-
-      &:hover:not(:active) {
-        background-color: rgba(white, 0.7);
-      }
-
-      > svg {
-        width: normalized(28);
-        height: normalized(28);
-
-        fill: $like-green;
-      }
-
-      & + .text-content {
-        padding-left: normalized($close-btn-width + 24);
-      }
-    }
   }
 
   &__badge--front,
@@ -418,155 +417,6 @@ $close-btn-width: 56;
     }
   }
 
-  .login-tooltip {
-    position: absolute;
-    right: 0;
-
-    margin-right: normalized(12);
-
-    > div {
-      position: relative;
-    }
-
-    &__trigger {
-      display: block;
-
-      width: normalized(16);
-      height: normalized(16);
-
-      transition-timing-function: ease;
-      transition-duration: 0.25s;
-      transition-property: transform, background, color;
-
-      border: none;
-      border-radius: 50%;
-
-      @media screen and (max-width: 414px) {
-        width: normalized(18);
-        height: normalized(18);
-      }
-
-      &--flip- {
-        &enter-active {
-          transition-timing-function: ease-out;
-          transition-duration: 0.15s;
-        }
-        &leave-active {
-          transition-timing-function: ease-in;
-          transition-duration: 0.05s;
-        }
-        &enter,
-        &leave-to {
-          transform: scale(0);
-        }
-      }
-
-      &--open {
-        color: #9b9b9b;
-        background: none;
-
-        &:hover {
-          color: darken(#9b9b9b, 10);
-        }
-        &:active {
-          color: darken(#9b9b9b, 20);
-        }
-      }
-
-      &--close {
-        color: white;
-        background: $like-green;
-
-        &:hover {
-          color: darken(white, 20);
-          background: darken($like-green, 5);
-        }
-        &:active {
-          color: darken(white, 50);
-          background: darken($like-green, 15);
-        }
-      }
-
-      > div {
-        width: inherit;
-        height: inherit;
-      }
-    }
-
-    &__bubble {
-      &-wrapper {
-        position: absolute;
-        top: 50%;
-        right: calc(100% + #{normalized(4.5)});
-
-        transform: translateY(-50%);
-      }
-
-      position: relative;
-
-      width: normalized(208);
-
-      margin-right: normalized(8);
-      padding: normalized(8) normalized(12);
-
-      transform-origin: center right;
-
-      color: #9b9b9b;
-
-      border-radius: normalized(6);
-      background-color: white;
-
-      font-size: normalized(10);
-      line-height: normalized(14);
-
-      @media screen and (max-width: 414px) {
-        width: normalized(260);
-
-        font-size: normalized(12);
-        line-height: normalized(16);
-      }
-
-      &--pop-up- {
-        &enter-active {
-          transition-timing-function: ease-out;
-          transition-duration: 0.2s;
-        }
-        &leave-active {
-          transition-timing-function: ease-in;
-          transition-duration: 0.1s;
-        }
-        &enter,
-        &leave-to {
-          transform: scale(0);
-        }
-      }
-
-      // Triangle
-      &::before {
-        position: absolute;
-        top: 50%;
-        left: 100%;
-
-        width: 0;
-        height: 0;
-
-        content: '';
-
-        transform: translateY(-50%);
-
-        border-top: normalized(8) solid transparent;
-        border-bottom: normalized(8) solid transparent;
-        border-left: normalized(8) solid white;
-      }
-
-      a {
-        text-decoration: underline;
-
-        font-weight: 600;
-      }
-    }
-  }
-
   .like-button {
     position: absolute;
 
@@ -585,7 +435,8 @@ $close-btn-width: 56;
   }
 }
 
-.likecoin-embed--button-v2.likecoin-embed {
+.likecoin-embed--button-v2.likecoin-embed,
+.likecoin-embed--button-v3.likecoin-embed {
   margin-top: normalized(30) !important;
 
   .likecoin-embed {
@@ -600,35 +451,14 @@ $close-btn-width: 56;
     &__cta-badge {
       height: 100%;
       min-height: normalized(100);
-      padding: normalized(16) normalized(20);
 
       border-radius: normalized(8);
       background-image: linear-gradient(56deg,#d2f0f0, #f0e6b4 65%);
 
       font-size: normalized(22);
 
-      &-- {
-        &enter-active,
-        &leave-active {
-          transition-duration: 0.4s;
-          transition-property: opacity, transform;
-        }
-        &enter-active {
-          transition-timing-function: ease-out;
-        }
-        &leave-active {
-          transition-timing-function: ease-in;
-        }
-        &enter,
-        &leave-to {
-          opacity: 0;
-        }
-        &enter {
-          transform: scale(0.6) rotateX(-90deg);
-        }
-        &leave-to {
-          transform: scale(0.6) rotateX(90deg);
-        }
+      > div {
+        padding: normalized(16) normalized(20);
       }
     }
 
@@ -702,6 +532,69 @@ $close-btn-width: 56;
         background: linear-gradient(70deg, #e6e6e6 60%, #d2f0f0, #f0e6b4);
       }
     }
+  }
+}
+
+.likecoin-embed--button-v3.likecoin-embed {
+  .likecoin-embed {
+    &__cta-badge-wrapper {
+      margin-bottom: normalized(-32);
+    }
+
+    &__cta-badge {
+      -webkit-clip-path: url(#badge-clip);
+      clip-path: url(#badge-clip);
+
+      > div {
+        padding-bottom: normalized(48);
+      }
+    }
+
+    &__avatar {
+      margin-right: 0;
+
+      font-size: 0;
+
+      .lc-avatar {
+        margin-right: 0;
+        margin-left: normalized(4);
+
+        &--with-halo {
+          margin-right: normalized(6);
+          margin-left: normalized(8);
+        }
+
+        &__content {
+          width: normalized(68) !important;
+        }
+      }
+    }
+  }
+
+  .social-media-connect {
+    > div {
+      justify-content: flex-start !important;
+
+      margin-right: normalized(-24);
+      padding-left: normalized(52);
+
+      ul {
+        justify-content: flex-start !important;
+
+        li {
+          padding: 0;
+
+          &:not(:first-child) {
+            margin-left: normalized(8);
+
+            &:nth-child(n + 6) {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+
   }
 }
 </style>

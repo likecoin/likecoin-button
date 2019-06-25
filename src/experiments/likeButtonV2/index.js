@@ -1,6 +1,6 @@
 export default {
-  name: 'like-button-v2',
-  experimentID: '',
+  name: 'like-button-v3',
+  experimentID: 'fF2Uw4gCS2-j1m3nGg1HTw',
   isEligible: ({ req, route }) => {
     if (process.server && req.headers && req.headers.dnt === '1') return false;
     if (process.client && (window.doNotTrack
@@ -14,6 +14,6 @@ export default {
   },
   variants: [
     { name: 'original', weight: 9 },
-    { name: 'v2', weight: 1 },
+    { name: 'v3', weight: 1 },
   ],
 };
