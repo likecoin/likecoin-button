@@ -121,11 +121,11 @@ export default {
   },
   computed: {
     version() {
-      if (!this.$exp) return 3;
+      if (!this.$exp) return 2;
       const { name, $activeVariants } = this.$exp;
       if (name === 'like-button-v3'
-        && $activeVariants.find(variant => variant.name === 'original')) return 2;
-      return 3;
+        && $activeVariants.find(variant => variant.name === 'v3')) return 3;
+      return 2;
     },
     isMobile() {
       return checkIsMobileClient();
