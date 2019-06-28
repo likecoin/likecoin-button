@@ -93,7 +93,7 @@
 
 <script>
 import { TimelineMax } from 'gsap/all';
-import { Elastic, Power2 } from 'gsap/EasePack';
+import { Elastic } from 'gsap/EasePack';
 
 import {
   checkIsMobileClient,
@@ -121,11 +121,7 @@ export default {
   },
   computed: {
     version() {
-      if (!this.$exp) return 2;
-      const { name, $activeVariants } = this.$exp;
-      if (name === 'like-button-v3'
-        && $activeVariants.find(variant => variant.name === 'v3')) return 3;
-      return 2;
+      return 3;
     },
     isMobile() {
       return checkIsMobileClient();
@@ -137,7 +133,7 @@ export default {
       return [
         'likecoin-embed',
         'likecoin-embed--button',
-        `likecoin-embed--button-v${this.version}`,
+        'likecoin-embed--button-v3',
         `likecoin-embed--logged-${this.isLoggedIn ? 'in' : 'out'}`,
         {
           'likecoin-embed--flipped': this.isFlipped,
@@ -213,45 +209,27 @@ export default {
   methods: {
     onCtaBadgeEnter(el, onComplete) {
       const tl = new TimelineMax({ onComplete });
-      if (this.version === 3) {
-        tl.from(el, 1, {
-          x: '10%',
-          scale: 0,
-          rotation: -10,
-          opacity: 0,
-          transformOrigin: '5% bottom',
-          ease: Elastic.easeOut,
-          clearProps: 'all',
-        });
-      } else {
-        tl.from(el, 0.4, {
-          scale: 0.6,
-          rotationX: -90,
-          opacity: 0,
-          ease: Power2.easeOut,
-        });
-      }
+      tl.from(el, 1, {
+        x: '10%',
+        scale: 0,
+        rotation: -10,
+        opacity: 0,
+        transformOrigin: '5% bottom',
+        ease: Elastic.easeOut,
+        clearProps: 'all',
+      });
     },
     onCtaBadgeLeave(el, onComplete) {
       const tl = new TimelineMax({ onComplete });
-      if (this.version === 3) {
-        tl.to(el, 1, {
-          x: '10%',
-          scale: 0,
-          rotation: -10,
-          opacity: 0,
-          transformOrigin: '5% bottom',
-          ease: Elastic.easeIn,
-          clearProps: 'all',
-        });
-      } else {
-        tl.to(el, 0.4, {
-          scale: 0.6,
-          rotationX: 90,
-          opacity: 0,
-          ease: Power2.easeIn,
-        });
-      }
+      tl.to(el, 1, {
+        x: '10%',
+        scale: 0,
+        rotation: -10,
+        opacity: 0,
+        transformOrigin: '5% bottom',
+        ease: Elastic.easeIn,
+        clearProps: 'all',
+      });
     },
     onCheckCookieSupport(isSupport) {
       if (isSupport) {

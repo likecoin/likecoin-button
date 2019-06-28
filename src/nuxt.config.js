@@ -136,7 +136,7 @@ const nuxtConfig = {
     }],
     '@nuxtjs/sentry',
     'nuxt-svg-loader',
-    '@likecoin/nuxt-google-optimize',
+    // '@likecoin/nuxt-google-optimize',
   ],
   sentry: {
     clientIntegrations: {
@@ -144,11 +144,11 @@ const nuxtConfig = {
       ReportingObserver: false, // reporting is very noisy on CSP violation.
     },
   },
-  googleOptimize: {
-    cookieName: '__session',
-    useFetch: true,
-    maxAge: 604800, // 1 week
-  },
+  // googleOptimize: {
+  //   cookieName: '__session',
+  //   useFetch: true,
+  //   maxAge: 604800, // 1 week
+  // },
   /*
   ** Build configuration
   */

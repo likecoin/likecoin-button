@@ -2,12 +2,12 @@
   <div
     :class="[
       'like-button',
+      'like-button--version-2',
       {
         'like-button--liked': likeCount > 0,
         'like-button--max-like': isLocalMaxLike,
         'like-button--pressed': isPressingKnob,
         'like-button--long-pressed': isLongPressingKnob,
-        'like-button--version-2': true,
       },
     ]"
   >
