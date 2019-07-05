@@ -118,10 +118,6 @@ export default {
     LikeTextIcon,
   },
   props: {
-    version: {
-      type: Number,
-      default: 1,
-    },
     likeCount: {
       type: Number,
       default: 0,
