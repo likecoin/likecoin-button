@@ -118,10 +118,6 @@ export default {
     LikeTextIcon,
   },
   props: {
-    version: {
-      type: Number,
-      default: 1,
-    },
     likeCount: {
       type: Number,
       default: 0,
@@ -143,10 +139,6 @@ export default {
       default: true,
     },
     isMax: {
-      type: [Boolean, String],
-      default: false,
-    },
-    isShowMax: {
       type: [Boolean, String],
       default: false,
     },

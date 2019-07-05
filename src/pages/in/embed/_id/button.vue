@@ -2,12 +2,10 @@
   mixin LikeButton(isShowTotalLike="true")
     LikeButton(
       ref="likeButton"
-      :version="version"
       :like-count="likeCount"
       :total-like="totalLike"
       :is-togglable="false"
       :is-max="isMaxLike"
-      :is-show-max="isFlipped"
       :is-show-total-like=isShowTotalLike
       :href="popupLikeURL"
       @like="onClickLike"
@@ -43,10 +41,11 @@
           @leave="onCtaBadgeLeave"
         )
           .likecoin-embed__cta-badge(
-            :key="v2State"
+            :key="state"
+            :style="ctaBadgeStyle"
           )
             i18n(
-              :path="v2CTABadgeI18nPath"
+              :path="ctaBadgeI18nPath"
               tag="div"
             )
               br(place="br")
@@ -93,7 +92,7 @@
 
 <script>
 import { TimelineMax } from 'gsap/all';
-import { Elastic } from 'gsap/EasePack';
+import { Back } from 'gsap/EasePack';
 
 import {
   checkIsMobileClient,
@@ -115,28 +114,28 @@ export default {
   mixins: [mixin],
   data() {
     return {
-      shouldShowBackside: false,
       isUserFetched: false,
     };
   },
   computed: {
-    version() {
-      return 3;
+    isShowVariantVersion() {
+      if (!this.$exp) return false;
+      const { name, $activeVariants } = this.$exp;
+      return (
+        name === 'like-button-flip-x'
+        && $activeVariants.find(variant => variant.name === 'flipped')
+      );
     },
     isMobile() {
       return checkIsMobileClient();
-    },
-    isFlipped() {
-      return this.shouldShowBackside;
     },
     rootClass() {
       return [
         'likecoin-embed',
         'likecoin-embed--button',
-        'likecoin-embed--button-v3',
         `likecoin-embed--logged-${this.isLoggedIn ? 'in' : 'out'}`,
         {
-          'likecoin-embed--flipped': this.isFlipped,
+          'likecoin-embed--variant': this.isShowVariantVersion,
           'likecoin-embed--with-halo': this.avatarHalo !== 'none',
         },
       ];
@@ -165,7 +164,7 @@ export default {
       }
       return this.$t('Embed.back.civicLiker.button');
     },
-    v2State() {
+    state() {
       if (!this.isLoggedIn) {
         return 'muggle';
       }
@@ -198,37 +197,45 @@ export default {
       }
       return 'civicLikerPaid5';
     },
-    v2CTABadgeI18nPath() {
-      return `EmbedV2.badge.${this.v2State}`;
+    ctaBadgeI18nPath() {
+      return `EmbedV2.badge.${this.state}`;
     },
-
+    ctaBadgeStyle() {
+      if (this.isLoggedIn) return undefined;
+      return {
+        backgroundImage: 'linear-gradient(70deg, #e6e6e6 60%, #d2f0f0, #f0e6b4)',
+      };
+    },
     badgeClipPath() {
+      if (this.isShowVariantVersion) {
+        return 'M8,80c-4.4,0-8-3.6-8-8L0,8c0-4.4,3.6-8,8-8l272,0c4.4,0,8,3.6,8,8v64c0,4.4-3.6,8-8,8h-1c-0.9,9.1-10.4,23.1-35,22c-1.2,0-1.5-1.7,0-2c8.7-1.8,13.4-12.2,11.6-20H8z';
+      }
       return 'M32.4,80c-1.8,7.8,2.9,18.2,11.6,20c1.5,0.3,1.2,2,0,2C19.4,103.1,9.9,89.1,9,80H8c-4.4,0-8-3.6-8-8V8c0-4.4,3.6-8,8-8h272c4.4,0,8,3.6,8,8v64c0,4.4-3.6,8-8,8H32.4z';
+    },
+    badgeAnimatedProps() {
+      return {
+        opacity: 0,
+        scale: 0,
+        x: this.isShowVariantVersion ? '-10%' : '10%',
+        rotation: this.isShowVariantVersion ? 10 : -10,
+        transformOrigin: `${this.isShowVariantVersion ? '95%' : '5%'} bottom`,
+      };
     },
   },
   methods: {
     onCtaBadgeEnter(el, onComplete) {
       const tl = new TimelineMax({ onComplete });
-      tl.from(el, 1, {
-        x: '10%',
-        scale: 0,
-        rotation: -10,
-        opacity: 0,
-        transformOrigin: '5% bottom',
-        ease: Elastic.easeOut,
+      tl.from(el, 0.5, {
+        ...this.badgeAnimatedProps,
+        ease: Back.easeOut,
         clearProps: 'all',
       });
     },
     onCtaBadgeLeave(el, onComplete) {
       const tl = new TimelineMax({ onComplete });
-      tl.to(el, 1, {
-        x: '10%',
-        scale: 0,
-        rotation: -10,
-        opacity: 0,
-        transformOrigin: '5% bottom',
-        ease: Elastic.easeIn,
-        clearProps: 'all',
+      tl.to(el, 0.25, {
+        ...this.badgeAnimatedProps,
+        ease: Back.easeIn,
       });
     },
     onCheckCookieSupport(isSupport) {
@@ -268,10 +275,6 @@ export default {
         this.like();
         logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike(embed)', 1);
       }
-
-      if (this.isMaxLike) {
-        this.shouldShowBackside = true;
-      }
     },
     async onClickLike() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLikeButton', 'clickLikeButton(embed)', 1);
@@ -285,9 +288,6 @@ export default {
     onClickLikeStats() {
       this.openLikeStats();
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLikeStats', 'clickLikeStats(embed)', 1);
-    },
-    onClickCloseButton() {
-      this.shouldShowBackside = false;
     },
     onClickFrontDisplayName() {
       logTrackerEvent(
@@ -320,113 +320,25 @@ export default {
 <style lang="scss">
 @import "~assets/css/embed";
 
-#embed-cta-button {
-  @keyframes super-like-button-shake {
-    0%, 86% { transform: rotateZ(0deg); }
-    88% { transform: rotateZ(2deg); }
-    90% { transform: rotateZ(-2deg); }
-    92% { transform: rotateZ(3deg); }
-    94% { transform: rotateZ(-3deg); }
-    98% { transform: rotateZ(1deg); }
-    100% { transform: rotateZ(0deg); }
-  }
-  animation-name: super-like-button-shake;
-  animation-duration: 3s;
-  animation-timing-function: ease-out;
-  animation-delay: -2s;
-  animation-iteration-count: infinite;
-  animation-fill-mode: forwards;
-}
-
-.likecoin-embed {
+.likecoin-embed--button.likecoin-embed {
   perspective: 800px;
 
-  &--with-halo {
-    margin-top: normalized(24) !important;
-  }
-
-  &__badge {
-    backface-visibility: hidden;
-    transform-style: preserve-3d;
-
-    .likecoin-embed--logged-out & {
-      background: linear-gradient(70deg, #e6e6e6 60%, #d2f0f0, #f0e6b4);
-    }
-
-    &--front {
-      .likecoin-embed--logged-out & {
-        margin-right: normalized($button-width / 2 + $button-shadow-width);
-      }
-    }
-
-    &--back {
-      margin-right: normalized($button-width / 2 + $button-shadow-width);
-
-      .text-content {
-        padding-left: normalized(24);
-      }
-    }
-  }
-
-  &__badge--front,
-  footer {
-    margin-right: normalized($button-border-width + $button-shadow-width);
-  }
-
-  .text-content {
-    &__title {
-      &#{&}--amount {
-        color: $like-green;
-
-        .amount-in-usd {
-          margin-left: normalized(6);
-
-          color: $like-gray-5;
-
-          font-size: normalized(10);
-          line-height: normalized(10.5);
-        }
-      }
-
-      &#{&}--civic-liker {
-        font-size: normalized(24);
-        line-height: normalized(24.5);
-      }
-    }
-  }
-
-  .like-button {
-    position: absolute;
-
-    margin-top: normalized(-18);
-    margin-left: normalized(44);
-  }
-
-  .social-media-connect {
-    transition: opacity 0.3s ease;
-
-    .likecoin-embed--flipped & {
-      pointer-events: none;
-
-      opacity: 0;
-    }
-  }
-}
-
-.likecoin-embed--button-v2.likecoin-embed,
-.likecoin-embed--button-v3.likecoin-embed {
   margin-top: normalized(30) !important;
 
-  .likecoin-embed {
-    &__layout {
+  .likecoin-embed__ {
+    &layout {
       display: flex;
     }
 
-    &__layout-left {
+    &layout-left {
       width: normalized(288);
     }
 
-    &__cta-badge {
+    &cta-badge-wrapper {
+      margin-bottom: normalized(-32);
+    }
+
+    &cta-badge {
       height: 100%;
       min-height: normalized(100);
 
@@ -435,30 +347,44 @@ export default {
 
       font-size: normalized(22);
 
+      -webkit-clip-path: url(#badge-clip);
+      clip-path: url(#badge-clip);
+
       > div {
         padding: normalized(16) normalized(20);
+        padding-bottom: normalized(48);
       }
     }
 
-    &__like-button-wrapper {
+    &like-button-wrapper {
       display: flex;
       align-items: center;
       flex-shrink: 0;
     }
 
-    &__avatar {
+    &avatar {
       margin-top: normalized(6);
-      margin-right: normalized(4);
+      margin-right: 0;
       margin-bottom: normalized(6);
 
       font-size: 0;
 
-      .lc-avatar__content {
-        width: normalized(48) !important;
+      .lc-avatar {
+        margin-right: 0;
+        margin-left: normalized(4);
+
+        &--with-halo {
+          margin-right: normalized(6);
+          margin-left: normalized(8);
+        }
+
+        &__content {
+          width: normalized(68) !important;
+        }
       }
     }
 
-    &__like-count {
+    &like-count {
       margin-left: normalized(24);
       padding: normalized(4);
 
@@ -485,6 +411,28 @@ export default {
     }
   }
 
+  .text-content {
+    &__title {
+      &#{&}--amount {
+        color: $like-green;
+
+        .amount-in-usd {
+          margin-left: normalized(6);
+
+          color: $like-gray-5;
+
+          font-size: normalized(10);
+          line-height: normalized(10.5);
+        }
+      }
+
+      &#{&}--civic-liker {
+        font-size: normalized(24);
+        line-height: normalized(24.5);
+      }
+    }
+  }
+
   .like-button {
     position: relative;
 
@@ -495,68 +443,17 @@ export default {
   .social-media-connect {
     margin-right: 0;
 
-    > div {
-      margin-left: 0;
-    }
+    transition: opacity 0.3s ease;
 
-    ul {
-      align-items: center;
-    }
-  }
-
-  &.likecoin-embed--logged-out {
-    .likecoin-embed {
-      &__cta-badge {
-        background: linear-gradient(70deg, #e6e6e6 60%, #d2f0f0, #f0e6b4);
-      }
-    }
-  }
-}
-
-.likecoin-embed--button-v3.likecoin-embed {
-  .likecoin-embed {
-    &__cta-badge-wrapper {
-      margin-bottom: normalized(-32);
-    }
-
-    &__cta-badge {
-      -webkit-clip-path: url(#badge-clip);
-      clip-path: url(#badge-clip);
-
-      > div {
-        padding-bottom: normalized(48);
-      }
-    }
-
-    &__avatar {
-      margin-right: 0;
-
-      font-size: 0;
-
-      .lc-avatar {
-        margin-right: 0;
-        margin-left: normalized(4);
-
-        &--with-halo {
-          margin-right: normalized(6);
-          margin-left: normalized(8);
-        }
-
-        &__content {
-          width: normalized(68) !important;
-        }
-      }
-    }
-  }
-
-  .social-media-connect {
     > div {
       justify-content: flex-start !important;
 
       margin-right: normalized(-24);
+      margin-left: 0;
       padding-left: normalized(52);
 
       ul {
+        align-items: center;
         justify-content: flex-start !important;
 
         li {
@@ -572,7 +469,45 @@ export default {
         }
       }
     }
+  }
 
+  &.likecoin-embed--variant {
+    .likecoin-embed__ {
+      &layout {
+        flex-direction: row-reverse;
+      }
+
+      &like-count-wrapper {
+        flex-grow: 1;
+      }
+
+      &like-count {
+        min-width: normalized(80);
+        margin-left: normalized(24);
+      }
+    }
+
+    .social-media-connect {
+      > div {
+        justify-content: flex-end !important;
+
+        margin-left: 0;
+        padding-right: normalized(76);
+        padding-left: 0;
+
+        ul {
+          flex-direction: row-reverse;
+          justify-content: flex-start !important;
+
+          li {
+            &:not(:first-child) {
+              margin-right: normalized(8);
+              margin-left: 0;
+            }
+          }
+        }
+      }
+    }
   }
 }
 </style>
