@@ -92,7 +92,7 @@
 
 <script>
 import { TimelineMax } from 'gsap/all';
-import { Elastic } from 'gsap/EasePack';
+import { Back } from 'gsap/EasePack';
 
 import {
   checkIsMobileClient,
@@ -202,25 +202,25 @@ export default {
   methods: {
     onCtaBadgeEnter(el, onComplete) {
       const tl = new TimelineMax({ onComplete });
-      tl.from(el, 1, {
+      tl.from(el, 0.5, {
         x: '10%',
         scale: 0,
         rotation: -10,
         opacity: 0,
         transformOrigin: '5% bottom',
-        ease: Elastic.easeOut,
+        ease: Back.easeOut,
         clearProps: 'all',
       });
     },
     onCtaBadgeLeave(el, onComplete) {
       const tl = new TimelineMax({ onComplete });
-      tl.to(el, 1, {
+      tl.to(el, 0.25, {
         x: '10%',
         scale: 0,
         rotation: -10,
         opacity: 0,
         transformOrigin: '5% bottom',
-        ease: Elastic.easeIn,
+        ease: Back.easeIn,
         clearProps: 'all',
       });
     },
