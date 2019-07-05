@@ -170,7 +170,7 @@ export default {
         this.hasStorageAPIAccess = await checkHasStorageAPIAccess();
         res = process.client
           && navigator.cookieEnabled
-          && (document.cookie && /likecoin_cookie=true/.test(document.cookie))
+          && (document.cookie && /likebutton_cookie=1/.test(document.cookie))
           && this.hasStorageAPIAccess;
       } catch (err) {
         console.error(err);
@@ -190,6 +190,7 @@ export default {
           count,
           isSubscribed,
           isTrialSubscriber,
+          serverCookieSupported,
         } = myData;
         const { total } = totalData;
         this.isLoggedIn = !!liker;
@@ -198,6 +199,9 @@ export default {
         this.totalLike = total;
         this.likeCount = count;
         this.likeSent = count;
+        if (this.hasCookieSupport && serverCookieSupported !== undefined) {
+          this.hasCookieSupport = serverCookieSupported;
+        }
         if (liker) {
           if (this.$sentry) {
             this.$sentry.configureScope((scope) => {

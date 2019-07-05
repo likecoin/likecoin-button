@@ -3,10 +3,11 @@
    accept __session for cookie  */
 import * as cookie from 'tiny-cookie';
 
-export default async ({ res }) => {
+export default async ({ req, res }) => {
   try {
     if (process.server) {
-      if (res.clearCookie) {
+      // eslint-disable-next-line no-underscore-dangle
+      if (res.clearCookie && ((req.cookies || {}).__session)) {
         /* clear legacy cookie affecting a/b testing */
         res.clearCookie('__session',
           {

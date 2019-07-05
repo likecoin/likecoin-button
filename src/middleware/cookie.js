@@ -1,10 +1,16 @@
+import { TEST_MODE } from '@/constant';
+
 export default function ({ req, res }) {
   if (process.server) {
-    if (!req.cookies || !req.cookies.likecoin_cookie) {
+    if (!req.cookies || !req.cookies.likebutton_cookie) {
       if (res.cookie) {
-        res.cookie('likecoin_cookie', 'true', { path: '/', secure: true });
+        res.cookie('likebutton_cookie', '1', {
+          domain: TEST_MODE ? undefined : '.like.co',
+          path: '/',
+          secure: !TEST_MODE,
+        });
       } else {
-        res.setHeader('Set-Cookie', 'likecoin_cookie=true; Path=/; secure');
+        res.setHeader('Set-Cookie', `likebutton_cookie=1; ${TEST_MODE ? '' : 'Domain=.like.co '}Path=/;${TEST_MODE ? '' : ' Secure'}`);
       }
     }
   }
