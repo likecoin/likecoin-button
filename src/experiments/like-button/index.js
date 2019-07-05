@@ -6,7 +6,7 @@ export default {
     if (process.client && (window.doNotTrack
       || navigator.doNotTrack
       || !navigator.cookieEnabled
-      || !(document.cookie && /likecoin_cookie=true/.test(document.cookie)))
+      || !(document.cookie && /likebutton_cookie=1/.test(document.cookie)))
     ) {
       return false;
     }
