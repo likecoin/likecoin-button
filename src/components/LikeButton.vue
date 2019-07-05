@@ -146,10 +146,6 @@ export default {
       type: [Boolean, String],
       default: false,
     },
-    isShowMax: {
-      type: [Boolean, String],
-      default: false,
-    },
   },
   data() {
     return {
