@@ -43,6 +43,7 @@
         )
           .likecoin-embed__cta-badge(
             :key="state"
+            :style="ctaBadgeStyle"
           )
             i18n(
               :path="ctaBadgeI18nPath"
@@ -194,7 +195,12 @@ export default {
     ctaBadgeI18nPath() {
       return `EmbedV2.badge.${this.state}`;
     },
-
+    ctaBadgeStyle() {
+      if (this.isLoggedIn) return undefined;
+      return {
+        backgroundImage: 'linear-gradient(70deg, #e6e6e6 60%, #d2f0f0, #f0e6b4)',
+      };
+    },
     badgeClipPath() {
       return 'M32.4,80c-1.8,7.8,2.9,18.2,11.6,20c1.5,0.3,1.2,2,0,2C19.4,103.1,9.9,89.1,9,80H8c-4.4,0-8-3.6-8-8V8c0-4.4,3.6-8,8-8h272c4.4,0,8,3.6,8,8v64c0,4.4-3.6,8-8,8H32.4z';
     },
@@ -453,14 +459,6 @@ export default {
             }
           }
         }
-      }
-    }
-  }
-
-  &.likecoin-embed--logged-out {
-    .likecoin-embed__ {
-      &cta-badge {
-        background: linear-gradient(70deg, #e6e6e6 60%, #d2f0f0, #f0e6b4);
       }
     }
   }
