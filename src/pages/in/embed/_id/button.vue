@@ -118,14 +118,6 @@ export default {
     };
   },
   computed: {
-    isShowVariantVersion() {
-      if (!this.$exp) return false;
-      const { name, $activeVariants } = this.$exp;
-      return (
-        name === 'like-button-flip-x'
-        && $activeVariants.find(variant => variant.name === 'flipped')
-      );
-    },
     isMobile() {
       return checkIsMobileClient();
     },
@@ -135,7 +127,6 @@ export default {
         'likecoin-embed--button',
         `likecoin-embed--logged-${this.isLoggedIn ? 'in' : 'out'}`,
         {
-          'likecoin-embed--variant': this.isShowVariantVersion,
           'likecoin-embed--with-halo': this.avatarHalo !== 'none',
         },
       ];
@@ -207,18 +198,15 @@ export default {
       };
     },
     badgeClipPath() {
-      if (this.isShowVariantVersion) {
-        return 'M8,80c-4.4,0-8-3.6-8-8L0,8c0-4.4,3.6-8,8-8l272,0c4.4,0,8,3.6,8,8v64c0,4.4-3.6,8-8,8h-1c-0.9,9.1-10.4,23.1-35,22c-1.2,0-1.5-1.7,0-2c8.7-1.8,13.4-12.2,11.6-20H8z';
-      }
       return 'M32.4,80c-1.8,7.8,2.9,18.2,11.6,20c1.5,0.3,1.2,2,0,2C19.4,103.1,9.9,89.1,9,80H8c-4.4,0-8-3.6-8-8V8c0-4.4,3.6-8,8-8h272c4.4,0,8,3.6,8,8v64c0,4.4-3.6,8-8,8H32.4z';
     },
     badgeAnimatedProps() {
       return {
         opacity: 0,
         scale: 0,
-        x: this.isShowVariantVersion ? '-10%' : '10%',
-        rotation: this.isShowVariantVersion ? 10 : -10,
-        transformOrigin: `${this.isShowVariantVersion ? '95%' : '5%'} bottom`,
+        x: '10%',
+        rotation: -10,
+        transformOrigin: '5% bottom',
       };
     },
   },
@@ -464,45 +452,6 @@ export default {
 
             &:nth-child(n + 6) {
               display: none;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  &.likecoin-embed--variant {
-    .likecoin-embed__ {
-      &layout {
-        flex-direction: row-reverse;
-      }
-
-      &like-count-wrapper {
-        flex-grow: 1;
-      }
-
-      &like-count {
-        min-width: normalized(80);
-        margin-left: normalized(24);
-      }
-    }
-
-    .social-media-connect {
-      > div {
-        justify-content: flex-end !important;
-
-        margin-left: 0;
-        padding-right: normalized(76);
-        padding-left: 0;
-
-        ul {
-          flex-direction: row-reverse;
-          justify-content: flex-start !important;
-
-          li {
-            &:not(:first-child) {
-              margin-right: normalized(8);
-              margin-left: 0;
             }
           }
         }
