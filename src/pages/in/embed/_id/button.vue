@@ -20,9 +20,15 @@
     )
       block
 
-  div(:class="rootClass")
-    .like-rewards-button
-
+  TransitionGroup(
+    :class="rootClass"
+    name="likecoin-embed-"
+    tag="div"
+  )
+    .like-rewards-button.like-rewards-button--base(
+      v-if="!isShowAltMode"
+      key="base"
+    )
       svg(style="line-height:0;position:absolute;z-index:-1")
         clipPath(
           id="badge-clip"
@@ -89,6 +95,24 @@
             | {{ $tc('EmbedV2.likeCountLabel', totalLike, { n: totalLike }) }}
       //- END - Version 2
 
+    .like-rewards-button.like-rewards-button--sticky-bottom(
+      v-else-if="isBottomSticky"
+      key="sticky-bottom"
+    )
+      .like-rewards-button__top-border
+      .like-rewards-button__content-bar
+        +LikeButton("true")
+
+        .like-rewards-button__creator-info
+          span.like-rewards-button__creator-name
+            | {{ displayName }}
+          LcAvatar(
+            :src="avatar"
+            :halo="avatarHalo"
+            size="normal"
+            @click="onClickAvatar"
+            @click-halo="onClickAvatarHalo"
+          )
 </template>
 
 <script>
@@ -116,11 +140,18 @@ export default {
   data() {
     return {
       isUserFetched: false,
+      isShowAltMode: !!this.$route.query.mode,
     };
   },
   computed: {
     isMobile() {
       return checkIsMobileClient();
+    },
+    mode() {
+      return this.$route.query.mode;
+    },
+    isBottomSticky() {
+      return this.mode === 'sticky-bottom';
     },
     rootClass() {
       return [
@@ -210,6 +241,15 @@ export default {
         transformOrigin: '5% bottom',
       };
     },
+  },
+  mounted() {
+    if (this.mode) {
+      this.isShowAltMode = true;
+      window.addEventListener('message', this.onReceiveMessage, false);
+    }
+  },
+  beforeDestory() {
+    window.removeEventListener('message', this.onReceiveMessage, false);
   },
   methods: {
     onCtaBadgeEnter(el, onComplete) {
@@ -302,6 +342,30 @@ export default {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickAvatarHalo', 'clickAvatarHalo(embed)', 1);
       this.convertLikerToCivicLiker();
     },
+    onReceiveMessage(event) {
+      // TODO: Check event.origin
+
+      let actions;
+      try {
+        ({ actions } = JSON.parse(event.data));
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error);
+        return;
+      }
+
+      actions.forEach((action) => {
+        switch (action) {
+          case 'showAltMode':
+            this.isShowAltMode = true;
+            break;
+          case 'hideAltMode':
+            this.isShowAltMode = false;
+            break;
+          default:
+        }
+      });
+    },
   },
 };
 </script>
@@ -309,10 +373,33 @@ export default {
 <style lang="scss">
 @import "~assets/css/embed";
 
-.likecoin-embed .like-rewards-button {
-  perspective: 800px;
+.likecoin-embed {
+  &-- {
+    &enter,
+    &leave-to {
+      opacity: 0;
+    }
 
-  margin-top: normalized(30) !important;
+    &enter-active,
+    &leave-active {
+      transition-duration: 250ms;
+      transition-property: opacity, transform !important;
+    }
+    &enter-active {
+      transition-timing-function: ease-out;
+    }
+    &leave-active {
+      transition-timing-function: ease-in;
+    }
+  }
+}
+
+.likecoin-embed .like-rewards-button {
+  &--base {
+    perspective: 800px;
+
+    margin-top: normalized(30) !important;
+  }
 
   .likecoin-embed__ {
     &layout {
@@ -456,6 +543,62 @@ export default {
             }
           }
         }
+      }
+    }
+  }
+
+  &--sticky-bottom {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+
+    margin-top: normalized(28);
+
+    .like-rewards-button__ {
+      &top-border {
+        height: normalized(3.33);
+
+        background-image: linear-gradient(to right, #d2f0f0, #f0e6b4);
+      }
+
+      &content-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 0 normalized(12);
+
+        background: white;
+      }
+
+      &creator-info {
+        display: flex;
+        align-items: center;
+
+        text-align: right;
+
+        color: $like-gray-5;
+
+        font-size: normalized(20);
+        font-weight: 600;
+      }
+
+      &creator-name {
+        margin-right: normalized(14);
+      }
+    }
+
+    .like-button-wrapper {
+      margin-top: normalized(10);
+      margin-bottom: normalized(10);
+      margin-left: 0;
+    }
+
+    .lc-avatar {
+      &__content {
+        width: normalized(66.66) !important;
       }
     }
   }
