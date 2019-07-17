@@ -383,12 +383,12 @@ export default {
 
     &enter-active,
     &leave-active {
-      transition-duration: 250ms;
+      transition-duration: 100ms;
       transition-property: opacity, transform !important;
     }
     &enter-active {
       transition-timing-function: ease-out;
-    }
+  }
     &leave-active {
       transition-timing-function: ease-in;
     }
