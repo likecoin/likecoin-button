@@ -364,6 +364,7 @@ export default {
             break;
           default:
         }
+        event.source.postMessage(JSON.stringify({ ack: action }), event.origin);
       });
     },
   },
