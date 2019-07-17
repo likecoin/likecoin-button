@@ -350,7 +350,7 @@ export default {
         ({ actions } = JSON.parse(event.data));
       } catch (error) {
         // eslint-disable-next-line no-console
-        console.log(error);
+        console.error(error);
         return;
       }
 
