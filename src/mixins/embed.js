@@ -143,7 +143,7 @@ export default {
     },
 
     signInURL() {
-      return `https://${LIKE_CO_HOSTNAME}/in/register${this.referrerQueryString}&is_popup=1`;
+      return `https://${LIKE_CO_HOSTNAME}/in/register${this.referrerQueryString}&is_popup=1&login=0`;
     },
     superLikeURL() {
       const amountPath = `${this.amount ? `/${this.amount}` : ''}`;
