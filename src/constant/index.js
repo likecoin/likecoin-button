@@ -19,7 +19,7 @@ export const LIKECOIN_MISC_API_BASE = `https://${LIKE_CO_HOSTNAME}`;
 export const W3C_EMAIL_REGEX = '^[a-zA-Z0-9.!#$%&\'*/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$';
 
 /* TEMP: reformat medium referrer into medium post */
-export const MEDIUM_REGEX = /^(?:https?:\/\/)?[^/]*\/media\/[a-zA-Z0-9_]+(?:\?postId=([a-zA-Z0-9_]+))?/;
+export const MEDIUM_MEDIA_REGEX = /^(?:https?:\/\/)?[^/]*\/media\/[a-zA-Z0-9_]+(?:\?postId=([a-zA-Z0-9_]+))?/;
 
 export const CIVIC_LIKER_START_DATE = 1546300800000; // 2019-01-01T08:00:00+0800
 export const CIVIC_LIKER_TRIAL_END_DATE = 1548950399000; // 2019-01-31T23:59:59+0800
@@ -33,4 +33,9 @@ export const QUERY_STRING_TO_REMOVE = [
   'utm_campaign',
   'utm_term',
   'utm_content',
+];
+
+export const MEDIUM_QUERY_STRING_TO_REMOVE = [
+  'source',
+  'postPublishedType',
 ];

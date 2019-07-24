@@ -1,7 +1,7 @@
 import {
   LIKE_CO_HOSTNAME,
   LIKER_LAND_URL_BASE,
-  MEDIUM_REGEX,
+  MEDIUM_MEDIA_REGEX,
 } from '@/constant';
 
 import EmbedCreateWidgetButton from '~/components/embed/EmbedCreateWidgetButton';
@@ -66,7 +66,7 @@ export default {
     const { id } = params;
     let { type = '' } = query;
     const { referrer = '' } = query;
-    if (!type && referrer.match(MEDIUM_REGEX)) {
+    if (!type && referrer.match(MEDIUM_MEDIA_REGEX)) {
       type = 'medium';
     }
 

@@ -1,4 +1,7 @@
-import { QUERY_STRING_TO_REMOVE } from '@/constant';
+import {
+  QUERY_STRING_TO_REMOVE,
+  MEDIUM_QUERY_STRING_TO_REMOVE,
+} from '@/constant';
 
 const URL = require('url-parse');
 
@@ -25,6 +28,11 @@ export const checkValidDomainNotIP = (url) => {
 export const handleQueryStringInUrl = (referrer) => {
   try {
     const url = new URL(referrer, true);
+    if (url.hostname === 'medium.com') {
+      MEDIUM_QUERY_STRING_TO_REMOVE.forEach((qs) => {
+        delete url.query[qs];
+      });
+    }
     QUERY_STRING_TO_REMOVE.forEach((qs) => {
       delete url.query[qs];
     });
