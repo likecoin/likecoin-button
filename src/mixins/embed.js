@@ -15,6 +15,7 @@ import {
   apiGetSocialListById,
   apiGetLikeButtonTotalCount,
   apiGetLikeButtonMyStatus,
+  apiGetLikeButtonSelfCount,
 } from '~/util/api/api';
 
 import { checkHasStorageAPIAccess } from '~/util/client';
@@ -181,35 +182,45 @@ export default {
 
     async updateUserSignInStatus() {
       try {
-        const [{ data: myData }, { data: totalData }] = await Promise.all([
-          apiGetLikeButtonMyStatus(this.id, this.referrer, this.hasCookieSupport),
-          apiGetLikeButtonTotalCount(this.id, this.referrer),
+        await Promise.all([
+          apiGetLikeButtonMyStatus(this.id, this.referrer, this.hasCookieSupport)
+            .then(({ data: myData }) => {
+              const {
+                liker,
+                isSubscribed,
+                isTrialSubscriber,
+                serverCookieSupported,
+              } = myData;
+              this.isLoggedIn = !!liker;
+              this.isSubscribed = isSubscribed;
+              this.isTrialSubscriber = isTrialSubscriber;
+              if (this.hasCookieSupport && serverCookieSupported !== undefined) {
+                this.hasCookieSupport = serverCookieSupported;
+              }
+              if (liker) {
+                if (this.$sentry) {
+                  this.$sentry.configureScope((scope) => {
+                    scope.setUser({ id: liker });
+                  });
+                }
+                return setTrackerUserId(liker);
+              }
+              return Promise.resolved;
+            }),
+          apiGetLikeButtonSelfCount(this.id, this.referrer).then(({ data: selfData }) => {
+            const { count, liker } = selfData;
+            if (!this.liker) {
+              this.liker = liker;
+              this.isLoggedIn = !!liker;
+            }
+            this.likeCount = count;
+            this.likeSent = count;
+          }),
+          apiGetLikeButtonTotalCount(this.id, this.referrer).then(({ data: totalData }) => {
+            const { total } = totalData;
+            this.totalLike = total;
+          }),
         ]);
-        const {
-          liker,
-          count,
-          isSubscribed,
-          isTrialSubscriber,
-          serverCookieSupported,
-        } = myData;
-        const { total } = totalData;
-        this.isLoggedIn = !!liker;
-        this.isSubscribed = isSubscribed;
-        this.isTrialSubscriber = isTrialSubscriber;
-        this.totalLike = total;
-        this.likeCount = count;
-        this.likeSent = count;
-        if (this.hasCookieSupport && serverCookieSupported !== undefined) {
-          this.hasCookieSupport = serverCookieSupported;
-        }
-        if (liker) {
-          if (this.$sentry) {
-            this.$sentry.configureScope((scope) => {
-              scope.setUser({ id: liker });
-            });
-          }
-          await setTrackerUserId(liker);
-        }
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
       }
