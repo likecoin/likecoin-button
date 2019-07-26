@@ -3,7 +3,9 @@
    accept __session for cookie  */
 import * as cookie from 'tiny-cookie';
 
-export default async ({ req, res }) => {
+import experiments from '~/experiments';
+
+export default async ({ req, res, query }) => {
   try {
     if (process.server) {
       // eslint-disable-next-line no-underscore-dangle
@@ -19,8 +21,14 @@ export default async ({ req, res }) => {
       }
     } else {
       if (!document.cookie || !cookie.enabled()) return;
-      const expId = cookie.get('__session');
-      if (expId) cookie.set('exp', expId, Date.now());
+      let expCookie = cookie.get('__session');
+      if (query.exp) {
+        const [expId] = query.exp.split('.');
+        if (experiments.some(exp => exp.experimentID === expId)) {
+          expCookie = query.exp;
+        }
+      }
+      if (expCookie) cookie.set('exp', expCookie, Date.now());
     }
   } catch (err) {
     console.error(err); // eslint-disable-line no-console
