@@ -15,6 +15,7 @@ import {
   apiGetSocialListById,
   apiGetLikeButtonTotalCount,
   apiGetLikeButtonMyStatus,
+  apiGetLikeButtonSelfCount,
 } from '~/util/api/api';
 
 import { checkHasStorageAPIAccess } from '~/util/client';
@@ -181,17 +182,18 @@ export default {
 
     async updateUserSignInStatus() {
       try {
-        const [{ data: myData }, { data: totalData }] = await Promise.all([
+        const [{ data: myData }, { data: selfData }, { data: totalData }] = await Promise.all([
           apiGetLikeButtonMyStatus(this.id, this.referrer, this.hasCookieSupport),
+          apiGetLikeButtonSelfCount(this.id, this.referrer),
           apiGetLikeButtonTotalCount(this.id, this.referrer),
         ]);
         const {
           liker,
-          count,
           isSubscribed,
           isTrialSubscriber,
           serverCookieSupported,
         } = myData;
+        const { count } = selfData;
         const { total } = totalData;
         this.isLoggedIn = !!liker;
         this.isSubscribed = isSubscribed;

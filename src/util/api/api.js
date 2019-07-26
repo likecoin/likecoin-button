@@ -8,10 +8,15 @@ export const apiGetSocialListById = (id, type = '') => axios.get(`${LIKECOIN_API
 export const apiGetLikeButtonMyStatus = (id, referrer, isCookieSupport) => {
   const cookieParam = isCookieSupport !== undefined ? `&cookie_support=${isCookieSupport ? 1 : 0}` : '';
   return axios.get(
-    `${LIKECOIN_MISC_API_BASE}/api/like/likebutton/${id}/self?referrer=${encodeURIComponent(referrer)}${cookieParam}`,
+    `${LIKECOIN_MISC_API_BASE}/api/like/likebutton/${id}/self?referrer=${encodeURIComponent(referrer)}${cookieParam}&show_count=0`,
     { withCredentials: true },
   );
 };
+
+export const apiGetLikeButtonSelfCount = (id, referrer) => axios.get(
+  `${LIKECOIN_MISC_API_BASE}/api/like/likebutton/${id}/self/like?referrer=${encodeURIComponent(referrer)}`,
+  { withCredentials: true },
+);
 
 export const apiGetLikeButtonTotalCount = (id, referrer) => axios.get(`${LIKECOIN_MISC_API_BASE}/api/like/likebutton/${id}/total?referrer=${encodeURIComponent(referrer)}`);
 
