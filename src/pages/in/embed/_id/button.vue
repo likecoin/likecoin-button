@@ -20,11 +20,7 @@
     )
       block
 
-  TransitionGroup(
-    :class="rootClass"
-    name="likecoin-embed-"
-    tag="div"
-  )
+  div(:class="rootClass")
     .like-rewards-button.like-rewards-button--base(
       v-if="!isShowAltMode"
       key="base"
@@ -373,27 +369,6 @@ export default {
 
 <style lang="scss">
 @import "~assets/css/embed";
-
-.likecoin-embed {
-  &-- {
-    &enter,
-    &leave-to {
-      opacity: 0;
-    }
-
-    &enter-active,
-    &leave-active {
-      transition-duration: 100ms;
-      transition-property: opacity, transform !important;
-    }
-    &enter-active {
-      transition-timing-function: ease-out;
-  }
-    &leave-active {
-      transition-timing-function: ease-in;
-    }
-  }
-}
 
 .likecoin-embed .like-rewards-button {
   &--base {
