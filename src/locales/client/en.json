@@ -68,7 +68,7 @@
   },
   "EmbedV2": {
     "badge": {
-      "muggle": "{becomeLiker}, Reward creators for free",
+      "muggle": "{becomeLiker}, Reward creators",
       "liker0": "Help distribute Creators Fund with your Like",
       "liker1": "@:EmbedV2.badge.civicLikerPaid1",
       "liker5": "{becomeCivicLiker} to further support me and enjoy the benefits",
@@ -79,7 +79,7 @@
       "civicLikerPaid1": "You may Like a content for at most 5 times",
       "civicLikerPaid5": "Liked 5 times. Thank you for your support"
     },
-    "becomeLiker": "Sign up as Liker",
+    "becomeLiker": "Sign up for free",
     "becomeCivicLiker": "Sign up as Civic Liker",
     "becomePaidCivicLiker": "Sign up as Civic Liker",
     "likeCountLabel": "{n} Like | {n} Likes"
