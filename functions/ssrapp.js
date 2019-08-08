@@ -5,7 +5,7 @@ const helmet = require('helmet');
 const { Nuxt } = require('nuxt-start');
 
 function setNoCacheHeader(req, res, next) {
-  res.setHeader('Cache-Control', 'public, max-age=600, must-revalidate');
+  res.setHeader('Cache-Control', 'public, max-age=600, stale-while-revalidate=600, stale-if-error=3600');
   res.setHeader('Vary', 'Cookie, Accept-Language');
   next();
 }
