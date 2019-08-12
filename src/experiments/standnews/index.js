@@ -1,4 +1,4 @@
-const experimentID = 'TAx6gxg9T9-WtTiZimvzDA';
+const experimentID = 'w8WnGvmrQeuegiMBCPO1pw';
 
 export default {
   name: 'standnews',
