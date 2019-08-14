@@ -341,7 +341,7 @@ export default {
     onReceiveMessage(event) {
       // TODO: Check event.origin
 
-      let actions;
+      let actions = [];
       try {
         ({ actions } = JSON.parse(event.data));
       } catch (error) {
