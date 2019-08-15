@@ -131,8 +131,6 @@ html[likecoin-embed] {
   }
 
   .social-media-connect {
-    margin-top: normalized(8);
-
     > div {
       justify-content: flex-end;
 
@@ -141,8 +139,6 @@ html[likecoin-embed] {
 
       ul {
         justify-content: flex-end;
-
-        margin: normalized(-4) normalized(-6);
 
         li {
           padding: normalized(4) normalized(6);
