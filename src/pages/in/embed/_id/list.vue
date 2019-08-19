@@ -93,7 +93,6 @@ import { checkValidDomainNotIP, handleQueryStringInUrl } from '@/util/url';
 
 export default {
   name: 'embed-id-list',
-  layout: 'narrowWithHeader',
   components: {
     LikeForm,
     UserAvatar,
