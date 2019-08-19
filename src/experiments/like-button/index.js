@@ -1,6 +1,6 @@
 export default {
-  name: 'like-button-flip-x',
-  experimentID: 'cwbwITx0Qse5gWILr7oYDA',
+  name: 'like-button',
+  experimentID: 'iSBsmjJOTiKGB0jhdcyMsg',
   isEligible: ({ req, route }) => {
     if (process.server && req.headers && req.headers.dnt === '1') return false;
     if (process.client && (window.doNotTrack
@@ -14,6 +14,6 @@ export default {
   },
   variants: [
     { name: 'original', weight: 9 },
-    { name: 'flipped', weight: 1 },
+    { name: 'alternative', weight: 1 },
   ],
 };
