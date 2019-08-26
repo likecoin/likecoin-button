@@ -1,8 +1,8 @@
-import en from './client/en.json';
+import zh from './client/zh.json';
 
-export const defaultLocale = 'en';
+export const defaultLocale = 'zh';
 export const preloadMessages = {
-  en,
+  zh,
 };
 
 export const supportedLocales = [
