@@ -82,15 +82,7 @@
           +LikeButton("false")
 
       .likecoin-embed__layout.likecoin-embed__layout--bottom
-        .likecoin-embed__layout-left.likecoin-embed__layout-left--alternate(
-          v-if="isShowAlternateVersion"
-        )
-          .likecoin-embed__avatar
-            +Avatar
-          .likecoin-embed__creator-info
-            a.likecoin-embed__display-name(@click="onClickDisplayName") {{ displayName }}
-            +SocialMediaConnect
-        .likecoin-embed__layout-left(v-else)
+        .likecoin-embed__layout-left
           +SocialMediaConnect
             template(#before)
               li.likecoin-embed__avatar
@@ -152,14 +144,6 @@ export default {
     };
   },
   computed: {
-    isShowAlternateVersion() {
-      if (!this.$exp) return false;
-      const { name, $activeVariants } = this.$exp;
-      return (
-        name === 'like-button'
-        && $activeVariants.find(variant => variant.name === 'alternative')
-      );
-    },
     isMobile() {
       return checkIsMobileClient();
     },
@@ -418,34 +402,6 @@ export default {
 
       &--bottom {
         padding-left: normalized(52);
-      }
-
-      &--alternate {
-        display: flex;
-        align-items: center;
-
-        margin: normalized(6) normalized(-8) !important;
-
-        .likecoin-embed__ {
-          &creator-info {
-            margin-left: normalized(8);
-
-            font-size: normalized(16);
-            font-weight: 600;
-
-            .social-media-connect {
-              ul {
-                margin: normalized(8) 0 0;
-              }
-            }
-          }
-
-          &display-name {
-            overflow: hidden;
-
-            max-width: normalized(140);
-          }
-        }
       }
     }
 
