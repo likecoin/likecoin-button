@@ -30,23 +30,16 @@ export default async ({
   req,
 }) => {
   // Set i18n instance on app to use it in middleware and pages asyncData/fetch
-  /* eslint-disable no-param-reassign */
   let locale = defaultLocale;
   if (!process.server) {
-    let navLang = (
-      navigator.language
-      || (navigator.languages && navigator.languages[0])
-      || defaultLocale
-    );
-    // TODO: iterate through navigator.languages to find locale
-    navLang = navLang.toLowerCase();
-    supportedLocales.forEach((key) => {
-      if (navLang.includes(key)) {
-        navLang = key;
+    const navLangs = [navigator.language, ...navigator.languages];
+    navLangs.some(navLang => supportedLocales.some((supportedLocale) => {
+      if (new RegExp(supportedLocale).test(navLang)) {
+        locale = supportedLocale;
+        return true;
       }
-    });
-    locale = navLang;
-    if (!supportedLocales.includes(locale)) locale = defaultLocale;
+      return false;
+    }));
   } else if (req) {
     locale = (
       (req.acceptsLanguages && req.acceptsLanguages(supportedLocales))

@@ -6,9 +6,9 @@ export const preloadMessages = {
 };
 
 export const supportedLocales = [
-  'en',
   'zh',
   'cn',
+  'en',
   'ja',
   // 'ko',
   // 'de',
