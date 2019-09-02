@@ -33,13 +33,13 @@ export default async ({
   let locale = defaultLocale;
   if (!process.server) {
     const navLangs = [navigator.language, ...navigator.languages];
-    navLangs.some(navLang => supportedLocales.some((supportedLocale) => {
-      if (new RegExp(supportedLocale).test(navLang)) {
-        locale = supportedLocale;
-        return true;
+    navLangs.find((navLang) => {
+      const match = supportedLocales.find(supportedLocale => navLang.includes(supportedLocale));
+      if (match) {
+        locale = match;
       }
-      return false;
-    }));
+      return !!match;
+    });
   } else if (req) {
     locale = (
       (req.acceptsLanguages && req.acceptsLanguages(supportedLocales))
