@@ -346,6 +346,20 @@ export default {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickDisplayName', 'clickDisplayName(embed)', 1);
       this.superLike();
     },
+    handleMessageAction(event, action) {
+      switch (action) {
+        case 'showAltMode':
+          this.isShowAltMode = true;
+          break;
+        case 'hideAltMode':
+          this.isShowAltMode = false;
+          break;
+        default:
+      }
+      if (event && event.source) {
+        event.source.postMessage(JSON.stringify({ ack: action }), event.origin);
+      }
+    },
     onReceiveMessage(event) {
       // TODO: Check event.origin
 
@@ -358,18 +372,13 @@ export default {
         return;
       }
 
-      actions.forEach((action) => {
-        switch (action) {
-          case 'showAltMode':
-            this.isShowAltMode = true;
-            break;
-          case 'hideAltMode':
-            this.isShowAltMode = false;
-            break;
-          default:
-        }
-        event.source.postMessage(JSON.stringify({ ack: action }), event.origin);
-      });
+      if (Array.isArray(actions)) {
+        actions.forEach((action) => {
+          this.handleMessageAction(event, action);
+        });
+      } else {
+        this.handleMessageAction(event, actions);
+      }
     },
   },
 };
