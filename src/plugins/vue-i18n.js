@@ -36,7 +36,7 @@ export default async ({
     supportedLocales.find((supportedLocale) => {
       const match = navLangs.find(navLang => navLang.toLowerCase().includes(supportedLocale));
       if (match) {
-        locale = match;
+        locale = supportedLocale;
       }
       return !!match;
     });
