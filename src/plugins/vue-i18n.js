@@ -33,8 +33,8 @@ export default async ({
   let locale = defaultLocale;
   if (!process.server) {
     const navLangs = [navigator.language, ...navigator.languages];
-    navLangs.find((navLang) => {
-      const match = supportedLocales.find(supportedLocale => navLang.toLowerCase().includes(supportedLocale));
+    supportedLocales.find((supportedLocale) => {
+      const match = navLangs.find(navLang => navLang.toLowerCase().includes(supportedLocale));
       if (match) {
         locale = match;
       }
