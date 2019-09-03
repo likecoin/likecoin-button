@@ -96,7 +96,7 @@
       //- END - Version 2
 
     .like-rewards-button.like-rewards-button--sticky-bottom(
-      v-else-if="isBottomSticky"
+      v-else-if="isStickyBottomMode"
       key="sticky-bottom"
     )
       .like-rewards-button__top-border
@@ -140,18 +140,18 @@ export default {
   data() {
     return {
       isUserFetched: false,
-      isShowAltMode: !!this.$route.query.mode,
+      isShowAltMode: false,
     };
   },
   computed: {
     isMobile() {
       return checkIsMobileClient();
     },
-    mode() {
-      return this.$route.query.mode;
+    isStickyBottomMode() {
+      return this.$route.query.mode === 'sticky-bottom';
     },
-    isBottomSticky() {
-      return this.mode === 'sticky-bottom';
+    hasAltMode() {
+      return this.isStickyBottomMode;
     },
     rootClass() {
       return [
@@ -243,7 +243,7 @@ export default {
     },
   },
   mounted() {
-    if (this.mode) {
+    if (this.hasAltMode) {
       this.isShowAltMode = true;
       window.addEventListener('message', this.onReceiveMessage, false);
     }
