@@ -1,6 +1,6 @@
 export default {
   name: 'like-button',
-  experimentID: '',
+  experimentID: '8BhGKEp1TVGtu2uQsUHKmA',
   isEligible: ({ req, route }) => {
     if (process.server && req.headers && req.headers.dnt === '1') return false;
     if (process.client && (window.doNotTrack
