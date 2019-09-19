@@ -144,14 +144,6 @@ export default {
     };
   },
   computed: {
-    isShowAlternateVersion() {
-      if (!this.$exp) return false;
-      const { name, $activeVariants } = this.$exp;
-      return (
-        name === 'like-button'
-        && $activeVariants.find(variant => variant.name === 'alternative')
-      );
-    },
     isMobile() {
       return checkIsMobileClient();
     },
@@ -229,9 +221,6 @@ export default {
       return 'civicLikerPaid5';
     },
     ctaBadgeI18nPath() {
-      if (this.isShowAlternateVersion && this.$te(`EmbedV2.badge.${this.state}-alternative`)) {
-        return `EmbedV2.badge.${this.state}-alternative`;
-      }
       return `EmbedV2.badge.${this.state}`;
     },
     ctaBadgeStyle() {
