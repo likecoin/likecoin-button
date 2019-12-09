@@ -43,7 +43,7 @@
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-import-resolver-webpack": "^0.11.0",
     "eslint-loader": "^2.1.2",
-    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-import": "^2.19.0",
     "eslint-plugin-nuxt": "^0.4.2",
     "eslint-plugin-vue": "^5.2.2",
     "node-sass": "^4.11.0",
