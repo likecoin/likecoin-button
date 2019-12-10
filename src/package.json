@@ -28,7 +28,7 @@
     "core-js": "^2.6.5",
     "gsap": "^2.1.1",
     "lodash.debounce": "^4.0.8",
-    "nuxt": "^2.6.3",
+    "nuxt": "^2.10.0",
     "nuxt-svg-loader": "^1.0.1",
     "on-headers": "^1.0.2",
     "tiny-cookie": "^1.0.1",
