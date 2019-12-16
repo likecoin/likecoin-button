@@ -164,7 +164,7 @@ export default {
         try {
           const { data } = await apiGetUserMinById(r.id);
           Vue.set(r, 'avatar', data.avatar);
-          Vue.set(r, 'displayName', data.displayName);
+          Vue.set(r, 'displayName', data.displayName || r.id);
           Vue.set(r, 'isPreRegCivicLiker', data.isPreRegCivicLiker);
           Vue.set(r, 'isSubscribedCivicLiker', data.isSubscribedCivicLiker);
           Vue.set(r, 'civicLikerSince', data.civicLikerSince);
