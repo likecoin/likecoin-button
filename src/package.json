@@ -8,7 +8,7 @@
     "node": "8.x.x"
   },
   "scripts": {
-    "dev": "IS_TESTNET=TRUE nuxt",
+    "dev": "nuxt",
     "build": "nuxt build",
     "deploy": "npm run build && gcloud app deploy",
     "start": "nuxt start",
@@ -23,9 +23,11 @@
     "@likecoin/ui-vue": "^0.7.1",
     "@nuxtjs/google-tag-manager": "^2.1.4",
     "@nuxtjs/sentry": "^3.0.0",
-    "axios": "^0.18.0",
+    "axios": "^0.19.0",
     "classlist-polyfill": "^1.2.0",
     "core-js": "^2.6.5",
+    "firebase-admin": "^8.8.0",
+    "firebase-functions": "^3.3.0",
     "gsap": "^2.1.1",
     "lodash.debounce": "^4.0.8",
     "nuxt": "^2.6.3",
