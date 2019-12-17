@@ -125,9 +125,8 @@ import {
 
 import { checkValidDomainNotIP, handleQueryStringInUrl } from '@/util/url';
 
-import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
-
 import mixin from '~/mixins/embed';
+import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
 import LikeButton from '~/components/LikeButton';
 import { checkIsMobileClient, checkIsTrustClient } from '~/util/client';
 import { logTrackerEvent } from '@/util/EventLogger';
