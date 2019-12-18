@@ -117,7 +117,7 @@
 
 <script>
 import { TimelineMax } from 'gsap/all';
-import { Back } from 'gsap/EasePack';
+import { Back } from 'gsap';
 
 import {
   checkIsMobileClient,
