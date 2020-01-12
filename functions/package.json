@@ -37,7 +37,7 @@
     "url-parse": "^1.4.4",
     "vue": "^2.6.11",
     "vue-i18n": "^8.8.2",
-    "vue-meta": "^1.6.0",
+    "vue-meta": "^2.3.2",
     "vue-recaptcha": "^1.1.1",
     "vue-router": "^3.0.6",
     "vue-server-renderer": "^2.6.11",
