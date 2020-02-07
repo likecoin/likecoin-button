@@ -154,6 +154,8 @@ import { handleQueryStringInUrl } from '@/util/url';
 
 import BackIcon from '@/assets/icons/arrow.svg';
 
+const uuidv4 = require('uuid/v4');
+
 const PENDING_LIKE_INTERVAL = 200;
 
 export default {
@@ -172,6 +174,7 @@ export default {
       isError: false,
       isNotFound: false,
       timeStarted: Date.now(),
+      sessionId: uuidv4(),
       updateTimer: null,
     };
   },
@@ -282,6 +285,7 @@ export default {
           this.referrer,
           { reCaptchaResponse: this.reCaptchaResponse },
           this.documentReferrer,
+          this.sessionId,
         );
       } catch (err) {
         if (err.response && err.response.status === 404) {

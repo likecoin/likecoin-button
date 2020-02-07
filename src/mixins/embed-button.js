@@ -103,6 +103,7 @@ export default {
         this.referrer,
         this.hasCookieSupport,
         this.documentReferrer,
+        this.sessionId,
       );
       this.isRead = true;
       if (this.readTimer) clearTimeout(this.readTimer);
