@@ -6,3 +6,4 @@ require('core-js/fn/math/cbrt');
 require('core-js/fn/number/is-integer');
 require('core-js/fn/number/is-nan');
 require('classlist-polyfill');
+require('intersection-observer');

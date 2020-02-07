@@ -42,6 +42,17 @@ export const apiPostLikeButton = (id, referrer, count = 1, isCookieSupport, docu
     },
   );
 };
+export const apiPostLikeButtonReadEvent = (id, referrer, isCookieSupport, documentReferrer) => {
+  const cookieParam = isCookieSupport !== undefined ? `&cookie_support=${isCookieSupport ? 1 : 0}` : '';
+  return axios.post(
+    `${LIKECOIN_MISC_API_BASE}/api/like/likebutton/${id}/read?referrer=${encodeURIComponent(referrer)}${cookieParam}`,
+    {},
+    {
+      headers: { 'Document-Referrer': documentReferrer },
+      withCredentials: true,
+    },
+  );
+};
 
 export const apiQueryCoinGeckoInfo = () => axios.get('https://api.coingecko.com/api/v3/coins/likecoin?localization=false', { withCredentials: false });
 

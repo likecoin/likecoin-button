@@ -4,14 +4,22 @@ import {
 
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 import { isAndroid, isFacebookBrowser } from '~/util/client';
+import {
+  apiPostLikeButtonReadEvent,
+} from '~/util/api/api';
 
 import mixin from './embed';
+
+const READ_TIMEOUT = 10000;
 
 export default {
   mixins: [mixin],
   data() {
     return {
       isUserFetched: false,
+      isDisplayed: false,
+      isReadTimerEnded: false,
+      readTimer: null,
     };
   },
   computed: {
@@ -40,7 +48,9 @@ export default {
   async mounted() {
     window.addEventListener('message', this.handleWindowMessage);
     if (this.isPreview) return;
-
+    this.readTimer = setTimeout(() => {
+      this.isReadTimerEnded = true;
+    }, READ_TIMEOUT);
     this.hasCookieSupport = await this.getIsCookieSupport();
     await this.updateUserSignInStatus();
     if (this.onCheckCookieSupport) this.onCheckCookieSupport(this.hasCookieSupport);
@@ -52,6 +62,12 @@ export default {
   watch: {
     referrer() {
       this.updateUserSignInStatus();
+    },
+    isDisplayed() {
+      this.handleReadEvent();
+    },
+    isReadTimerEnded() {
+      this.handleReadEvent();
     },
   },
   methods: {
@@ -72,7 +88,25 @@ export default {
       );
       this.$root.$emit('openPopupNoticeOverlay', w);
     },
-
+    setIsDisplayed() {
+      this.isDisplayed = true;
+    },
+    async handleReadEvent() {
+      if (!this.isRead && this.isReadTimerEnded && this.isDisplayed) {
+        await this.postReadEvent();
+      }
+    },
+    async postReadEvent() {
+      if (this.isRead) return;
+      await apiPostLikeButtonReadEvent(
+        this.id,
+        this.referrer,
+        this.hasCookieSupport,
+        this.documentReferrer,
+      );
+      this.isRead = true;
+      if (this.readTimer) clearTimeout(this.readTimer);
+    },
     async handleWindowMessage(event) {
       const { data } = event;
       if (typeof data !== 'object') return;
