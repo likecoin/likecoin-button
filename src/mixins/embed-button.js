@@ -18,6 +18,7 @@ export default {
     return {
       isUserFetched: false,
       isDisplayed: false,
+      isInteracted: false,
       isReadTimerEnded: false,
       readTimer: null,
     };
@@ -64,10 +65,13 @@ export default {
       this.updateUserSignInStatus();
     },
     isDisplayed() {
-      this.handleReadEvent();
+      this.checkShouldPostReadEvent();
+    },
+    setIsInteracted() {
+      this.checkShouldPostReadEvent();
     },
     isReadTimerEnded() {
-      this.handleReadEvent();
+      this.checkShouldPostReadEvent();
     },
   },
   methods: {
@@ -91,13 +95,18 @@ export default {
     setIsDisplayed() {
       this.isDisplayed = true;
     },
-    async handleReadEvent() {
-      if (!this.isRead && this.isReadTimerEnded && this.isDisplayed) {
+    setIsInteracted() {
+      this.isInteracted = true;
+    },
+    async checkShouldPostReadEvent() {
+      if (!this.isRead
+        && ((this.isReadTimerEnded && this.isDisplayed) || this.isInteracted)) {
         await this.postReadEvent();
       }
     },
     async postReadEvent() {
       if (this.isRead) return;
+      this.isRead = true;
       await apiPostLikeButtonReadEvent(
         this.id,
         this.referrer,
@@ -105,7 +114,6 @@ export default {
         this.documentReferrer,
         this.sessionId,
       );
-      this.isRead = true;
       if (this.readTimer) clearTimeout(this.readTimer);
     },
     async handleWindowMessage(event) {

@@ -292,7 +292,7 @@ export default {
       }
     },
     async onClickInteraction() {
-      this.postReadEvent();
+      this.setIsInteracted();
     },
     async onClickLoginButton(e) {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLoginButton', 'clickLoginButton(embed)', 1);
