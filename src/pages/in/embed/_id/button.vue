@@ -31,7 +31,7 @@
       @click-halo="onClickAvatarHalo"
     )&attributes(attributes)
 
-  div(:class="rootClass")
+  div(:class="rootClass" @click="onClickInteraction")
     .like-rewards-button.like-rewards-button--base(
       v-if="!isShowAltMode"
       key="base"
@@ -141,6 +141,7 @@ export default {
     return {
       isUserFetched: false,
       isShowAltMode: false,
+      intersectionObserver: null,
     };
   },
   computed: {
@@ -247,9 +248,25 @@ export default {
       this.isShowAltMode = true;
       window.addEventListener('message', this.onReceiveMessage, false);
     }
+    if (window.IntersectionObserver) {
+      if (!this.intersectionObserver) {
+        this.intersectionObserver = new IntersectionObserver(([entry]) => {
+          if (entry && entry.isIntersecting) {
+            this.setIsDisplayed();
+          }
+        });
+      }
+      this.intersectionObserver.observe(this.$el);
+    }
   },
   beforeDestory() {
     window.removeEventListener('message', this.onReceiveMessage, false);
+  },
+  destroyed() {
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
+      this.intersectionObserver = null;
+    }
   },
   methods: {
     onCtaBadgeEnter(el, onComplete) {
@@ -273,6 +290,9 @@ export default {
       } else {
         logTrackerEvent(this, 'LikeButton', 'isCookieSupportFalse', 'isCookieSupportFalse', 1);
       }
+    },
+    async onClickInteraction() {
+      this.setIsInteracted();
     },
     async onClickLoginButton(e) {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLoginButton', 'clickLoginButton(embed)', 1);

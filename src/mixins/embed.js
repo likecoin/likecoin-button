@@ -27,6 +27,7 @@ const LIKE_STATS_WINDOW_NAME = 'LIKER_LIST_STATS_WINDOW';
 const SUPER_LIKE_WINDOW_NAME = 'SUPER_LIKE_WINDOW';
 
 const debounce = require('lodash.debounce');
+const uuidv4 = require('uuid/v4');
 
 const debouncedOnClick = debounce((that) => {
   /* eslint-disable no-param-reassign */
@@ -39,6 +40,7 @@ const debouncedOnClick = debounce((that) => {
       count,
       that.hasCookieSupport,
       that.documentReferrer,
+      that.sessionId,
     );
   }
   that.totalLike += count;
@@ -108,6 +110,8 @@ export default {
       like_count: 0,
       likeSent: 0,
       totalLike: 0,
+
+      sessionId: uuidv4(),
 
       hasCookieSupport: false,
       hasStorageAPIAccess: false,
@@ -183,7 +187,13 @@ export default {
     async updateUserSignInStatus() {
       try {
         await Promise.all([
-          apiGetLikeButtonMyStatus(this.id, this.referrer, this.hasCookieSupport)
+          apiGetLikeButtonMyStatus(
+            this.id,
+            this.referrer,
+            this.hasCookieSupport,
+            this.documentReferrer,
+            this.sessionId,
+          )
             .then(({ data: myData }) => {
               const {
                 liker,
