@@ -315,7 +315,7 @@ export default {
         }
       } else {
         // User has not log in and 3rd party cookie is not blocked
-        this.signIn();
+        this.signUp();
         logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp(embed)', 1);
       }
     },
