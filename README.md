@@ -4,6 +4,12 @@
 
 > Link based LikeButton on firebase functions + hosting
 
+## Introduction
+For introduction ot LikeCoin button, please refer to [user guide](https://docs.like.co/user-guide/likecoin-button) here.
+
+## Documentation
+Please refer to [developer guide](https://docs.like.co/developer/likecoin-button) and [integration guide](https://github.com/likecoin/LikeCoinButton-integration).
+
 ## Folder structure
 ```bash
 ├── functions
