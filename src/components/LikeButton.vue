@@ -259,6 +259,9 @@ export default {
       }
     },
     onPressedKnob(e) {
+      if ('button' in e && e.button !== 0) {
+        return; // handle left click only
+      }
       if (this.hasMovedKnob) return;
 
       if (this.isMax && this.isKnobMovable && !this.isLongPressingKnob) {
@@ -289,6 +292,9 @@ export default {
     },
     onPressKnob(e) {
       if (checkIsMobileClient()) return;
+      if ('button' in e && e.button !== 0) {
+        return; // handle left click only
+      }
 
       this.setClientX(e);
       this.lastClientX = this.clientX;
