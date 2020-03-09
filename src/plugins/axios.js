@@ -1,7 +1,7 @@
 import * as axios from 'axios';
 
 const options = {
-  timeout: 20000,
+  timeout: 30000,
 };
 // The server-side needs a full url to works
 // if (process.server) {
