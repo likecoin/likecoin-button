@@ -259,7 +259,7 @@ export default {
       }
     },
     onPressedKnob(e) {
-      if ('button' in e && e.button !== 0) {
+      if (e && e.button !== undefined && e.button !== 0) {
         return; // handle left click only
       }
       if (this.hasMovedKnob) return;
@@ -292,7 +292,7 @@ export default {
     },
     onPressKnob(e) {
       if (checkIsMobileClient()) return;
-      if ('button' in e && e.button !== 0) {
+      if (e && e.button !== undefined && e.button !== 0) {
         return; // handle left click only
       }
 
