@@ -67,7 +67,7 @@ export default {
     isDisplayed() {
       this.checkShouldPostReadEvent();
     },
-    setIsInteracted() {
+    isInteracted() {
       this.checkShouldPostReadEvent();
     },
     isReadTimerEnded() {
