@@ -147,8 +147,8 @@ export default {
       return `?from=${encodeURIComponent(id)}${referrerQuery}&utm_source=button`;
     },
 
-    signInURL() {
-      return `https://${LIKE_CO_HOSTNAME}/in/register${this.referrerQueryString}&is_popup=1`;
+    signUpURL() {
+      return `https://${LIKE_CO_HOSTNAME}/in/register${this.referrerQueryString}&register=1&is_popup=1`;
     },
     superLikeURL() {
       const amountPath = `${this.amount ? `/${this.amount}` : ''}`;
@@ -236,16 +236,16 @@ export default {
       }
     },
 
-    signIn(options = { isNewWindow: true }) {
+    signUp(options = { isNewWindow: true }) {
       if (options.isNewWindow) {
         const w = window.open(
-          this.signInURL,
-          'signin',
+          this.signUpURL,
+          'signup',
           'width=540,height=600,menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes',
         );
         this.$root.$emit('openPopupNoticeOverlay', w);
       } else {
-        window.location = `${this.signInURL}&redirect=${encodeURIComponent(window.location.href)}`;
+        window.location = `${this.signUpURL}&redirect=${encodeURIComponent(window.location.href)}`;
       }
       logTrackerEvent(this, 'LikeButtonFlow', 'triggerSignUpIn', 'triggerSignUpIn', 1);
     },
