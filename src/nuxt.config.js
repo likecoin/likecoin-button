@@ -4,6 +4,7 @@ const { IS_TESTNET } = process.env;
 const nuxtConfig = {
   env: {
     SENTRY_DSN: process.env.SENTRY_DSN,
+    FACEBOOK_PIXEL_ID: process.env.FACEBOOK_PIXEL_ID,
     IS_TESTNET,
   },
   /*
@@ -23,12 +24,8 @@ const nuxtConfig = {
       { hid: 'og_image_height', property: 'og:image:height', content: '630' },
       { hid: 'theme-color', name: 'theme-color', content: '#D2F0F0' },
     ],
-    script: [
-      { src: '/vendor/fb/pixel.js', async: true },
-    ],
     link: [
       { rel: 'preload', href: 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Material+Icons', as: 'style' },
-      { rel: 'preload', href: '/vendor/fb/pixel.js', as: 'script' },
       // {
       //   rel: 'preload',
       //   href: `https://${IS_TESTNET ? 'rinkeby.' : ''}like.co/api/experiments/list`,
@@ -47,6 +44,7 @@ const nuxtConfig = {
     { src: '~/plugins/polyfill', ssr: false },
     { src: '~/plugins/likecoin-ui-vue' },
     { src: '~/plugins/vue-i18n' },
+    { src: '~/plugins/fbpixel.client.js', ssr: false },
     // { src: '~/plugins/optimize.js' },
   ],
   render: {
