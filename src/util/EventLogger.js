@@ -14,17 +14,22 @@ function digestMessage(message) {
   return window.crypto.subtle.digest('SHA-256', data);
 }
 
-export async function setTrackerUserId(userId) {
+export async function setTrackerUser({ user }) {
   if (window.doNotTrack || navigator.doNotTrack) return;
   window.dataLayer = window.dataLayer || [];
   try {
-    let hashedId = await digestMessage(userId);
+    let hashedId = await digestMessage(user);
     hashedId = hexString(hashedId);
     window.dataLayer.push({
       userId: hashedId,
     });
   } catch (err) {
     console.error(err);
+  }
+  if (window.fbq) {
+    const userPayload = {};
+    if (user) userPayload.external_id = user;
+    window.fbq('init', process.env.FACEBOOK_PIXEL_ID, userPayload);
   }
 }
 
@@ -46,7 +51,7 @@ export function logTrackerEvent(
       label,
       value,
     });
-    if (window.fbq) window.fbq('trackCustom', `${category}_${action}`, { value, label });
+    if (window.fbq) window.fbq('trackCustom', `${category}_${action}`, { label });
   } catch (err) {
     console.error('logging error:');
     console.error(err);

@@ -7,7 +7,7 @@ import {
 import EmbedCreateWidgetButton from '~/components/embed/EmbedCreateWidgetButton';
 import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
 import SocialMediaConnect from '~/components/SocialMediaConnect';
-import { setTrackerUserId, logTrackerEvent } from '@/util/EventLogger';
+import { setTrackerUser, logTrackerEvent } from '@/util/EventLogger';
 
 import {
   apiPostLikeButton,
@@ -213,7 +213,7 @@ export default {
                     scope.setUser({ id: liker });
                   });
                 }
-                return setTrackerUserId(liker);
+                return setTrackerUser({ user: liker });
               }
               return Promise.resolved;
             }),
