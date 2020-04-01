@@ -39,7 +39,7 @@
     "uuid": "^3.4.0",
     "vue-i18n": "^8.8.2",
     "vue-recaptcha": "^1.1.1",
-    "vuetify": "^1.5.3"
+    "vuetify": "^2.2.20"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
