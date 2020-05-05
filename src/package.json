@@ -16,7 +16,9 @@
     "lint": "npm run lint:es && npm run lint:style",
     "lint:es": "eslint --ext .js,.vue .",
     "lint:style": "stylelint -i .gitignore '**/*.{scss,vue}'",
-    "precommit": "npm run lint"
+    "precommit": "npm run lint",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "@likecoin/nuxt-google-optimize": "^0.5.3-like.10",
@@ -39,7 +41,8 @@
     "uuid": "^3.4.0",
     "vue-i18n": "^8.8.2",
     "vue-recaptcha": "^1.1.1",
-    "vuetify": "^1.5.3"
+    "vuetify": "^1.5.3",
+    "snyk": "^1.317.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
@@ -58,5 +61,6 @@
     "stylelint-config-recommended-scss": "^3.2.0",
     "stylelint-order": "^2.0.0",
     "stylelint-scss": "^3.5.4"
-  }
+  },
+  "snyk": true
 }
