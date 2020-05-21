@@ -2,13 +2,8 @@ const functions = require('firebase-functions');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
+const onHeaders = require('on-headers');
 const { Nuxt } = require('nuxt-start');
-
-function setNoCacheHeader(req, res, next) {
-  res.setHeader('Cache-Control', 'public, max-age=600, stale-while-revalidate=600, stale-if-error=3600');
-  res.setHeader('Vary', 'Cookie, Accept-Language');
-  next();
-}
 
 if ((functions.config().likeco || {}).testmode) {
   process.env.IS_TESTNET = true;
@@ -19,6 +14,22 @@ if ((functions.config().sentry || {}).report_uri) {
 }
 
 const nuxtConfig = require('./nuxt.config.js');
+
+function setNoCacheHeader(req, res, next) {
+  onHeaders(res, () => {
+    if (res.statusCode >= 200 && res.statusCode <= 399) {
+      res.setHeader('Cache-Control', 'public, max-age=600, stale-while-revalidate=600, stale-if-error=3600');
+    } else {
+      res.setHeader('Cache-Control', 'no-store');
+    }
+    if (nuxtConfig.googleOptimize) { // cookie sensitive ab testing
+      res.setHeader('Vary', 'Cookie, Accept-Language');
+    } else {
+      res.setHeader('Vary', 'Accept-Language');
+    }
+  });
+  next();
+}
 
 const config = {
   ...nuxtConfig,
