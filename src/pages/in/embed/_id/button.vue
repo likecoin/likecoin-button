@@ -323,6 +323,8 @@ export default {
       if (!this.isMaxLike) {
         this.like();
         logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike(embed)', 1);
+      } else if (this.canSuperLike) {
+        this.newSuperLike();
       }
     },
     async onClickLike() {
