@@ -15,7 +15,7 @@ if ((functions.config().sentry || {}).report_uri) {
 
 const nuxtConfig = require('./nuxt.config.js');
 
-function setNoCacheHeader(req, res, next) {
+function setCacheHeader(req, res, next) {
   onHeaders(res, () => {
     if (res.statusCode >= 200 && res.statusCode <= 399) {
       res.setHeader('Cache-Control', 'public, max-age=600, stale-while-revalidate=600, stale-if-error=3600');
@@ -43,7 +43,7 @@ app.use(helmet({
   frameguard: false,
 }));
 app.use(cookieParser());
-app.use(setNoCacheHeader);
+app.use(['/in/embed', '/in/like'], setCacheHeader);
 app.use(async (req, res) => {
   await nuxt.ready();
   nuxt.render(req, res);
