@@ -7,6 +7,9 @@
       :is-togglable="false"
       :is-max="isMaxLike"
       :is-show-total-like=isShowTotalLike
+      :can-super-like="canSuperLike"
+      :has-super-liked="hasSuperLiked"
+      :super-like-cooldown="nextSuperLikeTime"
       :href="popupLikeURL"
       @like="onClickLike"
       @click-stats="onClickLikeStats"
@@ -319,12 +322,13 @@ export default {
         logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp(embed)', 1);
       }
     },
-    doLike() {
+    async doLike() {
       if (!this.isMaxLike) {
         this.like();
         logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike(embed)', 1);
       } else if (this.canSuperLike) {
-        this.newSuperLike();
+        await this.newSuperLike();
+        await this.updateSuperLikeStatus();
       }
     },
     async onClickLike() {
