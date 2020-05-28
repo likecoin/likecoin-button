@@ -4,11 +4,20 @@
     :style="{
       border: 'none',
       background: 'none',
+      outline: 'none',
+      userSelect: 'none',
     }"
+    @mouseover="onMouseOver"
+    @mouseleave="onMouseLeave"
+    @mousedown="onPressDown"
+    @mouseup="onPressUp"
+    @touchstart="onTouchStart"
+    @touchend="onTouchEnd"
   >
     <svg
       :style="{
         margin: '-40px',
+        pointerEvents: 'none',
       }"
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -33,8 +42,13 @@
           />
         </clipPath>
       </defs>
-      <!-- Button Label -->
-      <g style="clip-path: url(#button-mask)">
+      <!-- Button -->
+      <g
+        :style="{
+          clipPath: 'url(#button-mask)',
+          pointerEvents: 'all',
+        }"
+      >
         <g>
           <!-- Button Bg -->
           <circle
@@ -50,10 +64,10 @@
           />
           <!-- Button Rim -->
           <circle
+            :style="rimStyle"
             cx="78"
             cy="78"
             r="38"
-            style="fill: none;stroke: #50e3c2;stroke-width: 4px"
           />
         </g>
       </g>
@@ -118,6 +132,43 @@ export default {
     count: {
       type: Number,
       default: 0,
+    },
+  },
+  data() {
+    return {
+      isHovering: false,
+      isPressing: false,
+    };
+  },
+  computed: {
+    rimStyle() {
+      return {
+        fill: 'none',
+        stroke: this.isPressing ? '#28646e' : '#50e3c2',
+        strokeWidth: `${this.isHovering ? 6 : 4}px`,
+      };
+    },
+  },
+  methods: {
+    onMouseOver() {
+      this.isHovering = true;
+    },
+    onMouseLeave() {
+      this.isHovering = false;
+    },
+    onPressDown() {
+      this.isPressing = true;
+    },
+    onPressUp() {
+      this.isPressing = false;
+    },
+    onTouchStart() {
+      this.isHovering = true;
+      this.isPressing = true;
+    },
+    onTouchEnd() {
+      this.isHovering = false;
+      this.isPressing = false;
     },
   },
 };
