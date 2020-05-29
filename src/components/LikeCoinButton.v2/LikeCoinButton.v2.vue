@@ -13,6 +13,7 @@
     @mouseup="onPressUp"
     @touchstart="onTouchStart"
     @touchend="onTouchEnd"
+    @click="onClick"
   >
     <svg
       :style="{
@@ -105,29 +106,25 @@
         </foreignObject>
       </g>
       <!-- Clap Bits -->
-      <g style="fill: #50e3c2;fill-rule: evenodd">
-        <g
-          v-for="i in 12"
-          :key="i"
-          :style="{
-            transform: `rotateZ(${i * 30 - 15}deg)`,
-            transformOrigin: 'center',
-          }"
-        >
-          <path
-            :style="{ transform: `translateY(-66px)` }"
-            d="M78,87c.7,0,1-.55,1.13-1,1-2.27,4.29-12.35,4.79-14.58a1.5,1.5,0,0,0-.92-2A15.23,15.23,0,0,0,78,69c-2.5,0-4,.07-5,.53-.77.11-1.21.72-1,1.87.48,2.17,3.79,12.28,4.81,14.6.19.35.46,1,1.16,1Z"
-          />
-        </g>
-      </g>
+      <ClapBits
+        v-for="id in clapBits"
+        :key="id"
+        :id="id"
+        @end="finishClapBitsAnimation"
+      />
     </svg>
   </button>
 </template>
 <!-- eslint-enable max-len -->
 
 <script>
+import ClapBits from './LikeCoinButton.v2.clapBits';
+
 export default {
   name: 'likecoin-button-v2',
+  components: {
+    ClapBits,
+  },
   props: {
     count: {
       type: Number,
@@ -138,13 +135,14 @@ export default {
     return {
       isHovering: false,
       isPressing: false,
+      clapBits: [],
     };
   },
   computed: {
     rimStyle() {
       return {
         fill: 'none',
-        stroke: this.isPressing ? '#28646e' : '#50e3c2',
+        stroke: this.isPressing || this.count >= 1 ? '#28646e' : '#50e3c2',
         strokeWidth: `${this.isHovering ? 6 : 4}px`,
       };
     },
@@ -169,6 +167,18 @@ export default {
     onTouchEnd() {
       this.isHovering = false;
       this.isPressing = false;
+    },
+    onClick() {
+      this.startClapBitsAnimation();
+    },
+    startClapBitsAnimation() {
+      this.clapBits.push(Date.now());
+    },
+    finishClapBitsAnimation(id) {
+      const index = this.clapBits.indexOf(id);
+      if (index !== -1) {
+        this.clapBits.splice(index, 1);
+      }
     },
   },
 };
