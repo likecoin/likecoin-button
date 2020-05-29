@@ -50,7 +50,7 @@
           pointerEvents: 'all',
         }"
       >
-        <g>
+        <g :style="buttonStyle">
           <!-- Button Bg -->
           <circle
             cx="78"
@@ -139,6 +139,13 @@ export default {
     };
   },
   computed: {
+    buttonStyle() {
+      return {
+        transform: `scale(${this.isPressing ? 0.9 : 1})`,
+        transition: 'transform 0.25s ease',
+        transformOrigin: 'center',
+      };
+    },
     rimStyle() {
       return {
         fill: 'none',
