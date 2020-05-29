@@ -144,6 +144,7 @@ export default {
         fill: 'none',
         stroke: this.isPressing || this.count >= 1 ? '#28646e' : '#50e3c2',
         strokeWidth: `${this.isHovering ? 6 : 4}px`,
+        transition: 'stroke 0.25s ease, stroke-width 0.25s ease',
       };
     },
   },
