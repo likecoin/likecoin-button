@@ -40,7 +40,7 @@
     "vue-i18n": "^8.8.2",
     "vue-meta": "^1.6.0",
     "vue-recaptcha": "^1.1.1",
-    "vue-router": "^3.0.6",
+    "vue-router": "^3.3.2",
     "vue-server-renderer": "^2.6.11",
     "vue-template-compiler": "^2.6.11",
     "vuetify": "^1.5.3",
