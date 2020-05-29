@@ -5,6 +5,6 @@ storiesOf('LikeCoin Button v2', module)
   .add('Default', () => ({
     template: '<LikeCoinButtonV2 />',
   }))
-  .add('With props', () => ({
+  .add('1 Like', () => ({
     template: '<LikeCoinButtonV2 :count="1" />',
   }));
