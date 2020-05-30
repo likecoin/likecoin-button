@@ -1,10 +1,24 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { storiesOf } from '@storybook/vue';
+import { withKnobs, number } from '@storybook/addon-knobs';
 
-storiesOf('LikeCoin Button v2', module)
-  .add('Default', () => ({
-    template: '<LikeCoinButtonV2 />',
-  }))
-  .add('1 Like', () => ({
-    template: '<LikeCoinButtonV2 :count="1" />',
-  }));
+import LikeCoinButtonV2 from './LikeCoinButton.v2';
+
+export default {
+  title: 'LikeCoin Button v2',
+  decorators: [withKnobs],
+};
+
+export const Default = () => ({
+  components: {
+    LikeCoinButtonV2,
+  },
+  props: {
+    count: {
+      default: number('Like count', 0),
+    },
+    cooldown: {
+      default: number('Cooldown (0-100)', 0),
+    },
+  },
+  template: '<LikeCoinButtonV2 :count="count" :cooldown="cooldown" />',
+});

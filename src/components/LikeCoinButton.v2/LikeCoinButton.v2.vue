@@ -53,10 +53,10 @@
         <g :style="buttonStyle">
           <!-- Button Bg -->
           <circle
+            :r="radius"
+            :style="buttonBgStyle"
             cx="78"
             cy="78"
-            r="38"
-            style="fill: #aaf1e7"
           />
           <!-- Button Clap -->
           <path
@@ -66,9 +66,11 @@
           <!-- Button Rim -->
           <circle
             :style="rimStyle"
+            :r="radius"
+            :stroke-dasharray="strokeDashArrayValue"
+            :stroke-dashoffset="strokeDashOffsetValue"
             cx="78"
             cy="78"
-            r="38"
           />
         </g>
       </g>
@@ -130,9 +132,14 @@ export default {
       type: Number,
       default: 0,
     },
+    cooldown: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
+      radius: 38,
       isHovering: false,
       isPressing: false,
       clapBits: [],
@@ -146,13 +153,35 @@ export default {
         transformOrigin: 'center',
       };
     },
+    buttonBgStyle() {
+      return {
+        ...this.strokeStyle,
+        fill: '#aaf1e7',
+        stroke: '#e6e6e6',
+      };
+    },
     rimStyle() {
       return {
+        ...this.strokeStyle,
+        transform: 'rotate(-90deg)',
+        transformOrigin: 'center',
         fill: 'none',
         stroke: this.isPressing || this.count >= 1 ? '#28646e' : '#50e3c2',
+      };
+    },
+    strokeStyle() {
+      return {
+        strokeLinecap: 'round',
         strokeWidth: `${this.isHovering ? 6 : 4}px`,
         transition: 'stroke 0.25s ease, stroke-width 0.25s ease',
       };
+    },
+    strokeDashArrayValue() {
+      return Math.PI * (this.radius * 2);
+    },
+    strokeDashOffsetValue() {
+      const cooldown = Math.min(100, Math.max(0, this.cooldown));
+      return (cooldown / 100) * this.strokeDashArrayValue;
     },
   },
   methods: {
