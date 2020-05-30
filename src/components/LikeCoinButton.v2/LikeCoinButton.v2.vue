@@ -65,6 +65,7 @@
             cx="78"
             cy="78"
           />
+          <!-- Button Icon -->
           <g
             :style="{
               clipPath: 'url(#button-icon-mask)',
@@ -81,43 +82,61 @@
                 key="star"
               >
                 <!-- Button Star -->
-                <path
-                  :style="{
-                    fill: 'none',
-                    stroke: superLikeIconColor,
-                    strokeWidth: '3px',
-                  }"
-                  d="M80,65.38l2.62,5.3a2.27,2.27,0,0,0,1.69,1.23l5.85.85a2.25,2.25,0,0,1,1.25,3.84l-4.23,4.12a2.24,2.24,0,0,0-.65,2l1,5.83a2.25,2.25,0,0,1-3.27,2.37L79,88.16a2.27,2.27,0,0,0-2.09,0l-5.23,2.75a2.25,2.25,0,0,1-3.27-2.37l1-5.83a2.24,2.24,0,0,0-.65-2L64.51,76.6a2.25,2.25,0,0,1,1.25-3.84l5.85-.85a2.27,2.27,0,0,0,1.69-1.23l2.62-5.3A2.25,2.25,0,0,1,80,65.38Z"
-                />
-                <!-- Button Star Trail -->
-                <g
-                  :style="{
-                    fill: 'none',
-                    stroke: superLikeIconColor,
-                    strokeLinecap: 'round',
-                    strokeLinejoin: 'round',
-                    strokeWidth: '3px'
-                  }"
+                <transition
+                  @enter="starIconEnter"
+                  @leave="starIconleave"
+                  :css="false"
                 >
-                  <line
-                    x1="72"
-                    y1="98"
-                    x2="72"
-                    y2="102"
-                  />
-                  <line
-                    x1="84"
-                    y1="98"
-                    x2="84"
-                    y2="102"
-                  />
-                  <line
-                    x1="78"
-                    y1="100"
-                    x2="78"
-                    y2="104"
-                  />
-                </g>
+                  <g :key="state">
+                    <!-- Star Bits -->
+                    <StarBits
+                      v-if="isShowStarBits"
+                      @end="isShowStarBits = false"
+                    />
+                    <path
+                      :style="{
+                        fill: 'none',
+                        stroke: superLikeIconColor,
+                        strokeWidth: '3px',
+                      }"
+                      d="M80,65.38l2.62,5.3a2.27,2.27,0,0,0,1.69,1.23l5.85.85a2.25,2.25,0,0,1,1.25,3.84l-4.23,4.12a2.24,2.24,0,0,0-.65,2l1,5.83a2.25,2.25,0,0,1-3.27,2.37L79,88.16a2.27,2.27,0,0,0-2.09,0l-5.23,2.75a2.25,2.25,0,0,1-3.27-2.37l1-5.83a2.24,2.24,0,0,0-.65-2L64.51,76.6a2.25,2.25,0,0,1,1.25-3.84l5.85-.85a2.27,2.27,0,0,0,1.69-1.23l2.62-5.3A2.25,2.25,0,0,1,80,65.38Z"
+                    />
+                    <!-- Button Star Trail -->
+                    <g
+                      :style="{
+                        fill: 'none',
+                        stroke: superLikeIconColor,
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        strokeWidth: '3px'
+                      }"
+                    >
+                      <line
+                        x1="72"
+                        y1="98"
+                        x2="72"
+                        y2="102"
+                      />
+                      <line
+                        x1="84"
+                        y1="98"
+                        x2="84"
+                        y2="102"
+                      />
+                      <line
+                        x1="78"
+                        y1="100"
+                        x2="78"
+                        y2="104"
+                      />
+                    </g>
+                    <!-- Tick -->
+                    <polyline
+                      points="73.38 80.35 76.68 83.18 82.8 75.76"
+                      style="opacity: 0;fill: none;stroke: #28646e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3px;fill-rule: evenodd"
+                    />
+                  </g>
+                </transition>
               </g>
               <!-- Button Clap -->
               <g
@@ -202,13 +221,15 @@
 <!-- eslint-enable max-len -->
 
 <script>
-import { TweenMax } from 'gsap/all';
+import { TimelineMax, TweenMax } from 'gsap/all';
 import ClapBits from './LikeCoinButton.v2.clapBits';
+import StarBits from './LikeCoinButton.v2.starBits';
 
 export default {
   name: 'likecoin-button-v2',
   components: {
     ClapBits,
+    StarBits,
   },
   props: {
     count: {
@@ -233,6 +254,7 @@ export default {
       isHovering: false,
       isPressing: false,
       clapBits: [],
+      isShowStarBits: false,
     };
   },
   computed: {
@@ -387,6 +409,65 @@ export default {
         transformOrigin: '50% 50%',
         onComplete: done,
       });
+    },
+    starIconEnter(el, done) {
+      const tl = new TimelineMax({ onComplete: done });
+      if (this.state === 'cooldown') {
+        const [star, starTrail, tick] = el.children;
+        tl.set(starTrail, { opacity: 0 });
+        tl.delay(0.2);
+        tl.from(el, 0.7, {
+          scale: 0.4,
+          y: 50,
+          transformOrigin: '50% 50%',
+        });
+        tl.fromTo(star, 0.5, {
+          fill: '#50e3c2',
+          strokeWidth: 0,
+        }, {
+          scale: 1.2,
+          transformOrigin: '50% 50%',
+          onComplete: () => {
+            this.isShowStarBits = true;
+          },
+        }, 0);
+        tl.fromTo(tick, 0.2, {
+          strokeWidth: 0,
+        }, {
+          strokeWidth: 3,
+          opacity: 1,
+        });
+        tl.addLabel('end');
+        tl.to(starTrail, 1, { opacity: 1 }, 'end+=1');
+        tl.to(star, 1, {
+          scale: 1,
+          stroke: this.superLikeIconColor,
+          strokeWidth: 3,
+          fill: 'transparent',
+        }, 'end+=1');
+        tl.to(tick, 1, {
+          opacity: 0,
+        }, 'end+=1');
+      } else {
+        done();
+      }
+    },
+    starIconleave(el, done) {
+      if (this.state === 'cooldown') {
+        TweenMax.to(el, 0.5, {
+          scaleX: 0.7,
+          scaleY: 1.5,
+          y: -100,
+          opacity: 0,
+          transformOrigin: '50% 50%',
+          onComplete: done,
+        });
+      } else {
+        TweenMax.to(el, 0.5, {
+          opacity: 0,
+          onComplete: done,
+        });
+      }
     },
   },
 };
