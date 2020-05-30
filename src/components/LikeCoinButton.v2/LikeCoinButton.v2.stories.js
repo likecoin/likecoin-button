@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { withKnobs, number } from '@storybook/addon-knobs';
+import { withKnobs, number, select } from '@storybook/addon-knobs';
 
 import LikeCoinButtonV2 from './LikeCoinButton.v2';
 
@@ -29,6 +29,13 @@ export const Default = () => ({
         step: 1,
       }),
     },
+    state: {
+      default: select('State', {
+        Initial: 'initial',
+        'Super Like-able': 'superlikeable',
+        Cooldown: 'cooldown',
+      }, 'default'),
+    },
   },
-  template: '<LikeCoinButtonV2 :count="count" :cooldown="cooldown" />',
+  template: '<LikeCoinButtonV2 :count="count" :cooldown="cooldown" :state="state" />',
 });
