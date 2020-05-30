@@ -14,10 +14,20 @@ export const Default = () => ({
   },
   props: {
     count: {
-      default: number('Like count', 0),
+      default: number('Like count', 0, {
+        range: true,
+        min: 0,
+        max: 5,
+        step: 1,
+      }),
     },
     cooldown: {
-      default: number('Cooldown (0-100)', 0),
+      default: number('Cooldown', 0, {
+        range: true,
+        min: 0,
+        max: 100,
+        step: 1,
+      }),
     },
   },
   template: '<LikeCoinButtonV2 :count="count" :cooldown="cooldown" />',
