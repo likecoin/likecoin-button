@@ -22,7 +22,7 @@ export const Default = () => ({
       }),
     },
     cooldown: {
-      default: number('Cooldown', 0, {
+      default: number('Cooldown', 30, {
         range: true,
         min: 0,
         max: 100,

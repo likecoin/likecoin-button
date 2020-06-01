@@ -154,8 +154,7 @@
           <circle
             :style="rimStyle"
             :r="radius"
-            :stroke-dasharray="strokeDashArrayValue"
-            :stroke-dashoffset="strokeDashOffsetValue"
+            ref="rim"
             cx="78"
             cy="78"
           />
@@ -308,6 +307,8 @@ export default {
         transformOrigin: 'center',
         fill: 'none',
         stroke: this.rimStrokeColor,
+        strokeDasharray: this.strokeDashArrayValue,
+        strokeDashoffset: this.strokeDashOffsetValue,
       };
     },
     badgeBgColor() {
@@ -341,8 +342,11 @@ export default {
       return Math.PI * (this.radius * 2);
     },
     strokeDashOffsetValue() {
-      const cooldown = Math.min(100, Math.max(0, this.cooldown));
-      return (cooldown / 100) * this.strokeDashArrayValue;
+      if (this.state === 'cooldown') {
+        const cooldown = Math.min(100, Math.max(0, this.cooldown));
+        return (cooldown / 100) * this.strokeDashArrayValue;
+      }
+      return 0;
     },
   },
   methods: {
@@ -411,8 +415,8 @@ export default {
       });
     },
     starIconEnter(el, done) {
-      const tl = new TimelineMax({ onComplete: done });
       if (this.state === 'cooldown') {
+        const tl = new TimelineMax({ onComplete: done });
         const [star, starTrail, tick] = el.children;
         tl.set(starTrail, { opacity: 0 });
         tl.delay(0.2);
@@ -448,6 +452,11 @@ export default {
         tl.to(tick, 1, {
           opacity: 0,
         }, 'end+=1');
+        tl.fromTo(this.$refs.rim, 1, {
+          strokeDashoffset: this.strokeDashArrayValue,
+        }, {
+          strokeDashoffset: this.strokeDashOffsetValue,
+        }, 0);
       } else {
         done();
       }
