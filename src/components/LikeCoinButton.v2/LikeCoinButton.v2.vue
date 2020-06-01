@@ -166,46 +166,61 @@
           :style="{
             fill: badgeBgColor,
           }"
+          ref="badgeBg"
           cx="120"
           cy="110"
           r="18"
         />
-        <g
-          v-if="state !== 'initial'"
-          :style="{
-            fill: shareIconColor,
-            fillRule: 'evenodd',
-          }"
+        <transition
+          @before-enter="badgeBeforeEnter"
+          @enter="badgeIconEnter"
+          @leave="badgeIconLeave"
+          :css="false"
+          mode="out-in"
         >
-          <path d="M115.13,107.11a2,2,0,1,0-2-2A2,2,0,0,0,115.13,107.11Z" />
-          <path d="M113,111.51a1.24,1.24,0,0,1,1.08-1.24,7.23,7.23,0,0,0,6.19-6.19,1.25,1.25,0,0,1,2.48.34,9.75,9.75,0,0,1-8.34,8.33,1.25,1.25,0,0,1-1.4-1.07A1,1,0,0,1,113,111.51Z" />
-          <path d="M113,116.8a1.25,1.25,0,0,1,1.15-1.24,12.42,12.42,0,0,0,11.43-11.41,1.26,1.26,0,0,1,1.35-1.15,1.27,1.27,0,0,1,1.15,1.35,14.93,14.93,0,0,1-13.73,13.7,1.25,1.25,0,0,1-1.35-1.14Z" />
-        </g>
-        <foreignObject
-          v-else
-          :x="120 - 18"
-          :y="110 - 18"
-          :width="18 * 2"
-          :height="18 * 2"
-        >
-          <div
+          <g
+            v-if="state !== 'initial'"
             :style="{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
+              fill: shareIconColor,
+              fillRule: 'evenodd',
             }"
+            key="shareIcon"
+            ref="shareIcon"
           >
-            <span
-              :style="{
-                color: '#28646e',
-                fontSize: '18px',
-                fontWeight: 'bold',
-                textAlign: 'center',
-              }"
-            >{{ count }}</span>
-          </div>
-        </foreignObject>
+            <path d="M115.13,107.11a2,2,0,1,0-2-2A2,2,0,0,0,115.13,107.11Z" />
+            <path d="M113,111.51a1.24,1.24,0,0,1,1.08-1.24,7.23,7.23,0,0,0,6.19-6.19,1.25,1.25,0,0,1,2.48.34,9.75,9.75,0,0,1-8.34,8.33,1.25,1.25,0,0,1-1.4-1.07A1,1,0,0,1,113,111.51Z" />
+            <path d="M113,116.8a1.25,1.25,0,0,1,1.15-1.24,12.42,12.42,0,0,0,11.43-11.41,1.26,1.26,0,0,1,1.35-1.15,1.27,1.27,0,0,1,1.15,1.35,14.93,14.93,0,0,1-13.73,13.7,1.25,1.25,0,0,1-1.35-1.14Z" />
+          </g>
+          <g
+            v-else
+            key="count"
+          >
+            <foreignObject
+              :x="120 - 18"
+              :y="110 - 18"
+              :width="18 * 2"
+              :height="18 * 2"
+            >
+              <div
+                :style="{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '100%',
+                }"
+              >
+                <span
+                  :style="{
+                    color: '#28646e',
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                  }"
+                >{{ count }}</span>
+              </div>
+            </foreignObject>
+          </g>
+        </transition>
       </g>
       <!-- Clap Bits -->
       <ClapBits
@@ -418,6 +433,7 @@ export default {
       if (this.state === 'cooldown') {
         const tl = new TimelineMax({ onComplete: done });
         const [star, starTrail, tick] = el.children;
+        this.startShareAnimation();
         tl.set(starTrail, { opacity: 0 });
         tl.delay(0.2);
         tl.from(el, 0.7, {
@@ -477,6 +493,47 @@ export default {
           onComplete: done,
         });
       }
+    },
+    startShareAnimation() {
+      const tl = new TimelineMax();
+      tl.to(this.$refs.badgeBg, 0.5, {
+        fill: '#50e3c2',
+      });
+      tl.to(this.$refs.shareIcon.children, 0.2, {
+        fill: '#28646e',
+        stagger: 0.1,
+      }, 0);
+      tl.addLabel('end');
+      tl.to(this.$refs.badgeBg, 0.5, {
+        fill: this.badgeBgColor,
+      }, 'end+=1');
+      tl.to(this.$refs.shareIcon.children, 0.5, {
+        fill: this.shareIconColor,
+      }, 'end+=1');
+    },
+    badgeBeforeEnter(el) {
+      TweenMax.set(el, { opacity: 0 });
+    },
+    badgeIconEnter(el, onComplete) {
+      const fromConfig = {
+        scale: 0,
+        onComplete,
+      };
+      if (this.state === 'initial') {
+        fromConfig.transformOrigin = '50% 50%';
+      }
+      const toConfig = {
+        opacity: 1,
+        scale: 1,
+        onComplete,
+      };
+      TweenMax.fromTo(el, 0.5, fromConfig, toConfig);
+    },
+    badgeIconLeave(el, onComplete) {
+      TweenMax.to(el, 0.5, {
+        opacity: 0,
+        onComplete,
+      });
     },
   },
 };
