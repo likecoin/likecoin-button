@@ -1,7 +1,33 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { withKnobs, number, select } from '@storybook/addon-knobs';
+import {
+  withKnobs,
+  color,
+  number,
+  select,
+} from '@storybook/addon-knobs';
 
 import LikeCoinButtonV2 from './LikeCoinButton.v2';
+
+const StoryWrapper = {
+  props: {
+    bgColor: {
+      type: String,
+      default: 'transparent',
+    },
+  },
+  template: `
+    <div
+      :style="{
+        width: '100vw',
+        height: '100vh',
+        padding: '40px',
+        backgroundColor: bgColor,
+      }"
+    >
+      <slot />
+    </div>
+  `,
+};
 
 export default {
   title: 'LikeCoin Button v2',
@@ -10,6 +36,7 @@ export default {
 
 export const Default = () => ({
   components: {
+    StoryWrapper,
     LikeCoinButtonV2,
   },
   props: {
@@ -36,12 +63,24 @@ export const Default = () => ({
         Cooldown: 'cooldown',
       }, 'initial'),
     },
+    bgColor: {
+      default: color('Background Color', '#fff'),
+    },
   },
-  template: '<LikeCoinButtonV2 :count="count" :cooldown="cooldown" :state="state" />',
+  template: `
+    <StoryWrapper :bgColor="bgColor">
+      <LikeCoinButtonV2
+        :count="count"
+        :cooldown="cooldown"
+        :state="state"
+      />
+    </StoryWrapper>
+  `,
 });
 
 export const Controlled = () => ({
   components: {
+    StoryWrapper,
     LikeCoinButtonV2,
   },
   data() {
@@ -92,5 +131,14 @@ export const Controlled = () => ({
       }
     },
   },
-  template: '<LikeCoinButtonV2 :count="count" :cooldown="cooldown" :state="state" @click="onClick" />',
+  template: `
+    <StoryWrapper>
+      <LikeCoinButtonV2
+        :count="count"
+        :cooldown="cooldown"
+        :state="state"
+        @click="onClick"
+      />
+    </StoryWrapper>
+  `,
 });
