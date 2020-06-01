@@ -31,7 +31,7 @@ export default {
   name: 'likecoin-button-v2-clap-bits',
   props: {
     id: {
-      type: String,
+      type: Number,
       required: true,
     },
   },
