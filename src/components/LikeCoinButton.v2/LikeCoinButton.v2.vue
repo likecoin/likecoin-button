@@ -185,11 +185,18 @@
               fillRule: 'evenodd',
             }"
             key="shareIcon"
-            ref="shareIcon"
           >
-            <path d="M115.13,107.11a2,2,0,1,0-2-2A2,2,0,0,0,115.13,107.11Z" />
-            <path d="M113,111.51a1.24,1.24,0,0,1,1.08-1.24,7.23,7.23,0,0,0,6.19-6.19,1.25,1.25,0,0,1,2.48.34,9.75,9.75,0,0,1-8.34,8.33,1.25,1.25,0,0,1-1.4-1.07A1,1,0,0,1,113,111.51Z" />
-            <path d="M113,116.8a1.25,1.25,0,0,1,1.15-1.24,12.42,12.42,0,0,0,11.43-11.41,1.26,1.26,0,0,1,1.35-1.15,1.27,1.27,0,0,1,1.15,1.35,14.93,14.93,0,0,1-13.73,13.7,1.25,1.25,0,0,1-1.35-1.14Z" />
+            <transition
+              @enter="shareIconEnter"
+              @leave="shareIconLeave"
+              :css="false"
+            >
+              <g :key="state">
+                <path d="M115.13,107.11a2,2,0,1,0-2-2A2,2,0,0,0,115.13,107.11Z" />
+                <path d="M113,111.51a1.24,1.24,0,0,1,1.08-1.24,7.23,7.23,0,0,0,6.19-6.19,1.25,1.25,0,0,1,2.48.34,9.75,9.75,0,0,1-8.34,8.33,1.25,1.25,0,0,1-1.4-1.07A1,1,0,0,1,113,111.51Z" />
+                <path d="M113,116.8a1.25,1.25,0,0,1,1.15-1.24,12.42,12.42,0,0,0,11.43-11.41,1.26,1.26,0,0,1,1.35-1.15,1.27,1.27,0,0,1,1.15,1.35,14.93,14.93,0,0,1-13.73,13.7,1.25,1.25,0,0,1-1.35-1.14Z" />
+              </g>
+            </transition>
           </g>
           <g
             v-else
@@ -440,11 +447,13 @@ export default {
     },
     starIconEnter(el, done) {
       if (this.state === 'cooldown') {
-        const tl = new TimelineMax({ onComplete: done });
         const [star, starTrail, tick] = el.children;
-        this.startShareAnimation();
-        tl.set(starTrail, { opacity: 0 });
-        tl.delay(0.2);
+        TweenMax.set(starTrail, { opacity: 0 });
+
+        const tl = new TimelineMax({
+          delay: 0.3,
+          onComplete: done,
+        });
         tl.from(el, 0.7, {
           scale: 0.4,
           y: 50,
@@ -503,23 +512,6 @@ export default {
         });
       }
     },
-    startShareAnimation() {
-      const tl = new TimelineMax();
-      tl.to(this.$refs.badgeBg, 0.5, {
-        fill: '#50e3c2',
-      });
-      tl.to(this.$refs.shareIcon.children, 0.2, {
-        fill: '#28646e',
-        stagger: 0.1,
-      }, 0);
-      tl.addLabel('end');
-      tl.to(this.$refs.badgeBg, 0.5, {
-        fill: this.badgeBgColor,
-      }, 'end+=1');
-      tl.to(this.$refs.shareIcon.children, 0.5, {
-        fill: this.shareIconColor,
-      }, 'end+=1');
-    },
     badgeBeforeEnter(el) {
       TweenMax.set(el, { opacity: 0 });
     },
@@ -536,13 +528,38 @@ export default {
         scale: 1,
         onComplete,
       };
-      TweenMax.fromTo(el, 0.5, fromConfig, toConfig);
+      TweenMax.fromTo(el, 0.25, fromConfig, toConfig);
     },
     badgeIconLeave(el, onComplete) {
-      TweenMax.to(el, 0.5, {
+      TweenMax.to(el, 0.25, {
         opacity: 0,
         onComplete,
       });
+    },
+    shareIconEnter(el, done) {
+      if (this.state === 'cooldown') {
+        const tl = new TimelineMax();
+        tl.to(el.children, 0.2, {
+          fill: '#28646e',
+          stagger: 0.2,
+          onComplete: done,
+        });
+        tl.to(this.$refs.badgeBg, 0.5, {
+          fill: '#50e3c2',
+        }, 0);
+        tl.to(el.children, 0.5, {
+          fill: this.shareIconColor,
+          clearProps: 'fill',
+        }, 2.2);
+        tl.to(this.$refs.badgeBg, 0.5, {
+          fill: this.badgeBgColor,
+        }, 2.2);
+      } else {
+        done();
+      }
+    },
+    shareIconLeave(el, done) {
+      done();
     },
     countLabelEnter(el, onComplete) {
       TweenMax.from(el, 0.2, {
