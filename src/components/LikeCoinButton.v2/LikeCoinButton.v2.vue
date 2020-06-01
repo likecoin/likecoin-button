@@ -195,30 +195,38 @@
             v-else
             key="count"
           >
-            <foreignObject
-              :x="120 - 18"
-              :y="110 - 18"
-              :width="18 * 2"
-              :height="18 * 2"
+            <transition
+              @enter="countLabelEnter"
+              @leave="countLabeleave"
+              :css="false"
             >
-              <div
-                :style="{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: '100%',
-                }"
-              >
-                <span
-                  :style="{
-                    color: '#28646e',
-                    fontSize: '18px',
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                  }"
-                >{{ count }}</span>
-              </div>
-            </foreignObject>
+              <g :key="`${count}`">
+                <foreignObject
+                  :x="120 - 18"
+                  :y="110 - 18"
+                  :width="18 * 2"
+                  :height="18 * 2"
+                >
+                  <div
+                    :style="{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '100%',
+                    }"
+                  >
+                    <span
+                      :style="{
+                        color: '#28646e',
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                      }"
+                    >{{ count }}</span>
+                  </div>
+                </foreignObject>
+              </g>
+            </transition>
           </g>
         </transition>
       </g>
@@ -532,6 +540,20 @@ export default {
     badgeIconLeave(el, onComplete) {
       TweenMax.to(el, 0.5, {
         opacity: 0,
+        onComplete,
+      });
+    },
+    countLabelEnter(el, onComplete) {
+      TweenMax.from(el, 0.2, {
+        opacity: 0,
+        y: 10,
+        onComplete,
+      });
+    },
+    countLabeleave(el, onComplete) {
+      TweenMax.to(el, 0.2, {
+        opacity: 0,
+        y: -10,
         onComplete,
       });
     },
