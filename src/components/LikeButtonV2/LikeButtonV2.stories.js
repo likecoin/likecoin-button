@@ -5,8 +5,12 @@ import {
   number,
   select,
 } from '@storybook/addon-knobs';
+import { gsap } from 'gsap';
+import { CSSPlugin } from 'gsap/CSSPlugin';
 
 import LikeCoinButtonV2 from './LikeButtonV2';
+
+gsap.registerPlugin(CSSPlugin);
 
 const StoryWrapper = {
   props: {

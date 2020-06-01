@@ -14,6 +14,7 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "storybook": "start-storybook",
+    "build-storybook": "build-storybook -c .storybook -o ../docs",
     "lint": "npm run lint:es && npm run lint:style",
     "lint:es": "eslint --ext .js,.vue .",
     "lint:style": "stylelint -i .gitignore '**/*.{scss,vue}'",
