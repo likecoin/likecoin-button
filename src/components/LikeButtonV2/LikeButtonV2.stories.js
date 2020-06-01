@@ -6,7 +6,7 @@ import {
   select,
 } from '@storybook/addon-knobs';
 
-import LikeCoinButtonV2 from './LikeCoinButton.v2';
+import LikeCoinButtonV2 from './LikeButtonV2';
 
 const StoryWrapper = {
   props: {
@@ -30,7 +30,7 @@ const StoryWrapper = {
 };
 
 export default {
-  title: 'LikeCoin Button v2',
+  title: 'Like Button (v2)',
   decorators: [withKnobs],
 };
 

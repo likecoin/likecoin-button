@@ -251,8 +251,8 @@
 
 <script>
 import { TimelineMax, TweenMax } from 'gsap/all';
-import ClapBits from './LikeCoinButton.v2.clapBits';
-import StarBits from './LikeCoinButton.v2.starBits';
+import ClapBits from './LikeButtonV2.clapBits';
+import StarBits from './LikeButtonV2.starBits';
 
 export default {
   name: 'likecoin-button-v2',
