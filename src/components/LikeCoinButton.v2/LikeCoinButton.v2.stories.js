@@ -34,7 +34,7 @@ export const Default = () => ({
         Initial: 'initial',
         'Super Like-able': 'superlikeable',
         Cooldown: 'cooldown',
-      }, 'default'),
+      }, 'initial'),
     },
   },
   template: '<LikeCoinButtonV2 :count="count" :cooldown="cooldown" :state="state" />',
