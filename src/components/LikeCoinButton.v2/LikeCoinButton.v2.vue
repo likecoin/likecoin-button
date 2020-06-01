@@ -395,6 +395,7 @@ export default {
     },
     onClick() {
       this.startClapBitsAnimation();
+      this.$emit('click');
     },
     startClapBitsAnimation() {
       this.clapBits.push(Date.now());
