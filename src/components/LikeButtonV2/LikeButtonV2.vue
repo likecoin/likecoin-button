@@ -6,6 +6,8 @@
       background: 'none',
       outline: 'none',
       userSelect: 'none',
+      padding: 0,
+      margin: 0,
     }"
     :disabled="state === 'cooldown'"
     @mouseover="onMouseOver"
@@ -18,6 +20,8 @@
   >
     <svg
       :style="{
+        position: 'relative',
+        display: 'block',
         margin: '-40px',
         pointerEvents: 'none',
       }"
