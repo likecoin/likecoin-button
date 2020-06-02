@@ -19,3 +19,25 @@ export const Default = () => ({
   },
   template: '<BookmarkButton :toggled="toggled" />',
 });
+
+export const Controlled = () => ({
+  components: {
+    BookmarkButton,
+  },
+  data() {
+    return {
+      toggled: false,
+    };
+  },
+  methods: {
+    onClick() {
+      this.toggled = !this.toggled;
+    },
+  },
+  template: `
+    <BookmarkButton
+      :toggled="toggled"
+      @click="onClick"
+    />
+  `,
+});
