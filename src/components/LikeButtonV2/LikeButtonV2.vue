@@ -259,7 +259,7 @@ import ClapBits from './LikeButtonV2.clapBits';
 import StarBits from './LikeButtonV2.starBits';
 
 export default {
-  name: 'likecoin-button-v2',
+  name: 'like-button-v2',
   components: {
     ClapBits,
     StarBits,

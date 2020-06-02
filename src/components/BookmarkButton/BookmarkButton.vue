@@ -7,7 +7,6 @@
       outline: 'none',
       userSelect: 'none',
     }"
-    :disabled="state === 'cooldown'"
     @mouseover="onMouseOver"
     @mouseleave="onMouseLeave"
     @mousedown="onPressDown"
@@ -79,7 +78,7 @@
 import { TweenMax } from 'gsap/all';
 
 export default {
-  name: 'likecoin-button-v2',
+  name: 'bookmark-button',
   props: {
     toggled: {
       type: Boolean,
