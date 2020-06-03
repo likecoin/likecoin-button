@@ -32,19 +32,32 @@
     >
       <defs>
         <clipPath id="button-mask">
-          <path
-            :d="`
-              M0,0
-              V156
-              H156
-              V0
-              Z
-              M120,132
-              a22,22,0,1,1,22-22
-              A22,22,0,0,1,120,132
-              Z
-            `"
-          />
+          <transition
+            @before-enter="buttonMaskBeforeEnter"
+            @enter="buttonMaskEnter"
+            @leave="buttonMaskLeave"
+            mode="out-in"
+          >
+            <path
+              v-if="isShowBadge"
+              :d="`
+                M0,0
+                V156
+                H156
+                V0
+                Z
+                M120,132
+                a22,22,0,1,1,22-22
+                A22,22,0,0,1,120,132
+                Z
+              `"
+            />
+            <rect
+              v-else
+              width="156"
+              height="156"
+            />
+          </transition>
         </clipPath>
         <clipPath id="button-icon-mask">
           <circle
@@ -165,82 +178,91 @@
         </g>
       </g>
       <!-- Badge -->
-      <g>
-        <circle
-          :style="{
-            fill: badgeBgColor,
-          }"
-          ref="badgeBg"
-          cx="120"
-          cy="110"
-          r="18"
-        />
-        <transition
-          @before-enter="badgeBeforeEnter"
-          @enter="badgeIconEnter"
-          @leave="badgeIconLeave"
-          :css="false"
-          mode="out-in"
-        >
-          <g
-            v-if="state !== 'initial'"
+      <transition
+        @before-appear="badgeBeforeEnter"
+        @appear="badgeEnter"
+        @before-enter="badgeBeforeEnter"
+        @enter="badgeEnter"
+        @leave="badgeLeave"
+        :css="false"
+      >
+        <g v-if="isShowBadge">
+          <circle
             :style="{
-              fill: shareIconColor,
-              fillRule: 'evenodd',
+              fill: badgeBgColor,
             }"
-            key="shareIcon"
+            ref="badgeBg"
+            cx="120"
+            cy="110"
+            r="18"
+          />
+          <transition
+            @before-enter="badgeIconBeforeEnter"
+            @enter="badgeIconEnter"
+            @leave="badgeIconLeave"
+            :css="false"
+            mode="out-in"
           >
-            <transition
-              @enter="shareIconEnter"
-              @leave="shareIconLeave"
-              :css="false"
+            <g
+              v-if="state !== 'initial'"
+              :style="{
+                fill: shareIconColor,
+                fillRule: 'evenodd',
+              }"
+              key="shareIcon"
             >
-              <g :key="state">
-                <path d="M115.13,107.11a2,2,0,1,0-2-2A2,2,0,0,0,115.13,107.11Z" />
-                <path d="M113,111.51a1.24,1.24,0,0,1,1.08-1.24,7.23,7.23,0,0,0,6.19-6.19,1.25,1.25,0,0,1,2.48.34,9.75,9.75,0,0,1-8.34,8.33,1.25,1.25,0,0,1-1.4-1.07A1,1,0,0,1,113,111.51Z" />
-                <path d="M113,116.8a1.25,1.25,0,0,1,1.15-1.24,12.42,12.42,0,0,0,11.43-11.41,1.26,1.26,0,0,1,1.35-1.15,1.27,1.27,0,0,1,1.15,1.35,14.93,14.93,0,0,1-13.73,13.7,1.25,1.25,0,0,1-1.35-1.14Z" />
-              </g>
-            </transition>
-          </g>
-          <g
-            v-else
-            key="count"
-          >
-            <transition
-              @enter="countLabelEnter"
-              @leave="countLabeleave"
-              :css="false"
+              <transition
+                @enter="shareIconEnter"
+                @leave="shareIconLeave"
+                :css="false"
+              >
+                <g :key="state">
+                  <path d="M115.13,107.11a2,2,0,1,0-2-2A2,2,0,0,0,115.13,107.11Z" />
+                  <path d="M113,111.51a1.24,1.24,0,0,1,1.08-1.24,7.23,7.23,0,0,0,6.19-6.19,1.25,1.25,0,0,1,2.48.34,9.75,9.75,0,0,1-8.34,8.33,1.25,1.25,0,0,1-1.4-1.07A1,1,0,0,1,113,111.51Z" />
+                  <path d="M113,116.8a1.25,1.25,0,0,1,1.15-1.24,12.42,12.42,0,0,0,11.43-11.41,1.26,1.26,0,0,1,1.35-1.15,1.27,1.27,0,0,1,1.15,1.35,14.93,14.93,0,0,1-13.73,13.7,1.25,1.25,0,0,1-1.35-1.14Z" />
+                </g>
+              </transition>
+            </g>
+            <g
+              v-else
+              key="count"
             >
-              <g :key="`${count}`">
-                <foreignObject
-                  :x="120 - 18"
-                  :y="110 - 18"
-                  :width="18 * 2"
-                  :height="18 * 2"
-                >
-                  <div
-                    :style="{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: '100%',
-                    }"
+              <transition
+                @enter="countLabelEnter"
+                @leave="countLabeleave"
+                :css="false"
+              >
+                <g :key="`${count}`">
+                  <foreignObject
+                    :x="120 - 18"
+                    :y="110 - 18"
+                    :width="18 * 2"
+                    :height="18 * 2"
                   >
-                    <span
+                    <div
                       :style="{
-                        color: '#28646e',
-                        fontSize: '18px',
-                        fontWeight: 'bold',
-                        textAlign: 'center',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '100%',
                       }"
-                    >{{ count }}</span>
-                  </div>
-                </foreignObject>
-              </g>
-            </transition>
-          </g>
-        </transition>
-      </g>
+                    >
+                      <span
+                        :style="{
+                          color: '#28646e',
+                          fontSize: '18px',
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                        }"
+                      >{{ count }}</span>
+                    </div>
+                  </foreignObject>
+                </g>
+              </transition>
+            </g>
+          </transition>
+        </g>
+      </transition>
       <!-- Clap Bits -->
       <ClapBits
         v-for="id in clapBits"
@@ -291,6 +313,9 @@ export default {
     };
   },
   computed: {
+    isShowBadge() {
+      return (this.state === 'initial' && this.count >= 1) || this.state !== 'initial';
+    },
     buttonStyle() {
       return {
         transform: `scale(${this.isPressing ? 0.9 : 1})`,
@@ -516,7 +541,59 @@ export default {
         });
       }
     },
+    buttonMaskBeforeEnter(el) {
+      if (this.isShowBadge) {
+        // eslint-disable-next-line no-param-reassign
+        el.display = 'none';
+      }
+    },
+    buttonMaskEnter(el, done) {
+      if (this.isShowBadge) {
+        TweenMax.fromTo(el, 0.25, {
+          display: 'unset',
+          scale: 1.4,
+          transformOrigin: '50% 50%',
+        }, {
+          scale: 1,
+          onComplete: done,
+        });
+      } else {
+        done();
+      }
+    },
+    buttonMaskLeave(el, done) {
+      if (this.isShowBadge) {
+        done();
+      } else {
+        TweenMax.to(el, 0.25, {
+          scale: 1.4,
+          transformOrigin: '50% 50%',
+          onComplete: done,
+        });
+      }
+    },
     badgeBeforeEnter(el) {
+      TweenMax.set(el, { opacity: 0 });
+    },
+    badgeEnter(el, onComplete) {
+      TweenMax.fromTo(el, 0.25, {
+        scale: 0,
+        transformOrigin: '50% 50%',
+      }, {
+        scale: 1,
+        opacity: 1,
+        onComplete,
+      });
+    },
+    badgeLeave(el, onComplete) {
+      TweenMax.to(el, 0.25, {
+        scale: 0,
+        transformOrigin: '50% 50%',
+        opacity: 0,
+        onComplete,
+      });
+    },
+    badgeIconBeforeEnter(el) {
       TweenMax.set(el, { opacity: 0 });
     },
     badgeIconEnter(el, onComplete) {
