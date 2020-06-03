@@ -6,6 +6,8 @@
       background: 'none',
       outline: 'none',
       userSelect: 'none',
+      margin: 0,
+      padding: 0,
     }"
     @mouseover="onMouseOver"
     @mouseleave="onMouseLeave"
