@@ -8,7 +8,7 @@ import {
 import { gsap } from 'gsap';
 import { CSSPlugin } from 'gsap/CSSPlugin';
 
-import LikeCoinButtonV2 from './LikeButtonV2';
+import LikeButtonV2 from './LikeButtonV2';
 
 gsap.registerPlugin(CSSPlugin);
 
@@ -41,7 +41,7 @@ export default {
 export const Default = () => ({
   components: {
     StoryWrapper,
-    LikeCoinButtonV2,
+    LikeButtonV2,
   },
   props: {
     count: {
@@ -73,7 +73,7 @@ export const Default = () => ({
   },
   template: `
     <StoryWrapper :bgColor="bgColor">
-      <LikeCoinButtonV2
+      <LikeButtonV2
         :count="count"
         :cooldown="cooldown"
         :state="state"
@@ -85,7 +85,7 @@ export const Default = () => ({
 export const Controlled = () => ({
   components: {
     StoryWrapper,
-    LikeCoinButtonV2,
+    LikeButtonV2,
   },
   data() {
     return {
@@ -137,7 +137,7 @@ export const Controlled = () => ({
   },
   template: `
     <StoryWrapper>
-      <LikeCoinButtonV2
+      <LikeButtonV2
         :count="count"
         :cooldown="cooldown"
         :state="state"
