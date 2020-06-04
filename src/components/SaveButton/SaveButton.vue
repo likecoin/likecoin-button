@@ -99,6 +99,7 @@ export default {
     },
     onMouseLeave() {
       this.isHovering = false;
+      this.isPressing = false;
     },
     onPressDown() {
       this.isPressing = true;
