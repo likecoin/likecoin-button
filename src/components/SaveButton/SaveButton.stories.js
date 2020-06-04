@@ -1,28 +1,28 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { withKnobs, boolean } from '@storybook/addon-knobs';
 
-import BookmarkButton from './BookmarkButton';
+import SaveButton from './SaveButton';
 
 export default {
-  title: 'Bookmark Button',
+  title: 'Save Button',
   decorators: [withKnobs],
 };
 
 export const Default = () => ({
   components: {
-    BookmarkButton,
+    SaveButton,
   },
   props: {
     toggled: {
       default: boolean('Toggled', false),
     },
   },
-  template: '<BookmarkButton :toggled="toggled" />',
+  template: '<SaveButton :toggled="toggled" />',
 });
 
 export const Controlled = () => ({
   components: {
-    BookmarkButton,
+    SaveButton,
   },
   data() {
     return {
@@ -35,7 +35,7 @@ export const Controlled = () => ({
     },
   },
   template: `
-    <BookmarkButton
+    <SaveButton
       :toggled="toggled"
       @click="onClick"
     />

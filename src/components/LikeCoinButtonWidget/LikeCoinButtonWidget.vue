@@ -69,7 +69,7 @@
       height="44"
     >
       <slot name="save-button">
-        <BookmarkButton />
+        <SaveButton />
       </slot>
     </foreignObject>
     <!-- Save Button Label -->
@@ -115,13 +115,13 @@
 
 <script>
 import LikeButton from '../LikeButtonV2/LikeButtonV2';
-import BookmarkButton from '../BookmarkButton/BookmarkButton';
+import SaveButton from '../SaveButton/SaveButton';
 
 export default {
   name: 'likecoin-button-widget',
   components: {
     LikeButton,
-    BookmarkButton,
+    SaveButton,
   },
   props: {
     likeButtonLabel: {
