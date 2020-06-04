@@ -543,17 +543,15 @@ export default {
     },
     buttonMaskBeforeEnter(el) {
       if (this.isShowBadge) {
-        // eslint-disable-next-line no-param-reassign
-        el.display = 'none';
+        TweenMax.set(el, {
+          transformOrigin: '50% 50%',
+          scale: 1.4,
+        });
       }
     },
     buttonMaskEnter(el, done) {
       if (this.isShowBadge) {
-        TweenMax.fromTo(el, 0.25, {
-          display: 'unset',
-          scale: 1.4,
-          transformOrigin: '50% 50%',
-        }, {
+        TweenMax.to(el, 0.25, {
           scale: 1,
           onComplete: done,
         });
