@@ -167,10 +167,17 @@
               </g>
             </transition>
           </g>
-          <!-- Button Rim -->
+          <!-- Cooldown Track -->
           <circle
-            :style="rimStyle"
             :r="radius"
+            :style="cooldownTrackStyle"
+            cx="78"
+            cy="78"
+          />
+          <!-- Cooldown Fill -->
+          <circle
+            :r="radius"
+            :style="cooldownFillStyle"
             ref="rim"
             cx="78"
             cy="78"
@@ -338,12 +345,34 @@ export default {
     },
     buttonBgStyle() {
       return {
-        ...this.strokeStyle,
         fill: this.buttonBgColor,
+      };
+    },
+    cooldownTrackDiameter() {
+      return Math.PI * (this.radius * 2);
+    },
+    cooldownFillLength() {
+      if (this.state === 'cooldown') {
+        const cooldown = Math.min(100, Math.max(0, this.cooldown));
+        return (cooldown / 100) * this.cooldownTrackDiameter;
+      }
+      return 0;
+    },
+    cooldownStrokeStyle() {
+      return {
+        fill: 'none',
+        strokeLinecap: 'round',
+        strokeWidth: `${this.isHovering ? 6 : 4}px`,
+        transition: 'stroke 0.25s ease, stroke-width 0.25s ease, fill 0.25s ease',
+      };
+    },
+    cooldownTrackStyle() {
+      return {
+        ...this.cooldownStrokeStyle,
         stroke: '#e6e6e6',
       };
     },
-    rimStrokeColor() {
+    cooldownFillColor() {
       switch (this.state) {
         case 'superlikeable':
           return '#28646e';
@@ -359,15 +388,14 @@ export default {
           return '#50e3c2';
       }
     },
-    rimStyle() {
+    cooldownFillStyle() {
       return {
-        ...this.strokeStyle,
+        ...this.cooldownStrokeStyle,
         transform: 'rotate(-90deg)',
         transformOrigin: 'center',
-        fill: 'none',
-        stroke: this.rimStrokeColor,
-        strokeDasharray: this.strokeDashArrayValue,
-        strokeDashoffset: this.strokeDashOffsetValue,
+        stroke: this.cooldownFillColor,
+        strokeDasharray: this.cooldownTrackDiameter,
+        strokeDashoffset: this.cooldownFillLength,
       };
     },
     badgeBgColor() {
@@ -389,23 +417,6 @@ export default {
         return '#e6e6e6';
       }
       return '#28646e';
-    },
-    strokeStyle() {
-      return {
-        strokeLinecap: 'round',
-        strokeWidth: `${this.isHovering ? 6 : 4}px`,
-        transition: 'stroke 0.25s ease, stroke-width 0.25s ease, fill 0.25s ease',
-      };
-    },
-    strokeDashArrayValue() {
-      return Math.PI * (this.radius * 2);
-    },
-    strokeDashOffsetValue() {
-      if (this.state === 'cooldown') {
-        const cooldown = Math.min(100, Math.max(0, this.cooldown));
-        return (cooldown / 100) * this.strokeDashArrayValue;
-      }
-      return 0;
     },
   },
   methods: {
@@ -449,21 +460,26 @@ export default {
         TweenMax.set(el, { y: 50 });
       }
     },
-    buttonIconEnter(el, done) {
+    buttonIconEnter(el, onComplete) {
       if (this.state === 'initial') {
         TweenMax.fromTo(el, 0.5, {
           scale: 0,
           transformOrigin: '50% 50%',
-          onComplete: done,
+          onComplete,
         }, {
           scale: 1,
           opacity: 1,
         });
       } else {
-        TweenMax.to(el, 0.5, {
+        const tl = new TimelineMax({ onComplete });
+        tl.to(el, 0.5, {
           y: 0,
-          onComplete: done,
         });
+        tl.fromTo(this.$refs.rim, 1, {
+          strokeDashoffset: this.cooldownTrackDiameter,
+        }, {
+          strokeDashoffset: 0,
+        }, 0);
       }
     },
     buttonIconleave(el, done) {
@@ -516,9 +532,9 @@ export default {
           opacity: 0,
         }, 'end+=1');
         tl.fromTo(this.$refs.rim, 1, {
-          strokeDashoffset: this.strokeDashArrayValue,
+          strokeDashoffset: this.cooldownTrackDiameter,
         }, {
-          strokeDashoffset: this.strokeDashOffsetValue,
+          strokeDashoffset: this.cooldownFillLength,
         }, 0);
       } else {
         done();
