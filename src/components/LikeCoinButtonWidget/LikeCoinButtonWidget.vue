@@ -68,7 +68,9 @@
       width="44"
       height="44"
     >
-      <BookmarkButton />
+      <slot name="save-button">
+        <BookmarkButton />
+      </slot>
     </foreignObject>
     <!-- Save Button Label -->
     <foreignObject
@@ -94,7 +96,9 @@
           height: '100%',
         }"
       >
-        <LikeButton />
+        <slot name="like-button">
+          <LikeButton />
+        </slot>
       </div>
     </foreignObject>
     <!-- Like Button Label -->
