@@ -64,6 +64,7 @@ export const Default = () => ({
       default: select('State', {
         Initial: 'initial',
         'Super Like-able': 'superlikeable',
+        'Super Liked': 'superliked',
         Cooldown: 'cooldown',
       }, 'initial'),
     },
@@ -74,9 +75,11 @@ export const Default = () => ({
   template: `
     <StoryWrapper :bgColor="bgColor">
       <LikeButtonV2
-        :count="count"
-        :cooldown="cooldown"
-        :state="state"
+        v-bind="{
+          count,
+          cooldown,
+          state,
+        }"
       />
     </StoryWrapper>
   `,
