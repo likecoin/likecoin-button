@@ -100,8 +100,11 @@ export const Controlled = () => ({
         case 'initial':
           if (this.count < 5) {
             this.count += 1;
-          } else {
-            this.state = 'superlikeable';
+            if (this.count === 5) {
+              setTimeout(() => {
+                this.state = 'superlikeable';
+              }, 500);
+            }
           }
           break;
 
