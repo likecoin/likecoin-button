@@ -75,13 +75,22 @@
         }"
       >
         <g :style="buttonStyle">
-          <!-- Button Bg -->
-          <circle
-            :r="radius"
-            :style="buttonBgStyle"
-            cx="78"
-            cy="78"
-          />
+          <transition
+            @before-enter="buttonBgBeforeEnter"
+            @enter="buttonBgEnter"
+            @leave="buttonBgleave"
+            :css="false"
+            mode="in-out"
+          >
+            <!-- Button Bg -->
+            <circle
+              :key="state"
+              :r="radius"
+              :style="buttonBgStyle"
+              cx="78"
+              cy="78"
+            />
+          </transition>
           <!-- Button Icon -->
           <g
             :style="{
@@ -128,8 +137,15 @@
                       }"
                       d="M80,65.38l2.62,5.3a2.27,2.27,0,0,0,1.69,1.23l5.85.85a2.25,2.25,0,0,1,1.25,3.84l-4.23,4.12a2.24,2.24,0,0,0-.65,2l1,5.83a2.25,2.25,0,0,1-3.27,2.37L79,88.16a2.27,2.27,0,0,0-2.09,0l-5.23,2.75a2.25,2.25,0,0,1-3.27-2.37l1-5.83a2.24,2.24,0,0,0-.65-2L64.51,76.6a2.25,2.25,0,0,1,1.25-3.84l5.85-.85a2.27,2.27,0,0,0,1.69-1.23l2.62-5.3A2.25,2.25,0,0,1,80,65.38Z"
                     />
+                    <!-- Tick -->
+                    <polyline
+                      v-if="state === 'cooldown'"
+                      points="73.38 80.35 76.68 83.18 82.8 75.76"
+                      style="fill: none;stroke: #28646e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3px;fill-rule: evenodd"
+                    />
                     <!-- Button Star Trail -->
                     <g
+                      v-else
                       :style="{
                         fill: 'none',
                         stroke: superLikeIconStroke,
@@ -157,12 +173,6 @@
                         y2="104"
                       />
                     </g>
-                    <!-- Tick -->
-                    <polyline
-                      v-if="state === 'cooldown'"
-                      points="73.38 80.35 76.68 83.18 82.8 75.76"
-                      style="fill: none;stroke: #28646e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3px;fill-rule: evenodd"
-                    />
                   </g>
                 </transition>
               </g>
@@ -479,6 +489,21 @@ export default {
         this.clapBits.splice(index, 1);
       }
     },
+    buttonBgBeforeEnter(el) {
+      TweenMax.set(el, { opacity: 0 });
+    },
+    buttonBgEnter(el, done) {
+      TweenMax.to(el, 0.5, {
+        opacity: 1,
+        onComplete: done,
+      });
+    },
+    buttonBgleave(el, done) {
+      TweenMax.to(el, 0.5, {
+        opacity: 0,
+        onComplete: done,
+      });
+    },
     buttonIconBeforeEnter(el) {
       if (this.state === 'initial') {
         TweenMax.set(el, { opacity: 0 });
@@ -518,11 +543,7 @@ export default {
     },
     starIconEnter(el, done) {
       if (this.state === 'cooldown') {
-        const [star, starTrail, tick] = el.children;
-        TweenMax.set(starTrail, {
-          opacity: 0,
-          y: 5,
-        });
+        const [star, tick] = el.children;
         TweenMax.set(tick, { opacity: 0 });
         const tl = new TimelineMax({
           delay: 0.3,
@@ -543,12 +564,7 @@ export default {
             this.isShowStarBits = true;
           },
         }, 0);
-        tl.addLabel('end');
         tl.to(tick, 0.2, { opacity: 1 });
-        tl.to(starTrail, 0.5, {
-          opacity: 1,
-          y: 0,
-        }, 'end+=1');
         tl.fromTo(this.$refs.rim, 1, {
           strokeDashoffset: this.cooldownTrackDiameter,
         }, {
@@ -576,9 +592,17 @@ export default {
           onComplete: done,
         });
       } else {
-        TweenMax.to(el, 0.5, {
-          opacity: 0,
+        const [, tick] = el.children;
+        const tl = new TimelineMax({
           onComplete: done,
+        });
+        tl.to(el, 0.2, {
+          opacity: 0,
+          scale: 2,
+          transformOrigin: '50% 50%',
+        });
+        tl.to(tick, 0.2, {
+          opacity: 0,
         });
       }
     },
