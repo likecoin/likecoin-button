@@ -103,9 +103,9 @@
     </foreignObject>
     <!-- Like Button Label -->
     <foreignObject
-      x="40"
+      x="28"
       y="134"
-      width="76"
+      width="100"
       height="32"
     >
       <div :style="labelStyle">{{ likeButtonLabel }}</div>
