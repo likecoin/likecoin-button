@@ -86,7 +86,7 @@ export const Controlled = () => ({
         case 'initital':
         case 'cooldown':
         default:
-          return `${this.count} Like${this.count > 1 ? 's' : ''}`;
+          return `${this.count + 32} Likes`;
       }
     },
   },
