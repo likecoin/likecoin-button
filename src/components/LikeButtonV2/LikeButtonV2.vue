@@ -189,7 +189,7 @@
           <circle
             :r="radius"
             :style="cooldownFillStyle"
-            ref="rim"
+            ref="cooldownFill"
             cx="78"
             cy="78"
           />
@@ -527,10 +527,10 @@ export default {
         tl.to(el, 0.5, {
           y: 0,
         });
-        tl.fromTo(this.$refs.rim, 1, {
+        tl.fromTo(this.$refs.cooldownFill, 1, {
           strokeDashoffset: this.cooldownTrackDiameter,
         }, {
-          strokeDashoffset: 0,
+          strokeDashoffset: this.cooldownFillLength,
         }, 0);
       }
     },
@@ -566,7 +566,7 @@ export default {
           },
         }, 0);
         tl.to(tick, 0.2, { opacity: 1 });
-        tl.fromTo(this.$refs.rim, 1, {
+        tl.fromTo(this.$refs.cooldownFill, 1, {
           strokeDashoffset: this.cooldownTrackDiameter,
         }, {
           strokeDashoffset: this.cooldownFillLength,
