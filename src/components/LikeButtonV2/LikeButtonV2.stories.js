@@ -1,7 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   withKnobs,
-  color,
   number,
   select,
 } from '@storybook/addon-knobs';
@@ -45,9 +44,6 @@ export const Default = () => ({
         'Super Liked': 'superliked',
         Cooldown: 'cooldown',
       }, 'initial'),
-    },
-    bgColor: {
-      default: color('Background Color', '#fff'),
     },
   },
   template: `
