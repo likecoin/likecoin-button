@@ -87,18 +87,15 @@ const Controlled = ({
       return `${this.count + 32} Likes`;
     },
   },
-  mounted() {
-    if (this.cooldown > 0) {
-      this.fastForwardCooldown();
-    }
-  },
   methods: {
     onClickLikeButton() {
       if (this.count < 5) {
         this.count += 1;
-      } else if (!this.cooldown) {
+      } else {
         this.hasSuperLiked = true;
         this.cooldown = 80;
+      }
+      if (this.count >= 5) {
         setTimeout(() => {
           this.fastForwardCooldown();
         }, 3000);
@@ -150,9 +147,9 @@ const Controlled = ({
 
 export const Case1 = Controlled();
 
-export const Case2 = Controlled({ cooldown: 100 });
+export const Case2 = Controlled({ cooldown: 80 });
 
 export const Case3 = Controlled({
   count: 5,
-  hasSuperLiked: true
+  hasSuperLiked: true,
 });
