@@ -195,15 +195,23 @@
         :css="false"
       >
         <g v-if="isShowBadge">
-          <circle
-            :style="{
-              fill: badgeBgColor,
-            }"
-            ref="badgeBg"
-            cx="120"
-            cy="110"
-            r="18"
-          />
+          <transition
+            @before-enter="badgeBgBeforeEnter"
+            @enter="badgeBgEnter"
+            @leave="badgeBgLeave"
+            :css="false"
+            mode="in-out"
+          >
+            <circle
+              :key="state"
+              :style="{
+                fill: badgeBgColor,
+              }"
+              cx="120"
+              cy="110"
+              r="18"
+            />
+          </transition>
           <transition
             @before-enter="badgeIconBeforeEnter"
             @enter="badgeIconEnter"
@@ -617,6 +625,15 @@ export default {
         opacity: 0,
         onComplete,
       });
+    },
+    badgeBgBeforeEnter(el) {
+      TweenMax.set(el, { opacity: 0 });
+    },
+    badgeBgEnter(el, done) {
+      TweenMax.to(el, 0.25, { opacity: 1, onComplete: done });
+    },
+    badgeBgLeave(el, done) {
+      TweenMax.to(el, 0.25, { opacity: 0, onComplete: done });
     },
     badgeIconBeforeEnter(el) {
       TweenMax.set(el, { opacity: 0 });
