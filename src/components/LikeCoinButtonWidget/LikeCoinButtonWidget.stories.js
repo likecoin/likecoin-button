@@ -47,8 +47,11 @@ export const Default = () => ({
   `,
 });
 
-
-export const Controlled = () => ({
+const Controlled = ({
+  count,
+  cooldown,
+  hasSuperLiked,
+} = {}) => () => ({
   components: {
     LikeButtonV2,
     LikeCoinButtonWidget,
@@ -61,9 +64,9 @@ export const Controlled = () => ({
   },
   data() {
     return {
-      count: 0,
-      cooldown: 0,
-      hasSuperLiked: false,
+      count: count || 0,
+      cooldown: cooldown || 0,
+      hasSuperLiked: hasSuperLiked || false,
       isSaved: false,
     };
   },
@@ -83,6 +86,11 @@ export const Controlled = () => ({
       }
       return `${this.count + 32} Likes`;
     },
+  },
+  mounted() {
+    if (this.cooldown > 0) {
+      this.fastForwardCooldown();
+    }
   },
   methods: {
     onClickLikeButton() {
@@ -138,4 +146,13 @@ export const Controlled = () => ({
       </template>
     </LikeCoinButtonWidget>
   `,
+});
+
+export const Case1 = Controlled();
+
+export const Case2 = Controlled({ cooldown: 100 });
+
+export const Case3 = Controlled({
+  count: 5,
+  hasSuperLiked: true
 });
