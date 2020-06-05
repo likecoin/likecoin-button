@@ -9,7 +9,7 @@
       padding: 0,
       margin: 0,
     }"
-    :disabled="state === 'cooldown'"
+    :disabled="isDisabled"
     @mouseover="onMouseOver"
     @mouseleave="onMouseLeave"
     @mousedown="onPressDown"
@@ -349,6 +349,10 @@ export default {
         return 'superliked';
       }
       return 'superlikeable';
+    },
+    isDisabled() {
+      return this.state === 'cooldown'
+        || this.state === 'superlikeable-cooldown';
     },
     isShowBadge() {
       return this.count >= 1;
