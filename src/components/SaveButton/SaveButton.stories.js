@@ -19,25 +19,3 @@ export const Default = () => ({
   },
   template: '<SaveButton :toggled="toggled" />',
 });
-
-export const Controlled = () => ({
-  components: {
-    SaveButton,
-  },
-  data() {
-    return {
-      toggled: false,
-    };
-  },
-  methods: {
-    onClick() {
-      this.toggled = !this.toggled;
-    },
-  },
-  template: `
-    <SaveButton
-      :toggled="toggled"
-      @click="onClick"
-    />
-  `,
-});
