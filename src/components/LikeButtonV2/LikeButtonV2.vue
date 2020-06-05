@@ -217,7 +217,7 @@
             @enter="badgeIconEnter"
             @leave="badgeIconLeave"
             :css="false"
-            mode="out-in"
+            mode="in-out"
           >
             <g
               v-if="state === 'initial'"
@@ -268,7 +268,6 @@
                 @enter="shareIconEnter"
                 @leave="shareIconLeave"
                 :css="false"
-                :mode="state === 'superlikeable' ? 'out-in' : 'out-in'"
               >
                 <g :key="state">
                   <path d="M115.13,107.11a2,2,0,1,0-2-2A2,2,0,0,0,115.13,107.11Z" />
@@ -673,13 +672,14 @@ export default {
           stagger: 0.2,
         });
       } else {
-        tl.from(el.children, 0.2, {
-          opacity: 0,
-        });
+        tl.from(el, 0.2, { opacity: 0 });
       }
     },
-    shareIconLeave(el, done) {
-      done();
+    shareIconLeave(el, onComplete) {
+      TweenMax.to(el, 0.2, {
+        opacity: 0,
+        onComplete,
+      });
     },
     countLabelEnter(el, onComplete) {
       TweenMax.from(el, 0.2, {
