@@ -321,12 +321,9 @@ export default {
       type: Number,
       default: 0,
     },
-    state: {
-      type: String,
-      default: 'initial',
-      validator(value) {
-        return ['initial', 'superlikeable', 'superliked', 'cooldown'].indexOf(value) !== -1;
-      },
+    hasSuperLiked: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -339,8 +336,23 @@ export default {
     };
   },
   computed: {
+    state() {
+      if (this.count < 5) {
+        return 'initial';
+      }
+      if (this.cooldown) {
+        if (this.hasSuperLiked) {
+          return 'cooldown';
+        }
+        return 'superlikeable-cooldown';
+      }
+      if (this.hasSuperLiked) {
+        return 'superliked';
+      }
+      return 'superlikeable';
+    },
     isShowBadge() {
-      return (this.state === 'initial' && this.count >= 1) || this.state !== 'initial';
+      return this.count >= 1;
     },
     buttonStyle() {
       return {

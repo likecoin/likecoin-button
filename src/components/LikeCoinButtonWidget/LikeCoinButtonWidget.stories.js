@@ -62,8 +62,8 @@ export const Controlled = () => ({
   data() {
     return {
       count: 0,
-      cooldown: 80,
-      state: 'initial',
+      cooldown: 0,
+      hasSuperLiked: false,
       isSaved: false,
     };
   },
@@ -78,36 +78,22 @@ export const Controlled = () => ({
       return this.isSaved ? 'Saved' : 'Save';
     },
     likeButtonLabel() {
-      switch (this.state) {
-        case 'superlikeable':
-        case 'superliked':
-          return 'Super Like Now';
-
-        case 'initital':
-        case 'cooldown':
-        default:
-          return `${this.count + 32} Likes`;
+      if (this.count >= 5 && !this.cooldown) {
+        return 'Super Like Now';
       }
+      return `${this.count + 32} Likes`;
     },
   },
   methods: {
     onClickLikeButton() {
-      switch (this.state) {
-        case 'initial':
-          if (this.count < 5) {
-            this.count += 1;
-          } else {
-            this.state = 'superlikeable';
-          }
-          break;
-
-        case 'superlikeable':
-        case 'superliked':
-          this.state = 'cooldown';
-          break;
-
-        default:
-          break;
+      if (this.count < 5) {
+        this.count += 1;
+      } else if (!this.cooldown) {
+        this.hasSuperLiked = true;
+        this.cooldown = 80;
+        setTimeout(() => {
+          this.fastForwardCooldown();
+        }, 3000);
       }
     },
     onClickSaveButton() {
@@ -119,19 +105,9 @@ export const Controlled = () => ({
           this.cooldown -= 0.2;
           this.fastForwardCooldown();
         } else {
-          this.state = 'superliked';
-          this.cooldown = 80;
+          this.cooldown = 0;
         }
       }, 16);
-    },
-  },
-  watch: {
-    state(newState) {
-      if (newState === 'cooldown') {
-        setTimeout(() => {
-          this.fastForwardCooldown();
-        }, 3000);
-      }
     },
   },
   template: `
@@ -146,9 +122,11 @@ export const Controlled = () => ({
     >
       <template #like-button>
         <LikeButtonV2
-          :state="state"
-          :cooldown="cooldown"
-          :count="count"
+          v-bind="{
+            cooldown,
+            count,
+            hasSuperLiked,
+          }"
           @click="onClickLikeButton"
         />
       </template>

@@ -1,8 +1,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   withKnobs,
+  boolean,
   number,
-  select,
 } from '@storybook/addon-knobs';
 import { gsap } from 'gsap';
 import { CSSPlugin } from 'gsap/CSSPlugin';
@@ -37,13 +37,8 @@ export const Default = () => ({
         step: 1,
       }),
     },
-    state: {
-      default: select('State', {
-        Initial: 'initial',
-        'Super Like-able': 'superlikeable',
-        'Super Liked': 'superliked',
-        Cooldown: 'cooldown',
-      }, 'initial'),
+    hasSuperLiked: {
+      default: boolean('Super Liked', false),
     },
   },
   template: `
@@ -51,7 +46,7 @@ export const Default = () => ({
       v-bind="{
         count,
         cooldown,
-        state,
+        hasSuperLiked,
       }"
     />
   `,
