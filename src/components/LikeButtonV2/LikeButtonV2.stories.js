@@ -12,27 +12,6 @@ import LikeButtonV2 from './LikeButtonV2';
 
 gsap.registerPlugin(CSSPlugin);
 
-const StoryWrapper = {
-  props: {
-    bgColor: {
-      type: String,
-      default: 'transparent',
-    },
-  },
-  template: `
-    <div
-      :style="{
-        width: '100vw',
-        height: '100vh',
-        padding: '40px',
-        backgroundColor: bgColor,
-      }"
-    >
-      <slot />
-    </div>
-  `,
-};
-
 export default {
   title: 'Like Button (v2)',
   decorators: [withKnobs],
@@ -40,7 +19,6 @@ export default {
 
 export const Default = () => ({
   components: {
-    StoryWrapper,
     LikeButtonV2,
   },
   props: {
@@ -73,21 +51,18 @@ export const Default = () => ({
     },
   },
   template: `
-    <StoryWrapper :bgColor="bgColor">
-      <LikeButtonV2
-        v-bind="{
-          count,
-          cooldown,
-          state,
-        }"
-      />
-    </StoryWrapper>
+    <LikeButtonV2
+      v-bind="{
+        count,
+        cooldown,
+        state,
+      }"
+    />
   `,
 });
 
 export const Controlled = () => ({
   components: {
-    StoryWrapper,
     LikeButtonV2,
   },
   data() {
@@ -142,13 +117,11 @@ export const Controlled = () => ({
     },
   },
   template: `
-    <StoryWrapper>
-      <LikeButtonV2
-        :count="count"
-        :cooldown="cooldown"
-        :state="state"
-        @click="onClick"
-      />
-    </StoryWrapper>
+    <LikeButtonV2
+      :count="count"
+      :cooldown="cooldown"
+      :state="state"
+      @click="onClick"
+    />
   `,
 });
