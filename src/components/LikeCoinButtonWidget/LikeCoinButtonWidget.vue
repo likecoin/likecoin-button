@@ -87,11 +87,9 @@
       width="156"
       height="156"
     >
-      <div :style="{ padding: '40px' }">
-        <slot name="like-button">
-          <LikeButton />
-        </slot>
-      </div>
+      <slot name="like-button">
+        <LikeButton />
+      </slot>
     </foreignObject>
     <!-- Like Button Label -->
     <foreignObject
