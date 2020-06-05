@@ -87,15 +87,7 @@
       width="156"
       height="156"
     >
-      <div
-        :style="{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          height: '100%',
-        }"
-      >
+      <div :style="{ padding: '40px' }">
         <slot name="like-button">
           <LikeButton />
         </slot>
