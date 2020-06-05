@@ -205,75 +205,74 @@
         :css="false"
       >
         <g v-if="isShowBadge">
-          <transition
-            @before-enter="badgeBgBeforeEnter"
-            @enter="badgeBgEnter"
-            @leave="badgeBgLeave"
-            :css="false"
-            mode="in-out"
-          >
+          <g key="count">
             <circle
-              :key="state"
               :style="{
-                fill: badgeBgColor,
+                fill: '#aaf1e7',
               }"
               cx="120"
               cy="110"
               r="18"
             />
-          </transition>
+            <transition
+              @enter="countLabelEnter"
+              @leave="countLabeleave"
+              :css="false"
+            >
+              <g :key="`${count}`">
+                <foreignObject
+                  :x="120 - 18"
+                  :y="110 - 18"
+                  :width="18 * 2"
+                  :height="18 * 2"
+                >
+                  <div
+                    :style="{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '100%',
+                    }"
+                  >
+                    <span
+                      :style="{
+                        color: '#28646e',
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                      }"
+                    >{{ count }}</span>
+                  </div>
+                </foreignObject>
+              </g>
+            </transition>
+          </g>
           <transition
-            @before-enter="badgeIconBeforeEnter"
-            @enter="badgeIconEnter"
-            @leave="badgeIconLeave"
+            @before-appear="badgeContentBeforeEnter"
+            @apper="badgeContentEnter"
+            @before-enter="badgeContentBeforeEnter"
+            @enter="badgeContentEnter"
+            @leave="badgeContentLeave"
             :css="false"
             mode="in-out"
           >
             <g
-              v-if="state === 'initial'"
-              key="count"
-            >
-              <transition
-                @enter="countLabelEnter"
-                @leave="countLabeleave"
-                :css="false"
-              >
-                <g :key="`${count}`">
-                  <foreignObject
-                    :x="120 - 18"
-                    :y="110 - 18"
-                    :width="18 * 2"
-                    :height="18 * 2"
-                  >
-                    <div
-                      :style="{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        height: '100%',
-                      }"
-                    >
-                      <span
-                        :style="{
-                          color: '#28646e',
-                          fontSize: '18px',
-                          fontWeight: 'bold',
-                          textAlign: 'center',
-                        }"
-                      >{{ count }}</span>
-                    </div>
-                  </foreignObject>
-                </g>
-              </transition>
-            </g>
-            <g
-              v-else
+              v-if="state !== 'initial'"
               :style="{
-                fill: shareIconColor,
+                fill: shareIconContentColor,
                 fillRule: 'evenodd',
               }"
               key="shareIcon"
             >
+              <circle
+                :key="state"
+                :style="{
+                  fill: shareIconBgColor,
+                }"
+                cx="120"
+                cy="110"
+                r="18"
+              />
               <transition
                 @enter="shareIconEnter"
                 @leave="shareIconLeave"
@@ -368,6 +367,7 @@ export default {
           return '#50e3c2';
 
         case 'cooldown':
+        case 'superlikeable-cooldown':
           return '#fff';
 
         case 'initial':
@@ -384,7 +384,7 @@ export default {
       return Math.PI * (this.radius * 2);
     },
     cooldownFillLength() {
-      if (this.state === 'cooldown') {
+      if (this.state === 'cooldown' || this.state === 'superlikeable-cooldown') {
         const cooldown = Math.min(100, Math.max(0, this.cooldown));
         return (cooldown / 100) * this.cooldownTrackDiameter;
       }
@@ -411,6 +411,7 @@ export default {
           return '#28646e';
 
         case 'cooldown':
+        case 'superlikeable-cooldown':
           return '#50e3c2';
 
         case 'initial':
@@ -431,38 +432,22 @@ export default {
         strokeDashoffset: this.cooldownFillLength,
       };
     },
-    badgeBgColor() {
-      switch (this.state) {
-        case 'superlikeable':
-          return '#e6e6e6';
-
-        case 'superliked':
-        case 'cooldown':
-          return '#50e3c2';
-
-        case 'initial':
-        default:
-          return '#aaf1e7';
-      }
+    shareIconBgColor() {
+      return this.hasSuperLiked ? '#50e3c2' : '#e6e6e6';
     },
-    shareIconColor() {
-      switch (this.state) {
-        case 'superliked':
-        case 'cooldown':
-          return '#28646e';
-
-        case 'superlikeable':
-        default:
-          return '#9b9b9b';
-      }
+    shareIconContentColor() {
+      return this.hasSuperLiked ? '#28646e' : '#9b9b9b';
     },
     superLikeIconStroke() {
-      if (this.state === 'cooldown') {
-        return '#50e3c2';
+      if (this.cooldown) {
+        return this.hasSuperLiked ? '#50e3c2' : '#e6e6e6';
       }
       return '#28646e';
     },
     superLikeIconFill() {
+      if (this.state === 'superlikeable-cooldown') {
+        return '#50e3c200';
+      }
       return '#50e3c2';
     },
   },
@@ -668,33 +653,20 @@ export default {
         onComplete,
       });
     },
-    badgeBgBeforeEnter(el) {
-      TweenMax.set(el, { opacity: 0 });
+    badgeContentBeforeEnter(el) {
+      TweenMax.set(el, { visibility: 'hidden' });
     },
-    badgeBgEnter(el, done) {
-      TweenMax.to(el, 0.25, { opacity: 1, onComplete: done });
-    },
-    badgeBgLeave(el, done) {
-      TweenMax.to(el, 0.25, { opacity: 0, onComplete: done });
-    },
-    badgeIconBeforeEnter(el) {
-      TweenMax.set(el, { opacity: 0 });
-    },
-    badgeIconEnter(el, onComplete) {
-      const fromConfig = {
+    badgeContentEnter(el, onComplete) {
+      TweenMax.set(el, { visibility: 'visible' });
+      TweenMax.from(el, 0.25, {
+        opacity: 0,
         scale: 0,
-      };
-      if (this.state === 'initial') {
-        fromConfig.transformOrigin = '50% 50%';
-      }
-      const toConfig = {
-        opacity: 1,
-        scale: 1,
+        transformOrigin: '50% 50%',
+        delay: 0.25,
         onComplete,
-      };
-      TweenMax.fromTo(el, 0.25, fromConfig, toConfig);
+      });
     },
-    badgeIconLeave(el, onComplete) {
+    badgeContentLeave(el, onComplete) {
       TweenMax.to(el, 0.25, {
         opacity: 0,
         onComplete,
