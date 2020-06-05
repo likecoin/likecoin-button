@@ -556,7 +556,14 @@ export default {
           strokeDashoffset: this.cooldownFillLength,
         }, 0);
       } else {
-        done();
+        TweenMax.from(el, 0.5, {
+          scaleX: 0.7,
+          scaleY: 1.5,
+          y: 100,
+          opacity: 0,
+          transformOrigin: '50% 50%',
+          onComplete: done,
+        });
       }
     },
     starIconleave(el, done) {
