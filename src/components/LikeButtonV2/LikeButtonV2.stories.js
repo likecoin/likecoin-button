@@ -8,6 +8,7 @@ import { gsap } from 'gsap';
 import { CSSPlugin } from 'gsap/CSSPlugin';
 
 import LikeButtonV2 from './LikeButtonV2';
+import LikeButtonV2Badge from './LikeButtonV2.badge';
 
 gsap.registerPlugin(CSSPlugin);
 
@@ -46,6 +47,33 @@ export const Default = () => ({
       v-bind="{
         count,
         cooldown,
+        hasSuperLiked,
+      }"
+    />
+  `,
+});
+
+export const Badge = () => ({
+  components: {
+    LikeButtonV2Badge,
+  },
+  props: {
+    count: {
+      default: number('Like count', 0, {
+        range: true,
+        min: 0,
+        max: 5,
+        step: 1,
+      }),
+    },
+    hasSuperLiked: {
+      default: boolean('Super Liked', false),
+    },
+  },
+  template: `
+    <LikeButtonV2Badge
+      v-bind="{
+        count,
         hasSuperLiked,
       }"
     />

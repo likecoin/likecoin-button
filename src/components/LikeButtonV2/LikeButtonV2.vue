@@ -192,98 +192,16 @@
         </g>
       </g>
       <!-- Badge -->
-      <transition
-        @before-appear="badgeBeforeEnter"
-        @appear="badgeEnter"
-        @before-enter="badgeBeforeEnter"
-        @enter="badgeEnter"
-        @leave="badgeLeave"
-        :css="false"
-      >
-        <g v-if="isShowBadge">
-          <g key="count">
-            <circle
-              :style="{
-                fill: '#aaf1e7',
-              }"
-              cx="120"
-              cy="110"
-              r="18"
-            />
-            <transition
-              @enter="countLabelEnter"
-              @leave="countLabeleave"
-              :css="false"
-            >
-              <g :key="`${count}`">
-                <foreignObject
-                  :x="120 - 18"
-                  :y="110 - 18"
-                  :width="18 * 2"
-                  :height="18 * 2"
-                >
-                  <div
-                    :style="{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: '100%',
-                    }"
-                  >
-                    <span
-                      :style="{
-                        color: '#28646e',
-                        fontSize: '18px',
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                      }"
-                    >{{ count }}</span>
-                  </div>
-                </foreignObject>
-              </g>
-            </transition>
-          </g>
-          <transition
-            @before-appear="badgeContentBeforeEnter"
-            @apper="badgeContentEnter"
-            @before-enter="badgeContentBeforeEnter"
-            @enter="badgeContentEnter"
-            @leave="badgeContentLeave"
-            :css="false"
-            mode="in-out"
-          >
-            <g
-              v-if="state !== 'initial'"
-              :style="{
-                fill: shareIconContentColor,
-                fillRule: 'evenodd',
-              }"
-              key="shareIcon"
-            >
-              <circle
-                :key="state"
-                :style="{
-                  fill: shareIconBgColor,
-                }"
-                cx="120"
-                cy="110"
-                r="18"
-              />
-              <transition
-                @enter="shareIconEnter"
-                @leave="shareIconLeave"
-                :css="false"
-              >
-                <g :key="state">
-                  <path d="M115.13,107.11a2,2,0,1,0-2-2A2,2,0,0,0,115.13,107.11Z" />
-                  <path d="M113,111.51a1.24,1.24,0,0,1,1.08-1.24,7.23,7.23,0,0,0,6.19-6.19,1.25,1.25,0,0,1,2.48.34,9.75,9.75,0,0,1-8.34,8.33,1.25,1.25,0,0,1-1.4-1.07A1,1,0,0,1,113,111.51Z" />
-                  <path d="M113,116.8a1.25,1.25,0,0,1,1.15-1.24,12.42,12.42,0,0,0,11.43-11.41,1.26,1.26,0,0,1,1.35-1.15,1.27,1.27,0,0,1,1.15,1.35,14.93,14.93,0,0,1-13.73,13.7,1.25,1.25,0,0,1-1.35-1.14Z" />
-                </g>
-              </transition>
-            </g>
-          </transition>
-        </g>
-      </transition>
+      <g>
+        <Badge
+          v-bind="{
+            x: 102,
+            y: 32,
+            count,
+            hasSuperLiked,
+          }"
+        />
+      </g>
       <!-- Clap Bits -->
       <ClapBits
         v-for="id in clapBits"
@@ -298,12 +216,14 @@
 
 <script>
 import { TimelineMax, TweenMax } from 'gsap/all';
+import Badge from './LikeButtonV2.badge';
 import ClapBits from './LikeButtonV2.clapBits';
 import StarBits from './LikeButtonV2.starBits';
 
 export default {
   name: 'like-button-v2',
   components: {
+    Badge,
     ClapBits,
     StarBits,
   },
@@ -433,12 +353,6 @@ export default {
         strokeDasharray: this.cooldownTrackDiameter,
         strokeDashoffset: this.cooldownFillLength,
       };
-    },
-    shareIconBgColor() {
-      return this.hasSuperLiked ? '#50e3c2' : '#e6e6e6';
-    },
-    shareIconContentColor() {
-      return this.hasSuperLiked ? '#28646e' : '#9b9b9b';
     },
     superLikeIconStroke() {
       if (this.cooldown) {
@@ -639,77 +553,6 @@ export default {
           onComplete: done,
         });
       }
-    },
-    badgeBeforeEnter(el) {
-      TweenMax.set(el, { opacity: 0 });
-    },
-    badgeEnter(el, onComplete) {
-      TweenMax.fromTo(el, 0.25, {
-        scale: 0,
-        transformOrigin: '50% 50%',
-      }, {
-        scale: 1,
-        opacity: 1,
-        onComplete,
-      });
-    },
-    badgeLeave(el, onComplete) {
-      TweenMax.to(el, 0.25, {
-        scale: 0,
-        transformOrigin: '50% 50%',
-        opacity: 0,
-        onComplete,
-      });
-    },
-    badgeContentBeforeEnter(el) {
-      TweenMax.set(el, { visibility: 'hidden' });
-    },
-    badgeContentEnter(el, onComplete) {
-      TweenMax.set(el, { visibility: 'visible' });
-      TweenMax.from(el, 0.25, {
-        opacity: 0,
-        scale: 0,
-        transformOrigin: '50% 50%',
-        delay: 0.25,
-        onComplete,
-      });
-    },
-    badgeContentLeave(el, onComplete) {
-      TweenMax.to(el, 0.25, {
-        opacity: 0,
-        onComplete,
-      });
-    },
-    shareIconEnter(el, onComplete) {
-      const tl = new TimelineMax({ onComplete });
-      if (this.state !== 'superlikeable') {
-        tl.from(el.children, 0.2, {
-          opacity: 0,
-          stagger: 0.2,
-        });
-      } else {
-        tl.from(el, 0.2, { opacity: 0 });
-      }
-    },
-    shareIconLeave(el, onComplete) {
-      TweenMax.to(el, 0.2, {
-        opacity: 0,
-        onComplete,
-      });
-    },
-    countLabelEnter(el, onComplete) {
-      TweenMax.from(el, 0.2, {
-        opacity: 0,
-        y: 10,
-        onComplete,
-      });
-    },
-    countLabeleave(el, onComplete) {
-      TweenMax.to(el, 0.2, {
-        opacity: 0,
-        y: -10,
-        onComplete,
-      });
     },
   },
 };
