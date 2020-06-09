@@ -1,29 +1,20 @@
 <!-- eslint-disable max-len -->
 <template>
-  <button
-    :style="buttonStyle"
-    @mouseover="onMouseOver"
-    @mouseleave="onMouseLeave"
-    @mousedown="onPressDown"
-    @mouseup="onPressUp"
-    @touchstart="onTouchStart"
-    @touchend="onTouchEnd"
-    @click="onClick"
+  <svg
+    :viewBox="`0 0 ${size} ${size}`"
+    :width="size"
+    xmlns="http://www.w3.org/2000/svg"
   >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 44 44"
-      width="44"
-    >
-      <defs>
-        <clipPath id="icon-mask">
-          <path d="M26.92,12.72H16.64A2.64,2.64,0,0,0,14,15.36V32.72l7.78-5.09,7.78,5.09V15.36A2.64,2.64,0,0,0,26.92,12.72Z" />
-        </clipPath>
-      </defs>
+    <defs>
+      <clipPath id="icon-mask">
+        <path d="M26.92,12.72H16.64A2.64,2.64,0,0,0,14,15.36V32.72l7.78-5.09,7.78,5.09V15.36A2.64,2.64,0,0,0,26.92,12.72Z" />
+      </clipPath>
+    </defs>
+    <g :style="svgStyle">
       <circle
-        cx="22"
-        cy="22"
-        r="22"
+        :cx="radius"
+        :cy="radius"
+        :r="radius"
         fill="#aaf1e7"
       />
       <transition
@@ -36,9 +27,9 @@
         :css="false"
       >
         <circle
-          cx="22"
-          cy="22"
-          r="22"
+          :cx="radius"
+          :cy="radius"
+          :r="radius"
           fill="#50e3c2"
         />
       </transition>
@@ -53,9 +44,9 @@
           :css="false"
         >
           <circle
-            cx="22"
-            cy="22"
-            r="22"
+            :cx="radius"
+            :cy="radius"
+            :r="radius"
             fill="#28646e"
           />
         </transition>
@@ -64,8 +55,23 @@
           fill="#28646e"
         />
       </g>
-    </svg>
-  </button>
+      <foreignObject
+        :width="size"
+        :height="size"
+      >
+        <button
+          :style="buttonStyle"
+          @mouseover="onMouseOver"
+          @mouseleave="onMouseLeave"
+          @mousedown="onPressDown"
+          @mouseup="onPressUp"
+          @touchstart="onTouchStart"
+          @touchend="onTouchEnd"
+          @click="onClick"
+        />
+      </foreignObject>
+    </g>
+  </svg>
 </template>
 <!-- eslint-enable max-len -->
 
@@ -87,6 +93,12 @@ export default {
     };
   },
   computed: {
+    size() {
+      return 44;
+    },
+    radius() {
+      return this.size / 2;
+    },
     buttonKey() {
       return this.isPressing ? 'pressed' : 'normal';
     },
@@ -95,13 +107,22 @@ export default {
     },
     buttonStyle() {
       return {
+        display: 'block',
         border: 'none',
         background: 'none',
         outline: 'none',
         userSelect: 'none',
         margin: 0,
         padding: 0,
+        width: '100%',
+        height: '100%',
+        borderRadius: '50%',
+      };
+    },
+    svgStyle() {
+      return {
         transform: `scale(${this.isPressing ? this.buttonPressedScale : 1})`,
+        transformOrigin: '50% 50%',
         transition: 'transform 0.2s ease',
       };
     },
