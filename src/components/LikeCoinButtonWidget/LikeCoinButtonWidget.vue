@@ -44,8 +44,8 @@
     </g>
     <!-- Avatar Label -->
     <foreignObject
+      :y="labelY"
       x="202"
-      y="134"
       width="68"
       height="32"
     >
@@ -74,8 +74,8 @@
     </svg>
     <!-- Save Button Label -->
     <foreignObject
+      :y="labelY"
       x="144"
-      y="134"
       width="52"
       height="32"
     >
@@ -88,8 +88,8 @@
     </slot>
     <!-- Like Button Label -->
     <foreignObject
+      :y="labelY"
       x="28"
-      y="134"
       width="100"
       height="32"
     >
@@ -157,6 +157,9 @@ export default {
         ...this.avatarRimStyle,
         stroke: '#50e3c2',
       };
+    },
+    labelY() {
+      return 140;
     },
     labelStyle() {
       return {
