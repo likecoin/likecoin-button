@@ -83,14 +83,9 @@
     </foreignObject>
 
     <!-- Like Button -->
-    <foreignObject
-      width="156"
-      height="156"
-    >
-      <slot name="like-button">
-        <LikeButton />
-      </slot>
-    </foreignObject>
+    <slot name="like-button">
+      <LikeButton />
+    </slot>
     <!-- Like Button Label -->
     <foreignObject
       x="28"
