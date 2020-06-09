@@ -195,16 +195,19 @@
       </foreignObject>
     </g>
     <!-- Badge -->
-    <g>
+    <svg
+      x="102"
+      y="92"
+      width="36"
+      height="36"
+    >
       <Badge
         v-bind="{
-          x: 102,
-          y: 32,
           count,
           hasSuperLiked,
         }"
       />
-    </g>
+    </svg>
     <!-- Clap Bits -->
     <ClapBits
       v-for="id in clapBits"
