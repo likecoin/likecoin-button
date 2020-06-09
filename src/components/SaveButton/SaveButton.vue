@@ -35,7 +35,7 @@
       </transition>
       <g style="clip-path: url(#icon-mask)">
         <transition
-          v-if="(isPressing && !toggled) || (!isPressing && toggled)"
+          v-if="toggled"
           @before-appear="iconFillBeforeEnter"
           @appear="iconFillEnter"
           @before-enter="iconFillBeforeEnter"
@@ -173,14 +173,13 @@ export default {
       });
     },
     iconFillBeforeEnter(el) {
-      TweenMax.set(el, { opacity: 0 });
-    },
-    iconFillEnter(el, onComplete) {
-      TweenMax.fromTo(el, 0.25, {
+      TweenMax.set(el, {
         scale: 0,
         transformOrigin: '50% 50%',
-      }, {
-        opacity: 1,
+      });
+    },
+    iconFillEnter(el, onComplete) {
+      TweenMax.to(el, 0.25, {
         scale: 1,
         onComplete,
       });
