@@ -45,6 +45,7 @@
                       color: '#28646e',
                       fontSize: '18px',
                       fontWeight: 'bold',
+                      fontFamily: 'Arial, sans-serif',
                       textAlign: 'center',
                     }"
                   >{{ count }}</span>
