@@ -196,11 +196,11 @@ export default {
     },
     shareIconEnter(el, onComplete) {
       TweenMax.set(el, { visibility: 'visible' });
-      TweenMax.from(el, 0.4, {
+      TweenMax.from(el, 0.5, {
         opacity: 0,
         scale: 0,
         transformOrigin: '50% 50%',
-        delay: 0.25,
+        delay: 1,
         onComplete,
       });
     },
