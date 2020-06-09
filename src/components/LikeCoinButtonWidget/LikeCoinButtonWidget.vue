@@ -62,7 +62,7 @@
     </foreignObject>
 
     <!-- Save button -->
-    <foreignObject
+    <svg
       x="148"
       y="78"
       width="44"
@@ -71,7 +71,7 @@
       <slot name="save-button">
         <SaveButton />
       </slot>
-    </foreignObject>
+    </svg>
     <!-- Save Button Label -->
     <foreignObject
       x="144"
