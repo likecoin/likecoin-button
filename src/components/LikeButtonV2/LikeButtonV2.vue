@@ -326,6 +326,7 @@ export default {
       radius: 38,
       isHovering: false,
       isPressing: false,
+      hasBlockingAnimation: false,
       clapBits: [],
       isShowStarBits: false,
     };
@@ -348,7 +349,8 @@ export default {
     },
     isDisabled() {
       return this.state === 'cooldown'
-        || this.state === 'superlikeable-cooldown';
+        || this.state === 'superlikeable-cooldown'
+        || this.hasBlockingAnimation;
     },
     isShowBadge() {
       return this.count >= 1;
@@ -508,18 +510,24 @@ export default {
         TweenMax.set(el, { y: 50 });
       }
     },
-    buttonIconEnter(el, onComplete) {
+    buttonIconEnter(el, done) {
       if (this.state === 'initial') {
         TweenMax.fromTo(el, 0.5, {
           scale: 0,
           transformOrigin: '50% 50%',
-          onComplete,
+          onComplete: done,
         }, {
           scale: 1,
           opacity: 1,
         });
       } else {
-        const tl = new TimelineMax({ onComplete });
+        this.hasBlockingAnimation = true;
+        const tl = new TimelineMax({
+          onComplete: () => {
+            this.hasBlockingAnimation = false;
+            done();
+          },
+        });
         tl.to(el, 0.5, {
           y: 0,
         });
