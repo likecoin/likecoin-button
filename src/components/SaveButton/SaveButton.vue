@@ -1,14 +1,7 @@
 <!-- eslint-disable max-len -->
 <template>
   <button
-    :style="{
-      border: 'none',
-      background: 'none',
-      outline: 'none',
-      userSelect: 'none',
-      margin: 0,
-      padding: 0,
-    }"
+    :style="buttonStyle"
     @mouseover="onMouseOver"
     @mouseleave="onMouseLeave"
     @mousedown="onPressDown"
@@ -92,6 +85,26 @@ export default {
       isHovering: false,
       isPressing: false,
     };
+  },
+  computed: {
+    buttonKey() {
+      return this.isPressing ? 'pressed' : 'normal';
+    },
+    buttonPressedScale() {
+      return 0.85;
+    },
+    buttonStyle() {
+      return {
+        border: 'none',
+        background: 'none',
+        outline: 'none',
+        userSelect: 'none',
+        margin: 0,
+        padding: 0,
+        transform: `scale(${this.isPressing ? this.buttonPressedScale : 1})`,
+        transition: 'transform 0.2s ease',
+      };
+    },
   },
   methods: {
     onMouseOver() {
