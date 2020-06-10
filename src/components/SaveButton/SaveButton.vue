@@ -73,14 +73,8 @@
         :height="size"
       >
         <button
-          :style="buttonStyle"
-          @mouseover="onMouseOver"
-          @mouseleave="onMouseLeave"
-          @mousedown="onPressDown"
-          @mouseup="onPressUp"
-          @touchstart="onTouchStart"
-          @touchend="onTouchEnd"
-          @click="onClick"
+          :style="buttonBaseStyle"
+          v-on="buttonListeners"
         />
       </foreignObject>
     </g>
@@ -90,20 +84,16 @@
 
 <script>
 import { TweenMax } from 'gsap/all';
+import ButtonMixin from '../../mixins/button';
 
 export default {
   name: 'bookmark-button',
+  mixins: [ButtonMixin],
   props: {
     toggled: {
       type: Boolean,
       default: false,
     },
-  },
-  data() {
-    return {
-      isHovering: false,
-      isPressing: false,
-    };
   },
   computed: {
     size() {
@@ -117,20 +107,6 @@ export default {
     },
     buttonPressedScale() {
       return 0.85;
-    },
-    buttonStyle() {
-      return {
-        display: 'block',
-        border: 'none',
-        background: 'none',
-        outline: 'none',
-        userSelect: 'none',
-        margin: 0,
-        padding: 0,
-        width: '100%',
-        height: '100%',
-        borderRadius: '50%',
-      };
     },
     iconFill() {
       return '#28646e';
@@ -148,30 +124,6 @@ export default {
     },
   },
   methods: {
-    onMouseOver() {
-      this.isHovering = true;
-    },
-    onMouseLeave() {
-      this.isHovering = false;
-      this.isPressing = false;
-    },
-    onPressDown() {
-      this.isPressing = true;
-    },
-    onPressUp() {
-      this.isPressing = false;
-    },
-    onTouchStart() {
-      this.isHovering = true;
-      this.isPressing = true;
-    },
-    onTouchEnd() {
-      this.isHovering = false;
-      this.isPressing = false;
-    },
-    onClick() {
-      this.$emit('click');
-    },
     hoverRimBeforeEnter(el) {
       TweenMax.set(el, { opacity: 0 });
     },

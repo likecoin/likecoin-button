@@ -172,24 +172,9 @@
         height="76"
       >
         <button
-          :style="{
-            border: 'none',
-            background: 'none',
-            outline: 'none',
-            userSelect: 'none',
-            padding: 0,
-            margin: 0,
-            width: '100%',
-            height: '100%',
-            borderRadius: '50%',
-          }"
+          :style="buttonStyle"
           :disabled="isDisabled"
-          @mouseover="onMouseOver"
-          @mouseleave="onMouseLeave"
-          @mousedown="onPressDown"
-          @mouseup="onPressUp"
-          @touchstart="onTouchStart"
-          @touchend="onTouchEnd"
+          v-on="buttonListeners"
           @click="onClick"
         />
       </foreignObject>
@@ -228,6 +213,7 @@ import { TimelineMax, TweenMax } from 'gsap/all';
 import Badge from './LikeButtonV2.badge';
 import ClapBits from './LikeButtonV2.clapBits';
 import StarBits from './LikeButtonV2.starBits';
+import ButtonMixin from '../../mixins/button';
 
 export default {
   name: 'like-button-v2',
@@ -236,6 +222,7 @@ export default {
     ClapBits,
     StarBits,
   },
+  mixins: [ButtonMixin],
   props: {
     count: {
       type: Number,
@@ -261,8 +248,6 @@ export default {
   data() {
     return {
       radius: 38,
-      isHovering: false,
-      isPressing: false,
       hasBlockingAnimation: false,
       clapBits: [],
       isShowStarBits: false,
@@ -294,6 +279,7 @@ export default {
     },
     buttonStyle() {
       return {
+        ...this.buttonBaseStyle,
         transform: `scale(${this.isPressing ? 0.9 : 1})`,
         transition: 'transform 0.25s ease',
         transformOrigin: 'center',
@@ -385,27 +371,6 @@ export default {
     },
   },
   methods: {
-    onMouseOver() {
-      this.isHovering = true;
-    },
-    onMouseLeave() {
-      this.isHovering = false;
-      this.isPressing = false;
-    },
-    onPressDown() {
-      this.isPressing = true;
-    },
-    onPressUp() {
-      this.isPressing = false;
-    },
-    onTouchStart() {
-      this.isHovering = true;
-      this.isPressing = true;
-    },
-    onTouchEnd() {
-      this.isHovering = false;
-      this.isPressing = false;
-    },
     onClick() {
       this.startClapBitsAnimation();
       this.$emit('click');
