@@ -105,9 +105,6 @@ export default {
     buttonKey() {
       return this.isPressing ? 'pressed' : 'normal';
     },
-    buttonPressedScale() {
-      return 0.85;
-    },
     iconFill() {
       return '#28646e';
     },
@@ -117,9 +114,7 @@ export default {
     svgStyle() {
       return {
         clipPath: 'url(#save-button-mask)',
-        transform: `scale(${this.isPressing ? this.buttonPressedScale : 1})`,
-        transformOrigin: '50% 50%',
-        transition: 'transform 0.2s ease',
+        ...this.buttonPressedStyle,
       };
     },
   },

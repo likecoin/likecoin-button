@@ -5,6 +5,9 @@ import {
 } from '@storybook/addon-knobs';
 
 import Identity from './Identity';
+import IdentityAvatar from './Identity.avatar';
+
+const defaultAvatarURL = 'https://avatars.dicebear.com/api/identicon/likecoin.svg';
 
 export default {
   title: 'Identity',
@@ -17,7 +20,7 @@ export const Default = () => ({
   },
   props: {
     avatarURL: {
-      default: text('Avatar URL', 'https://avatars.dicebear.com/api/identicon/likecoin.svg'),
+      default: text('Avatar URL', defaultAvatarURL),
     },
     displayName: {
       default: text('Display Name', 'Display Name'),
@@ -31,4 +34,16 @@ export const Default = () => ({
       }"
     />
   `,
+});
+
+export const Avatar = () => ({
+  components: {
+    IdentityAvatar,
+  },
+  props: {
+    url: {
+      default: text('URL', defaultAvatarURL),
+    },
+  },
+  template: '<IdentityAvatar :url="url" />',
 });

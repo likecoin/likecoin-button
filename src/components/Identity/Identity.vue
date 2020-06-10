@@ -1,43 +1,17 @@
 <template>
   <svg
-    :viewBox="`0 0 ${width} ${displayNameHeight}`"
+    :viewBox="`0 0 ${width} ${height}`"
     :width="width"
     :height="height"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <defs>
-      <clipPath id="avatar-mask">
-        <circle
-          :cx="avatarCenterX"
-          :cy="avatarCenterY"
-          :r="avatarRadius"
-        />
-      </clipPath>
-    </defs>
     <!-- Avatar -->
-    <g>
-      <g :style="{ clipPath: 'url(#avatar-mask)' }">
-        <image
-          :href="avatarURL"
-          :x="avatarCenterX - avatarRadius"
-          :y="avatarCenterY - avatarRadius"
-          :width="avatarRadius * 2"
-          :height="avatarRadius * 2"
-        />
-      </g>
-      <circle
-        :cx="avatarCenterX"
-        :cy="avatarCenterY"
-        :r="avatarRadius"
-        :style="avatarInnerRimStyle"
-      />
-      <circle
-        :cx="avatarCenterX"
-        :cy="avatarCenterY"
-        :r="avatarRimRadius"
-        :style="avatarOuterRimStyle"
-      />
-    </g>
+    <Avatar
+      :x="avatarX"
+      :y="avatarY"
+      :url="avatarURL"
+      @click="onClickAvatar"
+    />
     <!-- Display Name -->
     <foreignObject
       :x="displayNameX"
@@ -51,8 +25,13 @@
 </template>
 
 <script>
+import Avatar from './Identity.avatar';
+
 export default {
   name: 'identity',
+  components: {
+    Avatar,
+  },
   props: {
     avatarURL: {
       type: String,
@@ -70,38 +49,11 @@ export default {
     height() {
       return 74;
     },
-    avatarCenterX() {
-      return this.avatarRadius + 8;
+    avatarX() {
+      return 4;
     },
-    avatarCenterY() {
-      return this.displayNameHeight / 2;
-    },
-    avatarRadius() {
-      return 19;
-    },
-    avatarRimStrokeWidth() {
-      return 1.8;
-    },
-    avatarRimRadius() {
-      return this.avatarRadius + 3;
-    },
-    avatarRimStyle() {
-      return {
-        fill: 'none',
-        strokeWidth: `${this.avatarRimStrokeWidth}px`,
-      };
-    },
-    avatarInnerRimStyle() {
-      return {
-        ...this.avatarRimStyle,
-        stroke: '#e6e6e6',
-      };
-    },
-    avatarOuterRimStyle() {
-      return {
-        ...this.avatarRimStyle,
-        stroke: '#50e3c2',
-      };
+    avatarY() {
+      return 13;
     },
     displayNameWidth() {
       return 180;
@@ -110,7 +62,7 @@ export default {
       return this.height;
     },
     displayNameX() {
-      return this.avatarCenterX + this.avatarRadius + 12;
+      return 60;
     },
     displayNameY() {
       return 0;
@@ -125,6 +77,11 @@ export default {
         fontWeight: '500',
         height: '100%',
       };
+    },
+  },
+  methods: {
+    onClickAvatar(e) {
+      this.$emit('click-avatar', e);
     },
   },
 };

@@ -30,6 +30,16 @@ export default {
         borderRadius: '50%',
       };
     },
+    buttonPressedScale() {
+      return 0.85;
+    },
+    buttonPressedStyle() {
+      return {
+        transform: `scale(${this.isPressing ? this.buttonPressedScale : 1})`,
+        transformOrigin: 'center center',
+        transition: 'transform 0.2s ease',
+      };
+    },
   },
   methods: {
     onMouseOver() {
