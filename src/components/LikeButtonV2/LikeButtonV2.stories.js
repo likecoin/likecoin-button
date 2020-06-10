@@ -41,6 +41,22 @@ export const Default = () => ({
     hasSuperLiked: {
       default: boolean('Super Liked', false),
     },
+    explosionSize: {
+      default: number('Explosion Size', 1, {
+        range: true,
+        min: 0,
+        max: 1,
+        step: 0.01,
+      }),
+    },
+    explosionRange: {
+      default: number('Explosion Range', 1, {
+        range: true,
+        min: 0,
+        max: 1,
+        step: 0.01,
+      }),
+    },
   },
   template: `
     <LikeButtonV2
@@ -48,6 +64,8 @@ export const Default = () => ({
         count,
         cooldown,
         hasSuperLiked,
+        explosionSize,
+        explosionRange,
       }"
     />
   `,

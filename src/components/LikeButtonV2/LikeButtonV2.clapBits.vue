@@ -34,6 +34,14 @@ export default {
       type: Number,
       required: true,
     },
+    explosionRange: {
+      type: Number,
+      required: true,
+    },
+    explosionSize: {
+      type: Number,
+      required: true,
+    },
   },
   mounted() {
     const tl = new TimelineMax({
@@ -54,8 +62,8 @@ export default {
       })
       // Animate bits explosion
       .to(this.$refs.bits, 0.5, {
-        y: -66,
-        scale: 1,
+        y: this.explosionRange / -1 * 66,
+        scale: this.explosionSize,
         opacity: 1,
         transformOrigin: '50% 50%',
       })

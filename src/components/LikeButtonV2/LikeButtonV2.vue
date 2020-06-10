@@ -212,7 +212,11 @@
     <ClapBits
       v-for="id in clapBits"
       :key="id"
-      :id="id"
+      v-bind="{
+        id,
+        explosionSize,
+        explosionRange,
+      }"
       @end="finishClapBitsAnimation"
     />
   </svg>
@@ -244,6 +248,14 @@ export default {
     hasSuperLiked: {
       type: Boolean,
       default: false,
+    },
+    explosionSize: {
+      type: Number,
+      default: 1,
+    },
+    explosionRange: {
+      type: Number,
+      default: 66,
     },
   },
   data() {
