@@ -26,11 +26,11 @@
       />
       <transition
         v-if="isHovering"
-        @before-appear="hoverBgBeforeEnter"
-        @appear="hoverBgEnter"
-        @before-enter="hoverBgBeforeEnter"
-        @enter="hoverBgEnter"
-        @leave="hoverBgLeave"
+        @before-appear="hoverRimBeforeEnter"
+        @appear="hoverRimEnter"
+        @before-enter="hoverRimBeforeEnter"
+        @enter="hoverRimEnter"
+        @leave="hoverRimLeave"
         :css="false"
       >
         <circle
@@ -171,10 +171,10 @@ export default {
     onClick() {
       this.$emit('click');
     },
-    hoverBgBeforeEnter(el) {
+    hoverRimBeforeEnter(el) {
       TweenMax.set(el, { opacity: 0 });
     },
-    hoverBgEnter(el, onComplete) {
+    hoverRimEnter(el, onComplete) {
       TweenMax.fromTo(el, 0.25, {
         scale: 1.1,
         transformOrigin: '50% 50%',
@@ -184,7 +184,7 @@ export default {
         onComplete,
       });
     },
-    hoverBgLeave(el, onComplete) {
+    hoverRimLeave(el, onComplete) {
       TweenMax.to(el, 0.2, {
         scale: 1.1,
         opacity: 0,
