@@ -127,8 +127,9 @@ const Controlled = ({
           @click="onClickLikeButton"
         />
       </template>
-      <template #save-button>
+      <template #save-button="saveButtonProps">
         <SaveButton
+          v-bind="saveButtonProps"
           :toggled="isSaved"
           @click="onClickSaveButton"
         />

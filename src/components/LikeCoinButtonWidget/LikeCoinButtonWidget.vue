@@ -26,16 +26,12 @@
     </foreignObject>
 
     <!-- Save button -->
-    <svg
-      x="148"
-      y="78"
-      width="44"
-      height="44"
+    <slot
+      v-bind="saveSlotProps"
+      name="save-button"
     >
-      <slot name="save-button">
-        <SaveButton />
-      </slot>
-    </svg>
+      <SaveButton v-bind="saveSlotProps" />
+    </slot>
     <!-- Save Button Label -->
     <foreignObject
       :y="labelY"
@@ -101,6 +97,12 @@ export default {
       return {
         x: 209,
         y: 63,
+      };
+    },
+    saveSlotProps() {
+      return {
+        x: 148,
+        y: 78,
       };
     },
     labelY() {
