@@ -175,7 +175,6 @@
           :style="buttonStyle"
           :disabled="isDisabled"
           v-on="buttonListeners"
-          @click="onClick"
         />
       </foreignObject>
     </g>
