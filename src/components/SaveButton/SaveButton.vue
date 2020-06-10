@@ -43,10 +43,11 @@
           @leave="iconFillLeave"
           :css="false"
         >
-          <circle
-            :cx="radius"
-            :cy="radius"
-            :r="radius"
+          <rect
+            x="14"
+            y="12"
+            width="16"
+            height="22"
             fill="#28646e"
           />
         </transition>
@@ -173,21 +174,17 @@ export default {
       });
     },
     iconFillBeforeEnter(el) {
-      TweenMax.set(el, {
-        scale: 0,
-        transformOrigin: '50% 50%',
-      });
+      TweenMax.set(el, { scaleY: 0 });
     },
     iconFillEnter(el, onComplete) {
       TweenMax.to(el, 0.25, {
-        scale: 1,
+        scaleY: 1,
         onComplete,
       });
     },
     iconFillLeave(el, onComplete) {
       TweenMax.to(el, 0.2, {
-        scale: 0,
-        transformOrigin: '50% 50%',
+        scaleY: 0,
         onComplete,
       });
     },
