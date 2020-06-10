@@ -7,7 +7,7 @@
   >
     <defs>
       <clipPath id="save-icon-mask">
-        <path d="M26.92,12.72H16.64A2.64,2.64,0,0,0,14,15.36V32.72l7.78-5.09,7.78,5.09V15.36A2.64,2.64,0,0,0,26.92,12.72Z" />
+        <path :d="iconPath" />
       </clipPath>
       <clipPath id="save-button-mask">
         <circle
@@ -53,16 +53,18 @@
           :css="false"
         >
           <rect
+            :fill="iconFill"
             x="14"
             y="12"
             width="16"
             height="22"
-            fill="#28646e"
           />
         </transition>
         <path
-          d="M26.92,14.72a.64.64,0,0,1,.64.64V29L22.87,26l-1.09-.72-1.1.72L16,29V15.36a.64.64,0,0,1,.64-.64H26.92m0-2H16.64A2.64,2.64,0,0,0,14,15.36V32.72l7.78-5.09,7.78,5.09V15.36a2.64,2.64,0,0,0-2.64-2.64Z"
-          fill="#28646e"
+          :d="iconPath"
+          :stroke="iconFill"
+          stroke-width="4"
+          fill="none"
         />
       </g>
       <foreignObject
@@ -128,6 +130,12 @@ export default {
         height: '100%',
         borderRadius: '50%',
       };
+    },
+    iconFill() {
+      return '#28646e';
+    },
+    iconPath() {
+      return 'M26.9,12.7H16.6c-1.5,0-2.6,1.2-2.6,2.6v17.4l7.8-5.1l7.8,5.1V15.4C29.6,13.9,28.4,12.7,26.9,12.7z';
     },
     svgStyle() {
       return {
