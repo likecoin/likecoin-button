@@ -6,8 +6,15 @@
     xmlns="http://www.w3.org/2000/svg"
   >
     <defs>
-      <clipPath id="icon-mask">
+      <clipPath id="save-icon-mask">
         <path d="M26.92,12.72H16.64A2.64,2.64,0,0,0,14,15.36V32.72l7.78-5.09,7.78,5.09V15.36A2.64,2.64,0,0,0,26.92,12.72Z" />
+      </clipPath>
+      <clipPath id="save-button-mask">
+        <circle
+          :cx="radius"
+          :cy="radius"
+          :r="radius"
+        />
       </clipPath>
     </defs>
     <g :style="svgStyle">
@@ -30,10 +37,12 @@
           :cx="radius"
           :cy="radius"
           :r="radius"
-          fill="#50e3c2"
+          stroke="#50e3c2"
+          stroke-width="4"
+          fill="none"
         />
       </transition>
-      <g style="clip-path: url(#icon-mask)">
+      <g style="clip-path: url(#save-icon-mask)">
         <transition
           v-if="toggled"
           @before-appear="iconFillBeforeEnter"
@@ -122,6 +131,7 @@ export default {
     },
     svgStyle() {
       return {
+        clipPath: 'url(#save-button-mask)',
         transform: `scale(${this.isPressing ? this.buttonPressedScale : 1})`,
         transformOrigin: '50% 50%',
         transition: 'transform 0.2s ease',
@@ -158,7 +168,7 @@ export default {
     },
     hoverBgEnter(el, onComplete) {
       TweenMax.fromTo(el, 0.25, {
-        scale: 0.4,
+        scale: 1.1,
         transformOrigin: '50% 50%',
       }, {
         opacity: 1,
@@ -168,7 +178,8 @@ export default {
     },
     hoverBgLeave(el, onComplete) {
       TweenMax.to(el, 0.2, {
-        scale: 0,
+        scale: 1.1,
+        opacity: 0,
         transformOrigin: '50% 50%',
         onComplete,
       });
