@@ -251,11 +251,11 @@ export default {
     },
     explosionSize: {
       type: Number,
-      default: 1,
+      default: 0.65,
     },
     explosionRange: {
       type: Number,
-      default: 66,
+      default: 0.8,
     },
   },
   data() {

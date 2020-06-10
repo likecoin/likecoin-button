@@ -42,7 +42,7 @@ export const Default = () => ({
       default: boolean('Super Liked', false),
     },
     explosionSize: {
-      default: number('Explosion Size', 1, {
+      default: number('Explosion Size', 0.65, {
         range: true,
         min: 0,
         max: 1,
@@ -50,7 +50,7 @@ export const Default = () => ({
       }),
     },
     explosionRange: {
-      default: number('Explosion Range', 1, {
+      default: number('Explosion Range', 0.8, {
         range: true,
         min: 0,
         max: 1,
