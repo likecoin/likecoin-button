@@ -9,39 +9,12 @@
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 480 180"
   >
-    <defs>
-      <clipPath id="avatar-mask">
-        <circle
-          :cx="avatarCenterX"
-          :cy="avatarCenterY"
-          :r="avatarRadius"
-        />
-      </clipPath>
-    </defs>
-    <!-- Avatar -->
-    <g>
-      <g :style="{ clipPath: 'url(#avatar-mask)' }">
-        <image
-          :href="avatarURL"
-          :x="avatarCenterX - avatarRadius"
-          :y="avatarCenterY - avatarRadius"
-          :width="avatarRadius * 2"
-          :height="avatarRadius * 2"
-        />
-      </g>
-      <circle
-        :cx="avatarCenterX"
-        :cy="avatarCenterY"
-        :r="avatarRadius"
-        :style="avatarInnerRimStyle"
-      />
-      <circle
-        :cx="avatarCenterX"
-        :cy="avatarCenterY"
-        :r="avatarRadius + 3"
-        :style="avatarOuterRimStyle"
-      />
-    </g>
+    <slot
+      v-bind="identitySlotProps"
+      name="identity"
+    >
+      <Identity v-bind="identitySlotProps" />
+    </slot>
     <!-- Avatar Label -->
     <foreignObject
       :y="labelY"
@@ -50,15 +23,6 @@
       height="32"
     >
       <div :style="labelStyle">{{ avatarLabel }}</div>
-    </foreignObject>
-    <!-- Display Name -->
-    <foreignObject
-      x="270"
-      y="60"
-      width="180"
-      height="74"
-    >
-      <div :style="displayNameStyle">{{ displayName }}</div>
     </foreignObject>
 
     <!-- Save button -->
@@ -99,12 +63,14 @@
 </template>
 
 <script>
+import Identity from '../Identity/Identity';
 import LikeButton from '../LikeButtonV2/LikeButtonV2';
 import SaveButton from '../SaveButton/SaveButton';
 
 export default {
   name: 'likecoin-button-widget',
   components: {
+    Identity,
     LikeButton,
     SaveButton,
   },
@@ -131,31 +97,10 @@ export default {
     },
   },
   computed: {
-    avatarCenterX() {
-      return 236;
-    },
-    avatarCenterY() {
-      return 100;
-    },
-    avatarRadius() {
-      return 19;
-    },
-    avatarRimStyle() {
+    identitySlotProps() {
       return {
-        fill: 'none',
-        strokeWidth: '1.8px',
-      };
-    },
-    avatarInnerRimStyle() {
-      return {
-        ...this.avatarRimStyle,
-        stroke: '#e6e6e6',
-      };
-    },
-    avatarOuterRimStyle() {
-      return {
-        ...this.avatarRimStyle,
-        stroke: '#50e3c2',
+        x: 209,
+        y: 63,
       };
     },
     labelY() {
@@ -168,17 +113,6 @@ export default {
         fontSize: '14px',
         textAlign: 'center',
         width: '100%',
-      };
-    },
-    displayNameStyle() {
-      return {
-        display: 'flex',
-        alignItems: 'center',
-        color: '#28646E',
-        fontFamily: 'Arial, serif',
-        fontSize: '18px',
-        fontWeight: '500',
-        height: '100%',
       };
     },
   },

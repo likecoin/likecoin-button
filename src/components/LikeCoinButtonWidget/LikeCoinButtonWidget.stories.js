@@ -4,6 +4,7 @@ import {
   text,
 } from '@storybook/addon-knobs';
 
+import Identity from '../Identity/Identity';
 import LikeCoinButtonWidget from './LikeCoinButtonWidget';
 import LikeButtonV2 from '../LikeButtonV2/LikeButtonV2';
 import SaveButton from '../SaveButton/SaveButton';
@@ -27,12 +28,6 @@ export const Default = () => ({
     avatarLabel: {
       default: text('Avatar Label', 'Follow'),
     },
-    avatarURL: {
-      default: text('Avatar URL', 'https://avatars.dicebear.com/api/identicon/likecoin.svg'),
-    },
-    displayName: {
-      default: text('Display Name', 'Display Name'),
-    },
   },
   template: `
     <LikeCoinButtonWidget
@@ -40,8 +35,6 @@ export const Default = () => ({
         likeButtonLabel,
         saveButtonLabel,
         avatarLabel,
-        avatarURL,
-        displayName,
       }"
     />
   `,
@@ -53,6 +46,7 @@ const Controlled = ({
   hasSuperLiked,
 } = {}) => () => ({
   components: {
+    Identity,
     LikeButtonV2,
     LikeCoinButtonWidget,
     SaveButton,
@@ -119,8 +113,6 @@ const Controlled = ({
     <LikeCoinButtonWidget
       v-bind="{
         avatarLabel,
-        avatarURL,
-        displayName,
         likeButtonLabel,
         saveButtonLabel,
       }"
@@ -139,6 +131,15 @@ const Controlled = ({
         <SaveButton
           :toggled="isSaved"
           @click="onClickSaveButton"
+        />
+      </template>
+      <template #identity="identityProps">
+        <Identity
+          v-bind="{
+            ...identityProps,
+            avatarURL,
+            displayName,
+          }"
         />
       </template>
     </LikeCoinButtonWidget>
