@@ -77,7 +77,7 @@ export const Badge = () => ({
   },
   props: {
     count: {
-      default: number('Like count', 0, {
+      default: number('Like count', 5, {
         range: true,
         min: 0,
         max: 5,
