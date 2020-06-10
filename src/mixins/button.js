@@ -14,6 +14,7 @@ export default {
         mouseup: this.onPressUp,
         touchstart: this.onTouchStart,
         touchend: this.onTouchEnd,
+        click: this.onClick,
       };
     },
     buttonBaseStyle() {
