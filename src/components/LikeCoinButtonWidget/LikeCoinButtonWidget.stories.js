@@ -62,11 +62,12 @@ const Controlled = ({
       cooldown: cooldown || 0,
       hasSuperLiked: hasSuperLiked || false,
       isSaved: false,
+      isFollowing: false,
     };
   },
   computed: {
     avatarLabel() {
-      return this.count >= 1 ? 'Following' : 'Follow';
+      return this.isFollowing ? 'Following' : 'Follow';
     },
     avatarURL() {
       return `https://avatars.dicebear.com/api/identicon/${encodeURIComponent(this.displayName)}.svg`;
@@ -97,6 +98,9 @@ const Controlled = ({
     },
     onClickSaveButton() {
       this.isSaved = !this.isSaved;
+    },
+    onFollow() {
+      this.isFollowing = true;
     },
     fastForwardCooldown() {
       setTimeout(() => {
@@ -141,6 +145,7 @@ const Controlled = ({
             avatarURL,
             displayName,
           }"
+          @click-avatar="onFollow"
         />
       </template>
     </LikeCoinButtonWidget>
