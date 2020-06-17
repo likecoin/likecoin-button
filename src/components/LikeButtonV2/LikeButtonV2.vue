@@ -76,7 +76,7 @@
           >
             <!-- Button Clap -->
             <g
-              v-if="state === 'initial'"
+              v-if="state === 'initial' || state === 'max'"
               key="clap"
             >
               <path
@@ -189,6 +189,7 @@
         v-bind="{
           count,
           hasSuperLiked,
+          isSuperLikeEnabled,
         }"
       />
     </svg>
@@ -235,6 +236,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isSuperLikeEnabled: {
+      type: Boolean,
+      default: true,
+    },
     explosionSize: {
       type: Number,
       default: 0.65,
@@ -256,6 +261,9 @@ export default {
     state() {
       if (this.count < 5) {
         return 'initial';
+      }
+      if (!this.isSuperLikeEnabled) {
+        return 'max';
       }
       if (this.cooldown) {
         if (this.hasSuperLiked) {

@@ -43,7 +43,8 @@ export const Default = () => ({
 const Controlled = ({
   count,
   cooldown,
-  hasSuperLiked,
+  hasSuperLiked = false,
+  isSuperLikeEnabled = true,
 } = {}) => () => ({
   components: {
     Identity,
@@ -60,7 +61,8 @@ const Controlled = ({
     return {
       count: count || 0,
       cooldown: cooldown || 0,
-      hasSuperLiked: hasSuperLiked || false,
+      hasSuperLiked,
+      isSuperLikeEnabled,
       isSaved: false,
       isFollowing: false,
     };
@@ -76,7 +78,7 @@ const Controlled = ({
       return this.isSaved ? 'Saved' : 'Save';
     },
     likeButtonLabel() {
-      if (this.count >= 5 && !this.cooldown) {
+      if (this.count >= 5 && this.isSuperLikeEnabled && !this.cooldown) {
         return 'Super Like Now';
       }
       return `${this.count + 32} Likes`;
@@ -127,6 +129,7 @@ const Controlled = ({
             cooldown,
             count,
             hasSuperLiked,
+            isSuperLikeEnabled,
           }"
           @click="onClickLikeButton"
         />
@@ -159,4 +162,8 @@ export const Case2 = Controlled({ cooldown: 80 });
 export const Case3 = Controlled({
   count: 5,
   hasSuperLiked: true,
+});
+
+export const SuperLikeDisabled = Controlled({
+  isSuperLikeEnabled: false,
 });

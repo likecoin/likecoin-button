@@ -18,9 +18,7 @@
             :cx="radius"
             :cy="radius"
             :r="radius"
-            :style="{
-              fill: '#aaf1e7',
-            }"
+            :style="bgStyle"
           />
           <transition
             @enter="countLabelEnter"
@@ -28,47 +26,46 @@
             :css="false"
           >
             <g :key="`${count}`">
-              <foreignObject
-                :width="radius * 2"
-                :height="radius * 2"
-              >
-                <div
-                  :style="{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '100%',
-                  }"
-                >
-                  <span
-                    :style="{
-                      color: '#28646e',
-                      fontSize: '18px',
-                      fontWeight: 'bold',
-                      fontFamily: 'Arial, sans-serif',
-                      textAlign: 'center',
-                    }"
-                  >{{ count }}</span>
-                </div>
-              </foreignObject>
+              <text
+                :style="countTextStyle"
+                x="13"
+                y="24"
+              >{{ count }}</text>
             </g>
           </transition>
         </g>
         <transition
-          @before-appear="shareIconBeforeEnter"
-          @apper="shareIconEnter"
-          @before-enter="shareIconBeforeEnter"
-          @enter="shareIconEnter"
-          @leave="shareIconLeave"
+          @before-appear="overlayBeforeEnter"
+          @apper="overlayEnter"
+          @before-enter="overlayBeforeEnter"
+          @enter="overlayEnter"
+          @leave="overlayLeave"
           :css="false"
           mode="in-out"
         >
           <g
-            v-if="isShareable || isShared"
+            v-if="isMax"
+            key="max"
+          >
+            <circle
+              :cx="radius"
+              :cy="radius"
+              :r="radius"
+              :style="bgStyle"
+            />
+            <text
+              :style="maxTextStyle"
+              x="4.5"
+              y="22"
+            >MAX</text>
+          </g>
+          <g
+            v-else-if="isShareable || isShared"
             :style="{
               fill: shareIconContentColor,
               fillRule: 'evenodd',
             }"
+            key="share-icon"
           >
             <transition
               @before-enter="shareIconBgBeforeEnter"
@@ -120,6 +117,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isSuperLikeEnabled: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     radius() {
@@ -128,10 +129,13 @@ export default {
     state() {
       if (this.count >= 1) {
         if (this.count >= 5) {
-          if (this.hasSuperLiked) {
-            return 'shared';
+          if (this.isSuperLikeEnabled) {
+            if (this.hasSuperLiked) {
+              return 'shared';
+            }
+            return 'shareable';
           }
-          return 'shareable';
+          return 'max';
         }
         return 'liked';
       }
@@ -143,11 +147,37 @@ export default {
     isLiked() {
       return this.state === 'liked';
     },
+    isMax() {
+      return this.state === 'max';
+    },
     isShareable() {
       return this.state === 'shareable';
     },
     isShared() {
       return this.state === 'shared';
+    },
+    bgStyle() {
+      return { fill: '#aaf1e7' };
+    },
+    baseTextStyle() {
+      return {
+        fill: '#28646e',
+        fontWeight: 'bold',
+        fontFamily: 'Arial, sans-serif',
+        textAlign: 'center',
+      };
+    },
+    countTextStyle() {
+      return {
+        ...this.baseTextStyle,
+        fontSize: '18px',
+      };
+    },
+    maxTextStyle() {
+      return {
+        ...this.baseTextStyle,
+        fontSize: '12px',
+      };
     },
     shareIconBgColor() {
       return this.hasSuperLiked ? '#50e3c2' : '#e6e6e6';
@@ -192,10 +222,10 @@ export default {
         onComplete,
       });
     },
-    shareIconBeforeEnter(el) {
+    overlayBeforeEnter(el) {
       TweenMax.set(el, { visibility: 'hidden' });
     },
-    shareIconEnter(el, onComplete) {
+    overlayEnter(el, onComplete) {
       TweenMax.set(el, { visibility: 'visible' });
       TweenMax.from(el, 0.5, {
         opacity: 0,
@@ -205,7 +235,7 @@ export default {
         onComplete,
       });
     },
-    shareIconLeave(el, onComplete) {
+    overlayLeave(el, onComplete) {
       TweenMax.to(el, 0.25, {
         opacity: 0,
         onComplete,

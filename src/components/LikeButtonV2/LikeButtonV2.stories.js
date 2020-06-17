@@ -41,6 +41,9 @@ export const Default = () => ({
     hasSuperLiked: {
       default: boolean('Super Liked', false),
     },
+    isSuperLikeEnabled: {
+      default: boolean('Enable Super Like', true),
+    },
     explosionSize: {
       default: number('Explosion Size', 0.65, {
         range: true,
@@ -64,6 +67,7 @@ export const Default = () => ({
         count,
         cooldown,
         hasSuperLiked,
+        isSuperLikeEnabled,
         explosionSize,
         explosionRange,
       }"
@@ -87,12 +91,16 @@ export const Badge = () => ({
     hasSuperLiked: {
       default: boolean('Super Liked', false),
     },
+    isSuperLikeEnabled: {
+      default: boolean('Enable Super Like', true),
+    },
   },
   template: `
     <LikeButtonV2Badge
       v-bind="{
         count,
         hasSuperLiked,
+        isSuperLikeEnabled,
       }"
     />
   `,
