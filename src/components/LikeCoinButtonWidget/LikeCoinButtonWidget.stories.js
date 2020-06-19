@@ -1,11 +1,15 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   withKnobs,
+  select,
   text,
 } from '@storybook/addon-knobs';
 
 import Identity from '../Identity/Identity';
-import LikeCoinButtonWidget from './LikeCoinButtonWidget';
+import LikeCoinButtonWidget, {
+  LAYOUTS,
+  LAYOUT_DEFAULT,
+} from './LikeCoinButtonWidget';
 import LikeButtonV2 from '../LikeButtonV2/LikeButtonV2';
 import SaveButton from '../SaveButton/SaveButton';
 
@@ -19,6 +23,9 @@ export const Default = () => ({
     LikeCoinButtonWidget,
   },
   props: {
+    layout: {
+      default: select('Layout', LAYOUTS, LAYOUT_DEFAULT),
+    },
     likeButtonLabel: {
       default: text('Like Button Label', '1 LIKE'),
     },
@@ -32,6 +39,7 @@ export const Default = () => ({
   template: `
     <LikeCoinButtonWidget
       v-bind="{
+        layout,
         likeButtonLabel,
         saveButtonLabel,
         avatarLabel,
@@ -53,6 +61,9 @@ const Controlled = ({
     SaveButton,
   },
   props: {
+    layout: {
+      default: select('Layout', LAYOUTS, LAYOUT_DEFAULT),
+    },
     displayName: {
       default: text('Display Name', 'ckxpress'),
     },
@@ -118,6 +129,7 @@ const Controlled = ({
   template: `
     <LikeCoinButtonWidget
       v-bind="{
+        layout,
         avatarLabel,
         likeButtonLabel,
         saveButtonLabel,
