@@ -149,20 +149,13 @@
             </g>
           </transition>
         </g>
-        <!-- Cooldown Track -->
-        <circle
-          :r="radius"
-          :style="cooldownTrackStyle"
-          cx="78"
-          cy="78"
-        />
-        <!-- Cooldown Fill -->
-        <circle
-          :r="radius"
-          :style="cooldownFillStyle"
-          ref="cooldownFill"
-          cx="78"
-          cy="78"
+        <Cooldown
+          :value="cooldownValue"
+          :color="cooldownFillColor"
+          :radius="radius"
+          :center="78"
+          :is-bold="isHovering"
+          ref="cooldown"
         />
       </g>
       <foreignObject
@@ -212,6 +205,7 @@
 import { TimelineMax, TweenMax } from 'gsap/all';
 import Badge from './LikeButtonV2.badge';
 import ClapBits from './LikeButtonV2.clapBits';
+import Cooldown from './LikeButtonV2.cooldown';
 import StarBits from './LikeButtonV2.starBits';
 import ButtonMixin from '../../mixins/button';
 
@@ -220,6 +214,7 @@ export default {
   components: {
     Badge,
     ClapBits,
+    Cooldown,
     StarBits,
   },
   mixins: [ButtonMixin],
@@ -312,29 +307,11 @@ export default {
         fill: this.buttonBgColor,
       };
     },
-    cooldownTrackDiameter() {
-      return Math.PI * (this.radius * 2);
-    },
-    cooldownFillLength() {
+    cooldownValue() {
       if (this.state === 'cooldown' || this.state === 'superlikeable-cooldown') {
-        const cooldown = Math.min(100, Math.max(0, this.cooldown));
-        return (cooldown / 100) * this.cooldownTrackDiameter;
+        return this.cooldown;
       }
       return 0;
-    },
-    cooldownStrokeStyle() {
-      return {
-        fill: 'none',
-        strokeLinecap: 'round',
-        strokeWidth: `${this.isHovering ? 6 : 4}px`,
-        transition: 'stroke 0.25s ease, stroke-width 0.25s ease, fill 0.25s ease',
-      };
-    },
-    cooldownTrackStyle() {
-      return {
-        ...this.cooldownStrokeStyle,
-        stroke: '#e6e6e6',
-      };
     },
     cooldownFillColor() {
       switch (this.state) {
@@ -353,16 +330,6 @@ export default {
           }
           return '#50e3c2';
       }
-    },
-    cooldownFillStyle() {
-      return {
-        ...this.cooldownStrokeStyle,
-        transform: 'rotate(-90deg)',
-        transformOrigin: 'center',
-        stroke: this.cooldownFillColor,
-        strokeDasharray: this.cooldownTrackDiameter,
-        strokeDashoffset: this.cooldownFillLength,
-      };
     },
     superLikeIconStroke() {
       if (this.cooldown) {
@@ -434,11 +401,7 @@ export default {
         tl.to(el, 0.5, {
           y: 0,
         });
-        tl.fromTo(this.$refs.cooldownFill, 1, {
-          strokeDashoffset: this.cooldownTrackDiameter,
-        }, {
-          strokeDashoffset: this.cooldownFillLength,
-        }, 0);
+        this.$refs.cooldown.animateTrack(tl);
       }
     },
     buttonIconleave(el, done) {
@@ -473,11 +436,7 @@ export default {
           },
         }, 0);
         tl.to(tick, 0.2, { opacity: 1 });
-        tl.fromTo(this.$refs.cooldownFill, 1, {
-          strokeDashoffset: this.cooldownTrackDiameter,
-        }, {
-          strokeDashoffset: this.cooldownFillLength,
-        }, 0);
+        this.$refs.cooldown.animateTrack(tl);
       } else {
         TweenMax.from(el, 0.5, {
           scaleX: 0.7,
