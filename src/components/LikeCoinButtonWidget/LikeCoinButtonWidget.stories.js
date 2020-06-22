@@ -1,11 +1,15 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   withKnobs,
+  select,
   text,
 } from '@storybook/addon-knobs';
 
 import Identity from '../Identity/Identity';
-import LikeCoinButtonWidget from './LikeCoinButtonWidget';
+import LikeCoinButtonWidget, {
+  LAYOUTS,
+  LAYOUT_DEFAULT,
+} from './LikeCoinButtonWidget';
 import LikeButtonV2 from '../LikeButtonV2/LikeButtonV2';
 import SaveButton from '../SaveButton/SaveButton';
 
@@ -19,6 +23,9 @@ export const Default = () => ({
     LikeCoinButtonWidget,
   },
   props: {
+    layout: {
+      default: select('Layout', LAYOUTS, LAYOUT_DEFAULT),
+    },
     likeButtonLabel: {
       default: text('Like Button Label', '1 LIKE'),
     },
@@ -32,6 +39,7 @@ export const Default = () => ({
   template: `
     <LikeCoinButtonWidget
       v-bind="{
+        layout,
         likeButtonLabel,
         saveButtonLabel,
         avatarLabel,
@@ -53,6 +61,9 @@ const Controlled = ({
     SaveButton,
   },
   props: {
+    layout: {
+      default: select('Layout', LAYOUTS, LAYOUT_DEFAULT),
+    },
     displayName: {
       default: text('Display Name', 'ckxpress'),
     },
@@ -61,6 +72,7 @@ const Controlled = ({
     return {
       count: count || 0,
       cooldown: cooldown || 0,
+      cooldownEndTime: 0,
       hasSuperLiked,
       isSuperLikeEnabled,
       isSaved: false,
@@ -94,9 +106,12 @@ const Controlled = ({
       }
       if (this.count >= 5) {
         setTimeout(() => {
-          this.fastForwardCooldown();
+          this.cooldownEndTime = Date.now() + 5 * 1000;
         }, 3000);
       }
+    },
+    onCooldownEnd() {
+      this.cooldown = 0;
     },
     onClickSaveButton() {
       this.isSaved = !this.isSaved;
@@ -104,20 +119,11 @@ const Controlled = ({
     onFollow() {
       this.isFollowing = true;
     },
-    fastForwardCooldown() {
-      setTimeout(() => {
-        if (this.cooldown > 0) {
-          this.cooldown -= 0.2;
-          this.fastForwardCooldown();
-        } else {
-          this.cooldown = 0;
-        }
-      }, 16);
-    },
   },
   template: `
     <LikeCoinButtonWidget
       v-bind="{
+        layout,
         avatarLabel,
         likeButtonLabel,
         saveButtonLabel,
@@ -127,10 +133,12 @@ const Controlled = ({
         <LikeButtonV2
           v-bind="{
             cooldown,
+            cooldownEndTime,
             count,
             hasSuperLiked,
             isSuperLikeEnabled,
           }"
+          @cooldown-end="onCooldownEnd"
           @click="onClickLikeButton"
         />
       </template>
