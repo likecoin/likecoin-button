@@ -151,10 +151,12 @@
         </g>
         <Cooldown
           :value="cooldownValue"
+          :end-time="cooldownEndTime"
           :color="cooldownFillColor"
           :radius="radius"
           :center="78"
           :is-bold="isHovering"
+          @end="onCooldownEnd"
           ref="cooldown"
         />
       </g>
@@ -224,6 +226,10 @@ export default {
       default: 0,
     },
     cooldown: {
+      type: Number,
+      default: 0,
+    },
+    cooldownEndTime: {
       type: Number,
       default: 0,
     },
@@ -348,6 +354,9 @@ export default {
     onClick() {
       this.startClapBitsAnimation();
       this.$emit('click');
+    },
+    onCooldownEnd() {
+      this.$emit('cooldown-end');
     },
     startClapBitsAnimation() {
       this.clapBits.push(Date.now());

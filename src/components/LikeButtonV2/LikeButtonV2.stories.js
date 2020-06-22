@@ -9,6 +9,7 @@ import { CSSPlugin } from 'gsap/CSSPlugin';
 
 import LikeButtonV2 from './LikeButtonV2';
 import LikeButtonV2Badge from './LikeButtonV2.badge';
+import LikeButtonV2Cooldown from './LikeButtonV2.cooldown';
 
 gsap.registerPlugin(CSSPlugin);
 
@@ -38,6 +39,9 @@ export const Default = () => ({
         step: 1,
       }),
     },
+    cooldownEndTimeFromNow: {
+      default: number('Cooldown end time from now (seconds)', 10),
+    },
     hasSuperLiked: {
       default: boolean('Super Liked', false),
     },
@@ -66,6 +70,7 @@ export const Default = () => ({
       v-bind="{
         count,
         cooldown,
+        cooldownEndTime: Date.now() + cooldownEndTimeFromNow * 1000,
         hasSuperLiked,
         isSuperLikeEnabled,
         explosionSize,
@@ -103,5 +108,36 @@ export const Badge = () => ({
         isSuperLikeEnabled,
       }"
     />
+  `,
+});
+
+export const Cooldown = () => ({
+  components: {
+    LikeButtonV2Cooldown,
+  },
+  props: {
+    value: {
+      default: number('Value', 50, {
+        range: true,
+        min: 0,
+        max: 100,
+        step: 1,
+      }),
+    },
+    endTimeFromNow: {
+      default: number('End time from now (seconds)', 10),
+    },
+  },
+  template: `
+    <svg viewBox="0 0 100 100" width="100">
+      <LikeButtonV2Cooldown
+        v-bind="{
+          value,
+          endTime: Date.now() + endTimeFromNow * 1000,
+          radius: 36,
+          center: 50,
+        }"
+      />
+    </svg>
   `,
 });

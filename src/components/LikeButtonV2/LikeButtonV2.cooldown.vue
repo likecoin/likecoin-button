@@ -19,10 +19,16 @@
 </template>
 
 <script>
+import { TweenMax, Linear } from 'gsap/all';
+
 export default {
   name: 'like-button-v2-cooldown',
   props: {
     value: {
+      type: Number,
+      default: 0,
+    },
+    endTime: {
       type: Number,
       default: 0,
     },
@@ -76,13 +82,45 @@ export default {
       };
     },
   },
+  watch: {
+    value() {
+      this.startCountdownAnimation();
+    },
+    endTime() {
+      this.startCountdownAnimation();
+    },
+  },
+  mounted() {
+    this.startCountdownAnimation();
+  },
+  beforeDestroy() {
+    if (this.tween) {
+      this.tween.kill();
+    }
+  },
   methods: {
+    onEnd() {
+      this.$emit('end');
+    },
     animateTrack(tl) {
       tl.fromTo(this.$refs.fill, 1, {
         strokeDashoffset: this.diameter,
       }, {
         strokeDashoffset: this.fillLength,
       }, 0);
+    },
+    startCountdownAnimation() {
+      const secondsLeft = (this.endTime - Date.now()) / 1000;
+      if (secondsLeft > 0) {
+        if (this.tween) {
+          this.tween.kill();
+        }
+        this.tween = TweenMax.to(this.$refs.fill, secondsLeft, {
+          strokeDashoffset: 0,
+          ease: Linear.easeNone,
+          onComplete: this.onEnd,
+        });
+      }
     },
   },
 };

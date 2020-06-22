@@ -72,6 +72,7 @@ const Controlled = ({
     return {
       count: count || 0,
       cooldown: cooldown || 0,
+      cooldownEndTime: 0,
       hasSuperLiked,
       isSuperLikeEnabled,
       isSaved: false,
@@ -105,25 +106,18 @@ const Controlled = ({
       }
       if (this.count >= 5) {
         setTimeout(() => {
-          this.fastForwardCooldown();
+          this.cooldownEndTime = Date.now() + 5 * 1000;
         }, 3000);
       }
+    },
+    onCooldownEnd() {
+      this.cooldown = 0;
     },
     onClickSaveButton() {
       this.isSaved = !this.isSaved;
     },
     onFollow() {
       this.isFollowing = true;
-    },
-    fastForwardCooldown() {
-      setTimeout(() => {
-        if (this.cooldown > 0) {
-          this.cooldown -= 0.2;
-          this.fastForwardCooldown();
-        } else {
-          this.cooldown = 0;
-        }
-      }, 16);
     },
   },
   template: `
@@ -139,10 +133,12 @@ const Controlled = ({
         <LikeButtonV2
           v-bind="{
             cooldown,
+            cooldownEndTime,
             count,
             hasSuperLiked,
             isSuperLikeEnabled,
           }"
+          @cooldown-end="onCooldownEnd"
           @click="onClickLikeButton"
         />
       </template>
