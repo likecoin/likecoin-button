@@ -90,7 +90,7 @@ const Controlled = ({
       return this.isSaved ? 'Saved' : 'Save';
     },
     likeButtonLabel() {
-      if (this.count >= 5 && this.isSuperLikeEnabled && !this.cooldown) {
+      if (this.count >= 5 && this.isSuperLikeEnabled && this.cooldown <= 0) {
         return 'Super Like Now';
       }
       return `${this.count + 32} Likes`;
@@ -102,7 +102,7 @@ const Controlled = ({
         this.count += 1;
       } else {
         this.hasSuperLiked = true;
-        this.cooldown = 80;
+        this.cooldown = 0.8;
       }
       if (this.count >= 5) {
         setTimeout(() => {
@@ -165,7 +165,7 @@ const Controlled = ({
 
 export const Case1 = Controlled();
 
-export const Case2 = Controlled({ cooldown: 80 });
+export const Case2 = Controlled({ cooldown: 0.8 });
 
 export const Case3 = Controlled({
   count: 5,

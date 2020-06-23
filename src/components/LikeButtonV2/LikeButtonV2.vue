@@ -426,7 +426,6 @@ export default {
         const [star, tick] = el.children;
         TweenMax.set(tick, { opacity: 0 });
         const tl = new TimelineMax({
-          delay: 0.3,
           onComplete: done,
         });
         tl.from(el, 0.7, {
