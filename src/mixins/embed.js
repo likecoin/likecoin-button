@@ -8,7 +8,6 @@ import {
 
 import EmbedCreateWidgetButton from '~/components/embed/EmbedCreateWidgetButton';
 import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
-import SocialMediaConnect from '~/components/SocialMediaConnect';
 import { setTrackerUser, logTrackerEvent } from '@/util/EventLogger';
 
 import {
@@ -55,7 +54,6 @@ export default {
   components: {
     EmbedCreateWidgetButton,
     EmbedUserInfo,
-    SocialMediaConnect,
   },
   asyncData({
     params,
@@ -120,6 +118,7 @@ export default {
       canSuperLike: false,
       hasSuperLiked: false,
       nextSuperLikeTime: -1,
+      cooldownProgress: 0,
       parentSuperLikeID: '',
 
       hasCookieSupport: false,
@@ -163,7 +162,6 @@ export default {
       const amountPath = `${this.amount ? `/${this.amount}` : ''}`;
       return `https://${LIKE_CO_HOSTNAME}/${this.id}${amountPath}${this.referrerQueryString}`;
     },
-
     likeCount: {
       get() {
         return this.like_count;
@@ -178,6 +176,20 @@ export default {
     },
     timezoneString() {
       return ((new Date()).getTimezoneOffset() / -60).toString();
+    },
+
+    // UI Labels
+    likeButtonLabel() {
+      if (this.likeCount >= 5 && this.canSuperLike && this.cooldownProgress <= 0) {
+        return this.$t('SuperLikeNow');
+      }
+      return this.$tc('LikeCountLabel', this.totalLike, { count: this.totalLike });
+    },
+    saveButtonLabel() {
+      return this.$t(this.isSaved ? 'Saved' : 'Save');
+    },
+    avatarLabel() {
+      return this.$t(this.isFollowing ? 'Following' : 'Follow');
     },
   },
   methods: {
@@ -205,10 +217,12 @@ export default {
           canSuperLike,
           lastSuperLikeInfos,
           nextSuperLikeTime,
+          cooldown,
         } = data;
         this.canSuperLike = canSuperLike;
         this.hasSuperLiked = !!(lastSuperLikeInfos && lastSuperLikeInfos.length);
         this.nextSuperLikeTime = nextSuperLikeTime;
+        this.cooldownProgress = cooldown;
       });
     },
     async updateUserSignInStatus() {
