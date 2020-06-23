@@ -26,7 +26,7 @@ export default {
   props: {
     value: {
       type: Number,
-      default: 0,
+      default: 0.0,
     },
     endTime: {
       type: Number,
@@ -54,8 +54,8 @@ export default {
       return Math.PI * (this.radius * 2);
     },
     fillLength() {
-      const value = Math.min(100, Math.max(0, this.value));
-      return (value / 100) * this.diameter;
+      const value = Math.min(1, Math.max(0, this.value));
+      return value * this.diameter;
     },
     strokeStyle() {
       return {

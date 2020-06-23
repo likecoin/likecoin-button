@@ -35,8 +35,8 @@ export const Default = () => ({
       default: number('Cooldown', 0, {
         range: true,
         min: 0,
-        max: 100,
-        step: 1,
+        max: 1,
+        step: 0.01,
       }),
     },
     cooldownEndTimeFromNow: {
@@ -117,11 +117,11 @@ export const Cooldown = () => ({
   },
   props: {
     value: {
-      default: number('Value', 50, {
+      default: number('Value', 0.5, {
         range: true,
         min: 0,
-        max: 100,
-        step: 1,
+        max: 1,
+        step: 0.01,
       }),
     },
     endTimeFromNow: {
