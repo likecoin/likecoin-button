@@ -36,11 +36,14 @@ const debouncedOnClick = debounce((that) => {
   if (count > 0) {
     apiPostLikeButton(
       that.id,
-      that.referrer,
       count,
-      that.hasCookieSupport,
-      that.documentReferrer,
-      that.sessionId,
+      {
+        referrer: that.referrer,
+        isCookieSupport: that.hasCookieSupport,
+        documentReferrer: that.documentReferrer,
+        sessionID: that.sessionId,
+        type: that.buttonType,
+      },
     );
   }
   that.totalLike += count;
@@ -126,6 +129,11 @@ export default {
       }
       return referrer;
     },
+    buttonType() {
+      const { query } = this.$route;
+      const { type = '' } = query;
+      return type;
+    },
     documentReferrer() {
       if (!process.client) return '';
       let windowReferrer = '';
@@ -189,10 +197,13 @@ export default {
         await Promise.all([
           apiGetLikeButtonMyStatus(
             this.id,
-            this.referrer,
-            this.hasCookieSupport,
-            this.documentReferrer,
-            this.sessionId,
+            {
+              referrer: this.referrer,
+              isCookieSupport: this.hasCookieSupport,
+              documentReferrer: this.documentReferrer,
+              sessionID: this.sessionId,
+              type: this.buttonType,
+            },
           )
             .then(({ data: myData }) => {
               const {
