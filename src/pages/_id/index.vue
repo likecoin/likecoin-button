@@ -182,6 +182,11 @@ export default {
     likee() {
       return this.$route.params.id;
     },
+    buttonType() {
+      const { query } = this.$route;
+      const { type = '' } = query;
+      return type;
+    },
     documentReferrer() {
       if (!process.client) return '';
       let windowReferrer = '';
@@ -282,10 +287,13 @@ export default {
       try {
         await apiPostLikeLink(
           this.likee,
-          this.referrer,
           { reCaptchaResponse: this.reCaptchaResponse },
-          this.documentReferrer,
-          this.sessionId,
+          {
+            referrer: this.referrer,
+            documentReferrer: this.documentReferrer,
+            sessionID: this.sessionId,
+            type: this.buttonType,
+          },
         );
       } catch (err) {
         if (err.response && err.response.status === 404) {

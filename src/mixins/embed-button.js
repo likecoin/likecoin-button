@@ -109,10 +109,13 @@ export default {
       this.isRead = true;
       await apiPostLikeButtonReadEvent(
         this.id,
-        this.referrer,
-        this.hasCookieSupport,
-        this.documentReferrer,
-        this.sessionId,
+        {
+          referrer: this.referrer,
+          isCookieSupport: this.hasCookieSupport,
+          documentReferrer: this.documentReferrer,
+          sessionID: this.sessionId,
+          type: this.buttonType,
+        },
       );
       if (this.readTimer) clearTimeout(this.readTimer);
     },
