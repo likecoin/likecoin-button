@@ -1,3 +1,5 @@
+import * as cookie from 'tiny-cookie';
+
 import {
   LIKE_CO_HOSTNAME,
   LIKER_LAND_URL_BASE,
@@ -6,16 +8,17 @@ import {
 
 import EmbedCreateWidgetButton from '~/components/embed/EmbedCreateWidgetButton';
 import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
-import SocialMediaConnect from '~/components/SocialMediaConnect';
 import { setTrackerUser, logTrackerEvent } from '@/util/EventLogger';
 
 import {
   apiPostLikeButton,
+  apiPostSuperLike,
   apiGetUserMinById,
   apiGetSocialListById,
   apiGetLikeButtonTotalCount,
   apiGetLikeButtonMyStatus,
   apiGetLikeButtonSelfCount,
+  apiGetSuperLikeMyStatus,
 } from '~/util/api/api';
 
 import { checkHasStorageAPIAccess } from '~/util/client';
@@ -54,7 +57,6 @@ export default {
   components: {
     EmbedCreateWidgetButton,
     EmbedUserInfo,
-    SocialMediaConnect,
   },
   asyncData({
     params,
@@ -116,6 +118,12 @@ export default {
 
       sessionId: uuidv4(),
 
+      canSuperLike: false,
+      hasSuperLiked: false,
+      nextSuperLikeTime: -1,
+      cooldownProgress: 0,
+      parentSuperLikeID: '',
+
       hasCookieSupport: false,
       hasStorageAPIAccess: false,
     };
@@ -162,7 +170,6 @@ export default {
       const amountPath = `${this.amount ? `/${this.amount}` : ''}`;
       return `https://${LIKE_CO_HOSTNAME}/${this.id}${amountPath}${this.referrerQueryString}`;
     },
-
     likeCount: {
       get() {
         return this.like_count;
@@ -174,6 +181,23 @@ export default {
 
     isMaxLike() {
       return this.likeCount >= MAX_LIKE;
+    },
+    timezoneString() {
+      return ((new Date()).getTimezoneOffset() / -60).toString();
+    },
+
+    // UI Labels
+    likeButtonLabel() {
+      if (this.likeCount >= 5 && this.canSuperLike && this.cooldownProgress <= 0) {
+        return this.$t('SuperLikeNow');
+      }
+      return this.$tc('LikeCountLabel', this.totalLike, { count: this.totalLike });
+    },
+    saveButtonLabel() {
+      return this.$t(this.isSaved ? 'Saved' : 'Save');
+    },
+    avatarLabel() {
+      return this.$t(this.isFollowing ? 'Following' : 'Follow');
     },
   },
   methods: {
@@ -191,7 +215,24 @@ export default {
       }
       return res;
     },
-
+    getParentSuperLikeID() {
+      if (!document.cookie || !cookie.enabled()) return '';
+      return cookie.get('likebutton_superlike_id');
+    },
+    async updateSuperLikeStatus() {
+      await apiGetSuperLikeMyStatus(this.timezoneString, this.referrer).then(({ data }) => {
+        const {
+          canSuperLike,
+          lastSuperLikeInfos,
+          nextSuperLikeTime,
+          cooldown,
+        } = data;
+        this.canSuperLike = canSuperLike;
+        this.hasSuperLiked = !!(lastSuperLikeInfos && lastSuperLikeInfos.length);
+        this.nextSuperLikeTime = nextSuperLikeTime;
+        this.cooldownProgress = cooldown;
+      });
+    },
     async updateUserSignInStatus() {
       try {
         await Promise.all([
@@ -241,6 +282,7 @@ export default {
             const { total } = totalData;
             this.totalLike = total;
           }),
+          this.updateSuperLikeStatus(),
         ]);
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
@@ -272,7 +314,16 @@ export default {
         'menubar=no,location=no,width=600,height=768',
       );
     },
-
+    async newSuperLike() {
+      await apiPostSuperLike(
+        this.id,
+        this.referrer,
+        this.timezoneString,
+        this.parentSuperLikeID,
+        this.documentReferrer,
+        this.sessionId,
+      );
+    },
     openLikeStats(options = { isNewWindow: true }) {
       const { id, referrer } = this;
       if (options.isNewWindow) {

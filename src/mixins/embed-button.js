@@ -53,6 +53,7 @@ export default {
       this.isReadTimerEnded = true;
     }, READ_TIMEOUT);
     this.hasCookieSupport = await this.getIsCookieSupport();
+    this.parentSuperLikeID = this.getParentSuperLikeID();
     await this.updateUserSignInStatus();
     if (this.onCheckCookieSupport) this.onCheckCookieSupport(this.hasCookieSupport);
     this.isUserFetched = true;

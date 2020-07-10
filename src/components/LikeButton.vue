@@ -52,13 +52,32 @@
               mode="out-in"
             >
               <div key="clap">
-                <like-clap-icon />
+                <template v-if="isMax">
+                  <div v-if="canSuperLike">
+                    SuperLike
+                  </div>
+                  <div v-else-if="superLikeCooldown > -1">
+                    {{ new Date(Date.now() + superLikeCooldown) }}
+                  </div>
+                  <template v-else>
+                    <like-clap-icon />
+                  </template>
+                </template>
+                <template v-else>
+                  <like-clap-icon />
+                </template>
               </div>
             </transition-group>
 
             <transition name="like-button__like-count-label-">
               <div
-                v-if="likeCount >= 1"
+                v-if="hasSuperLiked"
+                :class="{
+                  'like-button__like-count-label': true,
+                }"
+              >S</div>
+              <div
+                v-else-if="likeCount >= 1"
                 :class="{
                   'like-button__like-count-label': true,
                   'like-button__like-count-label--max': isMax,
@@ -129,6 +148,18 @@ export default {
     isShowTotalLike: {
       type: [Boolean, String],
       default: true,
+    },
+    canSuperLike: {
+      type: Boolean,
+      default: false,
+    },
+    hasSuperLiked: {
+      type: Boolean,
+      default: false,
+    },
+    superLikeCooldown: {
+      type: Number,
+      default: -1,
     },
     isToggled: {
       type: [Boolean, String],

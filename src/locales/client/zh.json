@@ -7,6 +7,8 @@
     "back": "返回",
     "loading": "載入中"
   },
+  "Follow": "追蹤",
+  "Following": "追蹤中",
   "LikeButton": {
     "head": {
       "title": "讚好 {name} 的作品",
@@ -29,6 +31,7 @@
       "aboutLikeCoin": "關於讚賞鍵"
     }
   },
+  "LikeCountLabel": "尚無點讚 | 1 個讚 | {count} 個讚",
   "Embed": {
     "back": {
       "civicLiker": {
@@ -88,5 +91,8 @@
     "title": "請在「彈出式視窗」中點讚支持作者{br}Please sign-in in the pop up window",
     "titleForIOSInApp": "請使用3D Touch按拍手鍵，然後在彈出視窗中點讚支持作者",
     "link": "為何出現彈出式視窗"
-  }
+  },
+  "Save": "收藏",
+  "Saved": "已收藏",
+  "SuperLikeNow": "立即 Super Like"
 }
