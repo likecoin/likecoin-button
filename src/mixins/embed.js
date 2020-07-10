@@ -315,14 +315,14 @@ export default {
       );
     },
     async newSuperLike() {
-      await apiPostSuperLike(
-        this.id,
-        this.referrer,
-        this.timezoneString,
-        this.parentSuperLikeID,
-        this.documentReferrer,
-        this.sessionId,
-      );
+      await apiPostSuperLike(this.id, {
+        referrer: this.referrer,
+        tz: this.timezoneString,
+        parentSuperLikeID: this.parentSuperLikeID,
+        documentReferrer: this.documentReferrer,
+        sessionID: this.sessionId,
+        type: this.buttonType,
+      });
     },
     openLikeStats(options = { isNewWindow: true }) {
       const { id, referrer } = this;

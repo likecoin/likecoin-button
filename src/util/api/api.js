@@ -103,7 +103,14 @@ export const apiPostLikeButtonReadEvent = (id, {
   );
 };
 
-export const apiPostSuperLike = (id, referrer, tz, parentSuperLikeID, documentReferrer = '', sessionID = '') => axios.post(
+export const apiPostSuperLike = (id, {
+  referrer = '',
+  tz,
+  parentSuperLikeID,
+  documentReferrer = '',
+  sessionID = '',
+  type = '',
+}) => axios.post(
   `${LIKECOIN_MISC_API_BASE}/api/like/share/${id}`,
   {
     referrer,
@@ -113,6 +120,7 @@ export const apiPostSuperLike = (id, referrer, tz, parentSuperLikeID, documentRe
   {
     headers: {
       'Document-Referrer': documentReferrer,
+      'X-Likecoin-Button-Type': type,
       'X-Likecoin-Session-ID': sessionID,
     },
     withCredentials: true,
