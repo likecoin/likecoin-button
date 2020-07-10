@@ -19,6 +19,9 @@ import {
   apiGetLikeButtonMyStatus,
   apiGetLikeButtonSelfCount,
   apiGetSuperLikeMyStatus,
+  apiGetMyBookmark,
+  apiAddMyBookmark,
+  apiDeleteMyBookmark,
 } from '~/util/api/api';
 
 import { checkHasStorageAPIAccess } from '~/util/client';
@@ -124,6 +127,10 @@ export default {
       cooldownProgress: 0,
       parentSuperLikeID: '',
 
+      hasBookmarked: false,
+      isLoadingBookmark: true,
+      bookmarkID: undefined,
+
       hasCookieSupport: false,
       hasStorageAPIAccess: false,
     };
@@ -194,7 +201,7 @@ export default {
       return this.$tc('LikeCountLabel', this.totalLike, { count: this.totalLike });
     },
     saveButtonLabel() {
-      return this.$t(this.isSaved ? 'Saved' : 'Save');
+      return this.$t(this.hasBookmarked ? 'Saved' : 'Save');
     },
     avatarLabel() {
       return this.$t(this.isFollowing ? 'Following' : 'Follow');
@@ -267,7 +274,15 @@ export default {
                 }
                 return setTrackerUser({ user: liker });
               }
-              return Promise.resolved;
+
+              if (this.isLoggedIn) {
+                return apiGetMyBookmark(this.referrer).then(({ data: bookmarkData }) => {
+                  this.bookmarkID = bookmarkData.id;
+                }).catch();
+              }
+              this.isLoadingBookmark = false;
+
+              return Promise.resolve;
             }),
           apiGetLikeButtonSelfCount(this.id, this.referrer).then(({ data: selfData }) => {
             const { count, liker } = selfData;
@@ -288,7 +303,38 @@ export default {
         console.error(err); // eslint-disable-line no-console
       }
     },
-
+    async toggleBookmark() {
+      if (this.isLoadingBookmark) return;
+      this.isLoadingBookmark = true;
+      if (this.bookmarkID) {
+        this.hasBookmarked = true;
+        await apiDeleteMyBookmark(this.bookmarkID, {
+          documentReferrer: this.documentReferrer,
+          sessionID: this.sessionId,
+          type: this.buttonType,
+        }).then(() => {
+          this.bookmarkID = null;
+        }).catch((err) => {
+          // eslint-disable-next-line no-console
+          console.error(err);
+          this.hasBookmarked = false;
+        });
+      } else {
+        this.hasBookmarked = false;
+        await apiAddMyBookmark(this.referrer, {
+          documentReferrer: this.documentReferrer,
+          sessionID: this.sessionId,
+          type: this.buttonType,
+        }).then(({ data: bookmarkData }) => {
+          this.bookmarkID = bookmarkData.id;
+        }).catch((err) => {
+          // eslint-disable-next-line no-console
+          console.error(err);
+          this.hasBookmarked = true;
+        });
+      }
+      this.isLoadingBookmark = false;
+    },
     signUp(options = { isNewWindow: true }) {
       if (options.isNewWindow) {
         const w = window.open(

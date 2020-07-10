@@ -132,3 +132,41 @@ export const apiQueryCoinGeckoInfo = () => axios.get('https://api.coingecko.com/
 export const apiGetPageTitle = url => axios.get(`${LIKECOIN_MISC_API_BASE}/api/like/like/suggest/info/?url=${encodeURIComponent(url)}`)
   .then(res => (res.data || {}).title || '')
   .catch(() => '');
+
+export const apiGetMyBookmark = (url = '') => axios.get(
+  `${LIKECOIN_API}/api/users/bookmarks?url=${encodeURIComponent(url)}`,
+  { withCredentials: true },
+);
+
+export const apiAddMyBookmark = (url = '', {
+  documentReferrer = '',
+  sessionID = '',
+  type = '',
+}) => axios.post(
+  `${LIKECOIN_API}/api/users/bookmarks?url=${encodeURIComponent(url)}`,
+  null,
+  {
+    headers: {
+      'Document-Referrer': documentReferrer,
+      'X-Likecoin-Button-Type': type,
+      'X-Likecoin-Session-ID': sessionID,
+    },
+    withCredentials: true,
+  },
+);
+
+export const apiDeleteMyBookmark = (id = '', {
+  documentReferrer = '',
+  sessionID = '',
+  type = '',
+}) => axios.delete(
+  `${LIKECOIN_API}/api/users/bookmarks/${id}}`,
+  {
+    headers: {
+      'Document-Referrer': documentReferrer,
+      'X-Likecoin-Button-Type': type,
+      'X-Likecoin-Session-ID': sessionID,
+    },
+    withCredentials: true,
+  },
+);

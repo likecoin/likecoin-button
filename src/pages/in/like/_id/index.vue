@@ -111,7 +111,7 @@
             <template #save-button="saveButtonProps">
               <SaveButton
                 v-bind="saveButtonProps"
-                :toggled="false"
+                :toggled="hasBookmarked"
                 @click="onClickSaveButton"
               />
             </template>
@@ -294,7 +294,8 @@ export default {
       }
     },
     onClickSaveButton() {
-      // TODO: Bookmark
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickSaveButton', 'clickSaveButton(popup)', 1);
+      this.toggleBookmark();
     },
     onClickFollow() {
       // TODO: Follow
