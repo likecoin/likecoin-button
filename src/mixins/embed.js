@@ -22,6 +22,8 @@ import {
   apiGetMyBookmark,
   apiAddMyBookmark,
   apiDeleteMyBookmark,
+  apiGetMyFollower,
+  apiAddMyFollower,
 } from '~/util/api/api';
 
 import { checkHasStorageAPIAccess } from '~/util/client';
@@ -131,6 +133,9 @@ export default {
       isLoadingBookmark: true,
       bookmarkID: undefined,
 
+      hasFollowedCreator: false,
+      isLoadingFollowStatus: false,
+
       hasCookieSupport: false,
       hasStorageAPIAccess: false,
     };
@@ -204,7 +209,7 @@ export default {
       return this.$t(this.hasBookmarked ? 'Saved' : 'Save');
     },
     avatarLabel() {
-      return this.$t(this.isFollowing ? 'Following' : 'Follow');
+      return this.$t(this.hasFollowedCreator ? 'Following' : 'Follow');
     },
   },
   methods: {
@@ -276,11 +281,17 @@ export default {
               }
 
               if (this.isLoggedIn) {
-                return apiGetMyBookmark(this.referrer).then(({ data: bookmarkData }) => {
-                  this.bookmarkID = bookmarkData.id;
-                }).catch();
+                return Promise.all([
+                  apiGetMyBookmark(this.referrer).then(({ data: bookmarkData }) => {
+                    this.bookmarkID = bookmarkData.id;
+                  }).catch(),
+                  apiGetMyFollower(this.id).then(({ data: followData }) => {
+                    this.hasFollowedCreator = followData && followData.isFollowed;
+                  }).catch(),
+                ]);
               }
               this.isLoadingBookmark = false;
+              this.isLoadingFollowStatus = false;
 
               return Promise.resolve;
             }),
@@ -334,6 +345,23 @@ export default {
         });
       }
       this.isLoadingBookmark = false;
+    },
+    async toggleFollow() {
+      // NOTE: Unfollow is disabled for current UX
+      if (this.isLoadingFollowStatus || this.hasFollowedCreator) return;
+      this.isLoadingFollowStatus = true;
+      await apiAddMyFollower(this.id, {
+        documentReferrer: this.documentReferrer,
+        sessionID: this.sessionId,
+        type: this.buttonType,
+      }).then(() => {
+        this.hasFollowedCreator = true;
+      }).catch((err) => {
+        // eslint-disable-next-line no-console
+        console.error(err);
+        this.hasFollowedCreator = false;
+      });
+      this.isLoadingFollowStatus = false;
     },
     signUp(options = { isNewWindow: true }) {
       if (options.isNewWindow) {

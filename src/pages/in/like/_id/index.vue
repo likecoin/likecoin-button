@@ -298,7 +298,8 @@ export default {
       this.toggleBookmark();
     },
     onClickFollow() {
-      // TODO: Follow
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickFollowButton', 'clickFollowButton(popup)', 1);
+      this.toggleFollow();
     },
   },
 };

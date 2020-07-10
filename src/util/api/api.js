@@ -170,3 +170,25 @@ export const apiDeleteMyBookmark = (id = '', {
     withCredentials: true,
   },
 );
+
+export const apiGetMyFollower = (id = '') => axios.get(
+  `${LIKECOIN_API}/api/users/follow/users/${id}`,
+  { withCredentials: true },
+);
+
+export const apiAddMyFollower = (id = '', {
+  documentReferrer = '',
+  sessionID = '',
+  type = '',
+}) => axios.post(
+  `${LIKECOIN_API}/api/users/follow/users/${id}`,
+  null,
+  {
+    headers: {
+      'Document-Referrer': documentReferrer,
+      'X-Likecoin-Button-Type': type,
+      'X-Likecoin-Session-ID': sessionID,
+    },
+    withCredentials: true,
+  },
+);

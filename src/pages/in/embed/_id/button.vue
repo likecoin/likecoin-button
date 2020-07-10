@@ -168,7 +168,8 @@ export default {
       this.toggleBookmark();
     },
     onClickFollow() {
-      // TODO: Follow
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickFollowButton', 'clickFollowButton(embed)', 1);
+      this.toggleFollow();
     },
     handleMessageAction(event, action) {
       switch (action) {
