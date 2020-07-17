@@ -183,6 +183,7 @@
       <Badge
         v-bind="{
           count,
+          maxCount,
           hasSuperLiked,
           isSuperLikeEnabled,
         }"
@@ -225,6 +226,10 @@ export default {
       type: Number,
       default: 0,
     },
+    maxCount: {
+      type: Number,
+      default: 5,
+    },
     cooldown: {
       type: Number,
       default: 0,
@@ -260,7 +265,7 @@ export default {
   },
   computed: {
     state() {
-      if (this.count < 5) {
+      if (this.count < this.maxCount) {
         return 'initial';
       }
       if (!this.isSuperLikeEnabled) {
@@ -283,7 +288,7 @@ export default {
         || this.hasBlockingAnimation;
     },
     isShowBadge() {
-      return this.count >= 1;
+      return this.count > 0;
     },
     buttonStyle() {
       return {
@@ -331,7 +336,7 @@ export default {
 
         case 'initial':
         default:
-          if (this.isPressing || this.count >= 1) {
+          if (this.isPressing || this.count > 0) {
             return '#28646e';
           }
           return '#50e3c2';
