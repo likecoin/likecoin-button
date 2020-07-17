@@ -113,6 +113,10 @@ export default {
       type: Number,
       default: 0,
     },
+    maxCount: {
+      type: Number,
+      default: 5,
+    },
     hasSuperLiked: {
       type: Boolean,
       default: false,
@@ -127,8 +131,8 @@ export default {
       return 18;
     },
     state() {
-      if (this.count >= 1) {
-        if (this.count >= 5) {
+      if (this.count > 0) {
+        if (this.count >= this.maxCount) {
           if (this.isSuperLikeEnabled) {
             if (this.hasSuperLiked) {
               return 'shared';
