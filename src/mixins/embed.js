@@ -219,12 +219,13 @@ export default {
         this.hasStorageAPIAccess = await checkHasStorageAPIAccess();
         res = process.client
           && navigator.cookieEnabled
-          && (document.cookie && /likebutton_cookie=1/.test(document.cookie))
-          && this.hasStorageAPIAccess;
+          && this.hasStorageAPIAccess
+          && cookie.isEnabled();
       } catch (err) {
         console.error(err);
         return false;
       }
+      cookie.set('likebutton_cookie', 1);
       return res;
     },
     getParentSuperLikeID() {

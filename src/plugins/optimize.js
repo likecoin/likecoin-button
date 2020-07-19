@@ -20,7 +20,7 @@ export default async ({ req, res, query }) => {
           });
       }
     } else {
-      if (!document.cookie || !cookie.enabled()) return;
+      if (!document.cookie || !cookie.isEnabled()) return;
       let expCookie = cookie.get('__session');
       if (query.exp) {
         const [expId] = query.exp.split('.');
@@ -28,7 +28,7 @@ export default async ({ req, res, query }) => {
           expCookie = query.exp;
         }
       }
-      if (expCookie) cookie.set('exp', expCookie, Date.now());
+      if (expCookie) cookie.set('exp', expCookie);
     }
   } catch (err) {
     console.error(err); // eslint-disable-line no-console

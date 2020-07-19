@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     onFinishAnimation() {
-      this.$emit('end', this.id);
+      this.$emit('end');
     },
   },
 };

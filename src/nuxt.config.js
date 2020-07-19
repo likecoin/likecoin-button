@@ -119,9 +119,6 @@ const nuxtConfig = {
         component: resolve(__dirname, 'pages/_id/index.vue'),
       });
     },
-    middleware: [
-      'cookie',
-    ],
   },
   serverMiddleware: [
     '~/server_middleware/header-listener',
