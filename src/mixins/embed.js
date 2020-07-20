@@ -272,28 +272,27 @@ export default {
               if (this.hasCookieSupport && serverCookieSupported !== undefined) {
                 this.hasCookieSupport = serverCookieSupported;
               }
-              if (liker) {
+
+              if (this.isLoggedIn) {
                 if (this.$sentry) {
                   this.$sentry.configureScope((scope) => {
                     scope.setUser({ id: liker });
                   });
                 }
-                return setTrackerUser({ user: liker });
-              }
-
-              if (this.isLoggedIn) {
                 return Promise.all([
+                  setTrackerUser({ user: liker }),
                   apiGetMyBookmark(this.referrer).then(({ data: bookmarkData }) => {
                     this.bookmarkID = bookmarkData.id;
+                    this.isLoadingBookmark = false;
                   }).catch(),
                   apiGetMyFollower(this.id).then(({ data: followData }) => {
                     this.hasFollowedCreator = followData && followData.isFollowed;
+                    this.isLoadingFollowStatus = false;
                   }).catch(),
                 ]);
               }
               this.isLoadingBookmark = false;
               this.isLoadingFollowStatus = false;
-
               return Promise.resolve;
             }),
           apiGetLikeButtonSelfCount(this.id, this.referrer).then(({ data: selfData }) => {
