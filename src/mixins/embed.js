@@ -282,8 +282,10 @@ export default {
                 await Promise.all([
                   setTrackerUser({ user: liker }),
                   apiGetMyBookmark(this.referrer).then(({ data: bookmarkData }) => {
-                    this.bookmarkID = bookmarkData.id;
-                    this.hasBookmarked = true;
+                    if (bookmarkData.id) {
+                      this.bookmarkID = bookmarkData.id;
+                      this.hasBookmarked = true;
+                    }
                   }).catch(() => {}),
                   apiGetMyFollower(this.id).then(({ data: followData }) => {
                     this.hasFollowedCreator = followData && followData.isFollowed;
