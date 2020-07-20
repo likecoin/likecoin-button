@@ -163,13 +163,21 @@ export default {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickDisplayName', 'clickDisplayName(embed)', 1);
       this.superLike();
     },
-    onClickSaveButton() {
+    async onClickSaveButton() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickSaveButton', 'clickSaveButton(embed)', 1);
-      this.toggleBookmark();
+      if (this.isLoggedIn) {
+        this.toggleBookmark();
+      } else {
+        await this.doLogin();
+      }
     },
-    onClickFollow() {
+    async onClickFollow() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickFollowButton', 'clickFollowButton(embed)', 1);
-      this.toggleFollow();
+      if (this.isLoggedIn) {
+        this.toggleFollow();
+      } else {
+        await this.doLogin();
+      }
     },
     handleMessageAction(event, action) {
       switch (action) {
