@@ -319,7 +319,7 @@ export default {
       if (this.isLoadingBookmark) return;
       this.isLoadingBookmark = true;
       if (this.bookmarkID) {
-        this.hasBookmarked = true;
+        this.hasBookmarked = false;
         await apiDeleteMyBookmark(this.bookmarkID, {
           documentReferrer: this.documentReferrer,
           sessionID: this.sessionId,
@@ -329,10 +329,10 @@ export default {
         }).catch((err) => {
           // eslint-disable-next-line no-console
           console.error(err);
-          this.hasBookmarked = false;
+          this.hasBookmarked = true;
         });
       } else {
-        this.hasBookmarked = false;
+        this.hasBookmarked = true;
         await apiAddMyBookmark(this.referrer, {
           documentReferrer: this.documentReferrer,
           sessionID: this.sessionId,
@@ -342,7 +342,7 @@ export default {
         }).catch((err) => {
           // eslint-disable-next-line no-console
           console.error(err);
-          this.hasBookmarked = true;
+          this.hasBookmarked = false;
         });
       }
       this.isLoadingBookmark = false;
