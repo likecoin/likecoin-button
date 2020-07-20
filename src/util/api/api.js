@@ -160,7 +160,7 @@ export const apiDeleteMyBookmark = (id = '', {
   sessionID = '',
   type = '',
 }) => axios.delete(
-  `${LIKECOIN_API}/api/users/bookmarks/${id}}`,
+  `${LIKECOIN_API}/api/users/bookmarks/${id}`,
   {
     headers: {
       'Document-Referrer': documentReferrer,
