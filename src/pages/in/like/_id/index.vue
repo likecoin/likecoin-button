@@ -17,15 +17,6 @@
         <div class="like-panel">
           <div class="like-panel__badge">
 
-            <embed-user-info
-              v-if="avatar"
-              :avatar="avatar"
-              :avatar-halo="avatarHalo"
-              :style="userInfoStyle"
-              @click-avatar="onClickAvatar"
-              @click-avatar-halo="onClickAvatarHalo"
-            />
-
             <div
               :style="contentStyle"
               class="text-content-wrapper"
@@ -100,16 +91,41 @@
             </div>
           </div>
 
-          <like-button
-            v-if="isLoggedIn"
-            :like-count="likeCount"
-            :total-like="totalLike"
-            :is-togglable="false"
-            :is-max="isMaxLike"
-            @like="onClickLike"
-            @click-stats="onClickLikeStats"
-            ref="likeButton"
-          />
+          <LikeCoinButtonWidget
+            :like-button-label="likeButtonLabel"
+            :save-button-label="saveButtonLabel"
+            :avatar-label="avatarLabel"
+            :style="{ textAlign: 'center' }"
+          >
+            <template #like-button>
+              <LikeButton
+                :count="likeCount"
+                :cooldown="cooldownProgress"
+                :has-super-liked="hasSuperLiked"
+                :is-super-like-enabled="canSuperLike"
+                @click="onClickLike"
+                ref="likeButton"
+              />
+            </template>
+
+            <template #save-button="saveButtonProps">
+              <SaveButton
+                v-bind="saveButtonProps"
+                :toggled="hasBookmarked"
+                @click="onClickSaveButton"
+              />
+            </template>
+
+            <template #identity="identityProps">
+              <Identity
+                :avatarURL="avatar"
+                :display-name="displayName"
+                v-bind="identityProps"
+                @click-avatar="onClickFollow"
+              />
+            </template>
+          </LikeCoinButtonWidget>
+
         </div>
 
       </div>
@@ -125,16 +141,22 @@ import {
 
 import { checkValidDomainNotIP, handleQueryStringInUrl } from '@/util/url';
 
+import Identity from '~/components/Identity/Identity';
+import LikeButton from '~/components/LikeButtonV2/LikeButtonV2';
+import LikeCoinButtonWidget from '~/components/LikeCoinButtonWidget/LikeCoinButtonWidget';
+import SaveButton from '~/components/SaveButton/SaveButton';
+
 import mixin from '~/mixins/embed';
-import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
-import LikeButton from '~/components/LikeButton';
+
 import { checkIsMobileClient, checkIsTrustClient } from '~/util/client';
 import { logTrackerEvent } from '@/util/EventLogger';
 
 export default {
   components: {
+    Identity,
     LikeButton,
-    EmbedUserInfo,
+    LikeCoinButtonWidget,
+    SaveButton,
   },
   mixins: [mixin],
   data() {
@@ -165,13 +187,6 @@ export default {
       })(),
     ]).then(res => ({ ...res[0], ...res[1] }));
   },
-  head() {
-    return {
-      htmlAttrs: {
-        style: 'font-size: 410px',
-      },
-    };
-  },
   computed: {
     textContentProps() {
       return {
@@ -179,11 +194,6 @@ export default {
         ref: this.contentKey,
         class: 'text-content',
       };
-    },
-    userInfoStyle() {
-      const style = { marginTop: '-80px' };
-      if (this.avatarHalo !== 'none') style.marginBottom = 0;
-      return style;
     },
     ctaTitle() {
       if (this.isTrialSubscriber) {
@@ -225,7 +235,7 @@ export default {
       this.setContentHeight();
 
       if (this.likeCount <= 0 && this.$refs.likeButton) {
-        this.$refs.likeButton.onPressedKnob();
+        this.$refs.likeButton.onClick();
       }
     });
   },
@@ -283,13 +293,13 @@ export default {
         this.convertLikerToCivicLiker();
       }
     },
-    onClickAvatar() {
-      logTrackerEvent(this, 'LikeButtonFlow', 'clickAvatar', 'clickAvatar(popup)', 1);
-      this.superLike();
+    onClickSaveButton() {
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickSaveButton', 'clickSaveButton(popup)', 1);
+      this.toggleBookmark();
     },
-    onClickAvatarHalo() {
-      logTrackerEvent(this, 'LikeButtonFlow', 'clickAvatarHalo', 'clickAvatarHalo(popup)', 1);
-      this.convertLikerToCivicLiker();
+    onClickFollow() {
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickFollowButton', 'clickFollowButton(popup)', 1);
+      this.toggleFollow();
     },
   },
 };
@@ -346,8 +356,7 @@ $badge-width: 485px;
     flex-direction: column;
 
     max-width: 270px;
-    margin: 0 auto;
-    margin-top: 104px;
+    margin: 24px auto 0;
 
     text-align: center;
 
@@ -415,18 +424,5 @@ $badge-width: 485px;
 
 #embed-cta-button {
   margin-top: 8px;
-}
-
-.like-button {
-  position: absolute;
-  left: 50%;
-
-  margin-top: -18px;
-
-  transform: translate(-50%);
-
-  /deep/ .like-button-knob {
-    outline-style: none;
-  }
 }
 </style>

@@ -7,6 +7,8 @@
     "back": "Back",
     "loading": "Loading"
   },
+  "Follow": "Follow",
+  "Following": "Followed",
   "LikeButton": {
     "head": {
       "title": "Like {name}'s work",
@@ -29,6 +31,7 @@
       "aboutLikeCoin": "About Like Rewards"
     }
   },
+  "LikeCountLabel": "No Likes | 1 Like | {count} Likes",
   "Embed": {
     "back": {
       "civicLiker": {
@@ -88,5 +91,8 @@
     "title": "Let’s clap in the pop-up window",
     "titleForIOSInApp": "Let's clap in the pop-up window by performing 3D touch on the clap button",
     "link": "Why does pop-up appear?"
-  }
+  },
+  "Save": "Save",
+  "Saved": "Saved",
+  "SuperLikeNow": "Super Like Now"
 }

@@ -6,6 +6,8 @@
     "back": "返回",
     "loading": "载入中"
   },
+  "Follow": "追踪",
+  "Following": "追踪中",
   "LikeButton": {
     "head": {
       "title": "赞好 {name} 的作品",
@@ -28,6 +30,7 @@
       "aboutLikeCoin": "关于赞赏键"
     }
   },
+  "LikeCountLabel": "尚无点赞 | 1 个赞 | {count} 个赞",
   "Embed": {
     "back": {
       "civicLiker": {
@@ -76,5 +79,8 @@
     "becomeCivicLiker": "成为赞赏公民",
     "becomePaidCivicLiker": "正式成为赞赏公民",
     "likeCountLabel": "{n}人已按赞"
-  }
+  },
+  "Save": "收藏",
+  "Saved": "已收藏",
+  "SuperLikeNow": "立即 Super Like"
 }

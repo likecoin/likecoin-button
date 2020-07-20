@@ -5,32 +5,41 @@
       class="popup-notice-overlay"
     >
 
-      <div class="popup-notice-overlay-dialog">
-
-        <div class="popup-notice-overlay-dialog__body">
-          <i18n
-            :path="titlePath"
-            tag="span"
-            style="font-size: 1.5em"
+      <svg
+        class="popup-notice-overlay-dialog"
+        width="480"
+        viewBox="0 0 480 240"
+      >
+        <foreignObject
+          width="480"
+          height="240"
+        >
+          <div
+            :style="{
+              width: '100%',
+              height: '100%',
+            }"
           >
-            <br place="br">
-          </i18n>
-          <!--
-          <br>
-          <a
-            href="#"
-            target="_blank"
-          >{{ $t('PopupOverlay.link') }}</a>
-          -->
-        </div>
 
-        <div class="popup-notice-overlay-dialog__footer">
-          <button
-            @click="onCancel"
-          >{{ $t('general.cancel') }}</button>
-        </div>
+            <div class="popup-notice-overlay-dialog__body">
+              <i18n
+                :path="titlePath"
+                tag="span"
+                style="font-size: 1.5em"
+              >
+                <br place="br">
+              </i18n>
+            </div>
 
-      </div>
+            <div class="popup-notice-overlay-dialog__footer">
+              <button
+                @click="onCancel"
+              >{{ $t('general.cancel') }}</button>
+            </div>
+
+          </div>
+        </foreignObject>
+      </svg>
 
     </div>
   </transition>
@@ -82,12 +91,12 @@ export default {
 
   background-color: rgba(0, 0, 0, 0.8);
 
-  font-size: normalized(16);
+  font-size: 16px;
 
   &-- {
     &enter-active,
     &leave-active {
-      transition-property: transform, opacity;
+      transition-property: opacity;
     }
     &enter-active {
       transition-timing-function: ease-out;
@@ -100,8 +109,6 @@ export default {
 
     &enter,
     &leave-to {
-      transform: scale(0.8);
-
       opacity: 0;
     }
   }
