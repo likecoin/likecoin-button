@@ -259,7 +259,7 @@ export default {
               type: this.buttonType,
             },
           )
-            .then(({ data: myData }) => {
+            .then(async ({ data: myData }) => {
               const {
                 liker,
                 isSubscribed,
@@ -279,16 +279,14 @@ export default {
                     scope.setUser({ id: liker });
                   });
                 }
-                return Promise.all([
+                await Promise.all([
                   setTrackerUser({ user: liker }),
                   apiGetMyBookmark(this.referrer).then(({ data: bookmarkData }) => {
                     this.bookmarkID = bookmarkData.id;
-                    this.isLoadingBookmark = false;
-                  }).catch(),
+                  }).catch(() => {}),
                   apiGetMyFollower(this.id).then(({ data: followData }) => {
                     this.hasFollowedCreator = followData && followData.isFollowed;
-                    this.isLoadingFollowStatus = false;
-                  }).catch(),
+                  }).catch(() => {}),
                 ]);
               }
               this.isLoadingBookmark = false;
