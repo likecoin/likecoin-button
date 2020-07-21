@@ -101,6 +101,7 @@
               <LikeButton
                 :count="likeCount"
                 :cooldown="cooldownProgress"
+                :cooldown-end-time="nextSuperLikeTime"
                 :has-super-liked="hasSuperLiked"
                 :is-super-like-enabled="isSuperLiker"
                 @click="onClickLike"

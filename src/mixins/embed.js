@@ -239,13 +239,13 @@ export default {
           isSuperLiker,
           canSuperLike,
           lastSuperLikeInfos,
-          nextSuperLikeTime,
+          nextSuperLikeTs,
           cooldown,
         } = data;
         this.isSuperLiker = isSuperLiker;
         this.canSuperLike = canSuperLike;
         this.hasSuperLiked = !!(lastSuperLikeInfos && lastSuperLikeInfos.length);
-        this.nextSuperLikeTime = nextSuperLikeTime;
+        this.nextSuperLikeTime = nextSuperLikeTs;
         this.cooldownProgress = cooldown;
       });
     },
@@ -393,6 +393,8 @@ export default {
       );
     },
     async newSuperLike() {
+      this.hasSuperLiked = true;
+      this.cooldownProgress = 1;
       await apiPostSuperLike(this.id, {
         referrer: this.referrer,
         tz: this.timezoneString,

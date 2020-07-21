@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { TweenMax, Linear } from 'gsap/all';
+import { TweenMax, Linear, Circ } from 'gsap/all';
 
 export default {
   name: 'like-button-v2-cooldown',
@@ -49,13 +49,14 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      fillLength: this.calculateFillLength(this.value),
+    };
+  },
   computed: {
     diameter() {
-      return Math.PI * (this.radius * 2);
-    },
-    fillLength() {
-      const value = Math.min(1, Math.max(0, this.value));
-      return value * this.diameter;
+      return this.calculateDiameter();
     },
     strokeStyle() {
       return {
@@ -83,11 +84,26 @@ export default {
     },
   },
   watch: {
-    value() {
-      this.startCountdownAnimation();
+    value(newValue, oldValue) {
+      this.isUpdatingFillLength = true;
+      const oldFillLength = this.calculateFillLength(oldValue);
+      const newFillLength = this.calculateFillLength(newValue);
+      TweenMax.fromTo(this.$refs.fill, 0.5, {
+        strokeDashoffset: oldFillLength,
+      }, {
+        strokeDashoffset: newFillLength,
+        ease: Circ.out,
+        onComplete: () => {
+          this.fillLength = newFillLength;
+          this.isUpdatingFillLength = false;
+          this.startCountdownAnimation();
+        },
+      });
     },
     endTime() {
-      this.startCountdownAnimation();
+      if (!this.isUpdatingFillLength) {
+        this.startCountdownAnimation();
+      }
     },
   },
   mounted() {
@@ -101,6 +117,14 @@ export default {
   methods: {
     onEnd() {
       this.$emit('end');
+    },
+    calculateDiameter() {
+      return Math.PI * (this.radius * 2);
+    },
+    calculateFillLength(value) {
+      // NOTE: `this.diameter` is undefined in data()
+      const diameter = this.diameter || this.calculateDiameter();
+      return Math.min(1, Math.max(0, value)) * diameter;
     },
     animateTrack(tl) {
       tl.fromTo(this.$refs.fill, 1, {
