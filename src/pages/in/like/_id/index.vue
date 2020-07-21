@@ -254,6 +254,15 @@ export default {
         };
       }
     },
+    async doLike() {
+      if (!this.isMaxLike) {
+        this.like();
+        logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike(popup)', 1);
+      } else if (this.canSuperLike) {
+        await this.newSuperLike();
+        await this.updateSuperLikeStatus();
+      }
+    },
     onClickBackButton() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickBackButton', 'clickBackButton(popup)', 1);
       try {
@@ -264,10 +273,7 @@ export default {
       }
     },
     onClickLike() {
-      logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike(popup)', 1);
-      if (!this.isMaxLike) {
-        this.like();
-      }
+      this.doLike();
 
       const isPaidSubscriber = this.isSubscribed && !this.isTrialSubscriber;
       if (
