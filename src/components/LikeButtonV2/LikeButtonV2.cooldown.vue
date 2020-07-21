@@ -88,11 +88,11 @@ export default {
       this.isUpdatingFillLength = true;
       const oldFillLength = this.calculateFillLength(oldValue);
       const newFillLength = this.calculateFillLength(newValue);
-      TweenMax.fromTo(this.$refs.fill, 0.5, {
+      TweenMax.fromTo(this.$refs.fill, 1, {
         strokeDashoffset: oldFillLength,
       }, {
         strokeDashoffset: newFillLength,
-        ease: Circ.out,
+        ease: Circ.easeOut,
         onComplete: () => {
           this.fillLength = newFillLength;
           this.isUpdatingFillLength = false;
