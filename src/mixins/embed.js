@@ -1,4 +1,8 @@
-import * as cookie from 'tiny-cookie';
+import {
+  isCookieEnabled,
+  getCookie,
+  setCookie,
+} from 'tiny-cookie';
 
 import {
   LIKE_CO_HOSTNAME,
@@ -221,17 +225,17 @@ export default {
         res = process.client
           && navigator.cookieEnabled
           && this.hasStorageAPIAccess
-          && cookie.isEnabled();
+          && isCookieEnabled();
       } catch (err) {
         console.error(err);
         return false;
       }
-      cookie.set('likebutton_cookie', 1);
+      setCookie('likebutton_cookie', 1);
       return res;
     },
     getParentSuperLikeID() {
-      if (!document.cookie || !cookie.enabled()) return '';
-      return cookie.get('likebutton_superlike_id');
+      if (!document.cookie || !isCookieEnabled()) return '';
+      return getCookie('likebutton_superlike_id');
     },
     async updateSuperLikeStatus() {
       await apiGetSuperLikeMyStatus(this.timezoneString, this.referrer).then(({ data }) => {
