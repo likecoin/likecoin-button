@@ -45,6 +45,7 @@ const nuxtConfig = {
     { src: '~/plugins/likecoin-ui-vue' },
     { src: '~/plugins/vue-i18n' },
     { src: '~/plugins/fbpixel.client.js', ssr: false },
+    { src: '~/plugins/gsap.client.js', ssr: false },
     // { src: '~/plugins/optimize.js' },
   ],
   render: {
