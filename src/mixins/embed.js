@@ -248,7 +248,11 @@ export default {
         } = data;
         this.isSuperLiker = isSuperLiker;
         this.canSuperLike = canSuperLike;
-        this.hasSuperLiked = !!(lastSuperLikeInfos && lastSuperLikeInfos.length);
+        // HACK: Assume if `hasSuperLiked` has set to `true`, don't override it as
+        // `lastSuperLikeInfos` may return empty array even the Super Like action is success
+        if (!this.hasSuperLiked) {
+          this.hasSuperLiked = !!(lastSuperLikeInfos && lastSuperLikeInfos.length);
+        }
         this.nextSuperLikeTime = nextSuperLikeTs;
         this.cooldownProgress = cooldown;
       });
@@ -397,6 +401,7 @@ export default {
       );
     },
     async newSuperLike() {
+      const { cooldownProgress } = this;
       this.hasSuperLiked = true;
       this.cooldownProgress = 1;
       await apiPostSuperLike(this.id, {
@@ -406,6 +411,9 @@ export default {
         documentReferrer: this.documentReferrer,
         sessionID: this.sessionId,
         type: this.buttonType,
+      }).catch(() => {
+        this.hasSuperLiked = false;
+        this.cooldownProgress = cooldownProgress;
       });
     },
     openLikeStats(options = { isNewWindow: true }) {
