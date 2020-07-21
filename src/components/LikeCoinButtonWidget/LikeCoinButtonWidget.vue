@@ -157,7 +157,7 @@ export default {
     labelStyle() {
       return {
         color: '#9B9B9B',
-        fontFamily: 'Arial, serif',
+        fontFamily: 'Source Sans Pro, Arial, sans-serif',
         fontSize: '14px',
         textAlign: 'center',
         width: '100%',
