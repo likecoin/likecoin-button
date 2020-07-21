@@ -104,6 +104,7 @@
                 :has-super-liked="hasSuperLiked"
                 :is-super-like-enabled="isSuperLiker"
                 @click="onClickLike"
+                @cooldown-end="updateSuperLikeStatus"
                 ref="likeButton"
               />
             </template>
