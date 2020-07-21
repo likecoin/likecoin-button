@@ -123,6 +123,7 @@ export default {
 
       sessionId: uuidv4(),
 
+      isSuperLiker: false,
       canSuperLike: false,
       hasSuperLiked: false,
       nextSuperLikeTime: -1,
@@ -235,11 +236,13 @@ export default {
     async updateSuperLikeStatus() {
       await apiGetSuperLikeMyStatus(this.timezoneString, this.referrer).then(({ data }) => {
         const {
+          isSuperLiker,
           canSuperLike,
           lastSuperLikeInfos,
           nextSuperLikeTime,
           cooldown,
         } = data;
+        this.isSuperLiker = isSuperLiker;
         this.canSuperLike = canSuperLike;
         this.hasSuperLiked = !!(lastSuperLikeInfos && lastSuperLikeInfos.length);
         this.nextSuperLikeTime = nextSuperLikeTime;

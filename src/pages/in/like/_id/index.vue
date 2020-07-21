@@ -102,7 +102,7 @@
                 :count="likeCount"
                 :cooldown="cooldownProgress"
                 :has-super-liked="hasSuperLiked"
-                :is-super-like-enabled="canSuperLike"
+                :is-super-like-enabled="isSuperLiker"
                 @click="onClickLike"
                 ref="likeButton"
               />
