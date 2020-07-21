@@ -19,7 +19,12 @@
 </template>
 
 <script>
-import { TweenMax, Linear, Circ } from 'gsap/all';
+import {
+  Circ,
+  Linear,
+  TimelineMax,
+  TweenMax,
+} from 'gsap/all';
 
 export default {
   name: 'like-button-v2-cooldown',
@@ -84,13 +89,10 @@ export default {
     },
   },
   watch: {
-    value(newValue, oldValue) {
+    value(newValue) {
       this.isUpdatingFillLength = true;
-      const oldFillLength = this.calculateFillLength(oldValue);
       const newFillLength = this.calculateFillLength(newValue);
-      TweenMax.fromTo(this.$refs.fill, 1, {
-        strokeDashoffset: oldFillLength,
-      }, {
+      TweenMax.to(this.$refs.fill, 5, {
         strokeDashoffset: newFillLength,
         ease: Circ.easeOut,
         onComplete: () => {
@@ -126,12 +128,17 @@ export default {
       const diameter = this.diameter || this.calculateDiameter();
       return Math.min(1, Math.max(0, value)) * diameter;
     },
-    animateTrack(tl) {
+    animateTrack(parentTl) {
+      const tl = new TimelineMax();
       tl.fromTo(this.$refs.fill, 1, {
         strokeDashoffset: this.diameter,
       }, {
         strokeDashoffset: this.fillLength,
-      }, 0);
+      });
+      tl.to(this.$refs.fill, 1, {
+        strokeDashoffset: this.calculateFillLength(this.value),
+      });
+      parentTl.add(tl, 0);
     },
     startCountdownAnimation() {
       const secondsLeft = (this.endTime - Date.now()) / 1000;
