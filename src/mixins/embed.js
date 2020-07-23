@@ -291,6 +291,7 @@ export default {
                   });
                 }
                 await Promise.all([
+                  this.updateSuperLikeStatus(),
                   setTrackerUser({ user: liker }),
                   apiGetMyBookmark(this.referrer).then(({ data: bookmarkData }) => {
                     if (bookmarkData.id) {
@@ -320,7 +321,6 @@ export default {
             const { total } = totalData;
             this.totalLike = total;
           }),
-          this.updateSuperLikeStatus(),
         ]);
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
