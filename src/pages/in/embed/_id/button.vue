@@ -5,6 +5,10 @@
       :like-button-label="likeButtonLabel"
       :save-button-label="saveButtonLabel"
       :avatar-label="avatarLabel"
+      :is-avatar-label-button-disabled="hasFollowedCreator"
+      @click-like-button-label="onClickLikeStats"
+      @click-save-button-label="onClickSaveButton"
+      @click-avatar-button-label="onClickFollow"
     )
       template(#like-button)
         LikeButton(
@@ -28,6 +32,7 @@
         Identity(
           :avatarURL="avatar"
           :display-name="displayName"
+          :is-avatar-button-disabled="hasFollowedCreator"
           v-bind="identityProps"
           @click-avatar="onClickFollow"
         )

@@ -22,7 +22,14 @@
         width="68"
         height="32"
       >
-        <div :style="labelStyle">{{ avatarLabel }}</div>
+        <div :style="labelStyle">
+          <button
+            :disabled="isAvatarLabelButtonDisabled"
+            :style="labelButtonStyle"
+            @click="$emit('click-avatar-label')"
+            class="likecoin-button-widget__label-button"
+          >{{ avatarLabel }}</button>
+        </div>
       </foreignObject>
 
       <!-- Save button -->
@@ -39,7 +46,13 @@
         width="52"
         height="32"
       >
-        <div :style="labelStyle">{{ saveButtonLabel }}</div>
+        <div :style="labelStyle">
+          <button
+            :style="labelButtonStyle"
+            @click="$emit('click-save-button-label')"
+            class="likecoin-button-widget__label-button"
+          >{{ saveButtonLabel }}</button>
+        </div>
       </foreignObject>
 
       <!-- Like Button -->
@@ -51,9 +64,15 @@
         :y="labelY"
         x="28"
         width="100"
-        height="32"
+        height="36"
       >
-        <div :style="labelStyle">{{ likeButtonLabel }}</div>
+        <div :style="labelStyle">
+          <button
+            :style="labelButtonStyle"
+            @click="$emit('click-like-button-label')"
+            class="likecoin-button-widget__label-button"
+          >{{ likeButtonLabel }}</button>
+        </div>
       </foreignObject>
     </svg>
   </div>
@@ -92,6 +111,10 @@ export default {
     avatarLabel: {
       type: String,
       default: '',
+    },
+    isAvatarLabelButtonDisabled: {
+      type: Boolean,
+      default: false,
     },
     avatarURL: {
       type: String,
@@ -163,6 +186,30 @@ export default {
         width: '100%',
       };
     },
+    labelButtonStyle() {
+      return {
+        padding: '0 2px',
+        border: 'none',
+        borderRadius: '4px',
+        outline: 'none',
+        color: 'inherit',
+        fontFamily: 'inherit',
+        fontSize: 'inherit',
+        transition: 'background-color 0.2s ease',
+      };
+    },
   },
 };
 </script>
+
+<style lang="css">
+.likecoin-button-widget__label-button {
+  background-color: transparent;
+}
+.likecoin-button-widget__label-button:not([disabled]):hover {
+  background-color: #f4f4f4;
+}
+.likecoin-button-widget__label-button:not([disabled]):active {
+  background-color: #e6e6e6;
+}
+</style>

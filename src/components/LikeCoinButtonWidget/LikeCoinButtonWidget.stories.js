@@ -127,7 +127,10 @@ const Controlled = ({
         avatarLabel,
         likeButtonLabel,
         saveButtonLabel,
+        isAvatarLabelButtonDisabled: isFollowing,
       }"
+      @click-save-button-label="onClickSaveButton"
+      @click-avatar-label="onFollow"
     >
       <template #like-button>
         <LikeButtonV2
@@ -155,6 +158,7 @@ const Controlled = ({
             ...identityProps,
             avatarURL,
             displayName,
+            isAvatarButtonDisabled: isFollowing,
           }"
           @click-avatar="onFollow"
         />
