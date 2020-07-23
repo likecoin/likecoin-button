@@ -45,6 +45,7 @@
       >
         <button
           :style="buttonBaseStyle"
+          :disabled="isDisabled"
           v-on="buttonListeners"
         />
       </foreignObject>
@@ -62,6 +63,10 @@ export default {
     url: {
       type: String,
       default: '',
+    },
+    isDisabled: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

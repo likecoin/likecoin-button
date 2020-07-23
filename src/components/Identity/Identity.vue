@@ -10,6 +10,7 @@
       :x="avatarX"
       :y="avatarY"
       :url="avatarURL"
+      :is-disabled="isAvatarButtonDisabled"
       @click="onClickAvatar"
     />
     <!-- Display Name -->
@@ -36,6 +37,10 @@ export default {
     avatarURL: {
       type: String,
       default: '',
+    },
+    isAvatarButtonDisabled: {
+      type: Boolean,
+      default: false,
     },
     displayName: {
       type: String,
