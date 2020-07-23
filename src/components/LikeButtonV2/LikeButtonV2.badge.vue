@@ -167,7 +167,7 @@ export default {
       return {
         fill: '#28646e',
         fontWeight: 'bold',
-        fontFamily: 'Arial, sans-serif',
+        fontFamily: 'Source Sans Pro, Arial, sans-serif',
         textAlign: 'center',
       };
     },

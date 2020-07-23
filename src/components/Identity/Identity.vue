@@ -72,7 +72,7 @@ export default {
         display: 'flex',
         alignItems: 'center',
         color: '#28646E',
-        fontFamily: 'Arial, serif',
+        fontFamily: 'Source Sans Pro, Arial, sans-serif',
         fontSize: '18px',
         fontWeight: '500',
         height: '100%',
