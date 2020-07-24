@@ -5,7 +5,7 @@
       :like-button-label="likeButtonLabel"
       :save-button-label="saveButtonLabel"
       :avatar-label="avatarLabel"
-      :is-avatar-label-button-disabled="true"
+      :is-avatar-label-button-disabled="!isFollowButtonEnabled"
       @click-like-button-label="onClickLikeStats"
       @click-save-button-label="onClickSaveButton"
       @click-avatar-button-label="onClickFollow"
@@ -32,7 +32,7 @@
         Identity(
           :avatarURL="avatar"
           :display-name="displayName"
-          :is-avatar-button-disabled="true"
+          :is-avatar-button-disabled="!isFollowButtonEnabled"
           v-bind="identityProps"
           @click-avatar="onClickFollow"
         )
