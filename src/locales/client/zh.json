@@ -31,7 +31,7 @@
       "aboutLikeCoin": "關於讚賞鍵"
     }
   },
-  "LikeCountLabel": "尚無點讚 | 1 個讚 | {count} 個讚",
+  "LikeCountLabel": "尚無按讚 | 1 個讚 | {count} 個讚",
   "Embed": {
     "back": {
       "civicLiker": {
