@@ -96,7 +96,7 @@
             :save-button-label="saveButtonLabel"
             :avatar-label="avatarLabel"
             :style="{ textAlign: 'center' }"
-            :is-avatar-label-button-disabled="hasFollowedCreator"
+            :is-avatar-label-button-disabled="true"
             @click-like-button-label="onClickLikeStats"
             @click-save-button-label="onClickSaveButton"
             @click-avatar-button-label="onClickFollow"
@@ -126,7 +126,7 @@
               <Identity
                 :avatarURL="avatar"
                 :display-name="displayName"
-                :is-avatar-button-disabled="hasFollowedCreator"
+                :is-avatar-button-disabled="true"
                 v-bind="identityProps"
                 @click-avatar="onClickFollow"
               />

@@ -214,7 +214,7 @@ export default {
       return this.$t(this.hasBookmarked ? 'Saved' : 'Save');
     },
     avatarLabel() {
-      return this.$t(this.hasFollowedCreator ? 'Following' : 'Follow');
+      return this.hasFollowedCreator ? this.$t('Following') : '';
     },
   },
   methods: {
