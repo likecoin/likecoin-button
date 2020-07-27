@@ -20,10 +20,9 @@
 
 <script>
 import {
-  Circ,
   Linear,
+  Power2,
   TimelineMax,
-  TweenMax,
 } from 'gsap/all';
 
 export default {
@@ -92,14 +91,20 @@ export default {
     value(newValue) {
       this.isUpdatingFillLength = true;
       const newFillLength = this.calculateFillLength(newValue);
-      TweenMax.to(this.$refs.fill, 5, {
-        strokeDashoffset: newFillLength,
-        ease: Circ.easeOut,
+      if (this.tween) {
+        this.tween.kill();
+      }
+      this.tween = new TimelineMax({
         onComplete: () => {
           this.fillLength = newFillLength;
           this.isUpdatingFillLength = false;
           this.startCountdownAnimation();
         },
+      });
+      const progress = Math.abs(newFillLength - this.fillLength) / this.diameter;
+      this.tween.to(this.$refs.fill, 5 * progress, {
+        strokeDashoffset: newFillLength,
+        ease: Power2.easeInOut,
       });
     },
     endTime() {
@@ -129,16 +134,19 @@ export default {
       return Math.min(1, Math.max(0, value)) * diameter;
     },
     animateTrack(parentTl) {
-      const tl = new TimelineMax();
-      tl.fromTo(this.$refs.fill, 1, {
+      if (this.tween) {
+        this.tween.kill();
+      }
+      this.tween = new TimelineMax();
+      this.tween.fromTo(this.$refs.fill, 1, {
         strokeDashoffset: this.diameter,
       }, {
         strokeDashoffset: this.fillLength,
       });
-      tl.to(this.$refs.fill, 1, {
+      this.tween.to(this.$refs.fill, 1, {
         strokeDashoffset: this.calculateFillLength(this.value),
       });
-      parentTl.add(tl, 0);
+      parentTl.add(this.tween, 0);
     },
     startCountdownAnimation() {
       const secondsLeft = (this.endTime - Date.now()) / 1000;
@@ -146,10 +154,10 @@ export default {
         if (this.tween) {
           this.tween.kill();
         }
-        this.tween = TweenMax.to(this.$refs.fill, secondsLeft, {
+        this.tween = new TimelineMax({ onComplete: this.onEnd });
+        this.tween.to(this.$refs.fill, secondsLeft, {
           strokeDashoffset: 0,
           ease: Linear.easeNone,
-          onComplete: this.onEnd,
         });
       }
     },
