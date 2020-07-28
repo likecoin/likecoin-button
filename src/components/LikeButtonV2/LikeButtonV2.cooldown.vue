@@ -22,6 +22,7 @@
 import {
   Linear,
   Power2,
+  Power4,
   TimelineMax,
 } from 'gsap/all';
 
@@ -52,10 +53,18 @@ export default {
       type: Boolean,
       default: false,
     },
+    strokeWidth: {
+      type: Number,
+      default: 4,
+    },
   },
   data() {
+    const fillLength = this.calculateFillLength(this.value);
     return {
-      fillLength: this.calculateFillLength(this.value),
+      fillLength: fillLength > 0
+        ? Math.max(this.getMinAnimatedFillLength(), fillLength)
+        : 0
+      ,
     };
   },
   computed: {
@@ -66,7 +75,7 @@ export default {
       return {
         fill: 'none',
         strokeLinecap: 'round',
-        strokeWidth: `${this.isBold ? 6 : 4}px`,
+        strokeWidth: `${this.isBold ? this.strokeWidth * 3 / 2 : this.strokeWidth}px`,
         transition: 'stroke 0.25s ease, stroke-width 0.25s ease, fill 0.25s ease',
       };
     },
@@ -86,6 +95,9 @@ export default {
         strokeDashoffset: this.fillLength,
       };
     },
+    minAnimatedFillLength() {
+      return this.getMinAnimatedFillLength();
+    },
   },
   watch: {
     value(newValue) {
@@ -102,7 +114,7 @@ export default {
         },
       });
       const progress = Math.abs(newFillLength - this.fillLength) / this.diameter;
-      this.tween.to(this.$refs.fill, 5 * progress, {
+      this.tween.to(this.$refs.fill, 3 * progress, {
         strokeDashoffset: newFillLength,
         ease: Power2.easeInOut,
       });
@@ -124,6 +136,9 @@ export default {
   methods: {
     onEnd() {
       this.$emit('end');
+    },
+    getMinAnimatedFillLength() {
+      return this.strokeWidth * 1.5;
     },
     calculateDiameter() {
       return Math.PI * (this.radius * 2);
@@ -154,11 +169,31 @@ export default {
         if (this.tween) {
           this.tween.kill();
         }
-        this.tween = new TimelineMax({ onComplete: this.onEnd });
-        this.tween.to(this.$refs.fill, secondsLeft, {
-          strokeDashoffset: 0,
+        this.tween = new TimelineMax({
+          onComplete: () => {
+            this.fillLength = 0;
+            this.onEnd();
+          },
+        });
+        // The countdown animation consists of 2 parts
+        const remainingDuration = Math.max(
+          0.2,
+          secondsLeft * (
+            1 - Math.abs((this.fillLength - this.minAnimatedFillLength) / this.fillLength)
+          ),
+        );
+
+        // 1) A linear animation for displaying countdown
+        this.tween.to(this.$refs.fill, secondsLeft - remainingDuration, {
+          strokeDashoffset: this.minAnimatedFillLength,
           ease: Linear.easeNone,
         });
+        // 2) Emphsize the ending of the animation by a short pause
+        const emphsizeDuration = 0.25;
+        this.tween.to(this.$refs.fill, emphsizeDuration, {
+          strokeDashoffset: 0,
+          ease: Power4.easeInOut,
+        }, `+=${Math.max(remainingDuration - emphsizeDuration, emphsizeDuration)}`);
       }
     },
   },
