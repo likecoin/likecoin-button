@@ -147,12 +147,32 @@ export default {
         switch (data.action) {
           case 'LOGGED_IN':
             await this.updateUserSignInStatus();
-            // Click LikeButton after signing in
-            this.$nextTick(() => {
-              if (this.$refs.likeButton) {
-                this.$refs.likeButton.onPressedKnob();
-              }
-            });
+
+            // Do post sign in action after signing in
+            switch (this.postSignInAction) {
+              case 'like':
+                this.$nextTick(() => {
+                  if (this.$refs.likeButton) {
+                    this.$refs.likeButton.onClick();
+                  }
+                });
+                break;
+
+              case 'save':
+                if (!this.hasBookmarked) {
+                  this.onClickSaveButton();
+                }
+                break;
+
+              case 'follow':
+                if (!this.hasFollowedCreator) {
+                  this.onClickFollowButton();
+                }
+                break;
+
+              default:
+                break;
+            }
             break;
 
           // For preview usage

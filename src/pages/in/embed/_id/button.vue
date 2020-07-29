@@ -12,6 +12,7 @@
     )
       template(#like-button)
         LikeButton(
+          ref="likeButton"
           :count="likeCount"
           :cooldown="cooldownProgress"
           :cooldown-end-time="nextSuperLikeTime"
@@ -118,7 +119,8 @@ export default {
     async onClickInteraction() {
       this.setIsInteracted();
     },
-    async doLogin() {
+    async doLogin(action) {
+      this.postSignInAction = action;
       if (!this.hasCookieSupport || (isAndroid() && isFacebookBrowser())) {
         // User has not log in and 3rd party cookie is blocked
         // or: android fb iab stuck when sign in new window, use like popup
@@ -151,7 +153,7 @@ export default {
         // Case 3: User has logged in
         this.doLike();
       } else {
-        await this.doLogin();
+        await this.doLogin('like');
       }
     },
     onClickLikeStats() {
@@ -175,7 +177,7 @@ export default {
       if (this.isLoggedIn) {
         this.toggleBookmark();
       } else {
-        await this.doLogin();
+        await this.doLogin('save');
       }
     },
     async onClickFollow() {
@@ -183,7 +185,7 @@ export default {
       if (this.isLoggedIn) {
         this.toggleFollow();
       } else {
-        await this.doLogin();
+        await this.doLogin('follow');
       }
     },
     handleMessageAction(event, action) {
