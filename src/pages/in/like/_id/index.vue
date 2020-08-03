@@ -126,6 +126,7 @@
               <Identity
                 :avatarURL="avatar"
                 :display-name="displayName"
+                :is-avatar-button-outlined="isCreatorCivicLiker"
                 :is-avatar-button-disabled="!isFollowButtonEnabled"
                 v-bind="identityProps"
                 @click-avatar="onClickFollow"

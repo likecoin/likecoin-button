@@ -31,7 +31,6 @@ import {
 } from '~/util/api/api';
 
 import { checkHasStorageAPIAccess } from '~/util/client';
-import { getAvatarHaloTypeFromUser } from '~/util/user';
 import { handleQueryStringInUrl } from '~/util/url';
 
 const MAX_LIKE = 5;
@@ -95,6 +94,7 @@ export default {
         displayName,
         avatar,
         isPreRegCivicLiker,
+        isCivicLikerTrial,
         isSubscribedCivicLiker,
         civicLikerSince,
       } = res[0].data;
@@ -103,8 +103,8 @@ export default {
         id,
         displayName,
         avatar,
-        avatarHalo: getAvatarHaloTypeFromUser(res[0].data),
         isPreRegCivicLiker,
+        isCivicLikerTrial,
         isSubscribedCivicLiker,
         civicLikerSince,
         amount,
@@ -221,6 +221,9 @@ export default {
     },
     isFollowButtonEnabled() {
       return this.isSuperLiker && !this.hasFollowedCreator;
+    },
+    isCreatorCivicLiker() {
+      return this.isCivicLikerTrial || this.isSubscribedCivicLiker;
     },
   },
   methods: {

@@ -10,6 +10,7 @@
       :x="avatarX"
       :y="avatarY"
       :url="avatarURL"
+      :is-outlined="isAvatarButtonOutlined"
       :is-disabled="isAvatarButtonDisabled"
       @click="onClickAvatar"
     />
@@ -39,6 +40,10 @@ export default {
       default: '',
     },
     isAvatarButtonDisabled: {
+      type: Boolean,
+      default: false,
+    },
+    isAvatarButtonOutlined: {
       type: Boolean,
       default: false,
     },

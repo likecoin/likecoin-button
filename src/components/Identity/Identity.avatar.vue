@@ -32,6 +32,7 @@
         :style="avatarInnerRimStyle"
       />
       <circle
+        v-if="isOutlined"
         :cx="avatarCenterX"
         :cy="avatarCenterY"
         :r="avatarRimRadius"
@@ -63,6 +64,10 @@ export default {
     url: {
       type: String,
       default: '',
+    },
+    isOutlined: {
+      type: Boolean,
+      default: false,
     },
     isDisabled: {
       type: Boolean,

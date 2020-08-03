@@ -23,6 +23,9 @@ export const Default = () => ({
     avatarURL: {
       default: text('Avatar URL', defaultAvatarURL),
     },
+    isAvatarButtonOutlined: {
+      default: boolean('Avatar Button Outlined', true),
+    },
     isAvatarButtonDisabled: {
       default: boolean('Avatar Button Disabled', false),
     },
@@ -35,6 +38,7 @@ export const Default = () => ({
       v-bind="{
         avatarURL,
         displayName,
+        isAvatarButtonOutlined,
         isAvatarButtonDisabled,
       }"
     />
@@ -52,12 +56,16 @@ export const Avatar = () => ({
     isDisabled: {
       default: boolean('Disabled', false),
     },
+    isOutlined: {
+      default: boolean('Outlined', true),
+    },
   },
   template: `
     <IdentityAvatar
       v-bind="{
         url,
         isDisabled,
+        isOutlined,
       }"
     />
   `,
