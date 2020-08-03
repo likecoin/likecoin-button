@@ -108,16 +108,26 @@ export default {
     async postReadEvent() {
       if (this.isRead) return;
       this.isRead = true;
-      await apiPostLikeButtonReadEvent(
-        this.id,
-        {
-          referrer: this.referrer,
-          isCookieSupport: this.hasCookieSupport,
-          documentReferrer: this.documentReferrer,
-          sessionID: this.sessionId,
-          type: this.buttonType,
-        },
-      );
+      try {
+        await apiPostLikeButtonReadEvent(
+          this.id,
+          {
+            referrer: this.referrer,
+            isCookieSupport: this.hasCookieSupport,
+            documentReferrer: this.documentReferrer,
+            sessionID: this.sessionId,
+            type: this.buttonType,
+          },
+        );
+      } catch (err) {
+        const errMsg = err.message || err.toString();
+        if (
+          !errMsg.includes('timeout')
+          && !errMsg.includes('Network Error')
+        ) {
+          console.error(err);
+        }
+      }
       if (this.readTimer) clearTimeout(this.readTimer);
     },
     async handleWindowMessage(event) {
