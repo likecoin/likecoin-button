@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
 
-if (!process.env.FUNCTION_NAME || process.env.FUNCTION_NAME === 'ssrapp') {
+if (!process.env.K_SERVICE || process.env.K_SERVICE === 'ssrapp') {
   exports.ssrapp = require('./ssrapp');
 }
