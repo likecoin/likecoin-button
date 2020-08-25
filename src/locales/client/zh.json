@@ -32,6 +32,18 @@
     }
   },
   "LikeCountLabel": "尚無按讚 | 1 個讚 | {count} 個讚",
+  "CTA": {
+    "CivicLiker": {
+      "Title": "Super Like — 去 AI 內容分配",
+      "Description": "成為 Civic Liker，今年內每天獲贈兩個 Super Like 配額。更有效支持創作之餘更為重分發好內容出一分力",
+      "Features": [
+        "協助分發好內容",
+        "支持創作",
+        "賺取更多 LikeCoin"
+      ],
+      "Button": "成為讚賞公民"
+    }
+  },
   "Embed": {
     "back": {
       "civicLiker": {

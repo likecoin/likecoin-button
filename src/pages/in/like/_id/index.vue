@@ -243,7 +243,7 @@ export default {
     this.$nextTick(() => {
       this.setContentHeight();
 
-      if (this.likeCount <= 0 && this.$refs.likeButton) {
+      if (!this.isCreator && this.likeCount <= 0 && this.$refs.likeButton) {
         this.$refs.likeButton.onClick();
       }
     });
@@ -269,6 +269,16 @@ export default {
       } else if (this.canSuperLike) {
         await this.newSuperLike();
         await this.updateSuperLikeStatus();
+      } else {
+        this.$router.push({
+          name: 'in-cta-id-civic',
+          params: { id: this.id },
+          query: {
+            referrer: encodeURIComponent(this.referrer),
+            show_back: '1',
+          },
+        });
+        logTrackerEvent(this, 'LikeButtonFlow', 'clickCivicLikerCTA', 'clickCivicLikerCTA(popup)', 1);
       }
     },
     onClickBackButton() {

@@ -32,6 +32,18 @@
     }
   },
   "LikeCountLabel": "No Likes | 1 Like | {count} Likes",
+  "CTA": {
+    "CivicLiker": {
+      "Title": "Super Like — content distribution without AI",
+      "Description": "Become a Civic Liker and get two Super Like quotas every day this year. Be more effective for supporting creation, and content distribution.",
+      "Features": [
+        "Help content distribution",
+        "Support creation",
+        "Earn more LikeCoin"
+      ],
+      "Button": "Become a Civic Liker"
+    }
+  },
   "Embed": {
     "back": {
       "civicLiker": {

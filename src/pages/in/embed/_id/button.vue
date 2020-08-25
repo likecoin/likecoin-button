@@ -147,6 +147,13 @@ export default {
       } else if (this.canSuperLike) {
         await this.newSuperLike();
         await this.updateSuperLikeStatus();
+      } else {
+        window.open(
+          `/in/cta/${this.id}/civic?referrer=${encodeURIComponent(this.referrer)}`,
+          'civic-liker-cta',
+          'width=540,height=640,menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes',
+        );
+        logTrackerEvent(this, 'LikeButtonFlow', 'clickCivicLikerCTA', 'clickCivicLikerCTA(embed)', 1);
       }
     },
     async onClickLike() {
