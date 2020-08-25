@@ -18,6 +18,7 @@
           :cooldown-end-time="nextSuperLikeTime"
           :has-super-liked="hasSuperLiked"
           :is-super-like-enabled="isSuperLiker"
+          :is-creator="isCreator"
           @click="onClickLike"
           @cooldown-end="updateSuperLikeStatus"
         )
@@ -140,7 +141,7 @@ export default {
       }
     },
     async doLike() {
-      if (!this.isMaxLike) {
+      if (!this.isMaxLike && !this.isCreator) {
         this.like();
         logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike(embed)', 1);
       } else if (this.canSuperLike) {
