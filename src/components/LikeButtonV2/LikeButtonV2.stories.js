@@ -48,6 +48,9 @@ export const Default = () => ({
     isSuperLikeEnabled: {
       default: boolean('Enable Super Like', true),
     },
+    isCreator: {
+      default: boolean('Is creator', false),
+    },
     explosionSize: {
       default: number('Explosion Size', 0.65, {
         range: true,
@@ -73,6 +76,7 @@ export const Default = () => ({
         cooldownEndTime: Date.now() + cooldownEndTimeFromNow * 1000,
         hasSuperLiked,
         isSuperLikeEnabled,
+        isCreator,
         explosionSize,
         explosionRange,
       }"
