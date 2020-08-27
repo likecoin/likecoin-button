@@ -239,7 +239,6 @@ export default {
       return;
     }
 
-    this.contentKey = 'loggedIn';
     this.$nextTick(() => {
       this.setContentHeight();
     });
@@ -251,15 +250,17 @@ export default {
   },
   watch: {
     hasUpdateUserSignInStatus(value, prevValue) {
-      if (
-        value && !prevValue
-        && (
-          (this.isCreator && this.isSubscribed)
-          || (!this.isCreator && this.likeCount <= 0)
-        )
-        && this.$refs.likeButton
-      ) {
-        this.$refs.likeButton.onClick();
+      if (value && !prevValue) {
+        this.contentKey = 'loggedIn';
+        if (
+          (
+            (this.isCreator && this.isSubscribed)
+            || (!this.isCreator && this.likeCount <= 0)
+          )
+          && this.$refs.likeButton
+        ) {
+          this.$refs.likeButton.onClick();
+        }
       }
     },
   },
