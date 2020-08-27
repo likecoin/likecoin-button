@@ -148,6 +148,12 @@ export default {
         await this.newSuperLike();
         await this.updateSuperLikeStatus();
       } else {
+        if (this.ctaClickCount === undefined) {
+          this.ctaClickCount = 1;
+        } else {
+          this.ctaClickCount = (this.ctaClickCount + 1) % 5;
+          if (this.ctaClickCount !== 0) return;
+        }
         window.open(
           `/in/cta/${this.id}/civic?referrer=${encodeURIComponent(this.referrer)}`,
           'civic-liker-cta',
