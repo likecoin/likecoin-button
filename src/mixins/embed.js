@@ -144,6 +144,8 @@ export default {
 
       hasCookieSupport: false,
       hasStorageAPIAccess: false,
+
+      hasUpdateUserSignInStatus: false,
     };
   },
   computed: {
@@ -329,6 +331,8 @@ export default {
         ]);
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
+      } finally {
+        this.hasUpdateUserSignInStatus = true;
       }
     },
     async toggleBookmark() {

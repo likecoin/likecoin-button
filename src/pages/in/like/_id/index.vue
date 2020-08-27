@@ -242,16 +242,26 @@ export default {
     this.contentKey = 'loggedIn';
     this.$nextTick(() => {
       this.setContentHeight();
-
-      if (!this.isCreator && this.likeCount <= 0 && this.$refs.likeButton) {
-        this.$refs.likeButton.onClick();
-      }
     });
   },
   beforeDestroy() {
     if (this.resizeListener) {
       window.removeEventListener('resize', this.setContentHeight);
     }
+  },
+  watch: {
+    hasUpdateUserSignInStatus(value, prevValue) {
+      if (
+        value && !prevValue
+        && (
+          (this.isCreator && this.isSubscribed)
+          || (!this.isCreator && this.likeCount <= 0)
+        )
+        && this.$refs.likeButton
+      ) {
+        this.$refs.likeButton.onClick();
+      }
+    },
   },
   methods: {
     setContentHeight() {
