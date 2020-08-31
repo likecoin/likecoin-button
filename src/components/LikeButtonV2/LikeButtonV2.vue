@@ -385,7 +385,7 @@ export default {
           'unsuperlikeable',
           'cooldown',
           'superlikeable-cooldown',
-        ].some(s => s === this.state)
+        ].includes(this.state)
       ) {
         this.startClapBitsAnimation();
       }

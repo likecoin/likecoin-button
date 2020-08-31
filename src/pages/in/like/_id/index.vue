@@ -281,16 +281,19 @@ export default {
         await this.newSuperLike();
         await this.updateSuperLikeStatus();
       } else {
-        this.$router.push({
-          name: 'in-cta-id-civic',
-          params: { id: this.id },
-          query: {
-            referrer: encodeURIComponent(this.referrer),
-            show_back: '1',
-          },
-        });
-        logTrackerEvent(this, 'LikeButtonFlow', 'clickCivicLikerCTA', 'clickCivicLikerCTA(popup)', 1);
+        this.showCivicLikerCTA();
       }
+    },
+    showCivicLikerCTA() {
+      this.$router.push({
+        name: 'in-cta-id-civic',
+        params: { id: this.id },
+        query: {
+          referrer: encodeURIComponent(this.referrer),
+          show_back: '1',
+        },
+      });
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickCivicLikerCTA', 'clickCivicLikerCTA(popup)', 1);
     },
     onClickBackButton() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickBackButton', 'clickBackButton(popup)', 1);

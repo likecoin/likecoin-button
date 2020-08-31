@@ -195,10 +195,10 @@ export default {
       };
     },
     shareIconBgColor() {
-      return this.state === 'shared' ? '#50e3c2' : '#e6e6e6';
+      return this.isShared ? '#50e3c2' : '#e6e6e6';
     },
     shareIconContentColor() {
-      return this.state === 'shared' ? '#28646e' : '#9b9b9b';
+      return this.isShared ? '#28646e' : '#9b9b9b';
     },
   },
   methods: {
