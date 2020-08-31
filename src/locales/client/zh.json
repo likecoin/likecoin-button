@@ -34,13 +34,17 @@
   "LikeCountLabel": "尚無按讚 | 1 個讚 | {count} 個讚",
   "CTA": {
     "CivicLiker": {
-      "Title": "Super Like — 去 AI 內容分配",
-      "Description": "成為 Civic Liker，今年內每天獲贈兩個 Super Like 配額。更有效支持創作之餘更為重分發好內容出一分力",
-      "Features": [
-        "協助分發好內容",
-        "支持創作",
-        "賺取更多 LikeCoin"
+      "Title": "回饋讚賞公民，2020 年內，每天正午及凌晨贈送 Super Like 1 個，逾時使用，自動失效。",
+      "Description": [
+        "非讚賞公民：Super Like — 去中心編輯",
+        "加入讚賞公民解鎖 Super Like，本年內每天中午及凌晨獲贈一個"
       ],
+      "Features": [
+        "直接支付額外 LikeCoin，進一步支持作者",
+        "成為內容伯樂，每天推薦好文章",
+        "每當文章產生下線 Super Like，內容伯樂及作者同時獲得回饋"
+      ],
+      "MoreAbout": "瞭解更多讚賞公民福利",
       "Button": "成為讚賞公民"
     }
   },

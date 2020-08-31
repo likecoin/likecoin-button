@@ -19,13 +19,22 @@
         <!-- eslint-enable -->
 
         <h1>{{ $t('CTA.CivicLiker.Title') }}</h1>
-        <p>{{ $t('CTA.CivicLiker.Description') }}</p>
+        <p
+          v-for="p in $t('CTA.CivicLiker.Description')"
+          :key="p"
+        >{{ p }}</p>
         <ul>
           <li
             v-for="feature in $t('CTA.CivicLiker.Features')"
             :key="feature"
           >{{ feature }}</li>
         </ul>
+        <p>
+          <a
+            href="https://docs.like.co/v/zh/user-guide/civic-liker"
+            target="_blank"
+          >{{ $t("CTA.CivicLiker.MoreAbout") }}</a>
+        </p>
         <a
           :href="ctaURL"
           class="cta-button"
@@ -83,8 +92,8 @@ export default {
     }
 
     ul {
-      max-width: 256px;
-      margin: 24px auto 48px;
+      max-width: 360px;
+      margin: 24px auto;
       padding: 0;
 
       list-style: none;
@@ -96,6 +105,8 @@ export default {
 
         &::before {
           display: inline-block;
+
+          flex-shrink: 0;
 
           width: 24px;
           height: 24px;
