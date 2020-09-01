@@ -60,7 +60,7 @@
             >MAX</text>
           </g>
           <g
-            v-else-if="isShareable || isShared"
+            v-else-if="isUnsharable || isShareable || isShared"
             :style="{
               fill: shareIconContentColor,
               fillRule: 'evenodd',
@@ -125,25 +125,33 @@ export default {
       type: Boolean,
       default: true,
     },
+    isCreator: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     radius() {
       return 18;
     },
     state() {
-      if (this.count > 0) {
-        if (this.count >= this.maxCount) {
-          if (this.isSuperLikeEnabled) {
-            if (this.hasSuperLiked) {
-              return 'shared';
-            }
-            return 'shareable';
-          }
+      if (!this.isCreator) {
+        if (this.count === 0) {
+          return 'hidden';
+        }
+        if (this.count < this.maxCount) {
+          return 'liked';
+        }
+        if (!this.isSuperLikeEnabled) {
           return 'max';
         }
-        return 'liked';
+      } else if (!this.isSuperLikeEnabled) {
+        return 'unsharable';
       }
-      return 'hidden';
+      if (this.hasSuperLiked) {
+        return 'shared';
+      }
+      return 'shareable';
     },
     isHidden() {
       return this.state === 'hidden';
@@ -159,6 +167,9 @@ export default {
     },
     isShared() {
       return this.state === 'shared';
+    },
+    isUnsharable() {
+      return this.state === 'unsharable';
     },
     bgStyle() {
       return { fill: '#aaf1e7' };
@@ -184,10 +195,10 @@ export default {
       };
     },
     shareIconBgColor() {
-      return this.hasSuperLiked ? '#50e3c2' : '#e6e6e6';
+      return this.isShared ? '#50e3c2' : '#e6e6e6';
     },
     shareIconContentColor() {
-      return this.hasSuperLiked ? '#28646e' : '#9b9b9b';
+      return this.isShared ? '#28646e' : '#9b9b9b';
     },
   },
   methods: {

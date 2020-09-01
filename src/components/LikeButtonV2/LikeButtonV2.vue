@@ -186,6 +186,7 @@
           maxCount,
           hasSuperLiked,
           isSuperLikeEnabled,
+          isCreator,
         }"
       />
     </svg>
@@ -246,6 +247,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    isCreator: {
+      type: Boolean,
+      default: false,
+    },
     explosionSize: {
       type: Number,
       default: 0.65,
@@ -265,11 +270,15 @@ export default {
   },
   computed: {
     state() {
-      if (this.count < this.maxCount) {
-        return 'initial';
-      }
-      if (!this.isSuperLikeEnabled) {
-        return 'max';
+      if (!this.isCreator) {
+        if (this.count < this.maxCount) {
+          return 'initial';
+        }
+        if (!this.isSuperLikeEnabled) {
+          return 'max';
+        }
+      } else if (!this.isSuperLikeEnabled) {
+        return 'unsuperlikeable';
       }
       if (this.cooldown) {
         if (this.hasSuperLiked) {
@@ -288,7 +297,7 @@ export default {
         || this.hasBlockingAnimation;
     },
     isShowBadge() {
-      return this.count > 0;
+      return this.isCreator || this.count > 0;
     },
     buttonStyle() {
       return {
@@ -303,6 +312,9 @@ export default {
         case 'superlikeable':
         case 'superliked':
           return '#50e3c2';
+
+        case 'unsuperlikeable':
+          return '#f7f7f7';
 
         case 'cooldown':
         case 'superlikeable-cooldown':
@@ -334,6 +346,9 @@ export default {
         case 'superlikeable-cooldown':
           return '#50e3c2';
 
+        case 'unsuperlikeable':
+          return '#4a4a4a';
+
         case 'initial':
         default:
           if (this.isPressing || this.count > 0) {
@@ -343,21 +358,37 @@ export default {
       }
     },
     superLikeIconStroke() {
+      if (this.state === 'unsuperlikeable') {
+        return '#9b9b9b';
+      }
+
       if (this.cooldown) {
         return this.hasSuperLiked ? '#50e3c2' : '#e6e6e6';
       }
       return '#28646e';
     },
     superLikeIconFill() {
-      if (this.state === 'superlikeable-cooldown') {
-        return '#50e3c200';
+      switch (this.state) {
+        case 'unsuperlikeable':
+        case 'superlikeable-cooldown':
+          return '#50e3c200';
+
+        default:
+          return '#50e3c2';
       }
-      return '#50e3c2';
     },
   },
   methods: {
     onClick() {
-      this.startClapBitsAnimation();
+      if (
+        ![
+          'unsuperlikeable',
+          'cooldown',
+          'superlikeable-cooldown',
+        ].includes(this.state)
+      ) {
+        this.startClapBitsAnimation();
+      }
       this.$emit('click');
     },
     onCooldownEnd() {

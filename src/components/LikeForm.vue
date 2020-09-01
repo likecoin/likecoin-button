@@ -1,12 +1,15 @@
 <template>
-  <div class="like-form">
+  <div :class="rootClass">
 
     <header class="like-form__header">
       <div class="like-form__header__left">
         <slot name="header-left" />
       </div>
 
-      <like-coin-icon class="like-form__header__icon" />
+      <like-coin-icon
+        v-if="isShowHeaderIcon"
+        class="like-form__header__icon"
+      />
 
       <div class="like-form__header__right">
         <slot name="header-right" />
@@ -30,6 +33,20 @@ export default {
   components: {
     LikeCoinIcon,
   },
+  props: {
+    isShowHeaderIcon: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    rootClass() {
+      return {
+        'like-form': true,
+        'like-form--with-header-icon': !!this.isShowHeaderIcon,
+      };
+    },
+  },
 };
 </script>
 
@@ -40,7 +57,10 @@ $header-height: 48px;
 
 .like-form {
   width: 100%;
-  padding-top: ($header-icon-height - $header-height) / 2 + 16px;
+
+  &--with-header-icon {
+    padding-top: ($header-icon-height - $header-height) / 2 + 16px;
+  }
 
   &__header {
     position: relative;
@@ -74,10 +94,14 @@ $header-height: 48px;
   &__content {
     background-color: #f7f7f7;
     @media (min-width: 600px + 1px) {
-      padding: 80px 48px 38px;
+      padding: 48px 38px;
     }
     @media (max-width: 600px) {
-      padding: 80px 16px 24px;
+      padding: 24px;
+    }
+
+    .like-form--with-header-icon & {
+      padding-top: 80px;
     }
   }
 }

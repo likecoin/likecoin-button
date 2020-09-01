@@ -18,6 +18,7 @@
           :cooldown-end-time="nextSuperLikeTime"
           :has-super-liked="hasSuperLiked"
           :is-super-like-enabled="isSuperLiker"
+          :is-creator="isCreator"
           @click="onClickLike"
           @cooldown-end="updateSuperLikeStatus"
         )
@@ -140,12 +141,33 @@ export default {
       }
     },
     async doLike() {
-      if (!this.isMaxLike) {
+      if (!this.isMaxLike && !this.isCreator) {
         this.like();
         logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike(embed)', 1);
       } else if (this.canSuperLike) {
         await this.newSuperLike();
         await this.updateSuperLikeStatus();
+      } else {
+        this.showCivicLikerCTA();
+      }
+    },
+    getShouldShowCivicLikerCTA() {
+      if (this.ctaClickCount === undefined) {
+        this.ctaClickCount = 1;
+      } else {
+        this.ctaClickCount = (this.ctaClickCount + 1) % 5;
+        if (this.ctaClickCount !== 0) return false;
+      }
+      return true;
+    },
+    showCivicLikerCTA() {
+      if (this.getShouldShowCivicLikerCTA()) {
+        window.open(
+          `/in/cta/${this.id}/civic?referrer=${encodeURIComponent(this.referrer)}`,
+          'civic-liker-cta',
+          'width=540,height=640,menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes',
+        );
+        logTrackerEvent(this, 'LikeButtonFlow', 'clickCivicLikerCTA', 'clickCivicLikerCTA(embed)', 1);
       }
     },
     async onClickLike() {

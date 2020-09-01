@@ -117,6 +117,7 @@ export default {
   },
   data() {
     return {
+      isCreator: false,
       isLoggedIn: false,
       isSubscribed: false,
       isTrialSubscriber: false,
@@ -143,6 +144,8 @@ export default {
 
       hasCookieSupport: false,
       hasStorageAPIAccess: false,
+
+      hasUpdateUserSignInStatus: false,
     };
   },
   computed: {
@@ -281,6 +284,7 @@ export default {
                 serverCookieSupported,
               } = myData;
               this.isLoggedIn = !!liker;
+              this.isCreator = liker === this.id;
               this.isSubscribed = isSubscribed;
               this.isTrialSubscriber = isTrialSubscriber;
               if (this.hasCookieSupport && serverCookieSupported !== undefined) {
@@ -327,6 +331,8 @@ export default {
         ]);
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
+      } finally {
+        this.hasUpdateUserSignInStatus = true;
       }
     },
     async toggleBookmark() {

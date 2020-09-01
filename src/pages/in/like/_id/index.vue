@@ -108,6 +108,7 @@
                 :cooldown-end-time="nextSuperLikeTime"
                 :has-super-liked="hasSuperLiked"
                 :is-super-like-enabled="isSuperLiker"
+                :is-creator="isCreator"
                 @click="onClickLike"
                 @cooldown-end="updateSuperLikeStatus"
                 ref="likeButton"
@@ -238,19 +239,30 @@ export default {
       return;
     }
 
-    this.contentKey = 'loggedIn';
     this.$nextTick(() => {
       this.setContentHeight();
-
-      if (this.likeCount <= 0 && this.$refs.likeButton) {
-        this.$refs.likeButton.onClick();
-      }
     });
   },
   beforeDestroy() {
     if (this.resizeListener) {
       window.removeEventListener('resize', this.setContentHeight);
     }
+  },
+  watch: {
+    hasUpdateUserSignInStatus(value, prevValue) {
+      if (value && !prevValue) {
+        this.contentKey = 'loggedIn';
+        if (
+          (
+            (this.isCreator && this.isSubscribed)
+            || (!this.isCreator && this.likeCount <= 0)
+          )
+          && this.$refs.likeButton
+        ) {
+          this.$refs.likeButton.onClick();
+        }
+      }
+    },
   },
   methods: {
     setContentHeight() {
@@ -262,13 +274,26 @@ export default {
       }
     },
     async doLike() {
-      if (!this.isMaxLike) {
+      if (!this.isMaxLike && !this.isCreator) {
         this.like();
         logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike(popup)', 1);
       } else if (this.canSuperLike) {
         await this.newSuperLike();
         await this.updateSuperLikeStatus();
+      } else {
+        this.showCivicLikerCTA();
       }
+    },
+    showCivicLikerCTA() {
+      this.$router.push({
+        name: 'in-cta-id-civic',
+        params: { id: this.id },
+        query: {
+          referrer: encodeURIComponent(this.referrer),
+          show_back: '1',
+        },
+      });
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickCivicLikerCTA', 'clickCivicLikerCTA(popup)', 1);
     },
     onClickBackButton() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickBackButton', 'clickBackButton(popup)', 1);
