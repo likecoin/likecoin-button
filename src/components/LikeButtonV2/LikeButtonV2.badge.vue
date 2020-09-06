@@ -142,10 +142,8 @@ export default {
         if (this.count < this.maxCount) {
           return 'liked';
         }
-        if (!this.isSuperLikeEnabled) {
-          return 'max';
-        }
-      } else if (!this.isSuperLikeEnabled) {
+      }
+      if (!this.isSuperLikeEnabled) {
         return 'unsharable';
       }
       if (this.hasSuperLiked) {

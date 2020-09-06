@@ -270,14 +270,10 @@ export default {
   },
   computed: {
     state() {
-      if (!this.isCreator) {
-        if (this.count < this.maxCount) {
-          return 'initial';
-        }
-        if (!this.isSuperLikeEnabled) {
-          return 'max';
-        }
-      } else if (!this.isSuperLikeEnabled) {
+      if (!this.isCreator && this.count < this.maxCount) {
+        return 'initial';
+      }
+      if (!this.isSuperLikeEnabled) {
         return 'unsuperlikeable';
       }
       if (this.cooldown) {
