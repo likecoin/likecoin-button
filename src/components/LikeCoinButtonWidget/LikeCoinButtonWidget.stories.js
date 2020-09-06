@@ -52,7 +52,8 @@ const Controlled = ({
   count,
   cooldown,
   hasSuperLiked = false,
-  isSuperLikeEnabled = true,
+  isCreator = false,
+  isSuperLikeEnabled = false,
 } = {}) => () => ({
   components: {
     Identity,
@@ -75,6 +76,7 @@ const Controlled = ({
       cooldownEndTime: 0,
       hasSuperLiked,
       isSuperLikeEnabled,
+      isCreator,
       isSaved: false,
       isFollowing: false,
     };
@@ -96,18 +98,25 @@ const Controlled = ({
       return `${this.count + 32} Likes`;
     },
   },
+  mounted() {
+    if (this.hasSuperLiked && this.cooldown) {
+      this.fastForwardCooldown();
+    }
+  },
   methods: {
+    fastForwardCooldown() {
+      this.cooldownEndTime = Date.now() + 5 * 1000;
+      this.cooldown = 1;
+    },
     onClickLikeButton() {
-      if (this.count < 5) {
+      if (!isCreator && this.count < 5) {
         this.count += 1;
-      } else {
+        if (this.count === 5 && this.hasSuperLiked) {
+          this.fastForwardCooldown();
+        }
+      } else if (isSuperLikeEnabled) {
         this.hasSuperLiked = true;
-        this.cooldown = 0.8;
-      }
-      if (this.count >= 5) {
-        setTimeout(() => {
-          this.cooldownEndTime = Date.now() + 5 * 1000;
-        }, 3000);
+        this.fastForwardCooldown();
       }
     },
     onCooldownEnd() {
@@ -139,6 +148,7 @@ const Controlled = ({
             cooldownEndTime,
             count,
             hasSuperLiked,
+            isCreator,
             isSuperLikeEnabled,
           }"
           @cooldown-end="onCooldownEnd"
@@ -167,15 +177,43 @@ const Controlled = ({
   `,
 });
 
-export const Case1 = Controlled();
+export const Liker = Controlled();
 
-export const Case2 = Controlled({ cooldown: 0.8 });
+export const LikerCanSuperLike = Controlled({
+  isSuperLikeEnabled: true,
+});
 
-export const Case3 = Controlled({
+export const LikerHasSuperLiked = Controlled({
   count: 5,
+  isSuperLikeEnabled: true,
+  hasSuperLiked: true,
+  cooldown: 1,
+});
+
+export const LikerHadSuperLiked = Controlled({
+  count: 5,
+  isSuperLikeEnabled: true,
   hasSuperLiked: true,
 });
 
-export const SuperLikeDisabled = Controlled({
-  isSuperLikeEnabled: false,
+export const Creator = Controlled({
+  isCreator: true,
+});
+
+export const CreatorCanSuperLike = Controlled({
+  isCreator: true,
+  isSuperLikeEnabled: true,
+});
+
+export const CreatorHasSuperLiked = Controlled({
+  isCreator: true,
+  isSuperLikeEnabled: true,
+  hasSuperLiked: true,
+  cooldown: 1,
+});
+
+export const CreatorHadSuperLiked = Controlled({
+  isCreator: true,
+  isSuperLikeEnabled: true,
+  hasSuperLiked: true,
 });
