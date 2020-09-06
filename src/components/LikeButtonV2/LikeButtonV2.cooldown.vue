@@ -152,7 +152,11 @@ export default {
       if (this.tween) {
         this.tween.kill();
       }
-      this.tween = new TimelineMax();
+      this.tween = new TimelineMax({
+        onComplete: () => {
+          this.startCountdownAnimation();
+        },
+      });
       this.tween.fromTo(this.$refs.fill, 1, {
         strokeDashoffset: this.diameter,
       }, {
