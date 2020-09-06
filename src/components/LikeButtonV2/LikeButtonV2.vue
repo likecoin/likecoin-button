@@ -155,7 +155,7 @@
           :color="cooldownFillColor"
           :radius="radius"
           :center="78"
-          :is-bold="isHovering"
+          :is-bold="!isDisabled && isHovering"
           @end="onCooldownEnd"
           ref="cooldown"
         />
