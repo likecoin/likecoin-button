@@ -433,14 +433,12 @@ export default {
         });
       } else {
         this.hasBlockingAnimation = true;
-        const tl = new TimelineMax({
-          onComplete: () => {
-            this.hasBlockingAnimation = false;
-            done();
-          },
-        });
+        const tl = new TimelineMax({ onComplete: done });
         tl.to(el, 0.5, {
           y: 0,
+          onComplete: () => {
+            this.hasBlockingAnimation = false;
+          },
         });
         this.$refs.cooldown.animateTrack(tl);
       }
