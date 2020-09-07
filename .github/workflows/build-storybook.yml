@@ -1,0 +1,28 @@
+name: Build and Deploy Storybook
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10
+
+      - name: Install and Build Storybook
+        run: |
+          npm --prefix src install
+          npm --prefix src run build-storybook
+
+      - name: Deploy Storybook
+        uses: JamesIves/github-pages-deploy-action@3.5.9
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: docs

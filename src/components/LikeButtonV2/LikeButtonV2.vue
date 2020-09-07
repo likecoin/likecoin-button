@@ -155,7 +155,7 @@
           :color="cooldownFillColor"
           :radius="radius"
           :center="78"
-          :is-bold="isHovering"
+          :is-bold="!isDisabled && isHovering"
           @end="onCooldownEnd"
           ref="cooldown"
         />
@@ -270,14 +270,10 @@ export default {
   },
   computed: {
     state() {
-      if (!this.isCreator) {
-        if (this.count < this.maxCount) {
-          return 'initial';
-        }
-        if (!this.isSuperLikeEnabled) {
-          return 'max';
-        }
-      } else if (!this.isSuperLikeEnabled) {
+      if (!this.isCreator && this.count < this.maxCount) {
+        return 'initial';
+      }
+      if (!this.isSuperLikeEnabled) {
         return 'unsuperlikeable';
       }
       if (this.cooldown) {
@@ -437,14 +433,12 @@ export default {
         });
       } else {
         this.hasBlockingAnimation = true;
-        const tl = new TimelineMax({
-          onComplete: () => {
-            this.hasBlockingAnimation = false;
-            done();
-          },
-        });
+        const tl = new TimelineMax({ onComplete: done });
         tl.to(el, 0.5, {
           y: 0,
+          onComplete: () => {
+            this.hasBlockingAnimation = false;
+          },
         });
         this.$refs.cooldown.animateTrack(tl);
       }
