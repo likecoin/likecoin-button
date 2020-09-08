@@ -253,7 +253,8 @@ export default {
       if (value && !prevValue) {
         this.contentKey = 'loggedIn';
         if (
-          (
+          this.$route.query.action === 'like'
+          && (
             (this.isCreator && this.isSubscribed)
             || (!this.isCreator && this.likeCount <= 0)
           )

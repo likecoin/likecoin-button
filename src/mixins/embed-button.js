@@ -24,7 +24,7 @@ export default {
     };
   },
   computed: {
-    popupLikeURL() {
+    popupURL() {
       return `/in/like/${this.id}/?referrer=${encodeURIComponent(this.referrer)}`;
     },
     isPreview() {
@@ -39,7 +39,7 @@ export default {
           link.push({ rel: 'prefetch', href: this.signUpURL });
         }
       } else {
-        link.push({ rel: 'prefetch', href: this.popupLikeURL });
+        link.push({ rel: 'prefetch', href: this.popupURL });
       }
     }
     return {
@@ -76,18 +76,19 @@ export default {
     },
   },
   methods: {
-    popupLike() {
+    openPopup(action) {
+      const popupURL = `${this.popupURL}&action=${action}`;
       if (isAndroid() && isFacebookBrowser()) {
         /* android fb iab stuck when open new window */
         try {
-          window.top.location.href = this.popupLikeURL;
+          window.top.location.href = popupURL;
           return;
         } catch (err) {
           console.error(err);
         }
       }
       const w = window.open(
-        this.popupLikeURL,
+        popupURL,
         'like',
         'menubar=no,location=no,width=576,height=768',
       );

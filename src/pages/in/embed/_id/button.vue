@@ -126,8 +126,9 @@ export default {
       if (!this.hasCookieSupport || (isAndroid() && isFacebookBrowser())) {
         // User has not log in and 3rd party cookie is blocked
         // or: android fb iab stuck when sign in new window, use like popup
-        this.popupLike();
-        logTrackerEvent(this, 'LikeButtonFlow', 'popupLike', 'popupLike(embed)', 1);
+        this.openPopup(action);
+        const eventAction = action.replace(/^./, s => s.toUpperCase());
+        logTrackerEvent(this, 'LikeButtonFlow', `popup${eventAction}`, `popup${eventAction}(embed)`, 1);
         if (!(this.hasStorageAPIAccess)) {
           if (await requestStorageAPIAccess()) {
             this.hasCookieSupport = await this.getIsCookieSupport();
