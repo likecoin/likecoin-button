@@ -252,15 +252,33 @@ export default {
     hasUpdateUserSignInStatus(value, prevValue) {
       if (value && !prevValue) {
         this.contentKey = 'loggedIn';
-        if (
-          this.$route.query.action === 'like'
-          && (
-            (this.isCreator && this.isSubscribed)
-            || (!this.isCreator && this.likeCount <= 0)
-          )
-          && this.$refs.likeButton
-        ) {
-          this.$refs.likeButton.onClick();
+        switch (this.$route.query.action) {
+          case 'like':
+            if (
+              (
+                (this.isCreator && this.isSubscribed)
+                || (!this.isCreator && this.likeCount <= 0)
+              )
+              && this.$refs.likeButton
+            ) {
+              // Click the LikeButton directly for clicking effect
+              this.$refs.likeButton.onClick();
+            }
+            break;
+
+          case 'save':
+            if (!this.hasBookmarked) {
+              this.onClickSaveButton();
+            }
+            break;
+
+          case 'follow':
+            if (!this.hasFollowedCreator) {
+              this.onClickFollow();
+            }
+            break;
+
+          default:
         }
       }
     },
