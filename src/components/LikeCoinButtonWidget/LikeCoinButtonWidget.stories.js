@@ -103,7 +103,7 @@ const Controlled = ({
     },
   },
   mounted() {
-    if (this.hasSuperLiked && this.cooldown) {
+    if (this.cooldown) {
       this.fastForwardCooldown();
     }
   },
@@ -194,6 +194,12 @@ export const LikerHasSuperLiked = Controlled({
   cooldown: 1,
 });
 
+export const LikerHasSuperLikedElse = Controlled({
+  count: 5,
+  isSuperLikeEnabled: true,
+  cooldown: 1,
+});
+
 export const LikerHadSuperLiked = Controlled({
   count: 5,
   isSuperLikeEnabled: true,
@@ -213,6 +219,12 @@ export const CreatorHasSuperLiked = Controlled({
   isCreator: true,
   isSuperLikeEnabled: true,
   hasSuperLiked: true,
+  cooldown: 1,
+});
+
+export const CreatorHasSuperLikedElse = Controlled({
+  isCreator: true,
+  isSuperLikeEnabled: true,
   cooldown: 1,
 });
 
