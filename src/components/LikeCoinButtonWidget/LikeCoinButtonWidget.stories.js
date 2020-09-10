@@ -35,6 +35,9 @@ export const Default = () => ({
     avatarLabel: {
       default: text('Avatar Label', 'Follow'),
     },
+    hintLabel: {
+      default: text('Hint Label', 'This is hint.'),
+    },
   },
   template: `
     <LikeCoinButtonWidget
@@ -43,6 +46,7 @@ export const Default = () => ({
         likeButtonLabel,
         saveButtonLabel,
         avatarLabel,
+        hintLabel,
       }"
     />
   `,

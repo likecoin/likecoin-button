@@ -74,6 +74,16 @@
           >{{ likeButtonLabel }}</button>
         </div>
       </foreignObject>
+
+      <foreignObject
+        v-if="isShowHintLabel"
+        :x="saveSlotProps.x"
+        y="48"
+        width="300"
+        height="30"
+      >
+        <div :style="hintLabelStyle">{{ hintLabel }}</div>
+      </foreignObject>
     </svg>
   </div>
 </template>
@@ -124,10 +134,17 @@ export default {
       type: String,
       default: '',
     },
+    hintLabel: {
+      type: String,
+      default: undefined,
+    },
   },
   computed: {
     isStickyBottomLayout() {
       return this.layout === LAYOUT_STICKY_BOTTOM;
+    },
+    isShowHintLabel() {
+      return this.hintLabel !== undefined;
     },
     rootStyle() {
       const style = {};
@@ -165,23 +182,28 @@ export default {
     identitySlotProps() {
       return {
         x: 209,
-        y: 63,
+        y: 67,
       };
     },
     saveSlotProps() {
       return {
         x: 148,
-        y: 78,
+        y: 82,
       };
     },
     labelY() {
       return 140;
     },
-    labelStyle() {
+    textStyle() {
       return {
         color: '#9B9B9B',
         fontFamily: 'Source Sans Pro, Arial, sans-serif',
         fontSize: '14px',
+      };
+    },
+    labelStyle() {
+      return {
+        ...this.textStyle,
         textAlign: 'center',
         width: '100%',
       };
@@ -196,6 +218,13 @@ export default {
         fontFamily: 'inherit',
         fontSize: 'inherit',
         transition: 'background-color 0.2s ease',
+      };
+    },
+    hintLabelStyle() {
+      return {
+        ...this.textStyle,
+        width: '100%',
+        height: '100%',
       };
     },
   },
