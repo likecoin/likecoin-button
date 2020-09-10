@@ -6,6 +6,7 @@
       :save-button-label="saveButtonLabel"
       :avatar-label="avatarLabel"
       :is-avatar-label-button-disabled="hasFollowedCreator"
+      :hintLabel="hintText"
       @click-like-button-label="onClickLikeStats"
       @click-save-button-label="onClickSaveButton"
       @click-avatar-button-label="onClickFollow"
@@ -20,6 +21,7 @@
           :is-super-like-enabled="isSuperLiker"
           :is-creator="isCreator"
           @click="onClickLike"
+          @click-disabled="onClickCooldown"
           @cooldown-end="updateSuperLikeStatus"
         )
 

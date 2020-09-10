@@ -133,6 +133,7 @@ export default {
       hasSuperLiked: false,
       nextSuperLikeTime: -1,
       cooldownProgress: 0,
+      hasClickCooldown: false,
       parentSuperLikeID: '',
 
       hasBookmarked: false,
@@ -221,6 +222,33 @@ export default {
     },
     isCreatorCivicLiker() {
       return this.isCivicLikerTrial || this.isSubscribedCivicLiker;
+    },
+    hintText() {
+      if (this.isCreator) {
+        if (this.hasSuperLiked && this.cooldown) {
+          if (this.hasClickCooldown) {
+            return this.$t('HintLabel.SuperLikedPleaseTryAgainLater');
+          }
+          return this.$t('HintLabel.SuperLikedFollowersWillSee');
+        }
+        if (this.canSuperLike) {
+          return this.$t('HintLabel.CanSuperLikeOwn');
+        }
+        return this.$t('HintLabel.ToSuperLikeOwn');
+      }
+      if (this.likeCount >= 5) {
+        if (this.hasSuperLiked && this.cooldown) {
+          if (this.hasClickCooldown) {
+            return this.$t('HintLabel.SuperLikedPleaseTryAgainLater');
+          }
+          return this.$t('HintLabel.SuperLikedFollowersWillSee');
+        }
+        if (this.canSuperLike) {
+          return this.$t('HintLabel.CanSuperLike');
+        }
+        return this.$t('HintLabel.ToSuperLike');
+      }
+      return undefined;
     },
   },
   methods: {
@@ -449,6 +477,9 @@ export default {
         `${LIKER_LAND_URL_BASE}/civic${this.isTrialSubscriber ? '/register' : ''}${this.referrerQueryString}`,
         '_blank',
       );
+    },
+    onClickCooldown() {
+      this.hasClickCooldown = true;
     },
   },
 };

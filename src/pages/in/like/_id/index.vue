@@ -62,29 +62,12 @@
 
                 <!-- Max Liked -->
                 <div
-                  v-else-if="contentKey === 'cta'"
+                  v-else-if="hintText"
                   v-bind="textContentProps"
                 >
-                  <div
-                    v-if="ctaSubtitle"
-                    class="text-content__subtitle"
-                  >
-                    {{ ctaSubtitle }}
+                  <div class="text-content__subtitle">
+                    {{ hintText }}
                   </div>
-                  <div class="text-content__title text-content__title--civic-liker">
-                    {{ ctaTitle }}
-                  </div>
-
-                  <a
-                    @click="onClickCTAButton"
-                    id="embed-cta-button"
-                  >
-                    <div class="button-content-wrapper">
-                      <div class="button-content">
-                        {{ ctaButtonTitle }}
-                      </div>
-                    </div>
-                  </a>
                 </div>
 
               </transition>
@@ -110,6 +93,7 @@
                 :is-super-like-enabled="isSuperLiker"
                 :is-creator="isCreator"
                 @click="onClickLike"
+                @click-disabled="onClickCooldown"
                 @cooldown-end="updateSuperLikeStatus"
                 ref="likeButton"
               />
