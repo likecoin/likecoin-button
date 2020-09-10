@@ -68,6 +68,12 @@ export const Default = () => ({
       }),
     },
   },
+  methods: {
+    onClickDisabled() {
+      // eslint-disable-next-line no-alert
+      alert('Clicked disabled button.');
+    },
+  },
   template: `
     <LikeButtonV2
       v-bind="{
@@ -80,6 +86,7 @@ export const Default = () => ({
         explosionSize,
         explosionRange,
       }"
+      @click-disabled="onClickDisabled"
     />
   `,
 });

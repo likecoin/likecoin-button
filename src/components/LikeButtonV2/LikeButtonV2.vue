@@ -167,9 +167,16 @@
         height="76"
       >
         <button
+          v-if="!isDisabled"
           :style="buttonStyle"
-          :disabled="isDisabled"
           v-on="buttonListeners"
+          key="normal"
+        />
+        <button
+          v-else
+          :style="buttonStyle"
+          @click="onClickDisabledButton"
+          key="disabled"
         />
       </foreignObject>
     </g>
@@ -386,6 +393,9 @@ export default {
         this.startClapBitsAnimation();
       }
       this.$emit('click');
+    },
+    onClickDisabledButton() {
+      this.$emit('click-disabled');
     },
     onCooldownEnd() {
       this.$emit('cooldown-end');
