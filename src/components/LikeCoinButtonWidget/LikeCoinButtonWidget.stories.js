@@ -109,7 +109,7 @@ const Controlled = ({
   },
   methods: {
     fastForwardCooldown() {
-      this.cooldownEndTime = Date.now() + 5 * 1000;
+      this.cooldownEndTime = Date.now() + 20 * 1000;
       this.cooldown = 1;
     },
     onClickLikeButton() {
