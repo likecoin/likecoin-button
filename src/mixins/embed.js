@@ -228,11 +228,14 @@ export default {
         return this.$t('HintLabel.SignIn');
       }
       if (this.isCreator) {
-        if (this.hasSuperLiked && this.cooldown) {
+        if (this.cooldownProgress) {
           if (this.hasClickCooldown) {
             return this.$t('HintLabel.SuperLikedPleaseTryAgainLater');
           }
-          return this.$t('HintLabel.SuperLikedFollowersWillSee');
+          if (this.hasSuperLiked) {
+            return this.$t('HintLabel.SuperLikedFollowersWillSee');
+          }
+          return undefined;
         }
         if (this.canSuperLike) {
           return this.$t('HintLabel.CanSuperLikeOwn');
@@ -242,11 +245,14 @@ export default {
       if (this.likeCount < 5) {
         return this.$t('HintLabel.PleaseLike');
       }
-      if (this.hasSuperLiked && this.cooldown) {
+      if (this.cooldownProgress) {
         if (this.hasClickCooldown) {
           return this.$t('HintLabel.SuperLikedPleaseTryAgainLater');
         }
-        return this.$t('HintLabel.SuperLikedFollowersWillSee');
+        if (this.hasSuperLiked) {
+          return this.$t('HintLabel.SuperLikedFollowersWillSee');
+        }
+        return undefined;
       }
       if (this.canSuperLike) {
         return this.$t('HintLabel.CanSuperLike');
