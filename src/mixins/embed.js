@@ -133,6 +133,7 @@ export default {
       hasSuperLiked: false,
       nextSuperLikeTime: -1,
       cooldownProgress: 0,
+      hasClickCooldown: false,
       parentSuperLikeID: '',
 
       hasBookmarked: false,
@@ -221,6 +222,42 @@ export default {
     },
     isCreatorCivicLiker() {
       return this.isCivicLikerTrial || this.isSubscribedCivicLiker;
+    },
+    hintText() {
+      if (!this.isLoggedIn) {
+        return this.$t('HintLabel.SignIn');
+      }
+      if (this.isCreator) {
+        if (this.cooldownProgress) {
+          if (this.hasClickCooldown) {
+            return this.$t('HintLabel.SuperLikedPleaseTryAgainLater');
+          }
+          if (this.hasSuperLiked) {
+            return this.$t('HintLabel.SuperLikedFollowersWillSee');
+          }
+          return undefined;
+        }
+        if (this.canSuperLike) {
+          return this.$t('HintLabel.CanSuperLikeOwn');
+        }
+        return this.$t('HintLabel.ToSuperLikeOwn');
+      }
+      if (this.likeCount < 5) {
+        return this.$t('HintLabel.PleaseLike');
+      }
+      if (this.cooldownProgress) {
+        if (this.hasClickCooldown) {
+          return this.$t('HintLabel.SuperLikedPleaseTryAgainLater');
+        }
+        if (this.hasSuperLiked) {
+          return this.$t('HintLabel.SuperLikedFollowersWillSee');
+        }
+        return undefined;
+      }
+      if (this.canSuperLike) {
+        return this.$t('HintLabel.CanSuperLike');
+      }
+      return this.$t('HintLabel.ToSuperLike');
     },
   },
   methods: {
@@ -412,6 +449,7 @@ export default {
     async newSuperLike() {
       const { cooldownProgress } = this;
       this.hasSuperLiked = true;
+      this.isJustSuperLiked = true;
       this.cooldownProgress = 1;
       await apiPostSuperLike(this.id, {
         referrer: this.referrer,
@@ -449,6 +487,9 @@ export default {
         `${LIKER_LAND_URL_BASE}/civic${this.isTrialSubscriber ? '/register' : ''}${this.referrerQueryString}`,
         '_blank',
       );
+    },
+    onClickCooldown() {
+      this.hasClickCooldown = true;
     },
   },
 };

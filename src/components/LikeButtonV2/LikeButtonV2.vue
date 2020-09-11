@@ -110,7 +110,7 @@
                   />
                   <!-- Tick -->
                   <polyline
-                    v-if="state === 'cooldown'"
+                    v-if="isShowSuperLikeTick"
                     points="73.38 80.35 76.68 83.18 82.8 75.76"
                     style="fill: none;stroke: #28646e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3px;fill-rule: evenodd"
                   />
@@ -167,9 +167,16 @@
         height="76"
       >
         <button
+          v-if="!isDisabled"
           :style="buttonStyle"
-          :disabled="isDisabled"
           v-on="buttonListeners"
+          key="normal"
+        />
+        <button
+          v-else
+          :style="buttonStyle"
+          @click="onClickDisabledButton"
+          key="disabled"
         />
       </foreignObject>
     </g>
@@ -243,6 +250,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isJustSuperLiked: {
+      type: Boolean,
+      default: false,
+    },
     isSuperLikeEnabled: {
       type: Boolean,
       default: true,
@@ -278,6 +289,9 @@ export default {
       }
       if (this.cooldown) {
         if (this.hasSuperLiked) {
+          if (this.isJustSuperLiked) {
+            return 'just-superliked';
+          }
           return 'cooldown';
         }
         return 'superlikeable-cooldown';
@@ -294,6 +308,9 @@ export default {
     },
     isShowBadge() {
       return this.isCreator || this.count > 0;
+    },
+    isShowSuperLikeTick() {
+      return this.state === 'just-superliked';
     },
     buttonStyle() {
       return {
@@ -312,6 +329,7 @@ export default {
         case 'unsuperlikeable':
           return '#f7f7f7';
 
+        case 'just-superliked':
         case 'cooldown':
         case 'superlikeable-cooldown':
           return '#fff';
@@ -338,6 +356,7 @@ export default {
         case 'superliked':
           return '#28646e';
 
+        case 'just-superliked':
         case 'cooldown':
         case 'superlikeable-cooldown':
           return '#50e3c2';
@@ -354,18 +373,25 @@ export default {
       }
     },
     superLikeIconStroke() {
-      if (this.state === 'unsuperlikeable') {
-        return '#9b9b9b';
-      }
+      switch (this.state) {
+        case 'unsuperlikeable':
+          return '#9b9b9b';
 
-      if (this.cooldown) {
-        return this.hasSuperLiked ? '#50e3c2' : '#e6e6e6';
+        case 'cooldown':
+        case 'superlikeable-cooldown':
+          return '#e6e6e6';
+
+        case 'just-superliked':
+          return '#50e3c2';
+
+        default:
+          return '#28646e';
       }
-      return '#28646e';
     },
     superLikeIconFill() {
       switch (this.state) {
         case 'unsuperlikeable':
+        case 'cooldown':
         case 'superlikeable-cooldown':
           return '#50e3c200';
 
@@ -380,12 +406,16 @@ export default {
         ![
           'unsuperlikeable',
           'cooldown',
+          'just-superliked',
           'superlikeable-cooldown',
         ].includes(this.state)
       ) {
         this.startClapBitsAnimation();
       }
       this.$emit('click');
+    },
+    onClickDisabledButton() {
+      this.$emit('click-disabled');
     },
     onCooldownEnd() {
       this.$emit('cooldown-end');
@@ -452,7 +482,7 @@ export default {
       });
     },
     starIconEnter(el, done) {
-      if (this.state === 'cooldown') {
+      if (this.state === 'just-superliked') {
         const [star, tick] = el.children;
         TweenMax.set(tick, { opacity: 0 });
         const tl = new TimelineMax({

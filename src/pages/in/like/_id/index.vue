@@ -40,51 +40,13 @@
 
                 <!-- Logged In -->
                 <div
-                  v-else-if="contentKey === 'loggedIn'"
+                  v-else-if="hintText"
+                  :key="hintText"
                   v-bind="textContentProps"
                 >
                   <div class="text-content__subtitle">
-                    {{ $t('Embed.label.clickLikeButton') }}
+                    {{ hintText }}
                   </div>
-                  <i18n
-                    tag="div"
-                    class="text-content__title"
-                    path="Embed.label.supportUser"
-                  >
-                    <a
-                      :href="superLikeURL"
-                      place="user"
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >{{ displayName }}</a>
-                  </i18n>
-                </div>
-
-                <!-- Max Liked -->
-                <div
-                  v-else-if="contentKey === 'cta'"
-                  v-bind="textContentProps"
-                >
-                  <div
-                    v-if="ctaSubtitle"
-                    class="text-content__subtitle"
-                  >
-                    {{ ctaSubtitle }}
-                  </div>
-                  <div class="text-content__title text-content__title--civic-liker">
-                    {{ ctaTitle }}
-                  </div>
-
-                  <a
-                    @click="onClickCTAButton"
-                    id="embed-cta-button"
-                  >
-                    <div class="button-content-wrapper">
-                      <div class="button-content">
-                        {{ ctaButtonTitle }}
-                      </div>
-                    </div>
-                  </a>
                 </div>
 
               </transition>
@@ -110,6 +72,7 @@
                 :is-super-like-enabled="isSuperLiker"
                 :is-creator="isCreator"
                 @click="onClickLike"
+                @click-disabled="onClickCooldown"
                 @cooldown-end="updateSuperLikeStatus"
                 ref="likeButton"
               />

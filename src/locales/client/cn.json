@@ -92,6 +92,16 @@
     "becomePaidCivicLiker": "正式成为赞赏公民",
     "likeCountLabel": "{n}人已按赞"
   },
+  "HintLabel": {
+    "SignIn": "免费注册，化赞为赏",
+    "PleaseLike": "最多可拍掌 5 下，鼓励作者",
+    "SuperLikedPleaseTryAgainLater": "你己经 Super Like 过了，请稍后再 Super Like" ,
+    "SuperLikedFollowersWillSee": "己 Super Like，你的追踪者将会在 Liker Land 中看见文章",
+    "CanSuperLike": "Super Like 文章，大力赞赏创作者并分享文章",
+    "CanSuperLikeOwn": "立即 Super Like 分享自己的文章",
+    "ToSuperLike": "成为赞赏公民 Super Like 分享文章",
+    "ToSuperLikeOwn": "成为赞赏公民 Super Like 分享自己的文章"
+  },
   "Save": "收藏",
   "Saved": "已收藏",
   "SuperLikeNow": "立即 Super Like"

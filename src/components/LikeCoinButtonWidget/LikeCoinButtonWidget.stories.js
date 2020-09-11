@@ -35,6 +35,9 @@ export const Default = () => ({
     avatarLabel: {
       default: text('Avatar Label', 'Follow'),
     },
+    hintLabel: {
+      default: text('Hint Label', 'This is hint.'),
+    },
   },
   template: `
     <LikeCoinButtonWidget
@@ -43,6 +46,7 @@ export const Default = () => ({
         likeButtonLabel,
         saveButtonLabel,
         avatarLabel,
+        hintLabel,
       }"
     />
   `,
@@ -52,6 +56,7 @@ const Controlled = ({
   count,
   cooldown,
   hasSuperLiked = false,
+  isJustSuperLiked = false,
   isCreator = false,
   isSuperLikeEnabled = false,
 } = {}) => () => ({
@@ -75,6 +80,7 @@ const Controlled = ({
       cooldown: cooldown || 0,
       cooldownEndTime: 0,
       hasSuperLiked,
+      isJustSuperLiked,
       isSuperLikeEnabled,
       isCreator,
       isSaved: false,
@@ -99,13 +105,13 @@ const Controlled = ({
     },
   },
   mounted() {
-    if (this.hasSuperLiked && this.cooldown) {
+    if (this.cooldown) {
       this.fastForwardCooldown();
     }
   },
   methods: {
     fastForwardCooldown() {
-      this.cooldownEndTime = Date.now() + 5 * 1000;
+      this.cooldownEndTime = Date.now() + 20 * 1000;
       this.cooldown = 1;
     },
     onClickLikeButton() {
@@ -183,11 +189,25 @@ export const LikerCanSuperLike = Controlled({
   isSuperLikeEnabled: true,
 });
 
+export const LikerHasJustSuperLiked = Controlled({
+  count: 5,
+  isSuperLikeEnabled: true,
+  hasSuperLiked: true,
+  isJustSuperLiked: true,
+  cooldown: 1,
+});
+
 export const LikerHasSuperLiked = Controlled({
   count: 5,
   isSuperLikeEnabled: true,
   hasSuperLiked: true,
-  cooldown: 1,
+  cooldown: 0.8,
+});
+
+export const LikerHasSuperLikedElse = Controlled({
+  count: 5,
+  isSuperLikeEnabled: true,
+  cooldown: 0.8,
 });
 
 export const LikerHadSuperLiked = Controlled({
@@ -205,11 +225,25 @@ export const CreatorCanSuperLike = Controlled({
   isSuperLikeEnabled: true,
 });
 
+export const CreatorHasJustSuperLiked = Controlled({
+  isCreator: true,
+  isSuperLikeEnabled: true,
+  hasSuperLiked: true,
+  isJustSuperLiked: true,
+  cooldown: 1,
+});
+
 export const CreatorHasSuperLiked = Controlled({
   isCreator: true,
   isSuperLikeEnabled: true,
   hasSuperLiked: true,
-  cooldown: 1,
+  cooldown: 0.8,
+});
+
+export const CreatorHasSuperLikedElse = Controlled({
+  isCreator: true,
+  isSuperLikeEnabled: true,
+  cooldown: 0.8,
 });
 
 export const CreatorHadSuperLiked = Controlled({
