@@ -78,9 +78,9 @@
       <foreignObject
         v-if="isShowHintLabel"
         :x="saveSlotProps.x"
-        y="48"
+        y="8"
         width="300"
-        height="30"
+        height="60"
       >
         <div :style="hintLabelStyle">{{ hintLabel }}</div>
       </foreignObject>
@@ -225,6 +225,8 @@ export default {
         ...this.textStyle,
         width: '100%',
         height: '100%',
+        display: 'flex',
+        alignItems: 'flex-end',
       };
     },
   },
