@@ -104,6 +104,8 @@
     "likeCountLabel": "{n} Like | {n} Likes"
   },
   "HintLabel": {
+    "SignIn": "免費註冊，化讚為賞",
+    "PleaseLike": "最多可拍掌 5 下，鼓勵作者",
     "SuperLikedPleaseTryAgainLater": "你己經 Super Like 過了，請稍後再 Super Like" ,
     "SuperLikedFollowersWillSee": "己 Super Like，你的追蹤者將會在 Liker Land 中看見文章",
     "CanSuperLike": "Super Like 文章，大力讚賞創作者並分享文章",

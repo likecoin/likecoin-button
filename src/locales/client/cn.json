@@ -93,6 +93,8 @@
     "likeCountLabel": "{n}人已按赞"
   },
   "HintLabel": {
+    "SignIn": "免费注册，化赞为赏",
+    "PleaseLike": "最多可拍掌 5 下，鼓励作者",
     "SuperLikedPleaseTryAgainLater": "你己经 Super Like 过了，请稍后再 Super Like" ,
     "SuperLikedFollowersWillSee": "己 Super Like，你的追踪者将会在 Liker Land 中看见文章",
     "CanSuperLike": "Super Like 文章，大力赞赏创作者并分享文章",
