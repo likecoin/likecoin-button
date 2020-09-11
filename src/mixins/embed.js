@@ -440,6 +440,7 @@ export default {
     async newSuperLike() {
       const { cooldownProgress } = this;
       this.hasSuperLiked = true;
+      this.isJustSuperLiked = true;
       this.cooldownProgress = 1;
       await apiPostSuperLike(this.id, {
         referrer: this.referrer,
