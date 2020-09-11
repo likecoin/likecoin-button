@@ -131,6 +131,7 @@ export default {
       isSuperLiker: false,
       canSuperLike: false,
       hasSuperLiked: false,
+      isJustSuperLiked: false,
       nextSuperLikeTime: -1,
       cooldownProgress: 0,
       hasClickCooldown: false,
