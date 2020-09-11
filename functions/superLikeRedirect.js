@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const URL = require('url-parse');
 const Axios = require('axios');
 const HttpAgent = require('agentkeepalive');
+const base64url = require('base64url');
 
 let IS_TESTNET = false;
 if ((functions.config().likeco || {}).testmode) {
@@ -32,7 +33,28 @@ app.use(helmet());
 app.use(cookieParser());
 app.use('/:id', async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
-  const superLikeID = req.params.id;
+  const inputId = req.params.id;
+  let superLikeID;
+  try {
+    const inputNumber = Number(inputId);
+    if (inputNumber) superLikeID = inputId;
+  } catch (err) {
+    console.error(err);
+  }
+  if (!superLikeID) {
+    try {
+      const buf = base64url.toBuffer(inputId);
+      if (buf.length !== 8) throw new Error('INVALID_BUFFER_LENGTH');
+      const numericID = buf.readBigInt64BE();
+      if (numericID) superLikeID = numericID.toString();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  if (!superLikeID) {
+    res.status(400).send('INVALID_ID');
+    return;
+  }
   try {
     const { data } = await apiGetSuperLikeInfo(superLikeID);
     res.cookie('likebutton_superlike_id', superLikeID, {
@@ -41,17 +63,17 @@ app.use('/:id', async (req, res) => {
       sameSite: 'none',
       domain: LIKE_CO_HOSTNAME,
     });
-    let url = data.liker ? `https://like.co/${data.liker}` : 'https://liker.land';
+    let urlString = data.liker ? `https://like.co/${data.liker}` : 'https://liker.land';
     if (data && data.url) {
-      url = new URL(data.url, true);
+      const url = new URL(data.url, true);
       url.query.superlike_id = superLikeID;
       url.set('query', url.query);
-      url = url.toString();
+      urlString = url.toString();
     }
-    res.redirect(url);
+    res.redirect(urlString);
   } catch (err) {
     if (err.response && err.response.status) {
-      console.error(err.response);
+      console.error(err.response.data);
       res.status(err.response.status).send(err.response.data);
     } else {
       console.error(err);
