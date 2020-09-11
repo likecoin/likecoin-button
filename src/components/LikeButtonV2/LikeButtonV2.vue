@@ -302,7 +302,8 @@ export default {
       return 'superlikeable';
     },
     isDisabled() {
-      return this.state === 'cooldown'
+      return this.state === 'just-superliked'
+        || this.state === 'cooldown'
         || this.state === 'superlikeable-cooldown'
         || this.hasBlockingAnimation;
     },
@@ -345,7 +346,10 @@ export default {
       };
     },
     cooldownValue() {
-      if (this.state === 'cooldown' || this.state === 'superlikeable-cooldown') {
+      if (
+        this.state === 'just-superliked'
+        || this.state === 'cooldown'
+        || this.state === 'superlikeable-cooldown') {
         return this.cooldown;
       }
       return 0;

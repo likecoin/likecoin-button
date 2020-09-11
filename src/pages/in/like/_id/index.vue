@@ -69,6 +69,7 @@
                 :cooldown="cooldownProgress"
                 :cooldown-end-time="nextSuperLikeTime"
                 :has-super-liked="hasSuperLiked"
+                :is-just-super-liked="isJustSuperLiked"
                 :is-super-like-enabled="isSuperLiker"
                 :is-creator="isCreator"
                 @click="onClickLike"
