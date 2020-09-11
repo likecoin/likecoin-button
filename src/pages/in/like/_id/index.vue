@@ -40,29 +40,8 @@
 
                 <!-- Logged In -->
                 <div
-                  v-else-if="contentKey === 'loggedIn'"
-                  v-bind="textContentProps"
-                >
-                  <div class="text-content__subtitle">
-                    {{ $t('Embed.label.clickLikeButton') }}
-                  </div>
-                  <i18n
-                    tag="div"
-                    class="text-content__title"
-                    path="Embed.label.supportUser"
-                  >
-                    <a
-                      :href="superLikeURL"
-                      place="user"
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >{{ displayName }}</a>
-                  </i18n>
-                </div>
-
-                <!-- Max Liked -->
-                <div
                   v-else-if="hintText"
+                  :key="hintText"
                   v-bind="textContentProps"
                 >
                   <div class="text-content__subtitle">
