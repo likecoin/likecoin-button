@@ -45,6 +45,9 @@ export const Default = () => ({
     hasSuperLiked: {
       default: boolean('Super Liked', false),
     },
+    isJustSuperLiked: {
+      default: boolean('Just Super Liked', false),
+    },
     isSuperLikeEnabled: {
       default: boolean('Enable Super Like', true),
     },
@@ -81,6 +84,7 @@ export const Default = () => ({
         cooldown,
         cooldownEndTime: Date.now() + cooldownEndTimeFromNow * 1000,
         hasSuperLiked,
+        isJustSuperLiked,
         isSuperLikeEnabled,
         isCreator,
         explosionSize,
