@@ -55,11 +55,12 @@ jobs:
       - deploy:
           name: Deploy
           command: |
+            firebase use dev
             SENTRY_PUBLISH_RELEASE=TRUE \
             SENTRY_DSN=${TEST_SENTRY_DSN} \
             SENTRY_PROJECT=${TEST_SENTRY_PROJECT} \
             FACEBOOK_PIXEL_ID=${TEST_FACEBOOK_PIXEL_ID} \
-            firebase deploy --project likecoin-button-develop
+            firebase deploy
           environment:
             IS_TESTNET: true
   deploy_mainnet:
@@ -81,6 +82,7 @@ jobs:
       - deploy:
           name: Deploy
           command: |
+            firebase use default
             SENTRY_PUBLISH_RELEASE=TRUE \
             firebase deploy
 workflows:
