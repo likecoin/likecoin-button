@@ -76,7 +76,7 @@
           >
             <!-- Button Clap -->
             <g
-              v-if="state === 'initial' || state === 'max'"
+              v-if="state === 'initial'"
               key="clap"
             >
               <path
@@ -296,23 +296,16 @@ export default {
         return 'unsuperlikeable';
       }
       if (this.cooldown) {
-        if (this.hasSuperLiked) {
-          if (this.isJustSuperLiked) {
-            return 'just-superliked';
-          }
-          return 'cooldown';
+        if (this.hasSuperLiked && this.isJustSuperLiked) {
+          return 'just-superliked';
         }
-        return 'superlikeable-cooldown';
-      }
-      if (this.hasSuperLiked) {
-        return 'superliked';
+        return 'cooldown';
       }
       return 'superlikeable';
     },
     isDisabled() {
       return this.state === 'just-superliked'
         || this.state === 'cooldown'
-        || this.state === 'superlikeable-cooldown'
         || this.hasBlockingAnimation;
     },
     isShowBadge() {
@@ -341,7 +334,6 @@ export default {
     buttonBgColor() {
       switch (this.state) {
         case 'superlikeable':
-        case 'superliked':
           return '#50e3c2';
 
         case 'unsuperlikeable':
@@ -349,7 +341,6 @@ export default {
 
         case 'just-superliked':
         case 'cooldown':
-        case 'superlikeable-cooldown':
           return '#fff';
 
         case 'initial':
@@ -366,7 +357,7 @@ export default {
       if (
         this.state === 'just-superliked'
         || this.state === 'cooldown'
-        || this.state === 'superlikeable-cooldown') {
+      ) {
         return this.cooldown;
       }
       return 0;
@@ -374,12 +365,10 @@ export default {
     cooldownFillColor() {
       switch (this.state) {
         case 'superlikeable':
-        case 'superliked':
           return '#28646e';
 
         case 'just-superliked':
         case 'cooldown':
-        case 'superlikeable-cooldown':
           return '#50e3c2';
 
         case 'unsuperlikeable':
@@ -399,7 +388,6 @@ export default {
           return '#9b9b9b';
 
         case 'cooldown':
-        case 'superlikeable-cooldown':
           return '#e6e6e6';
 
         case 'just-superliked':
@@ -413,7 +401,6 @@ export default {
       switch (this.state) {
         case 'unsuperlikeable':
         case 'cooldown':
-        case 'superlikeable-cooldown':
           return '#50e3c200';
 
         default:
@@ -426,9 +413,8 @@ export default {
       if (
         ![
           'unsuperlikeable',
-          'cooldown',
           'just-superliked',
-          'superlikeable-cooldown',
+          'cooldown',
         ].includes(this.state)
       ) {
         this.startClapBitsAnimation();
