@@ -7,7 +7,7 @@
     width="156"
   >
     <defs>
-      <clipPath id="button-mask">
+      <clipPath :id="buttonMaskID">
         <transition
           @before-enter="buttonMaskBeforeEnter"
           @enter="buttonMaskEnter"
@@ -35,7 +35,7 @@
           />
         </transition>
       </clipPath>
-      <clipPath id="button-icon-mask">
+      <clipPath :id="buttonIconMaskID">
         <circle
           :r="radius"
           cx="78"
@@ -44,7 +44,7 @@
       </clipPath>
     </defs>
     <!-- Button -->
-    <g :style="{ clipPath: 'url(#button-mask)' }">
+    <g :style="{ clipPath: `url(#${buttonMaskID})` }">
       <g :style="buttonStyle">
         <transition
           @before-enter="buttonBgBeforeEnter"
@@ -65,7 +65,7 @@
         <!-- Button Icon -->
         <g
           :style="{
-            clipPath: 'url(#button-icon-mask)',
+            clipPath: `url(#${buttonIconMaskID})`,
           }"
         >
           <transition
@@ -199,8 +199,8 @@
     </svg>
     <!-- Clap Bits -->
     <ClapBits
-      v-for="id in clapBits"
-      :key="id"
+      v-for="cId in clapBits"
+      :key="cId"
       v-bind="{
         id,
         explosionSize,
@@ -262,6 +262,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    /**
+     * An unique ID required if there are 2 or more buttons appears on the same
+     * page.
+     */
+    id: {
+      type: String,
+      default: undefined,
+    },
     explosionSize: {
       type: Number,
       default: 0.65,
@@ -312,6 +320,15 @@ export default {
     },
     isShowSuperLikeTick() {
       return this.state === 'just-superliked';
+    },
+    idSuffix() {
+      return this.id ? `-${this.id}` : '';
+    },
+    buttonMaskID() {
+      return `button-mask${this.idSuffix}`;
+    },
+    buttonIconMaskID() {
+      return `button-icon-mask${this.idSuffix}`;
     },
     buttonStyle() {
       return {
@@ -425,7 +442,9 @@ export default {
       this.$emit('cooldown-end');
     },
     startClapBitsAnimation() {
-      this.clapBits.push(Date.now());
+      this.clapBits.push(
+        `button-clapbits${this.idSuffix}-${Date.now()}`,
+      );
     },
     finishClapBitsAnimation(id) {
       const index = this.clapBits.indexOf(id);
