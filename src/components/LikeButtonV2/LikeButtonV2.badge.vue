@@ -144,6 +144,9 @@ export default {
         }
       }
       if (!this.isSuperLikeEnabled) {
+        if (this.hasSuperLiked) {
+          return 'shared';
+        }
         return 'unsharable';
       }
       if (this.hasSuperLiked) {
