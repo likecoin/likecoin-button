@@ -192,7 +192,6 @@
           count,
           maxCount,
           hasSuperLiked,
-          isSuperLikeEnabled,
           isCreator,
         }"
       />

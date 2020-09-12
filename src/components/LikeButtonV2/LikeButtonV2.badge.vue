@@ -60,7 +60,7 @@
             >MAX</text>
           </g>
           <g
-            v-else-if="isUnsharable || isShareable || isShared"
+            v-else-if="isShareable || isShared"
             :style="{
               fill: shareIconContentColor,
               fillRule: 'evenodd',
@@ -121,10 +121,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    isSuperLikeEnabled: {
-      type: Boolean,
-      default: true,
-    },
     isCreator: {
       type: Boolean,
       default: false,
@@ -142,12 +138,6 @@ export default {
         if (this.count < this.maxCount) {
           return 'liked';
         }
-      }
-      if (!this.isSuperLikeEnabled) {
-        if (this.hasSuperLiked) {
-          return 'shared';
-        }
-        return 'unsharable';
       }
       if (this.hasSuperLiked) {
         return 'shared';
@@ -168,9 +158,6 @@ export default {
     },
     isShared() {
       return this.state === 'shared';
-    },
-    isUnsharable() {
-      return this.state === 'unsharable';
     },
     bgStyle() {
       return { fill: '#aaf1e7' };
