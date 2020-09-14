@@ -10,6 +10,7 @@ import { CSSPlugin } from 'gsap/CSSPlugin';
 import LikeButtonV2 from './LikeButtonV2';
 import LikeButtonV2Badge from './LikeButtonV2.badge';
 import LikeButtonV2Cooldown from './LikeButtonV2.cooldown';
+import LikeButtonV2StateTable from './LikeButtonV2.stateTable';
 
 gsap.registerPlugin(CSSPlugin);
 
@@ -155,4 +156,11 @@ export const Cooldown = () => ({
       />
     </svg>
   `,
+});
+
+export const StateTable = () => ({
+  components: {
+    LikeButtonV2StateTable,
+  },
+  template: '<LikeButtonV2StateTable />',
 });

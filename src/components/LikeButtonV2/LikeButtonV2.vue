@@ -7,7 +7,7 @@
     width="156"
   >
     <defs>
-      <clipPath id="button-mask">
+      <clipPath :id="buttonMaskID">
         <transition
           @before-enter="buttonMaskBeforeEnter"
           @enter="buttonMaskEnter"
@@ -35,7 +35,7 @@
           />
         </transition>
       </clipPath>
-      <clipPath id="button-icon-mask">
+      <clipPath :id="buttonIconMaskID">
         <circle
           :r="radius"
           cx="78"
@@ -44,7 +44,7 @@
       </clipPath>
     </defs>
     <!-- Button -->
-    <g :style="{ clipPath: 'url(#button-mask)' }">
+    <g :style="{ clipPath: `url(#${buttonMaskID})` }">
       <g :style="buttonStyle">
         <transition
           @before-enter="buttonBgBeforeEnter"
@@ -65,7 +65,7 @@
         <!-- Button Icon -->
         <g
           :style="{
-            clipPath: 'url(#button-icon-mask)',
+            clipPath: `url(#${buttonIconMaskID})`,
           }"
         >
           <transition
@@ -76,7 +76,7 @@
           >
             <!-- Button Clap -->
             <g
-              v-if="state === 'initial' || state === 'max'"
+              v-if="state === 'initial'"
               key="clap"
             >
               <path
@@ -192,15 +192,14 @@
           count,
           maxCount,
           hasSuperLiked,
-          isSuperLikeEnabled,
           isCreator,
         }"
       />
     </svg>
     <!-- Clap Bits -->
     <ClapBits
-      v-for="id in clapBits"
-      :key="id"
+      v-for="cId in clapBits"
+      :key="cId"
       v-bind="{
         id,
         explosionSize,
@@ -262,6 +261,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    /**
+     * An unique ID required if there are 2 or more buttons appears on the same
+     * page.
+     */
+    id: {
+      type: String,
+      default: undefined,
+    },
     explosionSize: {
       type: Number,
       default: 0.65,
@@ -288,23 +295,16 @@ export default {
         return 'unsuperlikeable';
       }
       if (this.cooldown) {
-        if (this.hasSuperLiked) {
-          if (this.isJustSuperLiked) {
-            return 'just-superliked';
-          }
-          return 'cooldown';
+        if (this.hasSuperLiked && this.isJustSuperLiked) {
+          return 'just-superliked';
         }
-        return 'superlikeable-cooldown';
-      }
-      if (this.hasSuperLiked) {
-        return 'superliked';
+        return 'cooldown';
       }
       return 'superlikeable';
     },
     isDisabled() {
       return this.state === 'just-superliked'
         || this.state === 'cooldown'
-        || this.state === 'superlikeable-cooldown'
         || this.hasBlockingAnimation;
     },
     isShowBadge() {
@@ -312,6 +312,15 @@ export default {
     },
     isShowSuperLikeTick() {
       return this.state === 'just-superliked';
+    },
+    idSuffix() {
+      return this.id ? `-${this.id}` : '';
+    },
+    buttonMaskID() {
+      return `button-mask${this.idSuffix}`;
+    },
+    buttonIconMaskID() {
+      return `button-icon-mask${this.idSuffix}`;
     },
     buttonStyle() {
       return {
@@ -324,7 +333,6 @@ export default {
     buttonBgColor() {
       switch (this.state) {
         case 'superlikeable':
-        case 'superliked':
           return '#50e3c2';
 
         case 'unsuperlikeable':
@@ -332,7 +340,6 @@ export default {
 
         case 'just-superliked':
         case 'cooldown':
-        case 'superlikeable-cooldown':
           return '#fff';
 
         case 'initial':
@@ -349,7 +356,7 @@ export default {
       if (
         this.state === 'just-superliked'
         || this.state === 'cooldown'
-        || this.state === 'superlikeable-cooldown') {
+      ) {
         return this.cooldown;
       }
       return 0;
@@ -357,12 +364,10 @@ export default {
     cooldownFillColor() {
       switch (this.state) {
         case 'superlikeable':
-        case 'superliked':
           return '#28646e';
 
         case 'just-superliked':
         case 'cooldown':
-        case 'superlikeable-cooldown':
           return '#50e3c2';
 
         case 'unsuperlikeable':
@@ -382,7 +387,6 @@ export default {
           return '#9b9b9b';
 
         case 'cooldown':
-        case 'superlikeable-cooldown':
           return '#e6e6e6';
 
         case 'just-superliked':
@@ -396,7 +400,6 @@ export default {
       switch (this.state) {
         case 'unsuperlikeable':
         case 'cooldown':
-        case 'superlikeable-cooldown':
           return '#50e3c200';
 
         default:
@@ -409,9 +412,8 @@ export default {
       if (
         ![
           'unsuperlikeable',
-          'cooldown',
           'just-superliked',
-          'superlikeable-cooldown',
+          'cooldown',
         ].includes(this.state)
       ) {
         this.startClapBitsAnimation();
@@ -425,7 +427,9 @@ export default {
       this.$emit('cooldown-end');
     },
     startClapBitsAnimation() {
-      this.clapBits.push(Date.now());
+      this.clapBits.push(
+        `button-clapbits${this.idSuffix}-${Date.now()}`,
+      );
     },
     finishClapBitsAnimation(id) {
       const index = this.clapBits.indexOf(id);
