@@ -1,5 +1,28 @@
 {
   "projects": {
-    "default": "likecoin-button"
+    "default": "likecoin-button",
+    "dev": "likecoin-button-develop"
+  },
+  "targets": {
+    "likecoin-button": {
+      "hosting": {
+        "button": [
+          "likecoin-button"
+        ],
+        "superlike": [
+          "superlike"
+        ]
+      }
+    },
+    "likecoin-button-develop": {
+      "hosting": {
+        "button": [
+          "likecoin-button-develop"
+        ],
+        "superlike": [
+          "superlike-dev"
+        ]
+      }
+    }
   }
 }
