@@ -1,3 +1,6 @@
+<template>
+  <div>{{ $t('general.loading') }}</div>
+</template>
 <script>
 import { apiGetSuperLikeInfo } from '@/util/api/api';
 
@@ -8,6 +11,7 @@ export default {
     res,
     params,
     error,
+    redirect,
   }) {
     const superLikeID = params.id;
     try {
@@ -18,14 +22,14 @@ export default {
         sameSite: 'none',
       });
       res.setHeader('Cache-Control', 'no-store');
-      let url = data.liker ? `https://like.co/${data.liker}` : 'https://liker.land';
+      let urlString = data.liker ? `https://like.co/${data.liker}` : 'https://liker.land';
       if (data && data.url) {
-        url = new URL(data.url, true);
+        const url = new URL(data.url, true);
         url.query.superlike_id = superLikeID;
         url.set('query', url.query);
-        url = url.toString();
+        urlString = url.toString();
       }
-      res.redirect(url);
+      redirect(urlString);
     } catch (err) {
       console.error(err);
       error(err);
