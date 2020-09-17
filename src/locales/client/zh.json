@@ -106,11 +106,11 @@
   "HintLabel": {
     "SignIn": "免費註冊，化讚為賞",
     "PleaseLike": "最多可拍掌 5 下，鼓勵作者",
-    "SuperLikedPleaseTryAgainLater": "你己經 Super Like 過了，請稍後再 Super Like" ,
-    "SuperLikedFollowersWillSee": "己 Super Like，你的追蹤者將會在 Liker Land 中看見文章",
-    "CanSuperLike": "Super Like 文章，大力讚賞創作者並分享文章",
-    "CanSuperLikeOwn": "立即 Super Like 分享自己的文章",
-    "ToSuperLike": "成為讚賞公民 Super Like 分享文章",
+    "SuperLikedPleaseTryAgainLater": "Super Like 冷卻中，逢 12 點重置" ,
+    "SuperLikedFollowersWillSee": "已 Super Like 了這篇",
+    "CanSuperLike": "送出 Super Like，助此好文在 Liker Land 突圍而出",
+    "CanSuperLikeOwn": "送出 Super Like，助此好文在 Liker Land 突圍而出",
+    "ToSuperLike": "成為讚賞公民 Super Like 分享好文",
     "ToSuperLikeOwn": "成為讚賞公民 Super Like 分享自己的文章"
   },
   "PopupOverlay": {
