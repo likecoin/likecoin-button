@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.oice",
+      "sha256_cert_fingerprints": [
+        "50:58:43:26:ac:2a:6e:cf:b4:fb:a1:84:3b:ae:9d:24:2d:d1:29:fc:f4:1e:5e:b1:a2:0c:b1:62:41:af:8a:98"
+      ]
+    }
+  }
+]
