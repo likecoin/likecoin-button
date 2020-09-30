@@ -25,7 +25,9 @@ export default {
   },
   computed: {
     popupURL() {
-      return `/in/like/${this.id}/?referrer=${encodeURIComponent(this.referrer)}`;
+      let url = `/in/like/${this.id}/?referrer=${encodeURIComponent(this.referrer)}`;
+      if (this.buttonType) url += `&type=${encodeURIComponent(this.buttonType)}`;
+      return url;
     },
     isPreview() {
       return this.$route.name.endsWith('-preview');
