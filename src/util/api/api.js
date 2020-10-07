@@ -42,24 +42,6 @@ export const apiGetLikeButtonTotalCount = (id, referrer) => axios.get(`${LIKECOI
 
 export const apiGetLikeButtonLikerList = (id, referrer) => axios.get(`${LIKECOIN_MISC_API_BASE}/api/like/likebutton/${id}/list?referrer=${encodeURIComponent(referrer)}`);
 
-export const apiPostLikeLink = (id, payload, {
-  referrer = '',
-  documentReferrer = '',
-  sessionID = '',
-  type = '',
-}) => axios.post(
-  `${LIKECOIN_MISC_API_BASE}/api/like/likelink/${id}?referrer=${encodeURIComponent(referrer)}`,
-  payload,
-  {
-    headers: {
-      'Document-Referrer': documentReferrer,
-      'X-Likecoin-Button-Type': type,
-      'X-Likecoin-Session-ID': sessionID,
-    },
-    withCredentials: true,
-  },
-);
-
 export const apiPostLikeButton = (id, count = 1, {
   referrer = '',
   isCookieSupport,
