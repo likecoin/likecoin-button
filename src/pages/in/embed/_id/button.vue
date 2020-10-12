@@ -125,6 +125,7 @@ export default {
       this.setIsInteracted();
     },
     async doLogin(action) {
+      if (this.isPreview) return;
       this.postSignInAction = action;
       if (!this.hasCookieSupport || (isAndroid() && isFacebookBrowser())) {
         // User has not log in and 3rd party cookie is blocked
