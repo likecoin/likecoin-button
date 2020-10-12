@@ -30,7 +30,7 @@ export default {
       return url;
     },
     isPreview() {
-      return this.$route.name.endsWith('-preview');
+      return this.$route.query.preview === '1';
     },
   },
   head() {
