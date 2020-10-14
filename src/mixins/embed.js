@@ -101,7 +101,7 @@ export default {
 
       return {
         id,
-        displayName,
+        displayName: displayName || id,
         avatar,
         isPreRegCivicLiker,
         isCivicLikerTrial,

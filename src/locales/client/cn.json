@@ -12,22 +12,6 @@
     "head": {
       "title": "赞好 {name} 的作品",
       "description": "Reward Creativity, powered by LikeCoin"
-    },
-    "label": {
-      "userNotFound": "找不到用户 {name}",
-      "pending": "等待中",
-      "thanksAppreciation": "感谢你对这篇文章的赞赏！",
-      "distributeLikeFromEcosystem": "{user} 明天将会收到一些来自 LikeCoin 生态圈的 LIKE。",
-      "considerSuperLike": "除了以赞好挖 LIKE，还可以用 \"Super Like\"，直接以 LikeCoin 表达对 {likee} 的支持和赞赏。",
-      "doYouKnow": {
-        "title": "你知道吗： ",
-        "login": "登入 {loginPage} ，可让作者获得更多 LikeCoin。",
-        "likecoinId": "Liker ID"
-      },
-      "backToHome": "返回主页"
-    },
-    "button": {
-      "aboutLikeCoin": "关于赞赏键"
     }
   },
   "LikeCountLabel": "尚无点赞 | 1 个赞 | {count} 个赞",
