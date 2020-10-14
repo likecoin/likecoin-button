@@ -123,6 +123,7 @@ import mixin from '~/mixins/embed';
 
 import { checkIsMobileClient, checkIsTrustClient } from '~/util/client';
 import { logTrackerEvent } from '@/util/EventLogger';
+import { EXTERNAL_HOSTNAME, LIKECOIN_OEMBED_API_BASE } from '@/constant';
 
 export default {
   components: {
@@ -152,6 +153,20 @@ export default {
           content: this.$t('LikeButton.head.description'),
         },
       ],
+      link: [
+        {
+          rel: 'alternate',
+          type: 'application/json+oembed',
+          href: `${LIKECOIN_OEMBED_API_BASE}?url=${this.encodedExternalURL}&format=json`,
+          title: this.$t('LikeButton.head.title', { name: this.displayName }),
+        },
+        {
+          rel: 'alternate',
+          type: 'application/xml+oembed',
+          href: `${LIKECOIN_OEMBED_API_BASE}?url=${this.encodedExternalURL}&format=xml`,
+          title: this.$t('LikeButton.head.title', { name: this.displayName }),
+        },
+      ],
     };
   },
   data() {
@@ -165,6 +180,9 @@ export default {
     };
   },
   computed: {
+    encodedExternalURL() {
+      return encodeURIComponent(`https://${EXTERNAL_HOSTNAME}${this.$route.path}`);
+    },
     textContentProps() {
       return {
         key: this.contentKey,
