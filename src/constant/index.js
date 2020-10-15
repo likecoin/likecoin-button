@@ -16,6 +16,8 @@ export const LIKER_LAND_URL_BASE = IS_TESTNET ? 'https://rinkeby.liker.land' : '
  should USE EXTERNAL_HOSTNAME in future */
 export const LIKECOIN_MISC_API_BASE = `https://${LIKE_CO_HOSTNAME}`;
 
+export const LIKECOIN_OEMBED_API_BASE = `https://${LIKE_CO_HOSTNAME}/api/oembed`;
+
 export const W3C_EMAIL_REGEX = '^[a-zA-Z0-9.!#$%&\'*/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$';
 
 /* TEMP: reformat medium referrer into medium post */

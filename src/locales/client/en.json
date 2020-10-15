@@ -13,22 +13,6 @@
     "head": {
       "title": "Like {name}'s work",
       "description": "Reward Creativity, powered by LikeCoin"
-    },
-    "label": {
-      "userNotFound": "User {name} Not Found",
-      "pending": "Pending",
-      "thanksAppreciation": "Thanks for showing your appreciation on the article.",
-      "distributeLikeFromEcosystem": "Some LIKE will be distributed to {user} tomorrow from the LikeCoin Ecosystem.",
-      "considerSuperLike": "Other than helping to mine LIKE by Liking, please consider paying {likee} directly by \"Super Like\"",
-      "doYouKnow": {
-        "title": "Do you know: ",
-        "login": "Content creator will receive more LikeCoin if you login with {loginPage}",
-        "likecoinId": "Liker ID"
-      },
-      "backToHome": "Back to homepage"
-    },
-    "button": {
-      "aboutLikeCoin": "About Like Rewards"
     }
   },
   "LikeCountLabel": "No Likes | 1 Like | {count} Likes",

@@ -123,6 +123,7 @@ import mixin from '~/mixins/embed';
 
 import { checkIsMobileClient, checkIsTrustClient } from '~/util/client';
 import { logTrackerEvent } from '@/util/EventLogger';
+import { EXTERNAL_HOSTNAME, LIKECOIN_OEMBED_API_BASE } from '@/constant';
 
 export default {
   components: {
@@ -132,6 +133,42 @@ export default {
     SaveButton,
   },
   mixins: [mixin],
+  head() {
+    return {
+      title: this.$t('LikeButton.head.title', { name: this.displayName }),
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: this.$t('LikeButton.head.title', { name: this.displayName }),
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.$t('LikeButton.head.description'),
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: this.$t('LikeButton.head.description'),
+        },
+      ],
+      link: [
+        {
+          rel: 'alternate',
+          type: 'application/json+oembed',
+          href: `${LIKECOIN_OEMBED_API_BASE}?url=${this.encodedExternalURL}&format=json`,
+          title: this.$t('LikeButton.head.title', { name: this.displayName }),
+        },
+        {
+          rel: 'alternate',
+          type: 'application/xml+oembed',
+          href: `${LIKECOIN_OEMBED_API_BASE}?url=${this.encodedExternalURL}&format=xml`,
+          title: this.$t('LikeButton.head.title', { name: this.displayName }),
+        },
+      ],
+    };
+  },
   data() {
     return {
       referrerTitle: '',
@@ -142,25 +179,10 @@ export default {
       },
     };
   },
-  asyncData(ctx) {
-    return Promise.all([
-      mixin.asyncData(ctx),
-      (async () => {
-        const { query } = ctx;
-        let { referrer = '' } = query;
-        if (referrer) {
-          referrer = handleQueryStringInUrl(referrer);
-        }
-        const url = encodeURI(referrer);
-        if (checkValidDomainNotIP(url)) {
-          const referrerTitle = await apiGetPageTitle(referrer);
-          return { referrerTitle };
-        }
-        return {};
-      })(),
-    ]).then(res => ({ ...res[0], ...res[1] }));
-  },
   computed: {
+    encodedExternalURL() {
+      return encodeURIComponent(`https://${EXTERNAL_HOSTNAME}${this.$route.path}`);
+    },
     textContentProps() {
       return {
         key: this.contentKey,
@@ -192,25 +214,6 @@ export default {
       }
       return this.$t('Embed.back.civicLiker.button');
     },
-  },
-  async mounted() {
-    this.resizeListener = window.addEventListener('resize', this.setContentHeight);
-
-    await this.updateUserSignInStatus();
-    if (!this.isLoggedIn) {
-      this.signUp({ isNewWindow: false });
-      logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp', 1);
-      return;
-    }
-
-    this.$nextTick(() => {
-      this.setContentHeight();
-    });
-  },
-  beforeDestroy() {
-    if (this.resizeListener) {
-      window.removeEventListener('resize', this.setContentHeight);
-    }
   },
   watch: {
     hasUpdateUserSignInStatus(value, prevValue) {
@@ -246,6 +249,43 @@ export default {
         }
       }
     },
+  },
+  asyncData(ctx) {
+    return Promise.all([
+      mixin.asyncData(ctx),
+      (async () => {
+        const { query } = ctx;
+        let { referrer = '' } = query;
+        if (referrer) {
+          referrer = handleQueryStringInUrl(referrer);
+        }
+        const url = encodeURI(referrer);
+        if (checkValidDomainNotIP(url)) {
+          const referrerTitle = await apiGetPageTitle(referrer);
+          return { referrerTitle };
+        }
+        return {};
+      })(),
+    ]).then(res => ({ ...res[0], ...res[1] }));
+  },
+  async mounted() {
+    this.resizeListener = window.addEventListener('resize', this.setContentHeight);
+
+    await this.updateUserSignInStatus();
+    if (!this.isLoggedIn) {
+      this.signUp({ isNewWindow: false });
+      logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp', 1);
+      return;
+    }
+
+    this.$nextTick(() => {
+      this.setContentHeight();
+    });
+  },
+  beforeDestroy() {
+    if (this.resizeListener) {
+      window.removeEventListener('resize', this.setContentHeight);
+    }
   },
   methods: {
     setContentHeight() {

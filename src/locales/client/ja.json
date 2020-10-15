@@ -10,22 +10,6 @@
     "head": {
       "title": " {name}のコンテンツを「いいね」",
       "description": "LikeCoinでクリエーターに報酬を与える。"
-    },
-    "label": {
-      "userNotFound": "ユーザー{name}が見つかりません",
-      "pending": "ペンディング",
-      "thanksAppreciation": "「いいね」してくれてありがとう。",
-      "distributeLikeFromEcosystem": "每日は、LikeCoinエコシステムからLIKEが{user}に配布されます。",
-      "considerSuperLike": "「いいね」する以外に、\"Super Like\"で直接{likee}を支払うことができます",
-      "doYouKnow": {
-        "title": "知っていますか： ",
-        "login": " {loginPage}でログインしている場合、好きなクリエーターがより多くの LIKE を受け取る",
-        "likecoinId": "Liker ID"
-      },
-      "backToHome": "ホームページに戻る"
-    },
-    "button": {
-      "aboutLikeCoin": "Like Rewards について"
     }
   },
   "Embed": {
