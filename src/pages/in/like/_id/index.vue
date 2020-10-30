@@ -15,50 +15,36 @@
         </h1>
 
         <div class="like-panel">
-          <div class="like-panel__badge">
+          <div
+            v-if="contentKey === 'loading'"
+            class="like-panel__badge"
+          >
 
             <div
               :style="contentStyle"
               class="text-content-wrapper"
             >
-              <transition
-                @enter="setContentHeight"
-                name="text-content-"
+              <div
+                v-bind="textContentProps"
               >
-                <!-- Loading -->
-                <div
-                  v-if="contentKey === 'loading'"
-                  v-bind="textContentProps"
-                >
-                  <div class="text-content__subtitle">
-                    {{ $t('general.loading') }}
-                  </div>
-                  <no-ssr>
-                    <lc-loading-indicator />
-                  </no-ssr>
+                <div class="text-content__subtitle">
+                  {{ $t('general.loading') }}
                 </div>
-
-                <!-- Logged In -->
-                <div
-                  v-else-if="hintText"
-                  :key="hintText"
-                  v-bind="textContentProps"
-                >
-                  <div class="text-content__subtitle">
-                    {{ hintText }}
-                  </div>
-                </div>
-
-              </transition>
+                <no-ssr>
+                  <lc-loading-indicator />
+                </no-ssr>
+              </div>
             </div>
           </div>
 
           <LikeCoinButtonWidget
+            v-else
             :like-button-label="likeButtonLabel"
             :save-button-label="saveButtonLabel"
             :avatar-label="avatarLabel"
             :style="{ textAlign: 'center' }"
             :is-avatar-label-button-disabled="hasFollowedCreator"
+            :hint-label="hintText"
             @click-like-button-label="onClickLikeStats"
             @click-save-button-label="onClickSaveButton"
             @click-avatar-button-label="onClickFollow"
@@ -269,33 +255,13 @@ export default {
     ]).then(res => ({ ...res[0], ...res[1] }));
   },
   async mounted() {
-    this.resizeListener = window.addEventListener('resize', this.setContentHeight);
-
     await this.updateUserSignInStatus();
     if (!this.isLoggedIn) {
       this.signUp({ isNewWindow: false });
       logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp', 1);
-      return;
-    }
-
-    this.$nextTick(() => {
-      this.setContentHeight();
-    });
-  },
-  beforeDestroy() {
-    if (this.resizeListener) {
-      window.removeEventListener('resize', this.setContentHeight);
     }
   },
   methods: {
-    setContentHeight() {
-      const elem = this.$refs[this.contentKey];
-      if (elem) {
-        this.contentStyle = {
-          height: `${elem.offsetHeight}px`,
-        };
-      }
-    },
     async doLike() {
       if (!this.isMaxLike && !this.isCreator) {
         this.like();
