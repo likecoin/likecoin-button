@@ -25,6 +25,7 @@ const nuxtConfig = {
       { hid: 'theme-color', name: 'theme-color', content: '#D2F0F0' },
     ],
     link: [
+      { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
       { rel: 'preload', href: 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Material+Icons', as: 'style' },
       // {
       //   rel: 'preload',
