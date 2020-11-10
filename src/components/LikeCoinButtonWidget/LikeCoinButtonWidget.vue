@@ -15,22 +15,6 @@
       >
         <Identity v-bind="identitySlotProps" />
       </slot>
-      <!-- Avatar Label -->
-      <foreignObject
-        :y="labelY"
-        x="202"
-        width="68"
-        height="32"
-      >
-        <div :style="labelStyle">
-          <button
-            :disabled="isAvatarLabelButtonDisabled"
-            :style="labelButtonStyle"
-            @click="$emit('click-avatar-label')"
-            class="likecoin-button-widget__label-button"
-          >{{ avatarLabel }}</button>
-        </div>
-      </foreignObject>
 
       <!-- Save button -->
       <slot
@@ -39,21 +23,6 @@
       >
         <SaveButton v-bind="saveSlotProps" />
       </slot>
-      <!-- Save Button Label -->
-      <foreignObject
-        :y="labelY"
-        x="144"
-        width="52"
-        height="32"
-      >
-        <div :style="labelStyle">
-          <button
-            :style="labelButtonStyle"
-            @click="$emit('click-save-button-label')"
-            class="likecoin-button-widget__label-button"
-          >{{ saveButtonLabel }}</button>
-        </div>
-      </foreignObject>
 
       <!-- Like Button -->
       <slot name="like-button">
@@ -78,11 +47,24 @@
       <foreignObject
         v-if="isShowHintLabel"
         :x="saveSlotProps.x"
-        y="8"
+        y="0"
         width="300"
         height="60"
       >
         <div :style="hintLabelStyle">{{ hintLabel }}</div>
+      </foreignObject>
+
+      <!-- CTA -->
+      <foreignObject
+        :x="saveSlotProps.x"
+        :y="saveSlotProps.y + 58"
+        width="300"
+        height="36"
+      >
+        <button
+          @click="$emit('click-cta-button')"
+          class="likecoin-button-widget__cta-button"
+        >{{ ctaButtonLabel }}</button>
       </foreignObject>
     </svg>
   </div>
@@ -114,17 +96,9 @@ export default {
       type: String,
       default: '',
     },
-    saveButtonLabel: {
+    ctaButtonLabel: {
       type: String,
       default: '',
-    },
-    avatarLabel: {
-      type: String,
-      default: '',
-    },
-    isAvatarLabelButtonDisabled: {
-      type: Boolean,
-      default: false,
     },
     avatarURL: {
       type: String,
@@ -182,13 +156,13 @@ export default {
     identitySlotProps() {
       return {
         x: 209,
-        y: 67,
+        y: 57,
       };
     },
     saveSlotProps() {
       return {
         x: 148,
-        y: 82,
+        y: 72,
       };
     },
     labelY() {
@@ -242,5 +216,35 @@ export default {
 }
 .likecoin-button-widget__label-button:not([disabled]):active {
   background-color: #e6e6e6;
+}
+
+.likecoin-button-widget__cta-button {
+  display: block;
+
+  box-sizing: border-box;
+
+  height: 36px;
+  padding: 4px 36px;
+
+  transition-timing-function: ease;
+  transition-duration: 0.2s;
+  transition-property: border-color, background-color;
+
+  color: #28646e;
+  border: 3px solid #aaf1e7;
+  border-radius: 12px;
+  outline: none;
+  background-color: white;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.likecoin-button-widget__cta-button:hover {
+  border-color: #50e3c2;
+}
+
+.likecoin-button-widget__cta-button:active {
+  background-color: #d2f0f0;
 }
 </style>
