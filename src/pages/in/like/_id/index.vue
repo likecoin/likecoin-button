@@ -40,14 +40,11 @@
           <LikeCoinButtonWidget
             v-else
             :like-button-label="likeButtonLabel"
-            :save-button-label="saveButtonLabel"
-            :avatar-label="avatarLabel"
+            :cta-button-label="ctaButtonLabel"
             :style="{ textAlign: 'center' }"
-            :is-avatar-label-button-disabled="hasFollowedCreator"
             :hint-label="hintText"
             @click-like-button-label="onClickLikeStats"
-            @click-save-button-label="onClickSaveButton"
-            @click-avatar-button-label="onClickFollow"
+            @click-cta-button="convertLikerToCivicLiker"
           >
             <template #like-button>
               <LikeButton
@@ -78,9 +75,9 @@
                 :avatarURL="avatar"
                 :display-name="displayName"
                 :is-avatar-button-outlined="isCreatorCivicLiker"
-                :is-avatar-button-disabled="hasFollowedCreator"
                 v-bind="identityProps"
-                @click-avatar="onClickFollow"
+                @click-avatar="onClickAvatar"
+                @click-display-name="onClickAvatar"
               />
             </template>
           </LikeCoinButtonWidget>
@@ -225,12 +222,6 @@ export default {
             }
             break;
 
-          case 'follow':
-            if (!this.hasFollowedCreator) {
-              this.onClickFollow();
-            }
-            break;
-
           default:
         }
       }
@@ -325,9 +316,9 @@ export default {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickSaveButton', 'clickSaveButton(popup)', 1);
       this.toggleBookmark();
     },
-    onClickFollow() {
-      logTrackerEvent(this, 'LikeButtonFlow', 'clickFollowButton', 'clickFollowButton(popup)', 1);
-      this.toggleFollow();
+    onClickAvatar() {
+      logTrackerEvent(this, 'LikeButtonFlow', 'clickAvatar', 'clickAvatar(popup)', 1);
+      this.goToPortfolio();
     },
   },
 };

@@ -215,11 +215,8 @@ export default {
       }
       return this.$tc('LikeCountLabel', this.totalLike, { count: this.totalLike });
     },
-    saveButtonLabel() {
-      return this.$t(this.hasBookmarked ? 'Saved' : 'Save');
-    },
-    avatarLabel() {
-      return this.$t(this.hasFollowedCreator ? 'Following' : 'Follow');
+    ctaButtonLabel() {
+      return this.$t('CTA.CivicLiker.Button');
     },
     isCreatorCivicLiker() {
       return this.isCivicLikerTrial || this.isSubscribedCivicLiker;
@@ -491,6 +488,9 @@ export default {
     },
     onClickCooldown() {
       this.hasClickCooldown = true;
+    },
+    goToPortfolio() {
+      window.open(`${LIKER_LAND_URL_BASE}/${this.id}`, '_blank');
     },
   },
 };
