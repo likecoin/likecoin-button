@@ -21,7 +21,10 @@
       :width="displayNameWidth"
       :height="displayNameHeight"
     >
-      <div :style="displayNameStyle">{{ displayName }}</div>
+      <div
+        :style="displayNameStyle"
+        @click="onClickDisplayName"
+      >{{ displayName }}</div>
     </foreignObject>
   </svg>
 </template>
@@ -92,6 +95,9 @@ export default {
   methods: {
     onClickAvatar(e) {
       this.$emit('click-avatar', e);
+    },
+    onClickDisplayName(e) {
+      this.$emit('click-display-name', e);
     },
   },
 };

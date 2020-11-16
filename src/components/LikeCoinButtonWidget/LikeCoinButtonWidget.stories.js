@@ -16,9 +16,13 @@ import SaveButton from '../SaveButton/SaveButton';
 export default {
   title: 'LikeCoin Button Widget (v2)',
   decorators: [withKnobs],
+  argTypes: {
+    onClickAvatar: { action: 'Clicked Avatar' },
+    onClickCta: { action: 'Clicked CTA Button' },
+  },
 };
 
-export const Default = () => ({
+export const Default = (_, { argTypes }) => ({
   components: {
     LikeCoinButtonWidget,
   },
@@ -29,25 +33,23 @@ export const Default = () => ({
     likeButtonLabel: {
       default: text('Like Button Label', '1 LIKE'),
     },
-    saveButtonLabel: {
-      default: text('Save Button Label', 'Save'),
-    },
-    avatarLabel: {
-      default: text('Avatar Label', 'Follow'),
+    ctaButtonLabel: {
+      default: text('CTA Button Label', 'Become a Civic Liker'),
     },
     hintLabel: {
       default: text('Hint Label', 'This is hint.'),
     },
+    onClickCta: argTypes.onClickCta,
   },
   template: `
     <LikeCoinButtonWidget
       v-bind="{
         layout,
         likeButtonLabel,
-        saveButtonLabel,
-        avatarLabel,
+        ctaButtonLabel,
         hintLabel,
       }"
+      @click-cta-button="onClickCta"
     />
   `,
 });
@@ -59,7 +61,7 @@ const Controlled = ({
   isJustSuperLiked = false,
   isCreator = false,
   isSuperLikeEnabled = false,
-} = {}) => () => ({
+} = {}) => (_, { argTypes }) => ({
   components: {
     Identity,
     LikeButtonV2,
@@ -73,6 +75,8 @@ const Controlled = ({
     displayName: {
       default: text('Display Name', 'ckxpress'),
     },
+    onClickAvatar: argTypes.onClickAvatar,
+    onClickCta: argTypes.onClickCta,
   },
   data() {
     return {
@@ -84,18 +88,11 @@ const Controlled = ({
       isSuperLikeEnabled,
       isCreator,
       isSaved: false,
-      isFollowing: false,
     };
   },
   computed: {
-    avatarLabel() {
-      return this.isFollowing ? 'Following' : 'Follow';
-    },
     avatarURL() {
       return `https://avatars.dicebear.com/api/identicon/${encodeURIComponent(this.displayName)}.svg`;
-    },
-    saveButtonLabel() {
-      return this.isSaved ? 'Saved' : 'Save';
     },
     likeButtonLabel() {
       if (this.count >= 5 && this.isSuperLikeEnabled && this.cooldown <= 0) {
@@ -131,21 +128,15 @@ const Controlled = ({
     onClickSaveButton() {
       this.isSaved = !this.isSaved;
     },
-    onFollow() {
-      this.isFollowing = true;
-    },
   },
   template: `
     <LikeCoinButtonWidget
       v-bind="{
         layout,
-        avatarLabel,
         likeButtonLabel,
-        saveButtonLabel,
-        isAvatarLabelButtonDisabled: isFollowing,
       }"
-      @click-save-button-label="onClickSaveButton"
-      @click-avatar-label="onFollow"
+      cta-button-label="Become a Civic Liker"
+      @click-cta-button="onClickCta"
     >
       <template #like-button>
         <LikeButtonV2
@@ -174,9 +165,8 @@ const Controlled = ({
             ...identityProps,
             avatarURL,
             displayName,
-            isAvatarButtonDisabled: isFollowing,
           }"
-          @click-avatar="onFollow"
+          @click-avatar="onClickAvatar"
         />
       </template>
     </LikeCoinButtonWidget>

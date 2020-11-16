@@ -3,13 +3,10 @@
     LikeCoinButtonWidget(
       :layout="widgetLayout"
       :like-button-label="likeButtonLabel"
-      :save-button-label="saveButtonLabel"
-      :avatar-label="avatarLabel"
-      :is-avatar-label-button-disabled="hasFollowedCreator"
+      :cta-button-label="ctaButtonLabel"
       :hintLabel="hintText"
       @click-like-button-label="onClickLikeStats"
-      @click-save-button-label="onClickSaveButton"
-      @click-avatar-button-label="onClickFollow"
+      @click-cta-button="convertLikerToCivicLiker"
     )
       template(#like-button)
         LikeButton(
@@ -38,9 +35,9 @@
           :avatarURL="avatar"
           :display-name="displayName"
           :is-avatar-button-outlined="isCreatorCivicLiker"
-          :is-avatar-button-disabled="hasFollowedCreator"
           v-bind="identityProps"
-          @click-avatar="onClickFollow"
+          @click-avatar="onClickAvatar"
+          @click-display-name="onClickAvatar"
         )
 </template>
 
@@ -190,15 +187,7 @@ export default {
     },
     onClickAvatar() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickAvatar', 'clickAvatar(embed)', 1);
-      this.superLike();
-    },
-    onClickAvatarHalo() {
-      logTrackerEvent(this, 'LikeButtonFlow', 'clickAvatarHalo', 'clickAvatarHalo(embed)', 1);
-      this.convertLikerToCivicLiker();
-    },
-    onClickDisplayName() {
-      logTrackerEvent(this, 'LikeButtonFlow', 'clickDisplayName', 'clickDisplayName(embed)', 1);
-      this.superLike();
+      this.goToPortfolio();
     },
     async onClickSaveButton() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickSaveButton', 'clickSaveButton(embed)', 1);
@@ -206,14 +195,6 @@ export default {
         this.toggleBookmark();
       } else {
         await this.doLogin('save');
-      }
-    },
-    async onClickFollow() {
-      logTrackerEvent(this, 'LikeButtonFlow', 'clickFollowButton', 'clickFollowButton(embed)', 1);
-      if (this.isLoggedIn) {
-        this.toggleFollow();
-      } else {
-        await this.doLogin('follow');
       }
     },
     handleMessageAction(event, action) {
