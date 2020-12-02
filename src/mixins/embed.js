@@ -482,7 +482,7 @@ export default {
     },
     convertLikerToCivicLiker() {
       window.open(
-        `${LIKER_LAND_URL_BASE}/civic${this.isTrialSubscriber ? '/register' : ''}${this.referrerQueryString}`,
+        `${LIKER_LAND_URL_BASE}/${this.id}/civic${this.referrerQueryString}`,
         '_blank',
       );
     },
