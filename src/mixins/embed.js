@@ -28,6 +28,7 @@ import {
   apiDeleteMyBookmark,
   apiGetMyFollower,
   apiAddMyFollower,
+  apiGetSupportingUserByID,
 } from '~/util/api/api';
 
 import { checkHasStorageAPIAccess } from '~/util/client';
@@ -144,6 +145,8 @@ export default {
       hasFollowedCreator: false,
       isLoadingFollowStatus: false,
 
+      supportingQuantity: 0,
+
       hasCookieSupport: false,
       hasStorageAPIAccess: false,
 
@@ -216,10 +219,16 @@ export default {
       return this.$tc('LikeCountLabel', this.totalLike, { count: this.totalLike });
     },
     ctaButtonLabel() {
-      return this.$t('CTA.CivicLiker.Button');
+      return this.$t(`CTA.CivicLiker.${this.isSupportingCreator ? 'Subscribing' : 'Button'}`);
+    },
+    ctaButtonPreset() {
+      return this.isSupportingCreator ? 'special' : 'default';
     },
     isCreatorCivicLiker() {
       return this.isCivicLikerTrial || this.isSubscribedCivicLiker;
+    },
+    isSupportingCreator() {
+      return this.supportingQuantity > 0;
     },
     hintText() {
       if (!this.isLoggedIn) {
@@ -363,6 +372,10 @@ export default {
             const { total } = totalData;
             this.totalLike = total;
           }),
+          apiGetSupportingUserByID(this.id).then(({ data: supportingData }) => {
+            const { quantity } = supportingData;
+            this.supportingQuantity = quantity;
+          }).catch(() => {}),
         ]);
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
@@ -480,10 +493,14 @@ export default {
         });
       }
     },
-    convertLikerToCivicLiker() {
+    onClickCTAButton() {
+      const url = this.isSupportingCreator
+        ? `${LIKER_LAND_URL_BASE}/${this.id}?civic_welcome=1`
+        : `${LIKER_LAND_URL_BASE}/${this.id}/civic${this.referrerQueryString}`;
       window.open(
-        `${LIKER_LAND_URL_BASE}/civic${this.isTrialSubscriber ? '/register' : ''}${this.referrerQueryString}`,
+        url,
         '_blank',
+        'menubar=no,location=no,width=527,height=700',
       );
     },
     onClickCooldown() {

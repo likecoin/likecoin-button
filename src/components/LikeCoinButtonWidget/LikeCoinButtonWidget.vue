@@ -63,7 +63,7 @@
       >
         <button
           @click="$emit('click-cta-button')"
-          class="likecoin-button-widget__cta-button"
+          :class="ctaButtonClass"
         >{{ ctaButtonLabel }}</button>
       </foreignObject>
     </svg>
@@ -99,6 +99,10 @@ export default {
     ctaButtonLabel: {
       type: String,
       default: '',
+    },
+    ctaButtonPreset: {
+      type: String,
+      default: 'default',
     },
     avatarURL: {
       type: String,
@@ -203,6 +207,12 @@ export default {
         alignItems: 'flex-end',
       };
     },
+    ctaButtonClass() {
+      return [
+        'likecoin-button-widget__cta-button',
+        `likecoin-button-widget__cta-button--${this.ctaButtonPreset}`,
+      ];
+    },
   },
 };
 </script>
@@ -231,20 +241,28 @@ export default {
   transition-property: border-color, background-color;
 
   color: #28646e;
-  border: 3px solid #aaf1e7;
   border-radius: 12px;
   outline: none;
-  background-color: white;
 
   font-size: 14px;
   font-weight: 600;
 }
-
-.likecoin-button-widget__cta-button:hover {
+.likecoin-button-widget__cta-button.likecoin-button-widget__cta-button--default {
+  border: 3px solid #aaf1e7;
+  background-color: white;
+}
+.likecoin-button-widget__cta-button.likecoin-button-widget__cta-button--default:hover {
   border-color: #50e3c2;
 }
-
-.likecoin-button-widget__cta-button:active {
+.likecoin-button-widget__cta-button.likecoin-button-widget__cta-button--default:active {
   background-color: #d2f0f0;
+}
+
+.likecoin-button-widget__cta-button.likecoin-button-widget__cta-button--special {
+  border: none;
+  background: linear-gradient(78deg, #d2f0f0, #f0e6b4);
+}
+.likecoin-button-widget__cta-button.likecoin-button-widget__cta-button--special:hover {
+  background: linear-gradient(78deg, #cae6e6, #e9dfae);
 }
 </style>

@@ -41,10 +41,11 @@
             v-else
             :like-button-label="likeButtonLabel"
             :cta-button-label="ctaButtonLabel"
+            :cta-button-preset="ctaButtonPreset"
             :style="{ textAlign: 'center' }"
             :hint-label="hintText"
             @click-like-button-label="onClickLikeStats"
-            @click-cta-button="convertLikerToCivicLiker"
+            @click-cta-button="onClickCTAButton"
           >
             <template #like-button>
               <LikeButton
@@ -301,16 +302,6 @@ export default {
     onClickLikeStats() {
       this.openLikeStats({ isNewWindow: false });
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLikeStats', 'clickLikeStats(popup)', 1);
-    },
-    onClickCTAButton() {
-      logTrackerEvent(this, 'LikeButtonFlow', 'clickCTA', 'clickCTA(popup)', 1);
-      if (this.isSubscribed && !this.isTrialSubscriber) {
-        logTrackerEvent(this, 'LikeButtonFlow', 'clickSuperLike', 'clickSuperLike(popup)', 1);
-        this.superLike();
-      } else {
-        logTrackerEvent(this, 'LikeButtonFlow', 'clickConvertCivicLiker', 'clickConvertCivicLiker(popup)', 1);
-        this.convertLikerToCivicLiker();
-      }
     },
     onClickSaveButton() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickSaveButton', 'clickSaveButton(popup)', 1);

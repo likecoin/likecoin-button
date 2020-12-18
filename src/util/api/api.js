@@ -174,3 +174,8 @@ export const apiAddMyFollower = (id = '', {
     withCredentials: true,
   },
 );
+
+export const apiGetSupportingUserByID = (id = '') => axios.get(
+  `${LIKECOIN_API}/api/civic/support/users/${id}`,
+  { withCredentials: true },
+);
