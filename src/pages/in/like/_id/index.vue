@@ -213,7 +213,11 @@ export default {
               && this.$refs.likeButton
             ) {
               // Click the LikeButton directly for clicking effect
-              this.$refs.likeButton.onClick();
+              this.$nextTick(() => {
+                if (this.$refs.likeButton) {
+                  this.$refs.likeButton.onClick();
+                }
+              });
             }
             break;
 
