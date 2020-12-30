@@ -206,10 +206,7 @@ export default {
         switch (this.$route.query.action) {
           case 'like':
             if (
-              (
-                (this.isCreator && this.isSubscribed)
-                || (!this.isCreator && this.likeCount <= 0)
-              )
+              (!this.isCreator && this.likeCount <= 0)
               && this.$refs.likeButton
             ) {
               // Click the LikeButton directly for clicking effect
