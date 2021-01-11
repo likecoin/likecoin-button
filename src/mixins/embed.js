@@ -507,7 +507,11 @@ export default {
       this.hasClickCooldown = true;
     },
     goToPortfolio() {
-      window.open(`${LIKER_LAND_URL_BASE}/${this.id}`, '_blank');
+      let url = `${LIKER_LAND_URL_BASE}/${this.id}`;
+      if (!this.isCreatorCivicLiker) {
+        url = `${url}/civic`;
+      }
+      window.open(url, '_blank');
     },
   },
 };
