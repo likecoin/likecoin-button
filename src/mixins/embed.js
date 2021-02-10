@@ -18,7 +18,6 @@ import {
   apiPostLikeButton,
   apiPostSuperLike,
   apiGetUserMinById,
-  apiGetSocialListById,
   apiGetLikeButtonTotalCount,
   apiGetLikeButtonMyStatus,
   apiGetLikeButtonSelfCount,
@@ -89,7 +88,6 @@ export default {
 
     return Promise.all([
       apiGetUserMinById(id),
-      apiGetSocialListById(id, type).catch(() => ({})),
     ]).then((res) => {
       const {
         displayName,
@@ -109,7 +107,6 @@ export default {
         isSubscribedCivicLiker,
         civicLikerSince,
         amount,
-        platforms: res[1].data,
       };
     }).catch((err) => {
       console.error(err); // eslint-disable-line no-console

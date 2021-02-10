@@ -192,14 +192,13 @@ export default {
           case 'PREVIEW': {
             if (!this.isPreview) return;
 
-            const { user, platforms } = data.content;
+            const { user } = data.content;
             if (user) {
               if (user.user) this.id = user.user;
               if (user.displayName) this.displayName = user.displayName;
               if (user.avatar) this.avatar = user.avatar;
               this.avatarHalo = getAvatarHaloTypeFromUser(user);
             }
-            if (platforms) this.platforms = platforms;
             break;
           }
 
