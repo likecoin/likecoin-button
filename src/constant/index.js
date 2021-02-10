@@ -14,7 +14,7 @@ export const LIKER_LAND_URL_BASE = IS_TESTNET ? 'https://rinkeby.liker.land' : '
 
 /* use LIKE_CO_HOSTNAME for now to prevent CORS preflight problem
  should USE EXTERNAL_HOSTNAME in future */
-export const LIKECOIN_MISC_API_BASE = `https://${LIKE_CO_HOSTNAME}`;
+export const LIKECOIN_MISC_API_BASE = `https://${LIKE_CO_HOSTNAME}/api`;
 
 export const LIKECOIN_OEMBED_API_BASE = `https://${LIKE_CO_HOSTNAME}/api/oembed`;
 
