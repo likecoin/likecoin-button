@@ -18,18 +18,18 @@
   "LikeCountLabel": "No Likes | 1 Like | {count} Likes",
   "CTA": {
     "CivicLiker": {
-      "Title": "Civic Likers will receive a free Super Like every noon and midnight in 2020. It expires if not used in 12 hours.",
+      "Title": "Join as a Civic Liker, support creators monthly",
       "Description": [
-        "Super Like - decentralized editorial",
-        "Join Civic Liker movement to earn 2 free Super Likes per day in 2020."
+        "Civic Likers are citizens of the creative world who support creators continuously.",
+        "Enjoy the following exclusive benefits:"
       ],
       "Features": [
-        "Pay extra LikeCoin directly to further reward creators.",
-        "Be a Content Jockey to pick content that matters.",
-        "When a story receives Super Like, both Content Jockey and creator receive LikeCoin."
+        "Unlock Super Like privilege. The quota reset at noon and midnight everyday in the promotion period",
+        "Have a more influential vote to the daily-released Creators Fund by giving Likes",
+        "A virtuous halo around your avatar"
       ],
       "MoreAbout": "Know more about Civic Liker",
-      "Button": "Become a Civic Liker",
+      "Button": "Register now",
       "Subscribing": "Supporting"
     }
   },

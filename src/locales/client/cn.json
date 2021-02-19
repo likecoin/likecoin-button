@@ -17,14 +17,18 @@
   "LikeCountLabel": "尚无点赞 | 1 个赞 | {count} 个赞",
   "CTA": {
     "CivicLiker": {
-      "Title": "Super Like — 去 AI 内容分配",
-      "Description": "成为 Civic Liker，今年内每天获赠两个 Super Like 配额。更有效支持创作之余更为重分发好内容出一分力",
-      "Features": [
-        "协助分发好内容",
-        "支持创作",
-        "赚取更多 LikeCoin"
+      "Title": "成为赞赏公民，每月赞助创作者",
+      "Description": [
+        "赞赏公民是一群愿意持续回馈创作的网络公民。",
+        "成为赞赏公民可享以下福利："
       ],
-      "Button": "成为赞赏公民",
+      "Features": [
+        "解锁 Super Like，推广时间内每天整点中午及凌晨获赠一次 Super Like 的权利。",
+        "拍手赞赏作品对创作基金的分配有更大影响力",
+        "头像显示独有的光环标记，突显尊贵的身份了解更多赞赏公民福利"
+      ],
+      "MoreAbout": "了解更多赞赏公民福利",
+      "Button": "立即注册",
       "Subscribing": "赞助中"
     }
   },
