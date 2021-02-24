@@ -119,6 +119,7 @@ export default {
       isLoggedIn: false,
       isSubscribed: false,
       isTrialSubscriber: false,
+      civicLikerVersion: 0,
 
       like_count: 0,
       likeSent: 0,
@@ -323,11 +324,13 @@ export default {
                 isSubscribed,
                 isTrialSubscriber,
                 serverCookieSupported,
+                civicLikerVersion,
               } = myData;
               this.isLoggedIn = !!liker;
               this.isCreator = liker === this.id;
               this.isSubscribed = isSubscribed;
               this.isTrialSubscriber = isTrialSubscriber;
+              this.civicLikerVersion = civicLikerVersion;
               if (this.hasCookieSupport && serverCookieSupported !== undefined) {
                 this.hasCookieSupport = serverCookieSupported;
               }
@@ -338,7 +341,7 @@ export default {
                     scope.setUser({ id: liker });
                   });
                 }
-                await Promise.all([
+                const promises = [
                   this.updateSuperLikeStatus(),
                   setTrackerUser({ user: liker }),
                   apiGetMyBookmark(this.referrer).then(({ data: bookmarkData }) => {
@@ -350,7 +353,15 @@ export default {
                   apiGetMyFollower(this.id).then(({ data: followData }) => {
                     this.hasFollowedCreator = followData && followData.isFollowed;
                   }).catch(() => {}),
-                ]);
+                ];
+                if (this.civicLikerVersion === 2) {
+                  promises.push(apiGetSupportingUserByID(this.id)
+                    .then(({ data: supportingData }) => {
+                      const { quantity } = supportingData;
+                      this.supportingQuantity = quantity;
+                    }).catch(() => {}));
+                }
+                await Promise.all(promises);
               }
               this.isLoadingBookmark = false;
               this.isLoadingFollowStatus = false;
@@ -369,10 +380,6 @@ export default {
             const { total } = totalData;
             this.totalLike = total;
           }),
-          apiGetSupportingUserByID(this.id).then(({ data: supportingData }) => {
-            const { quantity } = supportingData;
-            this.supportingQuantity = quantity;
-          }).catch(() => {}),
         ]);
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
