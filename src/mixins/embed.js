@@ -510,12 +510,24 @@ export default {
     onClickCooldown() {
       this.hasClickCooldown = true;
     },
-    goToPortfolio() {
+    goToPortfolio({
+      type = 'popup',
+      target = '_blank',
+      feature = '',
+    } = {}) {
       let url = `${LIKER_LAND_URL_BASE}/${this.id}`;
       if (!this.isCreatorCivicLiker) {
         url = `${url}/civic`;
       }
-      window.open(url, '_blank');
+      if (this.referrer) {
+        url = `${url}?referrer=${encodeURIComponent(this.referrer)}`;
+      }
+
+      if (type === 'popup') {
+        window.open(url, target, feature);
+      } else {
+        window.location.href = url;
+      }
     },
   },
 };
