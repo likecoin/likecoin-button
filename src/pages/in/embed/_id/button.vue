@@ -165,11 +165,11 @@ export default {
     },
     showCivicLikerCTA() {
       if (this.getShouldShowCivicLikerCTA()) {
-        window.open(
-          `/in/cta/${this.id}/civic?referrer=${encodeURIComponent(this.referrer)}`,
-          'civic-liker-cta',
-          'width=540,height=640,menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes',
-        );
+        this.goToPortfolio({
+          type: 'popup',
+          target: 'civic-liker-cta',
+          feature: 'width=540,height=640,menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes',
+        });
         logTrackerEvent(this, 'LikeButtonFlow', 'clickCivicLikerCTA', 'clickCivicLikerCTA(embed)', 1);
       }
     },

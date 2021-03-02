@@ -267,14 +267,7 @@ export default {
       }
     },
     showCivicLikerCTA() {
-      this.$router.push({
-        name: 'in-cta-id-civic',
-        params: { id: this.id },
-        query: {
-          referrer: encodeURIComponent(this.referrer),
-          show_back: '1',
-        },
-      });
+      this.goToPortfolio({ type: 'self' });
       logTrackerEvent(this, 'LikeButtonFlow', 'clickCivicLikerCTA', 'clickCivicLikerCTA(popup)', 1);
     },
     onClickBackButton() {
