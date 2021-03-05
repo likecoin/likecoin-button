@@ -519,8 +519,9 @@ export default {
       if (!this.isCreatorCivicLiker) {
         url = `${url}/civic`;
       }
+      url = `${url}?utm_source=button`;
       if (this.referrer) {
-        url = `${url}?referrer=${encodeURIComponent(this.referrer)}`;
+        url = `${url}&referrer=${encodeURIComponent(this.referrer)}`;
       }
 
       if (type === 'popup') {
