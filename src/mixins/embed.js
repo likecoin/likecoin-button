@@ -517,7 +517,7 @@ export default {
     } = {}) {
       let url = `${LIKER_LAND_URL_BASE}/${this.id}`;
       if (!this.isCreatorCivicLiker) {
-        url = `${url}/civic`;
+        url = `${url}/civic?utm_source=button`;
       }
       if (this.referrer) {
         url = `${url}?referrer=${encodeURIComponent(this.referrer)}`;
