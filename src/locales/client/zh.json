@@ -29,7 +29,7 @@
         "頭像顯示獨有的光環標記，突顯尊貴的身份瞭解更多讚賞公民福利"
       ],
       "MoreAbout": "瞭解更多讚賞公民福利",
-      "Button": "立即註冊",
+      "Button": "按月贊助",
       "Subscribing": "贊助中"
     }
   },
@@ -56,8 +56,8 @@
       "title": "化讚為賞 回饋創作",
       "createMyWidget": "創建我的 LikeWidget",
       "createMyButton": "創建我的 LikeButton",
-      "clickLikeButton": "請鼓掌支持我",
-      "clickLikeButtonNoLogin": "請登入，並為我鼓掌",
+      "clickLikeButton": "請拍掌支持我",
+      "clickLikeButtonNoLogin": "請登入，並為我拍掌",
       "rewardUserWithLikeToken": "以 LIKE 代幣讚賞 {user}",
       "supportUser": "支持 {user}",
       "supportUserNoLogin": "支持 {user}",
@@ -72,29 +72,29 @@
   },
   "EmbedV2": {
     "badge": {
-      "muggle": "{becomeLiker} 免費按讚，幫助我獲得收入",
-      "liker0": "Liker 每一按讚，我將獲得收入",
+      "muggle": "{becomeLiker} 免費按讚，讓作者獲得收入",
+      "liker0": "Liker 每一按讚，作者將獲得收入",
       "liker1": "@:EmbedV2.badge.civicLikerPaid1",
       "liker5": "{becomeCivicLiker}，進一步回饋創作，加享福利",
       "civicLikerTrial0": "@:EmbedV2.badge.civicLikerPaid0",
       "civicLikerTrial1": "@:EmbedV2.badge.civicLikerPaid1",
       "civicLikerTrial5": "{becomePaidCivicLiker}，進一步回饋創作，加享福利",
-      "civicLikerPaid0": "以 Like 分配你的月費，全數回饋作者",
-      "civicLikerPaid1": "謝謝支持。提醒一下，每內容最多按 Like 5 次",
-      "civicLikerPaid5": "已經按 Like 5 次，謝謝支持，我將獲得回饋。"
+      "civicLikerPaid0": "讚賞公民月費將全數回饋作者",
+      "civicLikerPaid1": "謝謝支持。提醒一下，每內容最多拍掌 5 下",
+      "civicLikerPaid5": "已經拍掌 5 下，謝謝支持，作者將獲得回饋。"
     },
-    "becomeLiker": "登記 Liker",
+    "becomeLiker": "註冊 Liker",
     "becomeCivicLiker": "成為讚賞公民",
     "becomePaidCivicLiker": "正式成為讚賞公民",
     "likeCountLabel": "{n} Like | {n} Likes"
   },
   "HintLabel": {
-    "SignIn": "免費註冊，化讚為賞",
+    "SignIn": "註冊 Liker ID 免費按讚",
     "PleaseLike": "最多可拍掌 5 下，鼓勵作者",
     "SuperLikedPleaseTryAgainLater": "Super Like 冷卻中，逢 12 點重置" ,
     "SuperLikedFollowersWillSee": "已 Super Like 了這篇",
-    "CanSuperLike": "送出 Super Like，助此好文在 Liker Land 突圍而出",
-    "CanSuperLikeOwn": "送出 Super Like，助此好文在 Liker Land 突圍而出",
+    "CanSuperLike": "送出 Super Like，分享優質內容",
+    "CanSuperLikeOwn": "送出 Super Like，分享優質內容",
     "ToSuperLike": "成為讚賞公民 Super Like 分享好文",
     "ToSuperLikeOwn": "成為讚賞公民 Super Like 分享自己的文章"
   },
