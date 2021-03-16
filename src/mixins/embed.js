@@ -515,11 +515,7 @@ export default {
       target = '_blank',
       feature = '',
     } = {}) {
-      let url = `${LIKER_LAND_URL_BASE}/${this.id}`;
-      if (!this.isCreatorCivicLiker) {
-        url = `${url}/civic`;
-      }
-      url = `${url}?utm_source=button`;
+      let url = `${LIKER_LAND_URL_BASE}/${this.id}/civic?utm_source=button`;
       if (this.referrer) {
         url = `${url}&referrer=${encodeURIComponent(this.referrer)}`;
       }
