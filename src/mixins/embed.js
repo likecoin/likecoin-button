@@ -272,6 +272,7 @@ export default {
         documentReferrer: this.documentReferrer,
         sessionID: this.sessionId,
         type: this.buttonType,
+        integration: this.integration,
       };
     },
   },
