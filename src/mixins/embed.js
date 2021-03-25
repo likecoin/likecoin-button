@@ -51,9 +51,7 @@ const debouncedOnClick = debounce((that) => {
       {
         referrer: that.referrer,
         isCookieSupport: that.hasCookieSupport,
-        documentReferrer: that.documentReferrer,
-        sessionID: that.sessionId,
-        type: that.buttonType,
+        ...that.apiMetadata,
       },
     );
   }
@@ -165,6 +163,11 @@ export default {
       const { type = '' } = query;
       return type;
     },
+    integration() {
+      const { query } = this.$route;
+      const { integration = '' } = query;
+      return integration;
+    },
     documentReferrer() {
       if (!process.client) return '';
       let windowReferrer = '';
@@ -264,6 +267,13 @@ export default {
       }
       return this.$t('HintLabel.ToSuperLike');
     },
+    apiMetadata() {
+      return {
+        documentReferrer: this.documentReferrer,
+        sessionID: this.sessionId,
+        type: this.buttonType,
+      };
+    },
   },
   methods: {
     async getIsCookieSupport() {
@@ -313,9 +323,7 @@ export default {
             {
               referrer: this.referrer,
               isCookieSupport: this.hasCookieSupport,
-              documentReferrer: this.documentReferrer,
-              sessionID: this.sessionId,
-              type: this.buttonType,
+              ...this.apiMetadata,
             },
           )
             .then(async ({ data: myData }) => {
@@ -392,11 +400,7 @@ export default {
       this.isLoadingBookmark = true;
       if (this.bookmarkID) {
         this.hasBookmarked = false;
-        await apiDeleteMyBookmark(this.bookmarkID, {
-          documentReferrer: this.documentReferrer,
-          sessionID: this.sessionId,
-          type: this.buttonType,
-        }).then(() => {
+        await apiDeleteMyBookmark(this.bookmarkID, this.apiMetadata).then(() => {
           this.bookmarkID = null;
         }).catch((err) => {
           // eslint-disable-next-line no-console
@@ -405,11 +409,7 @@ export default {
         });
       } else {
         this.hasBookmarked = true;
-        await apiAddMyBookmark(this.referrer, {
-          documentReferrer: this.documentReferrer,
-          sessionID: this.sessionId,
-          type: this.buttonType,
-        }).then(({ data: bookmarkData }) => {
+        await apiAddMyBookmark(this.referrer, this.apiMetadata).then(({ data: bookmarkData }) => {
           this.bookmarkID = bookmarkData.id;
         }).catch((err) => {
           // eslint-disable-next-line no-console
@@ -423,11 +423,7 @@ export default {
       // NOTE: Unfollow is disabled for current UX
       if (this.isLoadingFollowStatus || this.hasFollowedCreator) return;
       this.isLoadingFollowStatus = true;
-      await apiAddMyFollower(this.id, {
-        documentReferrer: this.documentReferrer,
-        sessionID: this.sessionId,
-        type: this.buttonType,
-      }).then(() => {
+      await apiAddMyFollower(this.id, this.apiMetadata).then(() => {
         this.hasFollowedCreator = true;
       }).catch((err) => {
         // eslint-disable-next-line no-console
@@ -470,9 +466,7 @@ export default {
         referrer: this.referrer,
         tz: this.timezoneString,
         parentSuperLikeID: this.parentSuperLikeID,
-        documentReferrer: this.documentReferrer,
-        sessionID: this.sessionId,
-        type: this.buttonType,
+        ...this.apiMetadata,
       }).catch(() => {
         this.hasSuperLiked = false;
         this.cooldownProgress = cooldownProgress;
