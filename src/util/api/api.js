@@ -1,24 +1,32 @@
 import axios from '~/plugins/axios';
 import { LIKECOIN_API, LIKECOIN_MISC_API_BASE } from '@/constant';
 
-export const apiGetUserMinById = id => axios.get(`${LIKECOIN_API}/users/id/${id}/min`);
-
-export const apiGetLikeButtonMyStatus = (id, {
-  referrer = '',
-  isCookieSupport,
+function getLikeCoinButtonHeaders({
   documentReferrer = '',
   sessionID = '',
   type = '',
-}) => {
+  integration = '',
+}) {
+  return {
+    'Document-Referrer': documentReferrer,
+    'X-Likecoin-Button-Type': type,
+    'X-Likecoin-Session-ID': sessionID,
+    'X-Likecoin-Button-Integration': integration,
+  };
+}
+
+export const apiGetUserMinById = id => axios.get(`${LIKECOIN_API}/users/id/${id}/min`);
+
+export const apiGetLikeButtonMyStatus = (id, data) => {
+  const {
+    referrer = '',
+    isCookieSupport,
+  } = data;
   const cookieParam = isCookieSupport !== undefined ? `&cookie_support=${isCookieSupport ? 1 : 0}` : '';
   return axios.get(
     `${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/self?referrer=${encodeURIComponent(referrer)}${cookieParam}&show_count=0`,
     {
-      headers: {
-        'Document-Referrer': documentReferrer,
-        'X-Likecoin-Button-Type': type,
-        'X-Likecoin-Session-ID': sessionID,
-      },
+      headers: getLikeCoinButtonHeaders(data),
       withCredentials: true,
     },
   );
@@ -40,72 +48,56 @@ export const apiGetLikeButtonTotalCount = (id, referrer) => axios.get(`${LIKECOI
 
 export const apiGetLikeButtonLikerList = (id, referrer) => axios.get(`${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/list?referrer=${encodeURIComponent(referrer)}`);
 
-export const apiPostLikeButton = (id, count = 1, {
-  referrer = '',
-  isCookieSupport,
-  documentReferrer = '',
-  sessionID = '',
-  type = '',
-}) => {
+export const apiPostLikeButton = (id, count = 1, data) => {
+  const {
+    referrer = '',
+    isCookieSupport,
+  } = data;
   const cookieParam = isCookieSupport !== undefined ? `&cookie_support=${isCookieSupport ? 1 : 0}` : '';
   return axios.post(
     `${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/${count}?referrer=${encodeURIComponent(referrer)}${cookieParam}`,
     {},
     {
-      headers: {
-        'Document-Referrer': documentReferrer,
-        'X-Likecoin-Button-Type': type,
-        'X-Likecoin-Session-ID': sessionID,
-      },
+      headers: getLikeCoinButtonHeaders(data),
       withCredentials: true,
     },
   );
 };
-export const apiPostLikeButtonReadEvent = (id, {
-  referrer = '',
-  isCookieSupport,
-  documentReferrer = '',
-  sessionID = '',
-  type = '',
-}) => {
+export const apiPostLikeButtonReadEvent = (id, data) => {
+  const {
+    referrer = '',
+    isCookieSupport,
+  } = data;
   const cookieParam = isCookieSupport !== undefined ? `&cookie_support=${isCookieSupport ? 1 : 0}` : '';
   return axios.post(
     `${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/read?referrer=${encodeURIComponent(referrer)}${cookieParam}`,
     {},
     {
-      headers: {
-        'Document-Referrer': documentReferrer,
-        'X-Likecoin-Button-Type': type,
-        'X-Likecoin-Session-ID': sessionID,
-      },
+      headers: getLikeCoinButtonHeaders(data),
       withCredentials: true,
     },
   );
 };
 
-export const apiPostSuperLike = (id, {
-  referrer = '',
-  tz,
-  parentSuperLikeID,
-  documentReferrer = '',
-  sessionID = '',
-  type = '',
-}) => axios.post(
-  `${LIKECOIN_MISC_API_BASE}/like/share/${id}`,
-  {
-    referrer,
+export const apiPostSuperLike = (id, data) => {
+  const {
+    referrer = '',
     tz,
     parentSuperLikeID,
-  },
-  {
-    headers: {
-      'Document-Referrer': documentReferrer,
-      'X-Likecoin-Button-Type': type,
-      'X-Likecoin-Session-ID': sessionID,
+  } = data;
+  return axios.post(
+    `${LIKECOIN_MISC_API_BASE}/like/share/${id}`,
+    {
+      referrer,
+      tz,
+      parentSuperLikeID,
     },
-    withCredentials: true,
-  },
-);
+    {
+      headers: getLikeCoinButtonHeaders(data),
+      withCredentials: true,
+    },
+  );
+};
 
 export const apiQueryCoinGeckoInfo = () => axios.get('https://api.coingecko.com/api/v3/coins/likecoin?localization=false', { withCredentials: false });
 
@@ -118,35 +110,19 @@ export const apiGetMyBookmark = (url = '') => axios.get(
   { withCredentials: true },
 );
 
-export const apiAddMyBookmark = (url = '', {
-  documentReferrer = '',
-  sessionID = '',
-  type = '',
-}) => axios.post(
+export const apiAddMyBookmark = (url = '', data) => axios.post(
   `${LIKECOIN_API}/users/bookmarks?url=${encodeURIComponent(url)}`,
   null,
   {
-    headers: {
-      'Document-Referrer': documentReferrer,
-      'X-Likecoin-Button-Type': type,
-      'X-Likecoin-Session-ID': sessionID,
-    },
+    headers: getLikeCoinButtonHeaders(data),
     withCredentials: true,
   },
 );
 
-export const apiDeleteMyBookmark = (id = '', {
-  documentReferrer = '',
-  sessionID = '',
-  type = '',
-}) => axios.delete(
+export const apiDeleteMyBookmark = (id = '', data) => axios.delete(
   `${LIKECOIN_API}/users/bookmarks/${id}`,
   {
-    headers: {
-      'Document-Referrer': documentReferrer,
-      'X-Likecoin-Button-Type': type,
-      'X-Likecoin-Session-ID': sessionID,
-    },
+    headers: getLikeCoinButtonHeaders(data),
     withCredentials: true,
   },
 );
@@ -156,19 +132,11 @@ export const apiGetMyFollower = (id = '') => axios.get(
   { withCredentials: true },
 );
 
-export const apiAddMyFollower = (id = '', {
-  documentReferrer = '',
-  sessionID = '',
-  type = '',
-}) => axios.post(
+export const apiAddMyFollower = (id = '', data) => axios.post(
   `${LIKECOIN_API}/users/follow/users/${id}`,
   null,
   {
-    headers: {
-      'Document-Referrer': documentReferrer,
-      'X-Likecoin-Button-Type': type,
-      'X-Likecoin-Session-ID': sessionID,
-    },
+    headers: getLikeCoinButtonHeaders(data),
     withCredentials: true,
   },
 );

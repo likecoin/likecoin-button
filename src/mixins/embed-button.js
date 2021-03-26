@@ -117,9 +117,7 @@ export default {
           {
             referrer: this.referrer,
             isCookieSupport: this.hasCookieSupport,
-            documentReferrer: this.documentReferrer,
-            sessionID: this.sessionId,
-            type: this.buttonType,
+            ...this.apiMetadata,
           },
         );
       } catch (err) {
