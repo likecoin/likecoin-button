@@ -150,6 +150,7 @@ export default {
           href: `${LIKECOIN_OEMBED_API_BASE}?url=${this.encodedExternalURL}&format=xml`,
           title: this.$t('LikeButton.head.title', { name: this.displayName }),
         },
+        { rel: 'prefetch', href: this.creatorPortfolioURL },
       ],
     };
   },
