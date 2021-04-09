@@ -16,7 +16,7 @@
 
         <div class="like-panel">
           <div
-            v-if="contentKey === 'loading'"
+            v-if="isLoading"
             class="like-panel__badge"
           >
 
@@ -164,6 +164,9 @@ export default {
     };
   },
   computed: {
+    isLoading() {
+      return this.contentKey === 'loading' || this.isRedirecting;
+    },
     encodedExternalURL() {
       return encodeURIComponent(`https://${EXTERNAL_HOSTNAME}${this.$route.path}`);
     },

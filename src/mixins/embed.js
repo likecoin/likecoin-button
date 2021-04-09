@@ -147,6 +147,8 @@ export default {
       hasStorageAPIAccess: false,
 
       hasUpdateUserSignInStatus: false,
+
+      isRedirecting: false,
     };
   },
   computed: {
@@ -518,6 +520,7 @@ export default {
       if (type === 'popup') {
         window.open(url, target, feature);
       } else {
+        this.isRedirecting = true;
         window.location.href = url;
       }
     },
