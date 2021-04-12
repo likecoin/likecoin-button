@@ -16,7 +16,7 @@
 
         <div class="like-panel">
           <div
-            v-if="contentKey === 'loading'"
+            v-if="isLoading"
             class="like-panel__badge"
           >
 
@@ -107,7 +107,11 @@ import mixin from '~/mixins/embed';
 
 import { checkIsMobileClient, checkIsTrustClient } from '~/util/client';
 import { logTrackerEvent } from '@/util/EventLogger';
-import { EXTERNAL_HOSTNAME, LIKECOIN_OEMBED_API_BASE } from '@/constant';
+import {
+  EXTERNAL_HOSTNAME,
+  LIKECOIN_OEMBED_API_BASE,
+  LIKER_LAND_URL_BASE,
+} from '@/constant';
 
 export default {
   components: {
@@ -150,6 +154,7 @@ export default {
           href: `${LIKECOIN_OEMBED_API_BASE}?url=${this.encodedExternalURL}&format=xml`,
           title: this.$t('LikeButton.head.title', { name: this.displayName }),
         },
+        { rel: 'preconnect', href: LIKER_LAND_URL_BASE },
       ],
     };
   },
@@ -164,6 +169,9 @@ export default {
     };
   },
   computed: {
+    isLoading() {
+      return this.contentKey === 'loading' || this.isRedirecting;
+    },
     encodedExternalURL() {
       return encodeURIComponent(`https://${EXTERNAL_HOSTNAME}${this.$route.path}`);
     },

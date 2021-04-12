@@ -147,6 +147,8 @@ export default {
       hasStorageAPIAccess: false,
 
       hasUpdateUserSignInStatus: false,
+
+      isRedirecting: false,
     };
   },
   computed: {
@@ -274,6 +276,14 @@ export default {
         type: this.buttonType,
         integration: this.integration,
       };
+    },
+
+    creatorPortfolioURL() {
+      let url = `${LIKER_LAND_URL_BASE}/${this.id}/civic?utm_source=button`;
+      if (this.referrer) {
+        url = `${url}&referrer=${encodeURIComponent(this.referrer)}`;
+      }
+      return url;
     },
   },
   methods: {
@@ -510,14 +520,11 @@ export default {
       target = '_blank',
       feature = '',
     } = {}) {
-      let url = `${LIKER_LAND_URL_BASE}/${this.id}/civic?utm_source=button`;
-      if (this.referrer) {
-        url = `${url}&referrer=${encodeURIComponent(this.referrer)}`;
-      }
-
+      const url = this.creatorPortfolioURL;
       if (type === 'popup') {
         window.open(url, target, feature);
       } else {
+        this.isRedirecting = true;
         window.location.href = url;
       }
     },
