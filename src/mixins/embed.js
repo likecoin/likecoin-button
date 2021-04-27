@@ -30,7 +30,7 @@ import {
   apiGetSupportingUserByID,
 } from '~/util/api/api';
 
-import { checkHasStorageAPIAccess } from '~/util/client';
+import { checkHasStorageAPIAccess, checkIsFirefoxStrictMode } from '~/util/client';
 import { handleQueryStringInUrl } from '~/util/url';
 
 const MAX_LIKE = 5;
@@ -291,10 +291,13 @@ export default {
       let res = false;
       try {
         this.hasStorageAPIAccess = await checkHasStorageAPIAccess();
+        // Cross-site Cookie randomly disappear in fx strict mode
+        const isFirefoxStrictMode = checkIsFirefoxStrictMode();
         res = process.client
           && navigator.cookieEnabled
           && this.hasStorageAPIAccess
-          && isCookieEnabled();
+          && isCookieEnabled()
+          && !isFirefoxStrictMode;
       } catch (err) {
         console.error(err);
         return false;
