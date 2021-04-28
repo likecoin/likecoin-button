@@ -63,6 +63,13 @@ export async function checkHasStorageAPIAccess() {
   }
 }
 
+export function checkIsFirefoxStrictMode() {
+  const isFireFox = navigator.userAgent.includes('Firefox');
+  const DNT = window.doNotTrack || navigator.doNotTrack;
+  // We cannot detect ETP strict mode, but it sets DNT to 1.
+  return (isFireFox && DNT && DNT === '1');
+}
+
 export async function requestStorageAPIAccess() {
   if (typeof document.requestStorageAccess !== 'function') return false;
   try {
