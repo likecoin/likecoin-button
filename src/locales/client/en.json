@@ -63,7 +63,7 @@
       "supportUserNoLogin": "Support {user}",
       "loginAdvice": "{login} the writer you like will generate more LikeCoin",
       "numLikesForArticle": "{numOfLikes} Like from {numOfLikers} people",
-      "registerNow": "Register"
+      "registerNow": "Monthly support"
     },
     "button": {
       "login": "Login to Liker ID",
