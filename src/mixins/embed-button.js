@@ -1,6 +1,4 @@
-import {
-  LIKE_CO_HOSTNAME,
-} from '@/constant';
+import { LIKE_CO_HOSTNAME } from '@/constant';
 
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 import { isAndroid, isFacebookBrowser } from '~/util/client';
@@ -51,11 +49,8 @@ export default {
   },
   async mounted() {
     try {
-      window.top.addEventListener('message', this.handleWindowMessage);
       // Notify app when button is mounted
-      if (window.top.ReactNativeWebView) {
-        window.top.ReactNativeWebView.postMessage(JSON.stringify({ action: 'MOUNTED' }));
-      }
+      window.top.postMessage({ action: 'MOUNTED' }, this.referrer);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
