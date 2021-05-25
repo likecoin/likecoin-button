@@ -50,10 +50,15 @@ export default {
     };
   },
   async mounted() {
-    window.top.addEventListener('message', this.handleWindowMessage);
-    // Notify app when button is mounted
-    if (window.top.ReactNativeWebView) {
-      window.top.ReactNativeWebView.postMessage(JSON.stringify({ action: 'MOUNTED' }));
+    try {
+      window.top.addEventListener('message', this.handleWindowMessage);
+      // Notify app when button is mounted
+      if (window.top.ReactNativeWebView) {
+        window.top.ReactNativeWebView.postMessage(JSON.stringify({ action: 'MOUNTED' }));
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
     }
     window.addEventListener('message', this.handleWindowMessage);
     if (this.isPreview) return;
