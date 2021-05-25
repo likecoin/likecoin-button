@@ -5,7 +5,8 @@
       :like-button-label="likeButtonLabel"
       :cta-button-label="ctaButtonLabel"
       :cta-button-preset="ctaButtonPreset"
-      :hintLabel="hintText"
+      :hint-label="hintText"
+      :is-show-like-button="isShowLikeButton"
       @click-like-button-label="onClickLikeStats"
       @click-cta-button="onClickCTAButton"
     )

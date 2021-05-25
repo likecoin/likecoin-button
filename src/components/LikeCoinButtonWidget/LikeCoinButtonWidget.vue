@@ -25,11 +25,15 @@
       </slot>
 
       <!-- Like Button -->
-      <slot name="like-button">
+      <slot
+        v-if="isShowLikeButton"
+        name="like-button"
+      >
         <LikeButton />
       </slot>
       <!-- Like Button Label -->
       <foreignObject
+        v-if="isShowLikeButton"
         :y="labelY"
         x="28"
         width="100"
@@ -115,6 +119,10 @@ export default {
     hintLabel: {
       type: String,
       default: undefined,
+    },
+    isShowLikeButton: {
+      type: Boolean,
+      default: true,
     },
   },
   computed: {

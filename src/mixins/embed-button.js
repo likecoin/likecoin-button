@@ -21,6 +21,7 @@ export default {
       isInteracted: false,
       isReadTimerEnded: false,
       readTimer: null,
+      isShowLikeButton: true,
     };
   },
   computed: {
@@ -49,6 +50,16 @@ export default {
     };
   },
   async mounted() {
+    try {
+      window.top.addEventListener('message', this.handleWindowMessage);
+      // Notify app when button is mounted
+      if (window.top.ReactNativeWebView) {
+        window.top.ReactNativeWebView.postMessage(JSON.stringify({ action: 'MOUNTED' }));
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
     window.addEventListener('message', this.handleWindowMessage);
     if (this.isPreview) return;
     this.readTimer = setTimeout(() => {
@@ -147,6 +158,10 @@ export default {
               hash: this.$route.hash,
               query: { ...this.$route.query, referrer },
             });
+            break;
+          }
+          case 'DISABLE_BUTTON': {
+            this.isShowLikeButton = false;
             break;
           }
           default:
