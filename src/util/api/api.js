@@ -63,21 +63,6 @@ export const apiPostLikeButton = (id, count = 1, data) => {
     },
   );
 };
-export const apiPostLikeButtonReadEvent = (id, data) => {
-  const {
-    referrer = '',
-    isCookieSupport,
-  } = data;
-  const cookieParam = isCookieSupport !== undefined ? `&cookie_support=${isCookieSupport ? 1 : 0}` : '';
-  return axios.post(
-    `${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/read?referrer=${encodeURIComponent(referrer)}${cookieParam}`,
-    {},
-    {
-      headers: getLikeCoinButtonHeaders(data),
-      withCredentials: true,
-    },
-  );
-};
 
 export const apiPostSuperLike = (id, data) => {
   const {

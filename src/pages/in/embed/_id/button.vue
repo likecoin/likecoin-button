@@ -1,5 +1,5 @@
 <template lang="pug">
-  div(@click="onClickInteraction")
+  div
     LikeCoinButtonWidget(
       :layout="widgetLayout"
       :like-button-label="likeButtonLabel"
@@ -76,7 +76,6 @@ export default {
     return {
       isUserFetched: false,
       isShowAltMode: false,
-      intersectionObserver: null,
     };
   },
   computed: {
@@ -99,30 +98,11 @@ export default {
       this.isShowAltMode = true;
       window.addEventListener('message', this.onReceiveMessage, false);
     }
-    if (window.IntersectionObserver) {
-      if (!this.intersectionObserver) {
-        this.intersectionObserver = new IntersectionObserver(([entry]) => {
-          if (entry && entry.isIntersecting) {
-            this.setIsDisplayed();
-          }
-        });
-      }
-      this.intersectionObserver.observe(this.$el);
-    }
   },
   beforeDestory() {
     window.removeEventListener('message', this.onReceiveMessage, false);
   },
-  destroyed() {
-    if (this.intersectionObserver) {
-      this.intersectionObserver.disconnect();
-      this.intersectionObserver = null;
-    }
-  },
   methods: {
-    async onClickInteraction() {
-      this.setIsInteracted();
-    },
     async doLogin(action) {
       if (this.isPreview) return;
       this.postSignInAction = action;

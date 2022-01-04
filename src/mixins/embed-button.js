@@ -2,23 +2,14 @@ import { LIKE_CO_HOSTNAME } from '@/constant';
 
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 import { isAndroid, isFacebookBrowser } from '~/util/client';
-import {
-  apiPostLikeButtonReadEvent,
-} from '~/util/api/api';
 
 import mixin from './embed';
-
-const READ_TIMEOUT = 10000;
 
 export default {
   mixins: [mixin],
   data() {
     return {
       isUserFetched: false,
-      isDisplayed: false,
-      isInteracted: false,
-      isReadTimerEnded: false,
-      readTimer: null,
       isShowLikeButton: true,
     };
   },
@@ -57,9 +48,6 @@ export default {
     }
     window.addEventListener('message', this.handleWindowMessage);
     if (this.isPreview) return;
-    this.readTimer = setTimeout(() => {
-      this.isReadTimerEnded = true;
-    }, READ_TIMEOUT);
     this.hasCookieSupport = await this.getIsCookieSupport();
     this.parentSuperLikeID = this.getParentSuperLikeID();
     await this.updateUserSignInStatus();
@@ -72,15 +60,6 @@ export default {
   watch: {
     referrer() {
       this.updateUserSignInStatus();
-    },
-    isDisplayed() {
-      this.checkShouldPostReadEvent();
-    },
-    isInteracted() {
-      this.checkShouldPostReadEvent();
-    },
-    isReadTimerEnded() {
-      this.checkShouldPostReadEvent();
     },
   },
   methods: {
@@ -101,41 +80,6 @@ export default {
         'menubar=no,location=no,width=576,height=768',
       );
       this.$root.$emit('openPopupNoticeOverlay', w);
-    },
-    setIsDisplayed() {
-      this.isDisplayed = true;
-    },
-    setIsInteracted() {
-      this.isInteracted = true;
-    },
-    async checkShouldPostReadEvent() {
-      if (!this.isRead
-        && ((this.isReadTimerEnded && this.isDisplayed) || this.isInteracted)) {
-        await this.postReadEvent();
-      }
-    },
-    async postReadEvent() {
-      if (this.isRead) return;
-      this.isRead = true;
-      try {
-        await apiPostLikeButtonReadEvent(
-          this.id,
-          {
-            referrer: this.referrer,
-            isCookieSupport: this.hasCookieSupport,
-            ...this.apiMetadata,
-          },
-        );
-      } catch (err) {
-        const errMsg = err.message || err.toString();
-        if (
-          !errMsg.includes('timeout')
-          && !errMsg.includes('Network Error')
-        ) {
-          console.error(err);
-        }
-      }
-      if (this.readTimer) clearTimeout(this.readTimer);
     },
     async handleWindowMessage(event) {
       const { data } = event;
