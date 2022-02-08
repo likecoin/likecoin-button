@@ -65,10 +65,13 @@
         width="300"
         height="36"
       >
-        <button
-          @click="$emit('click-cta-button')"
+        <a
           :class="ctaButtonClass"
-        >{{ ctaButtonLabel }}</button>
+          @click="$emit('click-cta-button')"
+          :href="ctaHref"
+          target="_blank"
+          rel="noreferrer noopener"
+        >{{ ctaButtonLabel }}</a>
       </foreignObject>
     </svg>
   </div>
@@ -78,6 +81,8 @@
 import Identity from '../Identity/Identity';
 import LikeButton from '../LikeButtonV2/LikeButtonV2';
 import SaveButton from '../SaveButton/SaveButton';
+
+import { CLW3_NOTICE_URL } from '../../constant';
 
 export const LAYOUT_DEFAULT = 'default';
 export const LAYOUT_STICKY_BOTTOM = 'sticky-bottom';
@@ -221,6 +226,9 @@ export default {
         `likecoin-button-widget__cta-button--${this.ctaButtonPreset}`,
       ];
     },
+    ctaHref() {
+      return CLW3_NOTICE_URL;
+    },
   },
 };
 </script>
@@ -241,12 +249,15 @@ export default {
 
   box-sizing: border-box;
 
+  width: max-content;
   height: 36px;
   padding: 4px 36px;
 
   transition-timing-function: ease;
   transition-duration: 0.2s;
   transition-property: border-color, background-color;
+
+  text-decoration: none;
 
   color: #28646e;
   border-radius: 12px;

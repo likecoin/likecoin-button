@@ -38,6 +38,8 @@
         <a
           :href="ctaURL"
           class="cta-button"
+          target="_blank"
+          rel="noreferrer noopener"
         >{{ $t('CTA.CivicLiker.Button') }}</a>
       </template>
     </like-form>
@@ -48,7 +50,7 @@
 <script>
 import LikeForm from '~/components/LikeForm';
 
-import { handleQueryStringInUrl } from '@/util/url';
+import { CLW3_NOTICE_URL } from '~/constant';
 
 export default {
   name: 'cta-id-civic',
@@ -56,19 +58,8 @@ export default {
     LikeForm,
   },
   computed: {
-    urlReferrer() {
-      const { query } = this.$route;
-      let { referrer = '' } = query;
-      if (referrer) {
-        referrer = handleQueryStringInUrl(referrer);
-      }
-      return referrer;
-    },
-    referrer() {
-      return this.urlReferrer;
-    },
     ctaURL() {
-      return `https://liker.land/civic?from=${this.$route.params.id}&referrer=${encodeURIComponent(this.referrer)}&utm_source=button`;
+      return CLW3_NOTICE_URL;
     },
     shouldShowBackButton() {
       return this.$route.query.show_back === '1';
