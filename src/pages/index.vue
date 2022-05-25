@@ -1,7 +1,7 @@
 <script>
 export default {
   fetch({ redirect }) {
-    redirect('https://like.co');
+    redirect('https://docs.like.co/user-guide/creator');
   },
 };
 </script>
