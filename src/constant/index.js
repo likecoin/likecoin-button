@@ -35,6 +35,7 @@ export const QUERY_STRING_TO_REMOVE = [
   'utm_campaign',
   'utm_term',
   'utm_content',
+  'ldtag_cl',
 ];
 
 export const MEDIUM_QUERY_STRING_TO_REMOVE = [
