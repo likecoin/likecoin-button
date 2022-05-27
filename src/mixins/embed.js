@@ -22,12 +22,12 @@ import {
   apiGetLikeButtonMyStatus,
   apiGetLikeButtonSelfCount,
   apiGetSuperLikeMyStatus,
-  apiGetMyBookmark,
-  apiAddMyBookmark,
-  apiDeleteMyBookmark,
-  apiGetMyFollower,
-  apiAddMyFollower,
   apiGetSupportingUserByID,
+  apiGetDataMinByIscnId,
+  apiPostLikeButtonByIscnId,
+  apiGetLikeButtonMyStatusByIscnId,
+  apiGetLikeButtonSelfCountByIscnId,
+  apiGetLikeButtonTotalCountByIscnId,
 } from '~/util/api/api';
 
 import { checkHasStorageAPIAccess, checkIsFirefoxStrictMode } from '~/util/client';
@@ -45,18 +45,20 @@ const debouncedOnClick = debounce((that) => {
   const count = that.likeCount - that.likeSent;
   that.likeSent += count;
   if (count > 0) {
-    apiPostLikeButton(
-      that.id,
-      count,
-      {
+    if (that.iscnId) {
+      apiPostLikeButtonByIscnId(that.iscnId, count, {
+        isCookieSupport: that.hasCookieSupport,
+        ...that.apiMetadata,
+      });
+    } else {
+      apiPostLikeButton(that.id, count, {
         referrer: that.referrer,
         isCookieSupport: that.hasCookieSupport,
         ...that.apiMetadata,
-      },
-    );
+      });
+    }
   }
   that.totalLike += count;
-  /* eslint-enable no-param-reassign */
 }, 500);
 
 export default {
@@ -80,35 +82,51 @@ export default {
     const { id } = params;
     let { type = '' } = query;
     const { referrer = '' } = query;
+    const { iscn_id: iscnId } = query;
     if (!type && referrer.match(MEDIUM_MEDIA_REGEX)) {
       type = 'medium';
     }
 
-    return Promise.all([
-      apiGetUserMinById(id),
-    ]).then((res) => {
-      const {
-        displayName,
-        avatar,
-        isPreRegCivicLiker,
-        isCivicLikerTrial,
-        isSubscribedCivicLiker,
-        civicLikerSince,
-      } = res[0].data;
-
+    if (id !== 'iscn') {
+      return Promise.all([apiGetUserMinById(id)])
+        .then((res) => {
+          const {
+            displayName,
+            avatar,
+            isPreRegCivicLiker,
+            isCivicLikerTrial,
+            isSubscribedCivicLiker,
+            civicLikerSince,
+          } = res[0].data;
+          return {
+            id,
+            displayName: displayName || id,
+            avatar,
+            isPreRegCivicLiker,
+            isCivicLikerTrial,
+            isSubscribedCivicLiker,
+            civicLikerSince,
+            amount,
+          };
+        })
+        .catch((err) => {
+          console.error(err); // eslint-disable-line no-console
+          error({ statusCode: 404, message: '' });
+        });
+    }
+    return Promise.all([apiGetDataMinByIscnId(iscnId)]).then((res) => {
+      const metadata = res && res[0].data.records[0].data.contentMetadata;
+      const stakeholders = res && res[0].data.records[0].data.stakeholders;
+      const iscnName = metadata && (metadata.name || metadata.title);
+      const iscnStakeHolder = stakeholders && stakeholders[0] && stakeholders[0].entity.name;
       return {
         id,
-        displayName: displayName || id,
-        avatar,
-        isPreRegCivicLiker,
-        isCivicLikerTrial,
-        isSubscribedCivicLiker,
-        civicLikerSince,
+        displayName: iscnStakeHolder,
+        iscnId,
         amount,
+        avatar: `https://avatars.dicebear.com/api/identicon/${iscnId}.svg`,
+        iscnName,
       };
-    }).catch((err) => {
-      console.error(err); // eslint-disable-line no-console
-      error({ statusCode: 404, message: '' });
     });
   },
   data() {
@@ -186,8 +204,13 @@ export default {
       return this.urlReferrer || '';
     },
     referrerQueryString() {
-      const { id, referrer } = this;
-      const referrerQuery = `${referrer ? `&referrer=${encodeURIComponent(referrer)}` : ''}`;
+      const { id, referrer, iscnId } = this;
+      const referrerQuery = `${
+        referrer ? `&referrer=${encodeURIComponent(referrer)}` : ''
+      }`;
+      if (iscnId) {
+        return `?from=iscn_id=${iscnId}&utm_source=button`;
+      }
       return `?from=${encodeURIComponent(id)}${referrerQuery}&utm_source=button`;
     },
 
@@ -222,7 +245,7 @@ export default {
       return this.$tc('LikeCountLabel', this.totalLike, { count: this.totalLike });
     },
     ctaButtonLabel() {
-      return this.$t(`CTA.CivicLiker.${this.isSupportingCreator ? 'Subscribing' : 'Button'}`);
+      return this.$t('CTA.CivicLiker.DepubSpace');
     },
     ctaButtonPreset() {
       return this.isSupportingCreator ? 'special' : 'default';
@@ -310,53 +333,55 @@ export default {
       return getCookie('likebutton_superlike_id');
     },
     async updateSuperLikeStatus() {
-      await apiGetSuperLikeMyStatus(this.timezoneString, this.referrer).then(({ data }) => {
-        const {
-          isSuperLiker,
-          canSuperLike,
-          lastSuperLikeInfos,
-          nextSuperLikeTs,
-          cooldown,
-        } = data;
-        this.isSuperLiker = isSuperLiker;
-        this.canSuperLike = canSuperLike;
-        // HACK: Assume if `hasSuperLiked` has set to `true`, don't override it as
-        // `lastSuperLikeInfos` may return empty array even the Super Like action is success
-        if (!this.hasSuperLiked) {
-          this.hasSuperLiked = !!(lastSuperLikeInfos && lastSuperLikeInfos.length);
-        }
-        this.nextSuperLikeTime = nextSuperLikeTs;
-        this.cooldownProgress = cooldown;
-      });
+      if (!this.iscnId) {
+        await apiGetSuperLikeMyStatus(this.timezoneString, this.referrer).then(({ data }) => {
+          const {
+            isSuperLiker,
+            canSuperLike,
+            lastSuperLikeInfos,
+            nextSuperLikeTs,
+            cooldown,
+          } = data;
+          this.isSuperLiker = isSuperLiker;
+          this.canSuperLike = canSuperLike;
+          // HACK: Assume if `hasSuperLiked` has set to `true`, don't override it as
+          // `lastSuperLikeInfos` may return empty array even the Super Like action is success
+          if (!this.hasSuperLiked) {
+            this.hasSuperLiked = !!(lastSuperLikeInfos && lastSuperLikeInfos.length);
+          }
+          this.nextSuperLikeTime = nextSuperLikeTs;
+          this.cooldownProgress = cooldown;
+        });
+      }
+      // TO-DO: handle updateSuperLikeStatus for ISCN
     },
     async updateUserSignInStatus() {
       try {
-        await Promise.all([
-          apiGetLikeButtonMyStatus(
-            this.id,
-            {
-              referrer: this.referrer,
+        if (this.iscnId) {
+          await Promise.all([
+            apiGetLikeButtonMyStatusByIscnId(this.iscnId, {
               isCookieSupport: this.hasCookieSupport,
               ...this.apiMetadata,
-            },
-          )
-            .then(async ({ data: myData }) => {
+            }).then(async ({ data: myData }) => {
               const {
                 liker,
                 isSubscribed,
                 isTrialSubscriber,
                 serverCookieSupported,
                 civicLikerVersion,
+                canLike,
               } = myData;
               this.isLoggedIn = !!liker;
-              this.isCreator = liker === this.id;
+              this.isCreator = !canLike;
               this.isSubscribed = isSubscribed;
               this.isTrialSubscriber = isTrialSubscriber;
               this.civicLikerVersion = civicLikerVersion;
-              if (this.hasCookieSupport && serverCookieSupported !== undefined) {
+              if (
+                this.hasCookieSupport
+                && serverCookieSupported !== undefined
+              ) {
                 this.hasCookieSupport = serverCookieSupported;
               }
-
               if (this.isLoggedIn) {
                 if (this.$sentry) {
                   this.$sentry.configureScope((scope) => {
@@ -364,87 +389,108 @@ export default {
                   });
                 }
                 const promises = [
-                  this.updateSuperLikeStatus(),
+                  // TO-DO: updateSuperLikeStatusByIscn()
                   setTrackerUser({ user: liker }),
-                  apiGetMyBookmark(this.referrer).then(({ data: bookmarkData }) => {
-                    if (bookmarkData.id) {
-                      this.bookmarkID = bookmarkData.id;
-                      this.hasBookmarked = true;
-                    }
-                  }).catch(() => {}),
-                  apiGetMyFollower(this.id).then(({ data: followData }) => {
-                    this.hasFollowedCreator = followData && followData.isFollowed;
-                  }).catch(() => {}),
                 ];
-                if (this.civicLikerVersion === 2) {
-                  promises.push(apiGetSupportingUserByID(this.id)
-                    .then(({ data: supportingData }) => {
-                      const { quantity } = supportingData;
-                      this.supportingQuantity = quantity;
-                    }).catch(() => {}));
-                }
                 await Promise.all(promises);
               }
-              this.isLoadingBookmark = false;
-              this.isLoadingFollowStatus = false;
               return Promise.resolve;
             }),
-          apiGetLikeButtonSelfCount(this.id, this.referrer).then(({ data: selfData }) => {
-            const { count, liker } = selfData;
-            if (!this.liker) {
-              this.liker = liker;
-              this.isLoggedIn = !!liker;
-            }
-            this.likeCount = count;
-            this.likeSent = count;
-          }),
-          apiGetLikeButtonTotalCount(this.id, this.referrer).then(({ data: totalData }) => {
-            const { total } = totalData;
-            this.totalLike = total;
-          }),
-        ]);
+            apiGetLikeButtonSelfCountByIscnId(this.iscnId).then(
+              ({ data: selfData }) => {
+                const { count, liker } = selfData;
+                if (!this.liker) {
+                  this.liker = liker;
+                  this.isLoggedIn = !!liker;
+                }
+                this.likeCount = count;
+                this.likeSent = count;
+              },
+            ),
+            apiGetLikeButtonTotalCountByIscnId(this.iscnId).then(
+              ({ data: totalData }) => {
+                const { total } = totalData;
+                this.totalLike = total;
+              },
+            ),
+          ]);
+        } else {
+          await Promise.all([
+            apiGetLikeButtonMyStatus(this.id, {
+              referrer: this.referrer,
+              isCookieSupport: this.hasCookieSupport,
+              ...this.apiMetadata,
+            })
+              .then(async ({ data: myData }) => {
+                const {
+                  liker,
+                  isSubscribed,
+                  isTrialSubscriber,
+                  serverCookieSupported,
+                  civicLikerVersion,
+                } = myData;
+                this.isLoggedIn = !!liker;
+                this.isCreator = liker === this.id;
+                this.isSubscribed = isSubscribed;
+                this.isTrialSubscriber = isTrialSubscriber;
+                this.civicLikerVersion = civicLikerVersion;
+                if (
+                  this.hasCookieSupport
+                && serverCookieSupported !== undefined
+                ) {
+                  this.hasCookieSupport = serverCookieSupported;
+                }
+
+                if (this.isLoggedIn) {
+                  if (this.$sentry) {
+                    this.$sentry.configureScope((scope) => {
+                      scope.setUser({ id: liker });
+                    });
+                  }
+                  const promises = [
+                    this.updateSuperLikeStatus(),
+                    setTrackerUser({ user: liker }),
+                  ];
+                  if (this.civicLikerVersion === 2) {
+                    promises.push(
+                      apiGetSupportingUserByID(this.id)
+                        .then(({ data: supportingData }) => {
+                          const { quantity } = supportingData;
+                          this.supportingQuantity = quantity;
+                        })
+                        .catch(() => {}),
+                    );
+                  }
+                  await Promise.all(promises);
+                }
+                this.isLoadingBookmark = false;
+                this.isLoadingFollowStatus = false;
+                return Promise.resolve;
+              }),
+            apiGetLikeButtonSelfCount(this.id, this.referrer).then(
+              ({ data: selfData }) => {
+                const { count, liker } = selfData;
+                if (!this.liker) {
+                  this.liker = liker;
+                  this.isLoggedIn = !!liker;
+                }
+                this.likeCount = count;
+                this.likeSent = count;
+              },
+            ),
+            apiGetLikeButtonTotalCount(this.id, this.referrer).then(
+              ({ data: totalData }) => {
+                const { total } = totalData;
+                this.totalLike = total;
+              },
+            ),
+          ]);
+        }
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
       } finally {
         this.hasUpdateUserSignInStatus = true;
       }
-    },
-    async toggleBookmark() {
-      if (this.isLoadingBookmark) return;
-      this.isLoadingBookmark = true;
-      if (this.bookmarkID) {
-        this.hasBookmarked = false;
-        await apiDeleteMyBookmark(this.bookmarkID, this.apiMetadata).then(() => {
-          this.bookmarkID = null;
-        }).catch((err) => {
-          // eslint-disable-next-line no-console
-          console.error(err);
-          this.hasBookmarked = true;
-        });
-      } else {
-        this.hasBookmarked = true;
-        await apiAddMyBookmark(this.referrer, this.apiMetadata).then(({ data: bookmarkData }) => {
-          this.bookmarkID = bookmarkData.id;
-        }).catch((err) => {
-          // eslint-disable-next-line no-console
-          console.error(err);
-          this.hasBookmarked = false;
-        });
-      }
-      this.isLoadingBookmark = false;
-    },
-    async toggleFollow() {
-      // NOTE: Unfollow is disabled for current UX
-      if (this.isLoadingFollowStatus || this.hasFollowedCreator) return;
-      this.isLoadingFollowStatus = true;
-      await apiAddMyFollower(this.id, this.apiMetadata).then(() => {
-        this.hasFollowedCreator = true;
-      }).catch((err) => {
-        // eslint-disable-next-line no-console
-        console.error(err);
-        this.hasFollowedCreator = false;
-      });
-      this.isLoadingFollowStatus = false;
     },
     signUp(options = { isNewWindow: true }) {
       if (options.isNewWindow) {
@@ -485,12 +531,15 @@ export default {
         this.hasSuperLiked = false;
         this.cooldownProgress = cooldownProgress;
       });
+      // TO-DO: handle new superLike for ISCN
     },
     openLikeStats(options = { isNewWindow: true }) {
-      const { id, referrer } = this;
+      const { id, referrer, iscnId } = this;
       if (options.isNewWindow) {
         window.open(
-          `/in/embed/${id}/list${this.referrerQueryString}`,
+          iscnId
+            ? `/in/embed/${id}/list?iscn_id=${iscnId}`
+            : `/in/embed/${id}/list${this.referrerQueryString}`,
           LIKE_STATS_WINDOW_NAME,
           'menubar=no,location=no,width=576,height=768',
         );
@@ -500,6 +549,7 @@ export default {
           params: { id },
           query: {
             referrer,
+            iscn_id: iscnId,
             show_back: '1',
           },
         });
@@ -514,15 +564,12 @@ export default {
         '_blank',
         'menubar=no,location=no,width=527,height=700',
       );
+      // TO-DO: handle on click CTA to go depub.SPACE
     },
     onClickCooldown() {
       this.hasClickCooldown = true;
     },
-    goToPortfolio({
-      type = 'popup',
-      target = '_blank',
-      feature = '',
-    } = {}) {
+    goToPortfolio({ type = 'popup', target = '_blank', feature = '' } = {}) {
       const url = this.creatorPortfolioURL;
       if (type === 'popup') {
         window.open(url, target, feature);
@@ -530,6 +577,7 @@ export default {
         this.isRedirecting = true;
         window.location.href = url;
       }
+      // TO-DO: handle go to portfolio
     },
   },
 };
