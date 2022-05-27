@@ -209,9 +209,9 @@ export default {
         referrer ? `&referrer=${encodeURIComponent(referrer)}` : ''
       }`;
       if (iscnId) {
-        return `?from=iscn_id=${iscnId}&utm_source=button`;
+        return `?iscn_id=${iscnId}&utm_source=button`;
       }
-      return `?from=${encodeURIComponent(id)}${referrerQuery}&utm_source=button`;
+      return `?=${encodeURIComponent(id)}${referrerQuery}&utm_source=button`;
     },
 
     signUpURL() {
