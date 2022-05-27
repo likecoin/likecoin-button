@@ -1,5 +1,5 @@
 import axios from '~/plugins/axios';
-import { LIKECOIN_API, LIKECOIN_MISC_API_BASE } from '@/constant';
+import { LIKECOIN_API, LIKECOIN_MISC_API_BASE, ISCN_RAW_DATA_ENDPOINT } from '@/constant';
 
 function getLikeCoinButtonHeaders({
   documentReferrer = '',
@@ -130,3 +130,54 @@ export const apiGetSupportingUserByID = (id = '') => axios.get(
   `${LIKECOIN_API}/civic/support/users/${id}`,
   { withCredentials: true },
 );
+
+// api for ISCN state
+
+export const apiGetDataMinByIscnId = (iscnId = '') => axios.get(`${ISCN_RAW_DATA_ENDPOINT}${iscnId}`);
+
+export const apiGetLikeButtonMyStatusByIscnId = (iscnId, data) => {
+  const {
+    isCookieSupport,
+  } = data;
+  const cookieParam = isCookieSupport !== undefined ? `&cookie_support=${isCookieSupport ? 1 : 0}` : '';
+  return axios.get(
+    `${LIKECOIN_API}/like/likebutton/iscn/self?iscn_id=${iscnId}${cookieParam}&show_count=0`,
+    {
+      headers: getLikeCoinButtonHeaders(data),
+      withCredentials: true,
+    },
+  );
+};
+
+export const apiGetLikeButtonSelfCountByIscnId = iscnId => axios.get(
+  `${LIKECOIN_API}/like/likebutton/iscn/self/like?iscn_id=${iscnId}`, { withCredentials: true },
+);
+
+export const apiGetLikeButtonTotalCountByIscnId = iscnId => axios.get(
+  `${LIKECOIN_API}/like/likebutton/iscn/total?iscn_id=${iscnId}`,
+);
+
+export const apiPostLikeButtonByIscnId = (iscnId, count = 1, data) => {
+  const {
+    isCookieSupport,
+  } = data;
+  const cookieParam = isCookieSupport !== undefined ? `&cookie_support=${isCookieSupport ? 1 : 0}` : '';
+  return axios.post(
+    `${LIKECOIN_API}/like/likebutton/iscn/${count}?iscn_id=${iscnId}${cookieParam}`,
+    {},
+    {
+      headers: getLikeCoinButtonHeaders(data),
+      withCredentials: true,
+    },
+  );
+};
+
+export const apiGetLikeButtonLikerListByIscnId = iscnId => axios.get(
+  `${LIKECOIN_API}/like/likebutton/iscn/list?iscn_id=${iscnId}`,
+);
+
+// TO-DO: handle superLike for ISCN
+// export const apiGetSuperLikeMyStatusByIscnId = (tz = '', iscnId = '') => axios.get(
+//   `${LIKECOIN_API}/like/share/self?tz=${tz}&iscn_id=${iscnId}`,
+//   { withCredentials: true },
+// );
