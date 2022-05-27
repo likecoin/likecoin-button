@@ -55,7 +55,7 @@
       <foreignObject
         v-if="shouldShowCta"
         :x="saveSlotProps.x"
-        :y="saveSlotProps.y + 58"
+        :y="saveSlotProps.y"
         width="300"
         height="36"
       >
@@ -175,7 +175,7 @@ export default {
     saveSlotProps() {
       return {
         x: 148,
-        y: 72,
+        y: 130,
       };
     },
     labelY() {
@@ -229,56 +229,3 @@ export default {
   },
 };
 </script>
-
-<style lang="css">
-.likecoin-button-widget__label-button {
-  background-color: transparent;
-}
-.likecoin-button-widget__label-button:not([disabled]):hover {
-  background-color: #f4f4f4;
-}
-.likecoin-button-widget__label-button:not([disabled]):active {
-  background-color: #e6e6e6;
-}
-
-.likecoin-button-widget__cta-button {
-  display: block;
-
-  box-sizing: border-box;
-
-  width: max-content;
-  height: 36px;
-  padding: 4px 36px;
-
-  transition-timing-function: ease;
-  transition-duration: 0.2s;
-  transition-property: border-color, background-color;
-
-  text-decoration: none;
-
-  color: #28646e;
-  border-radius: 12px;
-  outline: none;
-
-  font-size: 14px;
-  font-weight: 600;
-}
-.likecoin-button-widget__cta-button.likecoin-button-widget__cta-button--default {
-  border: 3px solid #aaf1e7;
-  background-color: white;
-}
-.likecoin-button-widget__cta-button.likecoin-button-widget__cta-button--default:hover {
-  border-color: #50e3c2;
-}
-.likecoin-button-widget__cta-button.likecoin-button-widget__cta-button--default:active {
-  background-color: #d2f0f0;
-}
-
-.likecoin-button-widget__cta-button.likecoin-button-widget__cta-button--special {
-  border: none;
-  background: linear-gradient(78deg, #d2f0f0, #f0e6b4);
-}
-.likecoin-button-widget__cta-button.likecoin-button-widget__cta-button--special:hover {
-  background: linear-gradient(78deg, #cae6e6, #e9dfae);
-}
-</style>
