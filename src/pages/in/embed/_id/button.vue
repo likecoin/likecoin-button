@@ -1,18 +1,20 @@
 <template lang="pug">
   div
-    LikeCoinButtonWidget(
+    LikeCoinButtonWidgetV2(
       :layout="widgetLayout"
       :like-button-label="likeButtonLabel"
       :cta-button-label="ctaButtonLabel"
       :cta-button-preset="ctaButtonPreset"
       :hint-label="hintText"
       :is-show-like-button="isShowLikeButton"
+      :should-show-cta="hasSuperLiked"
       @click-like-button-label="onClickLikeStats"
       @click-cta-button="onClickCTAButton"
     )
       template(#like-button)
         LikeButton(
           ref="likeButton"
+          :id="id"
           :count="likeCount"
           :cooldown="cooldownProgress"
           :cooldown-end-time="nextSuperLikeTime"
@@ -24,14 +26,6 @@
           @click-disabled="onClickCooldown"
           @cooldown-end="updateSuperLikeStatus"
         )
-
-      template(#save-button="saveButtonProps")
-        SaveButton(
-          v-bind="saveButtonProps"
-          :toggled="hasBookmarked"
-          @click="onClickSaveButton"
-        )
-
       template(#identity="identityProps")
         Identity(
           :avatarURL="avatar"
@@ -53,10 +47,10 @@ import {
 import mixin from '~/mixins/embed-button';
 
 import Identity from '~/components/Identity/Identity';
-import LikeCoinButtonWidget, {
+import LikeCoinButtonWidgetV2, {
   LAYOUTS,
   LAYOUT_DEFAULT,
-} from '~/components/LikeCoinButtonWidget/LikeCoinButtonWidget';
+} from '~/components/LikeCoinButtonWidgetV2/LikeCoinButtonWidgetV2';
 import LikeButton from '~/components/LikeButtonV2/LikeButtonV2';
 import SaveButton from '~/components/SaveButton/SaveButton';
 
@@ -67,9 +61,9 @@ export default {
   layout: 'embedv2',
   components: {
     Identity,
-    LikeCoinButtonWidget,
     LikeButton,
     SaveButton,
+    LikeCoinButtonWidgetV2,
   },
   mixins: [mixin],
   data() {
@@ -171,14 +165,6 @@ export default {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickAvatar', 'clickAvatar(embed)', 1);
       this.goToPortfolio();
     },
-    async onClickSaveButton() {
-      logTrackerEvent(this, 'LikeButtonFlow', 'clickSaveButton', 'clickSaveButton(embed)', 1);
-      if (this.isLoggedIn) {
-        this.toggleBookmark();
-      } else {
-        await this.doLogin('save');
-      }
-    },
     handleMessageAction(event, action) {
       switch (action) {
         case 'showAltMode':
@@ -195,7 +181,6 @@ export default {
     },
     onReceiveMessage(event) {
       // TODO: Check event.origin
-
       let actions = [];
       try {
         ({ actions } = JSON.parse(event.data));

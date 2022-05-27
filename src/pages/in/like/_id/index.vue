@@ -37,18 +37,20 @@
             </div>
           </div>
 
-          <LikeCoinButtonWidget
+          <LikeCoinButtonWidgetV2
             v-else
             :like-button-label="likeButtonLabel"
-            :cta-button-label="ctaButtonLabel"
             :cta-button-preset="ctaButtonPreset"
             :style="{ textAlign: 'center' }"
-            :hint-label="hintText"
             @click-like-button-label="onClickLikeStats"
             @click-cta-button="onClickCTAButton"
+            :hint-label="hintText"
+            :should-show-cta="hasSuperLiked"
+            :cta-button-label="ctaButtonLabel"
           >
             <template #like-button>
               <LikeButton
+                :id="id"
                 :count="likeCount"
                 :cooldown="cooldownProgress"
                 :cooldown-end-time="nextSuperLikeTime"
@@ -62,15 +64,6 @@
                 ref="likeButton"
               />
             </template>
-
-            <template #save-button="saveButtonProps">
-              <SaveButton
-                v-bind="saveButtonProps"
-                :toggled="hasBookmarked"
-                @click="onClickSaveButton"
-              />
-            </template>
-
             <template #identity="identityProps">
               <Identity
                 :avatarURL="avatar"
@@ -81,7 +74,7 @@
                 @click-display-name="onClickAvatar"
               />
             </template>
-          </LikeCoinButtonWidget>
+          </LikeCoinButtonWidgetV2>
 
         </div>
 
@@ -100,8 +93,7 @@ import { checkValidDomainNotIP, handleQueryStringInUrl } from '@/util/url';
 
 import Identity from '~/components/Identity/Identity';
 import LikeButton from '~/components/LikeButtonV2/LikeButtonV2';
-import LikeCoinButtonWidget from '~/components/LikeCoinButtonWidget/LikeCoinButtonWidget';
-import SaveButton from '~/components/SaveButton/SaveButton';
+import LikeCoinButtonWidgetV2 from '~/components/LikeCoinButtonWidgetV2/LikeCoinButtonWidgetV2';
 
 import mixin from '~/mixins/embed';
 
@@ -117,8 +109,7 @@ export default {
   components: {
     Identity,
     LikeButton,
-    LikeCoinButtonWidget,
-    SaveButton,
+    LikeCoinButtonWidgetV2,
   },
   mixins: [mixin],
   head() {
@@ -304,10 +295,6 @@ export default {
     onClickLikeStats() {
       this.openLikeStats({ isNewWindow: false });
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLikeStats', 'clickLikeStats(popup)', 1);
-    },
-    onClickSaveButton() {
-      logTrackerEvent(this, 'LikeButtonFlow', 'clickSaveButton', 'clickSaveButton(popup)', 1);
-      this.toggleBookmark();
     },
     onClickAvatar() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickAvatar', 'clickAvatar(popup)', 1);

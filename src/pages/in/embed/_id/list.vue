@@ -14,7 +14,8 @@
           </a>
         </template>
 
-        <template slot="header-right">
+        <!-- TO-DO: handle about -->
+        <!-- <template slot="header-right">
           <a
             :href="aboutURL"
             rel="noopener noreferrer"
@@ -22,7 +23,7 @@
           >
             {{ $t('LikeButton.button.aboutLikeCoin') }}
           </a>
-        </template>
+        </template> -->
 
         <template v-if="isFetched">
           <span class="liker-list-page__content">
@@ -88,6 +89,8 @@ import {
   apiGetLikeButtonLikerList,
   apiGetLikeButtonTotalCount,
   apiGetPageTitle,
+  apiGetLikeButtonLikerListByIscnId,
+  apiGetLikeButtonTotalCountByIscnId,
 } from '@/util/api/api';
 import { checkValidDomainNotIP, handleQueryStringInUrl } from '@/util/url';
 
@@ -134,16 +137,26 @@ export default {
   },
   async mounted() {
     const { params, query } = this.$route;
+    const iscnId = query.iscn_id;
     const referrer = handleQueryStringInUrl(query.referrer);
-    const promises = [
-      apiGetLikeButtonLikerList(params.id, referrer),
-      apiGetLikeButtonTotalCount(params.id, referrer),
-    ];
-    if (referrer) {
-      const url = encodeURI(referrer);
-      /* Try to get html to fetch title below */
-      if (checkValidDomainNotIP(url)) {
-        promises.push(apiGetPageTitle(referrer));
+    let promises;
+    if (iscnId) {
+      promises = [
+        apiGetLikeButtonLikerListByIscnId(iscnId),
+        apiGetLikeButtonTotalCountByIscnId(iscnId),
+      ];
+      promises.push();
+    } else {
+      promises = [
+        apiGetLikeButtonLikerList(params.id, referrer),
+        apiGetLikeButtonTotalCount(params.id, referrer),
+      ];
+      if (referrer) {
+        const url = encodeURI(referrer);
+        /* Try to get html to fetch title below */
+        if (checkValidDomainNotIP(url)) {
+          promises.push(apiGetPageTitle(referrer));
+        }
       }
     }
     const [
