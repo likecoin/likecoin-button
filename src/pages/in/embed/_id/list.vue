@@ -139,18 +139,17 @@ export default {
     const { params, query } = this.$route;
     const iscnId = query.iscn_id;
     const referrer = handleQueryStringInUrl(query.referrer);
-    let promises;
+    const promises = [];
     if (iscnId) {
-      promises = [
+      promises.push(
         apiGetLikeButtonLikerListByIscnId(iscnId),
         apiGetLikeButtonTotalCountByIscnId(iscnId),
-      ];
-      promises.push();
+      );
     } else {
-      promises = [
+      promises.push(
         apiGetLikeButtonLikerList(params.id, referrer),
         apiGetLikeButtonTotalCount(params.id, referrer),
-      ];
+      );
       if (referrer) {
         const url = encodeURI(referrer);
         /* Try to get html to fetch title below */

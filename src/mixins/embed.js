@@ -66,7 +66,7 @@ export default {
     EmbedCreateWidgetButton,
     EmbedUserInfo,
   },
-  asyncData({
+  async asyncData({
     params,
     error,
     query,
@@ -81,53 +81,49 @@ export default {
 
     const { id } = params;
     let { type = '' } = query;
-    const { referrer = '' } = query;
-    const { iscn_id: iscnId } = query;
+    const { referrer = '', iscn_id: iscnId } = query;
     if (!type && referrer.match(MEDIUM_MEDIA_REGEX)) {
       type = 'medium';
     }
 
     if (id !== 'iscn') {
-      return Promise.all([apiGetUserMinById(id)])
-        .then((res) => {
-          const {
-            displayName,
-            avatar,
-            isPreRegCivicLiker,
-            isCivicLikerTrial,
-            isSubscribedCivicLiker,
-            civicLikerSince,
-          } = res[0].data;
-          return {
-            id,
-            displayName: displayName || id,
-            avatar,
-            isPreRegCivicLiker,
-            isCivicLikerTrial,
-            isSubscribedCivicLiker,
-            civicLikerSince,
-            amount,
-          };
-        })
-        .catch((err) => {
-          console.error(err); // eslint-disable-line no-console
-          error({ statusCode: 404, message: '' });
-        });
-    }
-    return Promise.all([apiGetDataMinByIscnId(iscnId)]).then((res) => {
-      const metadata = res && res[0].data.records[0].data.contentMetadata;
-      const stakeholders = res && res[0].data.records[0].data.stakeholders;
-      const iscnName = metadata && (metadata.name || metadata.title);
-      const iscnStakeHolder = stakeholders && stakeholders[0] && stakeholders[0].entity.name;
+      const data = await apiGetUserMinById(id).catch((err) => {
+        console.error(err); // eslint-disable-line no-console
+        error({ statusCode: 404, message: '' });
+      });
+      const {
+        displayName,
+        avatar,
+        isPreRegCivicLiker,
+        isCivicLikerTrial,
+        isSubscribedCivicLiker,
+        civicLikerSince,
+      } = data.data;
       return {
         id,
-        displayName: iscnStakeHolder,
-        iscnId,
+        displayName: displayName || id,
+        avatar,
+        isPreRegCivicLiker,
+        isCivicLikerTrial,
+        isSubscribedCivicLiker,
+        civicLikerSince,
         amount,
-        avatar: `https://avatars.dicebear.com/api/identicon/${iscnId}.svg`,
-        iscnName,
       };
+    }
+    const data = await apiGetDataMinByIscnId(iscnId).catch((err) => {
+      console.error(err); // eslint-disable-line no-console
+      error({ statusCode: 404, message: '' });
     });
+    const metadata = data && data.data.records[0].data.contentMetadata;
+    const stakeholders = data && data.data.records[0].data.stakeholders;
+    return {
+      id,
+      displayName: stakeholders && stakeholders[0] && stakeholders[0].entity.name,
+      iscnId,
+      amount,
+      avatar: `https://avatars.dicebear.com/api/identicon/${iscnId}.svg`,
+      iscnName: metadata && (metadata.name || metadata.title),
+    };
   },
   data() {
     return {
