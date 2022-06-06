@@ -200,6 +200,9 @@ export default {
     },
     labelStyle() {
       return {
+        ...this.textStyle,
+        textAlign: 'center',
+        width: '100%',
         margin: 'auto',
         marginTop: '3px',
       };
