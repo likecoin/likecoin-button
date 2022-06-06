@@ -8,11 +8,13 @@ import {
   LIKE_CO_HOSTNAME,
   LIKER_LAND_URL_BASE,
   MEDIUM_MEDIA_REGEX,
+  DEPUB_SPACE_URL,
 } from '@/constant';
 
 import EmbedCreateWidgetButton from '~/components/embed/EmbedCreateWidgetButton';
 import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
 import { setTrackerUser, logTrackerEvent } from '@/util/EventLogger';
+// import axios from 'axios';
 
 import {
   apiPostLikeButton,
@@ -137,6 +139,7 @@ export default {
       cooldownProgress: 0,
       hasClickCooldown: false,
       parentSuperLikeID: '',
+      likeeWallet: '',
 
       hasBookmarked: false,
       isLoadingBookmark: true,
@@ -153,6 +156,7 @@ export default {
       hasUpdateUserSignInStatus: false,
 
       isRedirecting: false,
+      ctaHref: DEPUB_SPACE_URL,
     };
   },
   computed: {
@@ -452,16 +456,18 @@ export default {
       this.hasSuperLiked = true;
       this.isJustSuperLiked = true;
       this.cooldownProgress = 1;
-      await apiPostSuperLike(this.id, {
+      const address = await apiPostSuperLike(this.id, {
         referrer: this.referrer,
         tz: this.timezoneString,
         parentSuperLikeID: this.parentSuperLikeID,
         ...this.apiMetadata,
+        // locale: (axios.defaults.headers.common['Accept-Language']),
       }).catch(() => {
         this.hasSuperLiked = false;
         this.cooldownProgress = cooldownProgress;
       });
-      // TO-DO: handle new superLike for ISCN
+      this.likeeWallet = address.data.likeeWallet;
+      this.ctaHref = `${DEPUB_SPACE_URL}${this.likeeWallet}`;
     },
     openLikeStats(options = { isNewWindow: true }) {
       const { id, referrer, iscnId } = this;

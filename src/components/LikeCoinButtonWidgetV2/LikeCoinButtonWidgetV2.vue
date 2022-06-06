@@ -62,10 +62,16 @@
         <a
           :class="ctaButtonClass"
           @click="$emit('click-cta-button')"
-          :href="ctaHref"
+          :href="ctaHref || depupSpaceUrl"
           target="_blank"
           rel="noreferrer noopener"
-        >{{ ctaButtonLabel }}</a>
+        >
+          <lc-loading-indicator
+            :style="labelStyle"
+            v-if="!ctaHref"
+          />
+          <div v-else>{{ ctaButtonLabel }}</div>
+        </a>
       </foreignObject>
     </svg>
   </div>
@@ -75,7 +81,7 @@
 import Identity from '../Identity/Identity';
 import LikeButton from '../LikeButtonV2/LikeButtonV2';
 
-import { CLW3_NOTICE_URL } from '../../constant';
+import { DEPUB_SPACE_URL } from '../../constant';
 
 export const LAYOUT_DEFAULT = 'default';
 export const LAYOUT_STICKY_BOTTOM = 'sticky-bottom';
@@ -104,6 +110,10 @@ export default {
     ctaButtonPreset: {
       type: String,
       default: 'default',
+    },
+    ctaHref: {
+      type: String,
+      default: '',
     },
     avatarURL: {
       type: String,
@@ -190,9 +200,8 @@ export default {
     },
     labelStyle() {
       return {
-        ...this.textStyle,
-        textAlign: 'center',
-        width: '100%',
+        margin: 'auto',
+        marginTop: '3px',
       };
     },
     labelButtonStyle() {
@@ -223,8 +232,8 @@ export default {
         `likecoin-button-widget__cta-button--${this.ctaButtonPreset}`,
       ];
     },
-    ctaHref() {
-      return CLW3_NOTICE_URL;
+    depupSpaceUrl() {
+      return DEPUB_SPACE_URL;
     },
   },
 };
