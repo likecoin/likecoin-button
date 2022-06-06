@@ -86,11 +86,11 @@
     "SignIn": "免费注册，化赞为赏",
     "PleaseLike": "最多可拍掌 5 下，鼓励作者",
     "SuperLikedPleaseTryAgainLater": "Super Like 冷却中，逢 12 点重置" ,
-    "SuperLikedFollowersWillSee": "已 Super Like 了这篇",
-    "CanSuperLike": "送出 Super Like，助此好文在 Liker Land 突围而出",
-    "CanSuperLikeOwn": "送出 Super Like，助此好文在 Liker Land 突围而出",
-    "ToSuperLike": "成为赞赏公民 Super Like 分享好文",
-    "ToSuperLikeOwn": "成为赞赏公民 Super Like 分享自己的文章"
+    "SuperLikedFollowersWillSee": "已经分享到 depub.space",
+    "CanSuperLike": "一键分享到 depub.space",
+    "CanSuperLikeOwn": "一键分享到 depub.space",
+    "ToSuperLike": "成为赞赏公民，一键分享佳作到 depub.space",
+    "ToSuperLikeOwn": "成为赞赏公民，一键分享佳作到 depub.space"
   },
   "Save": "收藏",
   "Saved": "已收藏",
