@@ -139,7 +139,7 @@ export default {
       cooldownProgress: 0,
       hasClickCooldown: false,
       parentSuperLikeID: '',
-      likeeWallet: '',
+      likerWallet: '',
 
       hasBookmarked: false,
       isLoadingBookmark: true,
@@ -338,9 +338,12 @@ export default {
             lastSuperLikeInfos,
             nextSuperLikeTs,
             cooldown,
+            likeWallet,
           } = data;
           this.isSuperLiker = isSuperLiker;
           this.canSuperLike = canSuperLike;
+          this.likerWallet = likeWallet;
+          this.ctaHref = `${DEPUB_SPACE_URL}${this.likerWallet}`;
           // HACK: Assume if `hasSuperLiked` has set to `true`, don't override it as
           // `lastSuperLikeInfos` may return empty array even the Super Like action is success
           if (!this.hasSuperLiked) {
@@ -466,8 +469,8 @@ export default {
         this.hasSuperLiked = false;
         this.cooldownProgress = cooldownProgress;
       });
-      this.likeeWallet = address.data.likeeWallet;
-      this.ctaHref = `${DEPUB_SPACE_URL}${this.likeeWallet}`;
+      this.likerWallet = address.data.likerWallet;
+      this.ctaHref = `${DEPUB_SPACE_URL}${this.likerWallet}`;
     },
     openLikeStats(options = { isNewWindow: true }) {
       const { id, referrer, iscnId } = this;

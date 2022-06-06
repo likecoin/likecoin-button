@@ -6,7 +6,7 @@
       :cta-button-label="ctaButtonLabel"
       :cta-button-preset="ctaButtonPreset"
       :hint-label="hintText"
-      :cta-href="likeeWallet && ctaHref"
+      :cta-href="likerWallet && ctaHref"
       :is-show-like-button="isShowLikeButton"
       :should-show-cta="hasSuperLiked"
       @click-like-button-label="onClickLikeStats"

@@ -43,7 +43,7 @@
             :cta-button-preset="ctaButtonPreset"
             :style="{ textAlign: 'center' }"
             @click-like-button-label="onClickLikeStats"
-            :cta-href="likeeWallet && ctaHref"
+            :cta-href="likerWallet && ctaHref"
             :hint-label="hintText"
             :should-show-cta="hasSuperLiked"
             :cta-button-label="ctaButtonLabel"
