@@ -122,6 +122,7 @@ export const apiPostSuperLike = (id, data) => {
     referrer = '',
     tz,
     parentSuperLikeID,
+    locale,
   } = data;
   return axios.post(
     `${LIKECOIN_API}/like/share/${id}`,
@@ -129,6 +130,7 @@ export const apiPostSuperLike = (id, data) => {
       referrer,
       tz,
       parentSuperLikeID,
+      locale,
     },
     {
       headers: getLikeCoinButtonHeaders(data),

@@ -14,7 +14,7 @@ import {
 import EmbedCreateWidgetButton from '~/components/embed/EmbedCreateWidgetButton';
 import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
 import { setTrackerUser, logTrackerEvent } from '@/util/EventLogger';
-// import axios from 'axios';
+import axios from 'axios';
 
 import {
   apiPostLikeButton,
@@ -463,8 +463,8 @@ export default {
         referrer: this.referrer,
         tz: this.timezoneString,
         parentSuperLikeID: this.parentSuperLikeID,
+        locale: (axios.defaults.headers.common['Accept-Language']),
         ...this.apiMetadata,
-        // locale: (axios.defaults.headers.common['Accept-Language']),
       }).catch(() => {
         this.hasSuperLiked = false;
         this.cooldownProgress = cooldownProgress;
