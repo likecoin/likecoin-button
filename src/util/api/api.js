@@ -21,10 +21,13 @@ export const apiGetLikeButtonMyStatus = (id, data) => {
   const {
     referrer = '',
     isCookieSupport,
+    iscnId = '',
   } = data;
   const cookieParam = isCookieSupport !== undefined ? `&cookie_support=${isCookieSupport ? 1 : 0}` : '';
   return axios.get(
-    `${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/self?referrer=${encodeURIComponent(referrer)}${cookieParam}&show_count=0`,
+    id === 'iscn'
+      ? `${LIKECOIN_API}/like/likebutton/iscn/self?iscn_id=${encodeURIComponent(iscnId)}${cookieParam}&show_count=0`
+      : `${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/self?referrer=${encodeURIComponent(referrer)}${cookieParam}&show_count=0`,
     {
       headers: getLikeCoinButtonHeaders(data),
       withCredentials: true,
@@ -32,10 +35,18 @@ export const apiGetLikeButtonMyStatus = (id, data) => {
   );
 };
 
-export const apiGetLikeButtonSelfCount = (id, referrer) => axios.get(
-  `${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/self/like?referrer=${encodeURIComponent(referrer)}`,
-  { withCredentials: true },
-);
+export const apiGetLikeButtonSelfCount = (id, data) => {
+  const {
+    referrer,
+    iscnId,
+  } = data;
+  return axios.get(
+    id === 'iscn'
+      ? `${LIKECOIN_API}/like/likebutton/iscn/self/like?iscn_id=${encodeURIComponent(iscnId)}`
+      : `${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/self/like?referrer=${encodeURIComponent(referrer)}`,
+    { withCredentials: true },
+  );
+};
 
 export const apiGetSuperLikeInfo = id => axios.get(`${LIKECOIN_MISC_API_BASE}/like/share/${id}`);
 
@@ -44,18 +55,60 @@ export const apiGetSuperLikeMyStatus = (tz = '', referrer = '') => axios.get(
   { withCredentials: true },
 );
 
-export const apiGetLikeButtonTotalCount = (id, referrer) => axios.get(`${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/total?referrer=${encodeURIComponent(referrer)}`);
+export const apiGetLikeButtonTotalCount = (id, data) => {
+  const {
+    referrer,
+    iscnId,
+  } = data;
+  return axios.get(
+    id === 'iscn'
+      ? `${LIKECOIN_API}/like/likebutton/iscn/total?iscn_id=${encodeURIComponent(iscnId)}`
+      : `${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/total?referrer=${encodeURIComponent(referrer)}`,
+  );
+};
 
-export const apiGetLikeButtonLikerList = (id, referrer) => axios.get(`${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/list?referrer=${encodeURIComponent(referrer)}`);
+export const apiGetLikeButtonLikerList = (id, data) => {
+  const {
+    referrer,
+    iscnId,
+  } = data;
+  return axios.get(
+    id === 'iscn'
+      ? `${LIKECOIN_API}/like/likebutton/iscn/list?iscn_id=${encodeURIComponent(iscnId)}`
+      : `${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/list?referrer=${encodeURIComponent(referrer)}`,
+  );
+};
+
+export const apiGetLikeButtonLikerListByIscnId = iscnId => axios.get(
+  `${LIKECOIN_API}/like/likebutton/iscn/list?iscn_id=${encodeURIComponent(iscnId)}`,
+);
 
 export const apiPostLikeButton = (id, count = 1, data) => {
   const {
     referrer = '',
+    iscnId,
     isCookieSupport,
   } = data;
   const cookieParam = isCookieSupport !== undefined ? `&cookie_support=${isCookieSupport ? 1 : 0}` : '';
   return axios.post(
-    `${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/${count}?referrer=${encodeURIComponent(referrer)}${cookieParam}`,
+    id === 'iscn'
+      ? `${LIKECOIN_API}/like/likebutton/iscn/${count}?iscn_id=${encodeURIComponent(iscnId)}${cookieParam}`
+      : `${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/${count}?referrer=${encodeURIComponent(referrer)}${cookieParam}`,
+    {},
+    {
+      headers: getLikeCoinButtonHeaders(data),
+      withCredentials: true,
+    },
+  );
+};
+
+export const apiPostLikeButtonByIscnId = (iscnId, count = 1, data) => {
+  const {
+    isCookieSupport,
+  } = data;
+  const cookieParam = isCookieSupport !== undefined ? `&cookie_support=${isCookieSupport ? 1 : 0}` : '';
+  return axios.post(
+    `${LIKECOIN_API}/like/likebutton/iscn/${count}?iscn_id=${encodeURIComponent(iscnId)}${cookieParam}`,
     {},
     {
       headers: getLikeCoinButtonHeaders(data),
@@ -134,44 +187,3 @@ export const apiGetSupportingUserByID = (id = '') => axios.get(
 // api for ISCN state
 
 export const apiGetDataMinByIscnId = (iscnId = '') => axios.get(`${ISCN_RAW_DATA_ENDPOINT}${encodeURIComponent(iscnId)}`);
-
-export const apiGetLikeButtonMyStatusByIscnId = (iscnId, data) => {
-  const {
-    isCookieSupport,
-  } = data;
-  const cookieParam = isCookieSupport !== undefined ? `&cookie_support=${isCookieSupport ? 1 : 0}` : '';
-  return axios.get(
-    `${LIKECOIN_API}/like/likebutton/iscn/self?iscn_id=${encodeURIComponent(iscnId)}${cookieParam}&show_count=0`,
-    {
-      headers: getLikeCoinButtonHeaders(data),
-      withCredentials: true,
-    },
-  );
-};
-
-export const apiGetLikeButtonSelfCountByIscnId = iscnId => axios.get(
-  `${LIKECOIN_API}/like/likebutton/iscn/self/like?iscn_id=${encodeURIComponent(iscnId)}`, { withCredentials: true },
-);
-
-export const apiGetLikeButtonTotalCountByIscnId = iscnId => axios.get(
-  `${LIKECOIN_API}/like/likebutton/iscn/total?iscn_id=${encodeURIComponent(iscnId)}`,
-);
-
-export const apiPostLikeButtonByIscnId = (iscnId, count = 1, data) => {
-  const {
-    isCookieSupport,
-  } = data;
-  const cookieParam = isCookieSupport !== undefined ? `&cookie_support=${isCookieSupport ? 1 : 0}` : '';
-  return axios.post(
-    `${LIKECOIN_API}/like/likebutton/iscn/${count}?iscn_id=${encodeURIComponent(iscnId)}${cookieParam}`,
-    {},
-    {
-      headers: getLikeCoinButtonHeaders(data),
-      withCredentials: true,
-    },
-  );
-};
-
-export const apiGetLikeButtonLikerListByIscnId = iscnId => axios.get(
-  `${LIKECOIN_API}/like/likebutton/iscn/list?iscn_id=${encodeURIComponent(iscnId)}`,
-);

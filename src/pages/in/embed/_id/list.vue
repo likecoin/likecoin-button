@@ -89,8 +89,6 @@ import {
   apiGetLikeButtonLikerList,
   apiGetLikeButtonTotalCount,
   apiGetPageTitle,
-  apiGetLikeButtonLikerListByIscnId,
-  apiGetLikeButtonTotalCountByIscnId,
 } from '@/util/api/api';
 import { checkValidDomainNotIP, handleQueryStringInUrl } from '@/util/url';
 
@@ -137,25 +135,20 @@ export default {
   },
   async mounted() {
     const { params, query } = this.$route;
-    const iscnId = query.iscn_id;
-    const referrer = handleQueryStringInUrl(query.referrer);
+    const likeTarget = query.iscn_id
+      ? { id: 'iscn', referrer: '', iscnId: query.iscn_id }
+      : { id: params.id, referrer: handleQueryStringInUrl(query.referrer), iscnId: '' };
+    const { id, iscnId, referrer } = likeTarget;
     const promises = [];
-    if (iscnId) {
-      promises.push(
-        apiGetLikeButtonLikerListByIscnId(iscnId),
-        apiGetLikeButtonTotalCountByIscnId(iscnId),
-      );
-    } else {
-      promises.push(
-        apiGetLikeButtonLikerList(params.id, referrer),
-        apiGetLikeButtonTotalCount(params.id, referrer),
-      );
-      if (referrer) {
-        const url = encodeURI(referrer);
-        /* Try to get html to fetch title below */
-        if (checkValidDomainNotIP(url)) {
-          promises.push(apiGetPageTitle(referrer));
-        }
+    promises.push(
+      apiGetLikeButtonLikerList(id, { referrer, iscnId }),
+      apiGetLikeButtonTotalCount(id, { referrer, iscnId }),
+    );
+    if (referrer) {
+      const url = encodeURI(referrer);
+      /* Try to get html to fetch title below */
+      if (checkValidDomainNotIP(url)) {
+        promises.push(apiGetPageTitle(referrer));
       }
     }
     const [
@@ -166,6 +159,7 @@ export default {
     this.title = title;
     this.numOfLikes = totalData.total;
     this.numOfLikers = totalData.totalLiker;
+    // eslint-disable-next-line no-shadow
     this.likers = likers.map(id => ({ id }));
     this.isShowAll = likers.length <= this.$options.COLLAPSED_LIKER_COUNT;
     this.fetchList();

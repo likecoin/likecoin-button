@@ -248,10 +248,6 @@ export default {
   },
   async mounted() {
     await this.updateUserSignInStatus();
-    if (!this.isLoggedIn) {
-      this.signUp({ isNewWindow: false });
-      logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp', 1);
-    }
   },
   methods: {
     async doLike() {

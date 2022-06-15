@@ -22,12 +22,7 @@ import {
   apiGetLikeButtonMyStatus,
   apiGetLikeButtonSelfCount,
   apiGetSuperLikeMyStatus,
-  apiGetSupportingUserByID,
   apiGetDataMinByIscnId,
-  apiPostLikeButtonByIscnId,
-  apiGetLikeButtonMyStatusByIscnId,
-  apiGetLikeButtonSelfCountByIscnId,
-  apiGetLikeButtonTotalCountByIscnId,
 } from '~/util/api/api';
 
 import { checkHasStorageAPIAccess, checkIsFirefoxStrictMode } from '~/util/client';
@@ -45,18 +40,12 @@ const debouncedOnClick = debounce((that) => {
   const count = that.likeCount - that.likeSent;
   that.likeSent += count;
   if (count > 0) {
-    if (that.iscnId) {
-      apiPostLikeButtonByIscnId(that.iscnId, count, {
-        isCookieSupport: that.hasCookieSupport,
-        ...that.apiMetadata,
-      });
-    } else {
-      apiPostLikeButton(that.id, count, {
-        referrer: that.referrer,
-        isCookieSupport: that.hasCookieSupport,
-        ...that.apiMetadata,
-      });
-    }
+    apiPostLikeButton(that.likeTarget.id, count, {
+      referrer: that.likeTarget.id,
+      iscnId: that.likeTarget.id,
+      isCookieSupport: that.hasCookieSupport,
+      ...that.apiMetadata,
+    });
   }
   that.totalLike += count;
 }, 500);
@@ -305,6 +294,13 @@ export default {
       }
       return url;
     },
+
+    likeTarget() {
+      if (this.iscnId) {
+        return { id: 'iscn', referrer: '', iscnId: this.iscnId };
+      }
+      return { id: this.id, referrer: this.referrer, iscnId: '' };
+    },
   },
   methods: {
     async getIsCookieSupport() {
@@ -353,13 +349,16 @@ export default {
       // TO-DO: handle updateSuperLikeStatus for ISCN
     },
     async updateUserSignInStatus() {
+      const { id, referrer, iscnId } = this.likeTarget;
       try {
-        if (this.iscnId) {
-          await Promise.all([
-            apiGetLikeButtonMyStatusByIscnId(this.iscnId, {
-              isCookieSupport: this.hasCookieSupport,
-              ...this.apiMetadata,
-            }).then(async ({ data: myData }) => {
+        await Promise.all([
+          apiGetLikeButtonMyStatus(id, {
+            referrer,
+            iscnId,
+            isCookieSupport: this.hasCookieSupport,
+            ...this.apiMetadata,
+          })
+            .then(async ({ data: myData }) => {
               const {
                 liker,
                 isSubscribed,
@@ -386,103 +385,37 @@ export default {
                   });
                 }
                 const promises = [
-                  // TO-DO: updateSuperLikeStatusByIscn()
-                  setTrackerUser({ user: liker }),
+                  await this.updateSuperLikeStatus(),
+                  await setTrackerUser({ user: liker }),
                 ];
                 await Promise.all(promises);
               }
               return Promise.resolve;
             }),
-            apiGetLikeButtonSelfCountByIscnId(this.iscnId).then(
-              ({ data: selfData }) => {
-                const { count, liker } = selfData;
-                if (!this.liker) {
-                  this.liker = liker;
-                  this.isLoggedIn = !!liker;
-                }
-                this.likeCount = count;
-                this.likeSent = count;
-              },
-            ),
-            apiGetLikeButtonTotalCountByIscnId(this.iscnId).then(
-              ({ data: totalData }) => {
-                const { total } = totalData;
-                this.totalLike = total;
-              },
-            ),
-          ]);
-        } else {
-          await Promise.all([
-            apiGetLikeButtonMyStatus(this.id, {
-              referrer: this.referrer,
-              isCookieSupport: this.hasCookieSupport,
-              ...this.apiMetadata,
-            })
-              .then(async ({ data: myData }) => {
-                const {
-                  liker,
-                  isSubscribed,
-                  isTrialSubscriber,
-                  serverCookieSupported,
-                  civicLikerVersion,
-                } = myData;
+          apiGetLikeButtonSelfCount(id, {
+            referrer,
+            iscnId,
+          }).then(
+            ({ data: selfData }) => {
+              const { count, liker } = selfData;
+              if (!this.liker) {
+                this.liker = liker;
                 this.isLoggedIn = !!liker;
-                this.isCreator = liker === this.id;
-                this.isSubscribed = isSubscribed;
-                this.isTrialSubscriber = isTrialSubscriber;
-                this.civicLikerVersion = civicLikerVersion;
-                if (
-                  this.hasCookieSupport
-                && serverCookieSupported !== undefined
-                ) {
-                  this.hasCookieSupport = serverCookieSupported;
-                }
-
-                if (this.isLoggedIn) {
-                  if (this.$sentry) {
-                    this.$sentry.configureScope((scope) => {
-                      scope.setUser({ id: liker });
-                    });
-                  }
-                  const promises = [
-                    this.updateSuperLikeStatus(),
-                    setTrackerUser({ user: liker }),
-                  ];
-                  if (this.civicLikerVersion === 2) {
-                    promises.push(
-                      apiGetSupportingUserByID(this.id)
-                        .then(({ data: supportingData }) => {
-                          const { quantity } = supportingData;
-                          this.supportingQuantity = quantity;
-                        })
-                        .catch(() => {}),
-                    );
-                  }
-                  await Promise.all(promises);
-                }
-                this.isLoadingBookmark = false;
-                this.isLoadingFollowStatus = false;
-                return Promise.resolve;
-              }),
-            apiGetLikeButtonSelfCount(this.id, this.referrer).then(
-              ({ data: selfData }) => {
-                const { count, liker } = selfData;
-                if (!this.liker) {
-                  this.liker = liker;
-                  this.isLoggedIn = !!liker;
-                }
-                this.likeCount = count;
-                this.likeSent = count;
-              },
-            ),
-            apiGetLikeButtonTotalCount(this.id, this.referrer).then(
-              ({ data: totalData }) => {
-                const { total } = totalData;
-                this.totalLike = total;
-              },
-            ),
-          ]);
-        }
+              }
+              this.likeCount = count;
+              this.likeSent = count;
+            },
+          ),
+          apiGetLikeButtonTotalCount(id, {
+            referrer,
+            iscnId,
+          }).then(
+            ({ data: totalData }) => {
+              const { total } = totalData;
+              this.totalLike = total;
+            },
+          ),
+        ]);
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
       } finally {
