@@ -121,7 +121,8 @@ export default {
       displayName: stakeholders && stakeholders[0] && stakeholders[0].entity.name,
       iscnId,
       amount,
-      avatar: `https://avatars.dicebear.com/api/identicon/${iscnId}.svg`,
+      // Will use generative art in the future
+      avatar: `https://avatars.dicebear.com/api/identicon/${encodeURIComponent(iscnId)}.svg`,
       iscnName: metadata && (metadata.name || metadata.title),
     };
   },
@@ -199,23 +200,23 @@ export default {
     referrer() {
       return this.urlReferrer || '';
     },
-    referrerQueryString() {
+    targetQueryString() {
       const { id, referrer, iscnId } = this;
       const referrerQuery = `${
         referrer ? `&referrer=${encodeURIComponent(referrer)}` : ''
       }`;
       if (iscnId) {
-        return `?iscn_id=${iscnId}&utm_source=button`;
+        return `?iscn_id=${encodeURIComponent(iscnId)}&utm_source=button`;
       }
       return `?=${encodeURIComponent(id)}${referrerQuery}&utm_source=button`;
     },
 
     signUpURL() {
-      return `https://${LIKE_CO_HOSTNAME}/in/register${this.referrerQueryString}&register=1&is_popup=1`;
+      return `https://${LIKE_CO_HOSTNAME}/in/register${this.targetQueryString}&register=1&is_popup=1`;
     },
     superLikeURL() {
       const amountPath = `${this.amount ? `/${this.amount}` : ''}`;
-      return `https://${LIKE_CO_HOSTNAME}/${this.id}${amountPath}${this.referrerQueryString}`;
+      return `https://${LIKE_CO_HOSTNAME}/${this.id}${amountPath}${this.targetQueryString}`;
     },
     likeCount: {
       get() {
@@ -365,10 +366,10 @@ export default {
                 isTrialSubscriber,
                 serverCookieSupported,
                 civicLikerVersion,
-                canLike,
+                isSelfWork,
               } = myData;
               this.isLoggedIn = !!liker;
-              this.isCreator = !canLike;
+              this.isCreator = !isSelfWork;
               this.isSubscribed = isSubscribed;
               this.isTrialSubscriber = isTrialSubscriber;
               this.civicLikerVersion = civicLikerVersion;
@@ -533,9 +534,7 @@ export default {
       const { id, referrer, iscnId } = this;
       if (options.isNewWindow) {
         window.open(
-          iscnId
-            ? `/in/embed/${id}/list?iscn_id=${iscnId}`
-            : `/in/embed/${id}/list${this.referrerQueryString}`,
+          `/in/embed/${id}/list${this.targetQueryString}`,
           LIKE_STATS_WINDOW_NAME,
           'menubar=no,location=no,width=576,height=768',
         );
@@ -554,7 +553,7 @@ export default {
     onClickCTAButton() {
       const url = this.isSupportingCreator
         ? `${LIKER_LAND_URL_BASE}/${this.id}?civic_welcome=1`
-        : `${LIKER_LAND_URL_BASE}/${this.id}/civic${this.referrerQueryString}`;
+        : `${LIKER_LAND_URL_BASE}/${this.id}/civic${this.targetQueryString}`;
       window.open(
         url,
         '_blank',
