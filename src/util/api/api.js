@@ -143,42 +143,6 @@ export const apiGetPageTitle = url => axios.get(`${LIKECOIN_MISC_API_BASE}/like/
   .then(res => (res.data || {}).title || '')
   .catch(() => '');
 
-export const apiGetMyBookmark = (url = '') => axios.get(
-  `${LIKECOIN_API}/users/bookmarks?url=${encodeURIComponent(url)}`,
-  { withCredentials: true },
-);
-
-export const apiAddMyBookmark = (url = '', data) => axios.post(
-  `${LIKECOIN_API}/users/bookmarks?url=${encodeURIComponent(url)}`,
-  null,
-  {
-    headers: getLikeCoinButtonHeaders(data),
-    withCredentials: true,
-  },
-);
-
-export const apiDeleteMyBookmark = (id = '', data) => axios.delete(
-  `${LIKECOIN_API}/users/bookmarks/${id}`,
-  {
-    headers: getLikeCoinButtonHeaders(data),
-    withCredentials: true,
-  },
-);
-
-export const apiGetMyFollower = (id = '') => axios.get(
-  `${LIKECOIN_API}/users/follow/users/${id}`,
-  { withCredentials: true },
-);
-
-export const apiAddMyFollower = (id = '', data) => axios.post(
-  `${LIKECOIN_API}/users/follow/users/${id}`,
-  null,
-  {
-    headers: getLikeCoinButtonHeaders(data),
-    withCredentials: true,
-  },
-);
-
 export const apiGetSupportingUserByID = (id = '') => axios.get(
   `${LIKECOIN_API}/civic/support/users/${id}`,
   { withCredentials: true },
