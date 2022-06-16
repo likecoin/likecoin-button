@@ -375,7 +375,7 @@ export default {
                 isSelfWork,
               } = myData;
               this.isLoggedIn = !!liker;
-              this.isCreator = !isSelfWork;
+              this.isCreator = !!isSelfWork;
               this.isSubscribed = isSubscribed;
               this.isTrialSubscriber = isTrialSubscriber;
               this.civicLikerVersion = civicLikerVersion;
