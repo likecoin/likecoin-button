@@ -50,10 +50,18 @@ export const apiGetLikeButtonSelfCount = (id, data) => {
 
 export const apiGetSuperLikeInfo = id => axios.get(`${LIKECOIN_API}/like/share/${id}`);
 
-export const apiGetSuperLikeMyStatus = (tz = '', referrer = '') => axios.get(
-  `${LIKECOIN_API}/like/share/self?tz=${tz}&referrer=${encodeURIComponent(referrer)}`,
-  { withCredentials: true },
-);
+export const apiGetSuperLikeMyStatus = (tz, data) => {
+  const {
+    referrer,
+    iscnId,
+  } = data;
+  return axios.get(
+    iscnId
+      ? `${LIKECOIN_API}/like/share/iscn/self?tz=${tz}&iscn_id=${encodeURIComponent(iscnId)}`
+      : `${LIKECOIN_API}/like/share/self?tz=${tz}&referrer=${encodeURIComponent(referrer)}`,
+    { withCredentials: true },
+  );
+};
 
 export const apiGetLikeButtonTotalCount = (id, data) => {
   const {
@@ -121,16 +129,18 @@ export const apiPostSuperLike = (id, data) => {
   const {
     referrer = '',
     tz,
-    parentSuperLikeID,
     locale,
+    iscnId,
   } = data;
   return axios.post(
-    `${LIKECOIN_API}/like/share/${id}`,
+    id === 'iscn'
+      ? `${LIKECOIN_API}/like/share/iscn/?iscn_id=${encodeURIComponent(iscnId)}`
+      : `${LIKECOIN_API}/like/share/${id}`,
     {
       referrer,
       tz,
-      parentSuperLikeID,
       locale,
+      iscnId,
     },
     {
       headers: getLikeCoinButtonHeaders(data),

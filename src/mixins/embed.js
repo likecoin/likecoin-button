@@ -32,7 +32,6 @@ import { handleQueryStringInUrl } from '~/util/url';
 
 const MAX_LIKE = 5;
 const LIKE_STATS_WINDOW_NAME = 'LIKER_LIST_STATS_WINDOW';
-const SUPER_LIKE_WINDOW_NAME = 'SUPER_LIKE_WINDOW';
 
 const debounce = require('lodash.debounce');
 const uuidv4 = require('uuid/v4');
@@ -43,8 +42,8 @@ const debouncedOnClick = debounce((that) => {
   that.likeSent += count;
   if (count > 0) {
     apiPostLikeButton(that.likeTarget.id, count, {
-      referrer: that.likeTarget.id,
-      iscnId: that.likeTarget.id,
+      referrer: that.likeTarget.referrer,
+      iscnId: that.likeTarget.iscnId,
       isCookieSupport: that.hasCookieSupport,
       ...that.apiMetadata,
     });
@@ -330,29 +329,28 @@ export default {
       return getCookie('likebutton_superlike_id');
     },
     async updateSuperLikeStatus() {
-      if (!this.iscnId) {
-        await apiGetSuperLikeMyStatus(this.timezoneString, this.referrer).then(({ data }) => {
-          const {
-            isSuperLiker,
-            canSuperLike,
-            lastSuperLikeInfos,
-            nextSuperLikeTs,
-            cooldown,
-            likeWallet,
-          } = data;
-          this.isSuperLiker = isSuperLiker;
-          this.canSuperLike = canSuperLike;
-          this.likerWallet = likeWallet;
-          this.ctaHref = `${DEPUB_SPACE_URL}${this.likerWallet}`;
-          // HACK: Assume if `hasSuperLiked` has set to `true`, don't override it as
-          // `lastSuperLikeInfos` may return empty array even the Super Like action is success
-          if (!this.hasSuperLiked) {
-            this.hasSuperLiked = !!(lastSuperLikeInfos && lastSuperLikeInfos.length);
-          }
-          this.nextSuperLikeTime = nextSuperLikeTs;
-          this.cooldownProgress = cooldown;
-        });
-      }
+      const { referrer, iscnId } = this.likeTarget;
+      await apiGetSuperLikeMyStatus(this.timezoneString, { referrer, iscnId }).then(({ data }) => {
+        const {
+          isSuperLiker,
+          canSuperLike,
+          lastSuperLikeInfos,
+          nextSuperLikeTs,
+          cooldown,
+          likeWallet,
+        } = data;
+        this.isSuperLiker = isSuperLiker;
+        this.canSuperLike = canSuperLike;
+        this.likerWallet = likeWallet;
+        this.ctaHref = `${DEPUB_SPACE_URL}${this.likerWallet}`;
+        // HACK: Assume if `hasSuperLiked` has set to `true`, don't override it as
+        // `lastSuperLikeInfos` may return empty array even the Super Like action is success
+        if (!this.hasSuperLiked) {
+          this.hasSuperLiked = !!(lastSuperLikeInfos && lastSuperLikeInfos.length);
+        }
+        this.nextSuperLikeTime = nextSuperLikeTs;
+        this.cooldownProgress = cooldown;
+      });
       // TO-DO: handle updateSuperLikeStatus for ISCN
     },
     async updateUserSignInStatus() {
@@ -447,22 +445,16 @@ export default {
       this.likeCount += 1;
       debouncedOnClick(this);
     },
-    superLike() {
-      window.open(
-        this.superLikeURL,
-        SUPER_LIKE_WINDOW_NAME,
-        'menubar=no,location=no,width=600,height=768',
-      );
-    },
     async newSuperLike() {
+      const { referrer, iscnId } = this.likeTarget;
       const { cooldownProgress } = this;
       this.hasSuperLiked = true;
       this.isJustSuperLiked = true;
       this.cooldownProgress = 1;
       const address = await apiPostSuperLike(this.id, {
-        referrer: this.referrer,
+        referrer,
+        iscnId,
         tz: this.timezoneString,
-        parentSuperLikeID: this.parentSuperLikeID,
         locale: (axios.defaults.headers.common['Accept-Language']),
         ...this.apiMetadata,
       }).catch(() => {
