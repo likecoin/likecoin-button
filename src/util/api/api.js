@@ -129,7 +129,6 @@ export const apiPostSuperLike = (id, data) => {
   const {
     referrer = '',
     tz,
-    locale,
     iscnId,
   } = data;
   return axios.post(
@@ -139,7 +138,6 @@ export const apiPostSuperLike = (id, data) => {
     {
       referrer,
       tz,
-      locale,
       iscnId,
     },
     {
