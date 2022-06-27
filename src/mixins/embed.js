@@ -385,8 +385,8 @@ export default {
                   });
                 }
                 const promises = [
-                  await this.updateSuperLikeStatus(),
-                  await setTrackerUser({ user: liker }),
+                  this.updateSuperLikeStatus(),
+                  setTrackerUser({ user: liker }),
                 ];
                 await Promise.all(promises);
               }

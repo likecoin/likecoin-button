@@ -1,5 +1,5 @@
 import axios from '~/plugins/axios';
-import { LIKECOIN_API, LIKECOIN_MISC_API_BASE, ISCN_RAW_DATA_ENDPOINT } from '@/constant';
+import { LIKECOIN_API, ISCN_RAW_DATA_ENDPOINT } from '@/constant';
 
 function getLikeCoinButtonHeaders({
   documentReferrer = '',
@@ -27,7 +27,7 @@ export const apiGetLikeButtonMyStatus = (id, data) => {
   return axios.get(
     id === 'iscn'
       ? `${LIKECOIN_API}/like/likebutton/iscn/self?iscn_id=${encodeURIComponent(iscnId)}${cookieParam}&show_count=0`
-      : `${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/self?referrer=${encodeURIComponent(referrer)}${cookieParam}&show_count=0`,
+      : `${LIKECOIN_API}/like/likebutton/${id}/self?referrer=${encodeURIComponent(referrer)}${cookieParam}&show_count=0`,
     {
       headers: getLikeCoinButtonHeaders(data),
       withCredentials: true,
@@ -43,15 +43,15 @@ export const apiGetLikeButtonSelfCount = (id, data) => {
   return axios.get(
     id === 'iscn'
       ? `${LIKECOIN_API}/like/likebutton/iscn/self/like?iscn_id=${encodeURIComponent(iscnId)}`
-      : `${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/self/like?referrer=${encodeURIComponent(referrer)}`,
+      : `${LIKECOIN_API}/like/likebutton/${id}/self/like?referrer=${encodeURIComponent(referrer)}`,
     { withCredentials: true },
   );
 };
 
-export const apiGetSuperLikeInfo = id => axios.get(`${LIKECOIN_MISC_API_BASE}/like/share/${id}`);
+export const apiGetSuperLikeInfo = id => axios.get(`${LIKECOIN_API}/like/share/${id}`);
 
 export const apiGetSuperLikeMyStatus = (tz = '', referrer = '') => axios.get(
-  `${LIKECOIN_MISC_API_BASE}/like/share/self?tz=${tz}&referrer=${encodeURIComponent(referrer)}`,
+  `${LIKECOIN_API}/like/share/self?tz=${tz}&referrer=${encodeURIComponent(referrer)}`,
   { withCredentials: true },
 );
 
@@ -63,7 +63,7 @@ export const apiGetLikeButtonTotalCount = (id, data) => {
   return axios.get(
     id === 'iscn'
       ? `${LIKECOIN_API}/like/likebutton/iscn/total?iscn_id=${encodeURIComponent(iscnId)}`
-      : `${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/total?referrer=${encodeURIComponent(referrer)}`,
+      : `${LIKECOIN_API}/like/likebutton/${id}/total?referrer=${encodeURIComponent(referrer)}`,
   );
 };
 
@@ -75,7 +75,7 @@ export const apiGetLikeButtonLikerList = (id, data) => {
   return axios.get(
     id === 'iscn'
       ? `${LIKECOIN_API}/like/likebutton/iscn/list?iscn_id=${encodeURIComponent(iscnId)}`
-      : `${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/list?referrer=${encodeURIComponent(referrer)}`,
+      : `${LIKECOIN_API}/like/likebutton/${id}/list?referrer=${encodeURIComponent(referrer)}`,
   );
 };
 
@@ -93,7 +93,7 @@ export const apiPostLikeButton = (id, count = 1, data) => {
   return axios.post(
     id === 'iscn'
       ? `${LIKECOIN_API}/like/likebutton/iscn/${count}?iscn_id=${encodeURIComponent(iscnId)}${cookieParam}`
-      : `${LIKECOIN_MISC_API_BASE}/like/likebutton/${id}/${count}?referrer=${encodeURIComponent(referrer)}${cookieParam}`,
+      : `${LIKECOIN_API}/like/likebutton/${id}/${count}?referrer=${encodeURIComponent(referrer)}${cookieParam}`,
     {},
     {
       headers: getLikeCoinButtonHeaders(data),
@@ -124,7 +124,7 @@ export const apiPostSuperLike = (id, data) => {
     parentSuperLikeID,
   } = data;
   return axios.post(
-    `${LIKECOIN_MISC_API_BASE}/like/share/${id}`,
+    `${LIKECOIN_API}/like/share/${id}`,
     {
       referrer,
       tz,
@@ -139,7 +139,7 @@ export const apiPostSuperLike = (id, data) => {
 
 export const apiQueryCoinGeckoInfo = () => axios.get('https://api.coingecko.com/api/v3/coins/likecoin?localization=false', { withCredentials: false });
 
-export const apiGetPageTitle = url => axios.get(`${LIKECOIN_MISC_API_BASE}/like/like/suggest/info/?url=${encodeURIComponent(url)}`)
+export const apiGetPageTitle = url => axios.get(`${LIKECOIN_API}/like/like/suggest/info/?url=${encodeURIComponent(url)}`)
   .then(res => (res.data || {}).title || '')
   .catch(() => '');
 
