@@ -14,7 +14,8 @@
           </a>
         </template>
 
-        <template slot="header-right">
+        <!-- TO-DO: handle about -->
+        <!-- <template slot="header-right">
           <a
             :href="aboutURL"
             rel="noopener noreferrer"
@@ -22,7 +23,7 @@
           >
             {{ $t('LikeButton.button.aboutLikeCoin') }}
           </a>
-        </template>
+        </template> -->
 
         <template v-if="isFetched">
           <span class="liker-list-page__content">
@@ -134,11 +135,15 @@ export default {
   },
   async mounted() {
     const { params, query } = this.$route;
-    const referrer = handleQueryStringInUrl(query.referrer);
-    const promises = [
-      apiGetLikeButtonLikerList(params.id, referrer),
-      apiGetLikeButtonTotalCount(params.id, referrer),
-    ];
+    const likeTarget = query.iscn_id
+      ? { id: 'iscn', referrer: '', iscnId: query.iscn_id }
+      : { id: params.id, referrer: handleQueryStringInUrl(query.referrer), iscnId: '' };
+    const { id, iscnId, referrer } = likeTarget;
+    const promises = [];
+    promises.push(
+      apiGetLikeButtonLikerList(id, { referrer, iscnId }),
+      apiGetLikeButtonTotalCount(id, { referrer, iscnId }),
+    );
     if (referrer) {
       const url = encodeURI(referrer);
       /* Try to get html to fetch title below */
@@ -154,6 +159,7 @@ export default {
     this.title = title;
     this.numOfLikes = totalData.total;
     this.numOfLikers = totalData.totalLiker;
+    // eslint-disable-next-line no-shadow
     this.likers = likers.map(id => ({ id }));
     this.isShowAll = likers.length <= this.$options.COLLAPSED_LIKER_COUNT;
     this.fetchList();

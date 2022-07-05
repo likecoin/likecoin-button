@@ -30,7 +30,8 @@
       ],
       "MoreAbout": "Know more about Civic Liker",
       "Button": "Register now",
-      "Subscribing": "Supporting"
+      "Subscribing": "Supporting",
+      "DepubSpace": "Check on depub.space"
     }
   },
   "Embed": {
@@ -92,11 +93,11 @@
     "SignIn": "Register as a free Liker",
     "PleaseLike": "Clap 1 - 5 times to reward the creator",
     "SuperLikedPleaseTryAgainLater": "Super Like is cooling down, reset at every 12 o'clock" ,
-    "SuperLikedFollowersWillSee": "Super Liked",
-    "CanSuperLike": "Super Like to boost this content in Liker Land",
-    "CanSuperLikeOwn": "Super Like to boost this content in Liker Land",
-    "ToSuperLike": "Become a Civic Liker to Super Like good content",
-    "ToSuperLikeOwn": "Become a Civic Liker to Super Like your content"
+    "SuperLikedFollowersWillSee": "Shared to depub.space",
+    "CanSuperLike": "Share to depub.space in one click",
+    "CanSuperLikeOwn": "Share to depub.space in one click",
+    "ToSuperLike": "Join Civic Liker to share to depub.space in one click",
+    "ToSuperLikeOwn": "Join Civic Liker to share to depub.space in one click"
   },
   "PopupOverlay": {
     "title": "Let’s clap in the pop-up window",

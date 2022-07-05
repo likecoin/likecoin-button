@@ -10,6 +10,15 @@ export const EXTERNAL_HOSTNAME = IS_TESTNET ? 'button.rinkeby.like.co' : 'button
 
 export const LIKE_CO_HOSTNAME = IS_TESTNET ? 'rinkeby.like.co' : 'like.co';
 
+export const RAWDATA_URL = {
+  testnet: 'https://node.testnet.like.co/iscn/records/id?iscn_id=',
+  production: 'https://mainnet-node.like.co/iscn/records/id?iscn_id=',
+};
+
+export const ISCN_RAW_DATA_ENDPOINT = IS_TESTNET
+  ? RAWDATA_URL.testnet
+  : RAWDATA_URL.production;
+
 export const LIKER_LAND_URL_BASE = IS_TESTNET ? 'https://rinkeby.liker.land' : 'https://liker.land';
 
 /* use LIKE_CO_HOSTNAME for now to prevent CORS preflight problem
@@ -44,3 +53,5 @@ export const MEDIUM_QUERY_STRING_TO_REMOVE = [
 ];
 
 export const CLW3_NOTICE_URL = 'https://matters.news/@likecoin/%E8%AE%9A%E8%B3%9E%E5%85%AC%E6%B0%91-web3-%E6%94%B9%E7%89%88%E8%BF%8E%E8%99%8E%E5%B9%B4-bafyreigrx6dnzmbnfea3btnbzno272bsfadnhwpztuaaf4z5cyxflarx5y';
+
+export const DEPUB_SPACE_URL = IS_TESTNET ? 'https://stag.depub.space/' : 'https://depub.space/';

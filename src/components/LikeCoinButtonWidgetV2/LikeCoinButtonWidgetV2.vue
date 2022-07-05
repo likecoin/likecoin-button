@@ -16,14 +16,6 @@
         <Identity v-bind="identitySlotProps" />
       </slot>
 
-      <!-- Save button -->
-      <slot
-        v-bind="saveSlotProps"
-        name="save-button"
-      >
-        <SaveButton v-bind="saveSlotProps" />
-      </slot>
-
       <!-- Like Button -->
       <slot
         v-if="isShowLikeButton"
@@ -31,6 +23,7 @@
       >
         <LikeButton />
       </slot>
+
       <!-- Like Button Label -->
       <foreignObject
         v-if="isShowLikeButton"
@@ -60,18 +53,25 @@
 
       <!-- CTA -->
       <foreignObject
+        v-if="shouldShowCta"
         :x="saveSlotProps.x"
-        :y="saveSlotProps.y + 58"
+        :y="saveSlotProps.y"
         width="300"
         height="36"
       >
         <a
           :class="ctaButtonClass"
           @click="$emit('click-cta-button')"
-          :href="ctaHref"
+          :href="ctaHref || depupSpaceUrl"
           target="_blank"
           rel="noreferrer noopener"
-        >{{ ctaButtonLabel }}</a>
+        >
+          <lc-loading-indicator
+            :style="labelStyle"
+            v-if="!ctaHref"
+          />
+          <div v-else>{{ ctaButtonLabel }}</div>
+        </a>
       </foreignObject>
     </svg>
   </div>
@@ -80,9 +80,8 @@
 <script>
 import Identity from '../Identity/Identity';
 import LikeButton from '../LikeButtonV2/LikeButtonV2';
-import SaveButton from '../SaveButton/SaveButton';
 
-import { CLW3_NOTICE_URL } from '../../constant';
+import { DEPUB_SPACE_URL } from '../../constant';
 
 export const LAYOUT_DEFAULT = 'default';
 export const LAYOUT_STICKY_BOTTOM = 'sticky-bottom';
@@ -93,7 +92,6 @@ export default {
   components: {
     Identity,
     LikeButton,
-    SaveButton,
   },
   props: {
     layout: {
@@ -113,6 +111,10 @@ export default {
       type: String,
       default: 'default',
     },
+    ctaHref: {
+      type: String,
+      default: '',
+    },
     avatarURL: {
       type: String,
       default: '',
@@ -128,6 +130,10 @@ export default {
     isShowLikeButton: {
       type: Boolean,
       default: true,
+    },
+    shouldShowCta: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
@@ -172,14 +178,14 @@ export default {
     },
     identitySlotProps() {
       return {
-        x: 209,
+        x: 140,
         y: 57,
       };
     },
     saveSlotProps() {
       return {
         x: 148,
-        y: 72,
+        y: 130,
       };
     },
     labelY() {
@@ -197,6 +203,8 @@ export default {
         ...this.textStyle,
         textAlign: 'center',
         width: '100%',
+        margin: 'auto',
+        marginTop: '3px',
       };
     },
     labelButtonStyle() {
@@ -217,6 +225,7 @@ export default {
         width: '100%',
         height: '100%',
         display: 'flex',
+        textAlign: 'left',
         alignItems: 'flex-end',
       };
     },
@@ -226,8 +235,8 @@ export default {
         `likecoin-button-widget__cta-button--${this.ctaButtonPreset}`,
       ];
     },
-    ctaHref() {
-      return CLW3_NOTICE_URL;
+    depupSpaceUrl() {
+      return DEPUB_SPACE_URL;
     },
   },
 };

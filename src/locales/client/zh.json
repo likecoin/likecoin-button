@@ -30,7 +30,8 @@
       ],
       "MoreAbout": "瞭解更多讚賞公民福利",
       "Button": "按月贊助",
-      "Subscribing": "贊助中"
+      "Subscribing": "贊助中",
+      "DepubSpace": "查看 depub.space"
     }
   },
   "Embed": {
@@ -92,11 +93,11 @@
     "SignIn": "註冊 Liker ID 免費按讚",
     "PleaseLike": "最多可拍掌 5 下，鼓勵作者",
     "SuperLikedPleaseTryAgainLater": "Super Like 冷卻中，逢 12 點重置" ,
-    "SuperLikedFollowersWillSee": "已 Super Like 了這篇",
-    "CanSuperLike": "送出 Super Like，分享優質內容",
-    "CanSuperLikeOwn": "送出 Super Like，分享優質內容",
-    "ToSuperLike": "成為讚賞公民 Super Like 分享好文",
-    "ToSuperLikeOwn": "成為讚賞公民 Super Like 分享自己的文章"
+    "SuperLikedFollowersWillSee": "已經分享到 depub.space",
+    "CanSuperLike": "一鍵分享到 depub.space",
+    "CanSuperLikeOwn": "一鍵分享到 depub.space",
+    "ToSuperLike": "成為讚賞公民，一鍵分享佳作到 depub.space",
+    "ToSuperLikeOwn": "成為讚賞公民，一鍵分享佳作到 depub.space"
   },
   "PopupOverlay": {
     "title": "請在「彈出式視窗」中點讚支持作者{br}Please sign-in in the pop up window",
