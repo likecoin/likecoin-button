@@ -9,12 +9,12 @@ import Identity from '../Identity/Identity';
 import LikeCoinButtonWidget, {
   LAYOUTS,
   LAYOUT_DEFAULT,
-} from './LikeCoinButtonWidget';
+} from './LikeCoinButtonWidgetV2';
 import LikeButtonV2 from '../LikeButtonV2/LikeButtonV2';
 import SaveButton from '../SaveButton/SaveButton';
 
 export default {
-  title: 'LikeCoin Button Widget',
+  title: 'LikeCoin Button Widget (ISCN)',
   decorators: [withKnobs],
   argTypes: {
     onClickAvatar: { action: 'Clicked Avatar' },

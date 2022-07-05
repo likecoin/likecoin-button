@@ -15,7 +15,12 @@ export default {
   },
   computed: {
     popupURL() {
-      let url = `/in/like/${this.id}/?referrer=${encodeURIComponent(this.referrer)}`;
+      let url;
+      if (this.iscnId) {
+        url = `/in/like/iscn/?iscn_id=${this.iscnId}`;
+      } else {
+        url = `/in/like/${this.id}/?referrer=${encodeURIComponent(this.referrer)}`;
+      }
       if (this.buttonType) url += `&type=${encodeURIComponent(this.buttonType)}`;
       return url;
     },
@@ -41,7 +46,7 @@ export default {
   async mounted() {
     try {
       // Notify app when button is mounted
-      window.top.postMessage({ action: 'MOUNTED' }, this.referrer);
+      window.top.postMessage({ action: 'MOUNTED' }, window.location.href);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
