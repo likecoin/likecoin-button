@@ -5,6 +5,7 @@ import {
 } from 'tiny-cookie';
 
 import {
+  LIKECOIN_API,
   LIKE_CO_HOSTNAME,
   LIKER_LAND_URL_BASE,
   MEDIUM_MEDIA_REGEX,
@@ -28,6 +29,7 @@ import {
 
 import { checkHasStorageAPIAccess, checkIsFirefoxStrictMode } from '~/util/client';
 import { handleQueryStringInUrl } from '~/util/url';
+import axios from '~/plugins/axios';
 
 const MAX_LIKE = 5;
 const LIKE_STATS_WINDOW_NAME = 'LIKER_LIST_STATS_WINDOW';
@@ -155,6 +157,10 @@ export default {
 
       isRedirecting: false,
       ctaHref: DEPUB_SPACE_URL,
+
+      tempLink: '',
+      tempCTA: '',
+      tempNFTPrice: -1,
     };
   },
   computed: {
@@ -303,6 +309,9 @@ export default {
       }
       return { id: this.id, referrer: this.referrer, iscnId: '' };
     },
+  },
+  async mounted() {
+    await this.updateTempCTA();
   },
   methods: {
     async getIsCookieSupport() {
@@ -505,6 +514,26 @@ export default {
         window.location.href = url;
       }
       // TO-DO: handle go to portfolio
+    },
+    async updateTempCTA() {
+      this.tempLink = `https://app.rinkeby.like.co/nfttest/fetch?url=${this.referrer}&liker_id=${this.id}`;
+      this.tempCTA = 'Create ISCN';
+      this.tempNFTPrice = -1;
+      if (this.iscnId) {
+        const res = await axios.get(`${LIKECOIN_API}/likernft/mint`, {
+          params: {
+            iscn_id: this.iscnId,
+          },
+        }).catch(() => { });
+        if (res) {
+          this.tempLink = `https://app.rinkeby.like.co/nfttest/button/${encodeURIComponent(this.iscnId)}`;
+          this.tempCTA = 'Collect NFT';
+          this.tempNFTPrice = res.data.currentPrice;
+        } else {
+          this.tempLink = `https://app.rinkeby.like.co/nfttest/mint/${encodeURIComponent(this.iscnId)}`;
+          this.tempCTA = 'Mint NFT';
+        }
+      }
     },
   },
 };

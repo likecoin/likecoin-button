@@ -74,6 +74,18 @@
         </a>
       </foreignObject>
     </svg>
+
+    <div>
+      <div v-if="hasPrice">
+        {{ tempNFTPrice }} $LIKE
+      </div>
+      <a
+        :href="tempLink"
+        target="_blank"
+      >
+        {{ tempCTA }}
+      </a>
+    </div>
   </div>
 </template>
 
@@ -134,6 +146,18 @@ export default {
     shouldShowCta: {
       type: Boolean,
       default: false,
+    },
+    tempLink: {
+      type: String,
+      default: '',
+    },
+    tempCTA: {
+      type: String,
+      default: '',
+    },
+    tempNFTPrice: {
+      type: Number,
+      default: -1,
     },
   },
   computed: {
@@ -237,6 +261,9 @@ export default {
     },
     depupSpaceUrl() {
       return DEPUB_SPACE_URL;
+    },
+    hasPrice() {
+      return this.tempNFTPrice > 0;
     },
   },
 };
