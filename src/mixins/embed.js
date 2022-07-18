@@ -5,7 +5,6 @@ import {
 } from 'tiny-cookie';
 
 import {
-  LIKECOIN_API,
   LIKE_CO_HOSTNAME,
   LIKER_LAND_URL_BASE,
   MEDIUM_MEDIA_REGEX,
@@ -25,11 +24,11 @@ import {
   apiGetLikeButtonSelfCount,
   apiGetSuperLikeMyStatus,
   apiGetDataMinByIscnId,
+  apiGetLikerNftMint,
 } from '~/util/api/api';
 
 import { checkHasStorageAPIAccess, checkIsFirefoxStrictMode } from '~/util/client';
 import { handleQueryStringInUrl } from '~/util/url';
-import axios from '~/plugins/axios';
 
 const MAX_LIKE = 5;
 const LIKE_STATS_WINDOW_NAME = 'LIKER_LIST_STATS_WINDOW';
@@ -520,11 +519,12 @@ export default {
       this.tempCTA = 'Create ISCN';
       this.tempNFTPrice = -1;
       if (this.iscnId) {
-        const res = await axios.get(`${LIKECOIN_API}/likernft/mint`, {
-          params: {
-            iscn_id: this.iscnId,
-          },
-        }).catch(() => { });
+        let res;
+        try {
+          res = await apiGetLikerNftMint(this.iscnId);
+        } catch (error) {
+          // do nothing
+        }
         if (res) {
           this.tempLink = `https://app.rinkeby.like.co/nfttest/button/${encodeURIComponent(this.iscnId)}`;
           this.tempCTA = 'Collect NFT';
