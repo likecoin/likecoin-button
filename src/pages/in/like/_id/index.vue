@@ -47,9 +47,9 @@
             :hint-label="hintText"
             :should-show-cta="hasSuperLiked"
             :cta-button-label="ctaButtonLabel"
-            :temp-link="tempLink"
-            :temp-c-t-a="tempCTA"
-            :temp-n-f-t-price="tempNFTPrice"
+            :cta-link="ctaLink"
+            :cta-text="ctaText"
+            :nft-price="nftPrice"
           >
             <template #like-button>
               <LikeButton

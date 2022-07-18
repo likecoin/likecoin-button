@@ -77,13 +77,13 @@
 
     <div>
       <div v-if="hasPrice">
-        {{ tempNFTPrice }} $LIKE
+        {{ nftPrice }} $LIKE
       </div>
       <a
-        :href="tempLink"
+        :href="ctaLink"
         target="_blank"
       >
-        {{ tempCTA }}
+        {{ ctaText }}
       </a>
     </div>
   </div>
@@ -147,15 +147,15 @@ export default {
       type: Boolean,
       default: false,
     },
-    tempLink: {
+    ctaLink: {
       type: String,
       default: '',
     },
-    tempCTA: {
+    ctaText: {
       type: String,
       default: '',
     },
-    tempNFTPrice: {
+    nftPrice: {
       type: Number,
       default: -1,
     },
@@ -263,7 +263,7 @@ export default {
       return DEPUB_SPACE_URL;
     },
     hasPrice() {
-      return this.tempNFTPrice > 0;
+      return this.nftPrice > 0;
     },
   },
 };

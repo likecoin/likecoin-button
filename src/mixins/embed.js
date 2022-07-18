@@ -157,9 +157,7 @@ export default {
       isRedirecting: false,
       ctaHref: DEPUB_SPACE_URL,
 
-      tempLink: '',
-      tempCTA: '',
-      tempNFTPrice: -1,
+      nftPrice: -1,
     };
   },
   computed: {
@@ -308,9 +306,27 @@ export default {
       }
       return { id: this.id, referrer: this.referrer, iscnId: '' };
     },
+    ctaLink() {
+      if (this.iscnId) {
+        if (this.nftPrice) {
+          return `https://app.rinkeby.like.co/nfttest/mint/${encodeURIComponent(this.iscnId)}`;
+        }
+        return `https://app.rinkeby.like.co/nfttest/button/${encodeURIComponent(this.iscnId)}`;
+      }
+      return `https://app.rinkeby.like.co/nfttest/fetch?url=${this.referrer}&liker_id=${this.id}`;
+    },
+    ctaText() {
+      if (this.iscnId) {
+        if (this.nftPrice) {
+          return 'Collect NFT';
+        }
+        return 'Mint NFT';
+      }
+      return 'Create ISCN';
+    },
   },
   async mounted() {
-    await this.updateTempCTA();
+    await this.updateCtaText();
   },
   methods: {
     async getIsCookieSupport() {
@@ -514,24 +530,13 @@ export default {
       }
       // TO-DO: handle go to portfolio
     },
-    async updateTempCTA() {
-      this.tempLink = `https://app.rinkeby.like.co/nfttest/fetch?url=${this.referrer}&liker_id=${this.id}`;
-      this.tempCTA = 'Create ISCN';
-      this.tempNFTPrice = -1;
+    async updateCtaText() {
       if (this.iscnId) {
-        let res;
         try {
-          res = await apiGetLikerNftMint(this.iscnId);
+          const { data } = await apiGetLikerNftMint(this.iscnId);
+          this.nftPrice = data.currentPrice;
         } catch (error) {
           // do nothing
-        }
-        if (res) {
-          this.tempLink = `https://app.rinkeby.like.co/nfttest/button/${encodeURIComponent(this.iscnId)}`;
-          this.tempCTA = 'Collect NFT';
-          this.tempNFTPrice = res.data.currentPrice;
-        } else {
-          this.tempLink = `https://app.rinkeby.like.co/nfttest/mint/${encodeURIComponent(this.iscnId)}`;
-          this.tempCTA = 'Mint NFT';
         }
       }
     },
