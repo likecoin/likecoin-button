@@ -117,18 +117,28 @@ export default {
     } else if (inputAddress.startsWith('did:cosmos:')) {
       inputAddress = `cosmos1${stakeholdersFirstId.slice(stakeholdersFirstId.length - addressLengthWithoutPrefixAnd1)}`;
     }
-    let validlikeWallet;
+    let stakeholdersValidlikeWallet;
     if (isValidAddress(inputAddress)) {
-      validlikeWallet = changeAddressPrefix(inputAddress, 'like');
+      stakeholdersValidlikeWallet = changeAddressPrefix(inputAddress, 'like');
     }
-    const address = validlikeWallet || (data && data.data && data.data.owner);
-    const likerData = await apiGetLikerDataByAddress(address).catch(() => {});
+    let address = '';
+    let stakeholdersName;
+    if (stakeholdersValidlikeWallet
+      || (stakeholders && stakeholders[0] && stakeholders[0].entity.name)) {
+      address = stakeholdersValidlikeWallet;
+      stakeholdersName = (stakeholders && stakeholders[0] && stakeholders[0].entity.name);
+    } else {
+      address = data && data.data && data.data.owner;
+    }
+    const likerData = await apiGetLikerDataByAddress(address)
+      .catch(() => {});
     const displayName = (likerData && likerData.data && likerData.data.displayName)
-    || (stakeholders && stakeholders[0] && stakeholders[0].entity.name)
+    || stakeholdersName
     || maskedWallet(address);
     const avatar = (likerData && likerData.data && likerData.data.avatar)
     // Will use generative art in the future
     || `https://avatars.dicebear.com/api/identicon/${encodeURIComponent(iscnId)}.svg`;
+
     return {
       id,
       displayName,
