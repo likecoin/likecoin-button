@@ -121,7 +121,7 @@ export default {
     if (isValidAddress(inputAddress)) {
       stakeholdersValidlikeWallet = changeAddressPrefix(inputAddress, 'like');
     }
-    let address = '';
+    let address;
     let stakeholdersName;
     if (stakeholdersValidlikeWallet) {
       address = stakeholdersValidlikeWallet;
@@ -132,6 +132,7 @@ export default {
     const likerData = await apiGetLikerDataByAddress(address)
       .catch(() => {});
     const displayName = (likerData && likerData.data && likerData.data.displayName)
+    // stakeholdersName is only set if stakeholder wallet is used
     || stakeholdersName
     || maskedWallet(address);
     const avatar = (likerData && likerData.data && likerData.data.avatar)
