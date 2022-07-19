@@ -123,8 +123,7 @@ export default {
     }
     let address = '';
     let stakeholdersName;
-    if (stakeholdersValidlikeWallet
-      || (stakeholders && stakeholders[0] && stakeholders[0].entity.name)) {
+    if (stakeholdersValidlikeWallet) {
       address = stakeholdersValidlikeWallet;
       stakeholdersName = (stakeholders && stakeholders[0] && stakeholders[0].entity.name);
     } else {
