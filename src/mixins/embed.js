@@ -29,7 +29,7 @@ import {
 
 import { checkHasStorageAPIAccess, checkIsFirefoxStrictMode } from '~/util/client';
 import { handleQueryStringInUrl } from '~/util/url';
-import { isValidAddress, changeAddressPrefix } from '~/util/cosmos';
+import { isValidAddress, changeAddressPrefix, maskedWallet } from '~/util/cosmos';
 
 
 const MAX_LIKE = 5;
@@ -123,7 +123,8 @@ export default {
     }
     const address = validlikeWallet || (data && data.data && data.data.owner);
     const likerData = await apiGetLikerDataByAddress(address).catch(() => {});
-    const displayName = (likerData && likerData.data && likerData.data.displayName) || address;
+    const displayName = (likerData && likerData.data && likerData.data.displayName)
+    || maskedWallet(address);
     const avatar = (likerData && likerData.data && likerData.data.avatar)
     // Will use generative art in the future
     || `https://avatars.dicebear.com/api/identicon/${encodeURIComponent(iscnId)}.svg`;
