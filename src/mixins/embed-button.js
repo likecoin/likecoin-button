@@ -21,6 +21,7 @@ export default {
       } else {
         url = `/in/like/${this.id}/?referrer=${encodeURIComponent(this.referrer)}`;
       }
+      url += '&popup=1';
       if (this.buttonType) url += `&type=${encodeURIComponent(this.buttonType)}`;
       return url;
     },
