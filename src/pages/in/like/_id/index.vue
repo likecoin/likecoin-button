@@ -2,7 +2,10 @@
   <div class="lc-page-wrapper">
 
     <header class="lc-page-header">
-      <div class="lc-page-header__left-section">
+      <div
+        v-if="isPopup"
+        class="lc-page-header__left-section"
+      >
         <a @click="onClickBackButton">{{ $t('general.back') }}</a>
       </div>
     </header>
@@ -163,6 +166,10 @@ export default {
     isLoading() {
       return this.contentKey === 'loading' || this.isRedirecting;
     },
+    isPopup() {
+      const { popup } = this.$route.query;
+      return popup && popup !== '0';
+    },
     encodedExternalURL() {
       return encodeURIComponent(`https://${EXTERNAL_HOSTNAME}${this.$route.path}`);
     },
@@ -248,12 +255,17 @@ export default {
   },
   async mounted() {
     await this.updateUserSignInStatus();
-    if (!this.isLoggedIn) {
+    if (this.isPopup && !this.isLoggedIn) {
       this.signUp({ isNewWindow: false });
       logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp', 1);
     }
   },
   methods: {
+    async doLogin(action) {
+      if (this.isPreview) return;
+      this.postSignInAction = action;
+      this.signUp({ isNewWindow: false });
+    },
     async doLike() {
       if (!this.isMaxLike && !this.isCreator) {
         this.like();
@@ -278,18 +290,22 @@ export default {
         console.error(err);
       }
     },
-    onClickLike() {
-      this.doLike();
-
-      const isPaidSubscriber = this.isSubscribed && !this.isTrialSubscriber;
-      if (
-        this.isMaxLike
-        && (
-          !isPaidSubscriber
-          || (isPaidSubscriber && (!checkIsMobileClient() || checkIsTrustClient()))
-        )
-      ) {
-        this.contentKey = 'cta';
+    async onClickLike() {
+      if (this.isLoggedIn) {
+        // Case 3: User has logged in
+        this.doLike();
+        const isPaidSubscriber = this.isSubscribed && !this.isTrialSubscriber;
+        if (
+          this.isMaxLike
+          && (
+            !isPaidSubscriber
+            || (isPaidSubscriber && (!checkIsMobileClient() || checkIsTrustClient()))
+          )
+        ) {
+          this.contentKey = 'cta';
+        }
+      } else {
+        await this.doLogin('like');
       }
     },
     onClickLikeStats() {
