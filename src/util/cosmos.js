@@ -14,5 +14,11 @@ export function changeAddressPrefix(address, newPrefix) {
 }
 
 export function maskedWallet(address) {
-  return address.replace(/((?:like1|0x).{4}).*(.{8})/, '$1...$2');
+  let replacedAddress = address;
+  if (address.startsWith('like1')) {
+    replacedAddress = address.replace(/((?:like1|0x).{4}).*(.{8})/, '$1...$2');
+  } if (address.startsWith('cosmos1')) {
+    replacedAddress = address.replace(/((?:cosmos1|0x).{4}).*(.{6})/, '$1...$2');
+  }
+  return replacedAddress;
 }

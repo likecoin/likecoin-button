@@ -124,6 +124,7 @@ export default {
     const address = validlikeWallet || (data && data.data && data.data.owner);
     const likerData = await apiGetLikerDataByAddress(address).catch(() => {});
     const displayName = (likerData && likerData.data && likerData.data.displayName)
+    || (stakeholders && stakeholders[0] && stakeholders[0].entity.name)
     || maskedWallet(address);
     const avatar = (likerData && likerData.data && likerData.data.avatar)
     // Will use generative art in the future
