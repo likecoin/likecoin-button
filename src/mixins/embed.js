@@ -24,6 +24,7 @@ import {
   apiGetLikeButtonSelfCount,
   apiGetSuperLikeMyStatus,
   apiGetDataMinByIscnId,
+  apiGetLikerDataByAddress,
 } from '~/util/api/api';
 
 import { checkHasStorageAPIAccess, checkIsFirefoxStrictMode } from '~/util/client';
@@ -105,13 +106,19 @@ export default {
     });
     const metadata = data && data.data.records[0].data.contentMetadata;
     const stakeholders = data && data.data.records[0].data.stakeholders;
+
+    const likerData = await apiGetLikerDataByAddress(data && data.data.owner).catch(() => {});
+    const displayName = (likerData && likerData.data && likerData.data.displayName)
+    || (stakeholders && stakeholders[0] && stakeholders[0].entity.name);
+    const avatar = (likerData && likerData.data && likerData.data.avatar)
+    // Will use generative art in the future
+    || `https://avatars.dicebear.com/api/identicon/${encodeURIComponent(iscnId)}.svg`;
     return {
       id,
-      displayName: stakeholders && stakeholders[0] && stakeholders[0].entity.name,
+      displayName,
       iscnId,
       amount,
-      // Will use generative art in the future
-      avatar: `https://avatars.dicebear.com/api/identicon/${encodeURIComponent(iscnId)}.svg`,
+      avatar,
       iscnName: metadata && (metadata.name || metadata.title),
     };
   },

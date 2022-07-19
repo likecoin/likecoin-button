@@ -161,3 +161,5 @@ export const apiGetSupportingUserByID = (id = '') => axios.get(
 // api for ISCN state
 
 export const apiGetDataMinByIscnId = (iscnId = '') => axios.get(`${ISCN_RAW_DATA_ENDPOINT}${encodeURIComponent(iscnId)}`);
+
+export const apiGetLikerDataByAddress = (address = '') => axios.get(`${LIKECOIN_API}/users/addr/${address}/min`);
