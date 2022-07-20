@@ -25,10 +25,13 @@ import {
   apiGetSuperLikeMyStatus,
   apiGetDataMinByIscnId,
   apiGetLikerNftMint,
+  apiGetLikerDataByAddress,
 } from '~/util/api/api';
 
 import { checkHasStorageAPIAccess, checkIsFirefoxStrictMode } from '~/util/client';
 import { handleQueryStringInUrl } from '~/util/url';
+import { isValidAddress, changeAddressPrefix, maskedWallet } from '~/util/cosmos';
+
 
 const MAX_LIKE = 5;
 const LIKE_STATS_WINDOW_NAME = 'LIKER_LIST_STATS_WINDOW';
@@ -106,13 +109,43 @@ export default {
     });
     const metadata = data && data.data.records[0].data.contentMetadata;
     const stakeholders = data && data.data.records[0].data.stakeholders;
+
+    const stakeholdersFirstId = (stakeholders[0] && stakeholders[0].entity && stakeholders[0].entity['@id']) || '';
+    let inputAddress = stakeholdersFirstId;
+    const addressLengthWithoutPrefixAnd1 = 38;
+    if (stakeholdersFirstId.startsWith('did:like:')) {
+      inputAddress = `like1${stakeholdersFirstId.slice(stakeholdersFirstId.length - addressLengthWithoutPrefixAnd1)}`;
+    } else if (inputAddress.startsWith('did:cosmos:')) {
+      inputAddress = `cosmos1${stakeholdersFirstId.slice(stakeholdersFirstId.length - addressLengthWithoutPrefixAnd1)}`;
+    }
+    let stakeholdersValidlikeWallet;
+    if (isValidAddress(inputAddress)) {
+      stakeholdersValidlikeWallet = changeAddressPrefix(inputAddress, 'like');
+    }
+    let address;
+    let stakeholdersName;
+    if (stakeholdersValidlikeWallet) {
+      address = stakeholdersValidlikeWallet;
+      stakeholdersName = (stakeholders && stakeholders[0] && stakeholders[0].entity.name);
+    } else {
+      address = data && data.data && data.data.owner;
+    }
+    const likerData = await apiGetLikerDataByAddress(address)
+      .catch(() => {});
+    const displayName = (likerData && likerData.data && likerData.data.displayName)
+    // stakeholdersName is only set if stakeholder wallet is used
+    || stakeholdersName
+    || maskedWallet(address);
+    const avatar = (likerData && likerData.data && likerData.data.avatar)
+    // Will use generative art in the future
+    || `https://avatars.dicebear.com/api/identicon/${encodeURIComponent(iscnId)}.svg`;
+
     return {
       id,
-      displayName: stakeholders && stakeholders[0] && stakeholders[0].entity.name,
+      displayName,
       iscnId,
       amount,
-      // Will use generative art in the future
-      avatar: `https://avatars.dicebear.com/api/identicon/${encodeURIComponent(iscnId)}.svg`,
+      avatar,
       iscnName: metadata && (metadata.name || metadata.title),
     };
   },
