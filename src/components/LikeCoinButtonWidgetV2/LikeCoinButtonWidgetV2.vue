@@ -74,6 +74,18 @@
         </a>
       </foreignObject>
     </svg>
+
+    <div>
+      <div v-if="hasPrice">
+        {{ nftPrice }} $LIKE
+      </div>
+      <a
+        :href="ctaLink"
+        target="_blank"
+      >
+        {{ ctaText }}
+      </a>
+    </div>
   </div>
 </template>
 
@@ -134,6 +146,18 @@ export default {
     shouldShowCta: {
       type: Boolean,
       default: false,
+    },
+    ctaLink: {
+      type: String,
+      default: '',
+    },
+    ctaText: {
+      type: String,
+      default: '',
+    },
+    nftPrice: {
+      type: Number,
+      default: -1,
     },
   },
   computed: {
@@ -237,6 +261,9 @@ export default {
     },
     depupSpaceUrl() {
       return DEPUB_SPACE_URL;
+    },
+    hasPrice() {
+      return this.nftPrice > 0;
     },
   },
 };

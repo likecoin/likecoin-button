@@ -9,6 +9,9 @@
       :cta-href="likerWallet && ctaHref"
       :is-show-like-button="isShowLikeButton"
       :should-show-cta="hasSuperLiked"
+      :cta-link="ctaLink"
+      :cta-text="ctaText"
+      :nft-price="nftPrice"
       @click-like-button-label="onClickLikeStats"
     )
       template(#like-button)

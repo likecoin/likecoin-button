@@ -162,4 +162,10 @@ export const apiGetSupportingUserByID = (id = '') => axios.get(
 
 export const apiGetDataMinByIscnId = (iscnId = '') => axios.get(`${ISCN_RAW_DATA_ENDPOINT}${encodeURIComponent(iscnId)}`);
 
+export const apiGetLikerNftMint = iscnId => axios.get(`${LIKECOIN_API}/likernft/mint`, {
+  params: {
+    iscn_id: iscnId,
+  },
+});
+
 export const apiGetLikerDataByAddress = (address = '') => axios.get(`${LIKECOIN_API}/users/addr/${address}/min`);

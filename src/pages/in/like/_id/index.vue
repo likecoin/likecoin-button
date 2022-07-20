@@ -50,6 +50,9 @@
             :hint-label="hintText"
             :should-show-cta="hasSuperLiked"
             :cta-button-label="ctaButtonLabel"
+            :cta-link="ctaLink"
+            :cta-text="ctaText"
+            :nft-price="nftPrice"
           >
             <template #like-button>
               <LikeButton

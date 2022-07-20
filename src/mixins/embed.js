@@ -24,6 +24,7 @@ import {
   apiGetLikeButtonSelfCount,
   apiGetSuperLikeMyStatus,
   apiGetDataMinByIscnId,
+  apiGetLikerNftMint,
   apiGetLikerDataByAddress,
 } from '~/util/api/api';
 
@@ -188,6 +189,8 @@ export default {
 
       isRedirecting: false,
       ctaHref: DEPUB_SPACE_URL,
+
+      nftPrice: -1,
     };
   },
   computed: {
@@ -336,6 +339,27 @@ export default {
       }
       return { id: this.id, referrer: this.referrer, iscnId: '' };
     },
+    ctaLink() {
+      if (this.iscnId) {
+        if (this.nftPrice) {
+          return `https://app.rinkeby.like.co/nfttest/mint/${encodeURIComponent(this.iscnId)}`;
+        }
+        return `https://app.rinkeby.like.co/nfttest/button/${encodeURIComponent(this.iscnId)}`;
+      }
+      return `https://app.rinkeby.like.co/nfttest/fetch?url=${this.referrer}&liker_id=${this.id}`;
+    },
+    ctaText() {
+      if (this.iscnId) {
+        if (this.nftPrice) {
+          return 'Collect NFT';
+        }
+        return 'Mint NFT';
+      }
+      return 'Create ISCN';
+    },
+  },
+  async mounted() {
+    await this.updateCtaText();
   },
   methods: {
     async getIsCookieSupport() {
@@ -538,6 +562,16 @@ export default {
         window.location.href = url;
       }
       // TO-DO: handle go to portfolio
+    },
+    async updateCtaText() {
+      if (this.iscnId) {
+        try {
+          const { data } = await apiGetLikerNftMint(this.iscnId);
+          this.nftPrice = data.currentPrice;
+        } catch (error) {
+          // do nothing
+        }
+      }
     },
   },
 };
