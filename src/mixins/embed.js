@@ -19,6 +19,7 @@ import {
   apiPostLikeButton,
   apiPostSuperLike,
   apiGetUserMinById,
+  apiGetURLToISCNMapping,
   apiGetLikeButtonTotalCount,
   apiGetLikeButtonMyStatus,
   apiGetLikeButtonSelfCount,
@@ -72,35 +73,46 @@ export default {
     }
 
     const { id } = params;
-    let { type = '' } = query;
-    const { referrer = '', iscn_id: iscnId } = query;
+    let { type = '', iscn_id: iscnId } = query;
+    const { referrer = '' } = query;
     if (!type && referrer.match(MEDIUM_MEDIA_REGEX)) {
       type = 'medium';
     }
 
     if (id !== 'iscn') {
-      const data = await apiGetUserMinById(id).catch((err) => {
+      const mappingDataRes = await apiGetURLToISCNMapping(id, referrer).catch((err) => {
         console.error(err); // eslint-disable-line no-console
-        error({ statusCode: 404, message: '' });
       });
-      const {
-        displayName,
-        avatar,
-        isPreRegCivicLiker,
-        isCivicLikerTrial,
-        isSubscribedCivicLiker,
-        civicLikerSince,
-      } = data.data;
-      return {
-        id,
-        displayName: displayName || id,
-        avatar,
-        isPreRegCivicLiker,
-        isCivicLikerTrial,
-        isSubscribedCivicLiker,
-        civicLikerSince,
-        amount,
-      };
+      if (mappingDataRes && mappingDataRes.data) {
+        // TODO: use iscnId instead of composing from prefix and id
+        const { iscnPrefix, iscnVersion } = mappingDataRes.data;
+        iscnId = `${iscnPrefix}/${iscnVersion}`;
+      }
+
+      if (!iscnId) {
+        const data = await apiGetUserMinById(id).catch((err) => {
+          console.error(err); // eslint-disable-line no-console
+          error({ statusCode: 404, message: '' });
+        });
+        const {
+          displayName,
+          avatar,
+          isPreRegCivicLiker,
+          isCivicLikerTrial,
+          isSubscribedCivicLiker,
+          civicLikerSince,
+        } = data.data;
+        return {
+          id,
+          displayName: displayName || id,
+          avatar,
+          isPreRegCivicLiker,
+          isCivicLikerTrial,
+          isSubscribedCivicLiker,
+          civicLikerSince,
+          amount,
+        };
+      }
     }
     const data = await apiGetDataMinByIscnId(iscnId).catch((err) => {
       console.error(err); // eslint-disable-line no-console
