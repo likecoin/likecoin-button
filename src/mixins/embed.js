@@ -109,7 +109,7 @@ export default {
     const metadata = data && data.data.records[0].data.contentMetadata;
     const stakeholders = data && data.data.records[0].data.stakeholders;
 
-    const stakeholdersFirstId = (stakeholders[0] && stakeholders[0].entity && stakeholders[0].entity['@id']) || '';
+    const stakeholdersFirstId = (stakeholders && stakeholders[0] && stakeholders[0].entity && stakeholders[0].entity['@id']) || '';
     let inputAddress = stakeholdersFirstId;
     const addressLengthWithoutPrefixAnd1 = 38;
     if (stakeholdersFirstId.startsWith('did:like:')) {
