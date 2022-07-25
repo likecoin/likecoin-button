@@ -342,11 +342,11 @@ export default {
     ctaLink() {
       if (this.iscnId) {
         if (this.nftPrice) {
-          return `https://app.rinkeby.like.co/nfttest/mint/${encodeURIComponent(this.iscnId)}`;
+          return `https://app.rinkeby.like.co/nft/iscn/${encodeURIComponent(this.iscnId)}`;
         }
-        return `https://app.rinkeby.like.co/nfttest/button/${encodeURIComponent(this.iscnId)}`;
+        return `https://app.rinkeby.like.co/nft/purchase/${encodeURIComponent(this.iscnId)}`;
       }
-      return `https://app.rinkeby.like.co/nfttest/fetch?url=${this.referrer}&liker_id=${this.id}`;
+      return `https://app.rinkeby.like.co/nft/url?url=${this.referrer}&liker_id=${this.id}`;
     },
     ctaText() {
       if (this.iscnId) {
