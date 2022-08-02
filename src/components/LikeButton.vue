@@ -32,15 +32,15 @@
           class="like-button-knob-wrapper"
         >
           <a
+            ref="button"
             :style="{ marginLeft: `${knobProgress * 100}%` }"
             :href="$attrs.href"
+            class="like-button-knob"
+            target="_blank"
             @mousedown="onPressKnob"
             @mouseup="onPressedKnob"
             @mouseleave="onLeaveKnob"
             @click="onClickKnob"
-            ref="button"
-            class="like-button-knob"
-            target="_blank"
           >
             <no-ssr><ClapEffect ref="clapEffect" /></no-ssr>
 
@@ -88,14 +88,14 @@
             <transition name="like-button__like-count-bubble-">
               <div
                 v-if="isShowLikeCountBubble && likeCount > 0"
+                key="likeCountBubble"
+                ref="likeCountBubble"
                 :class="[
                   'like-button__like-count-bubble',
                   {
                     'like-button__like-count-bubble--max': isMax,
                   }
                 ]"
-                key="likeCountBubble"
-                ref="likeCountBubble"
               >{{ isMax ? 'MAX' : `+${likeCount}` }}</div>
             </transition>
           </a>
@@ -103,13 +103,13 @@
 
         <div class="like-button-stats">
           <like-text-icon
-            @click="onPressedKnob"
             class="like-button-stats__text-logo"
+            @click="onPressedKnob"
           />
           <span
             v-if="isShowTotalLike && totalLike > 0"
-            @click="$emit('click-stats')"
             class="like-button-stats__total-like"
+            @click="$emit('click-stats')"
           >{{ formattedTotalLike }}</span>
         </div>
       </div>

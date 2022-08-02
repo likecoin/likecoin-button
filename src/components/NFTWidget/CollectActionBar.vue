@@ -7,7 +7,6 @@
       {{ formattedPrice }} $LIKE
     </div>
     <button
-      @click="onClickCollectButton"
       class="
         py-[10px]
         px-[16px]
@@ -21,6 +20,7 @@
         font-600
         leading-[1.25]
       "
+      @click="onClickCollectButton"
     >
       <NFTWidgetIconInsertCoin class="mr-[12px]" />
       {{ collectButtonTitle }}

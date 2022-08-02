@@ -2,10 +2,10 @@
   <a
     :href="url"
     :title="title"
-    @click="handleClick"
     class="flex flex-col overflow-hidden rounded-[8px] bg-gray-f7"
     rel="noopener noreferrer"
     target="_blank"
+    @click="handleClick"
   >
     <div
       v-if="imgSrc"

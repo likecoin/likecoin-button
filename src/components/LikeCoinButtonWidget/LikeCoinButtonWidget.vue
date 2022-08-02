@@ -42,8 +42,8 @@
         <div :style="labelStyle">
           <button
             :style="labelButtonStyle"
-            @click="$emit('click-like-button-label')"
             class="likecoin-button-widget__label-button"
+            @click="$emit('click-like-button-label')"
           >{{ likeButtonLabel }}</button>
         </div>
       </foreignObject>
@@ -67,10 +67,10 @@
       >
         <a
           :class="ctaButtonClass"
-          @click="$emit('click-cta-button')"
           :href="ctaHref"
           target="_blank"
           rel="noreferrer noopener"
+          @click="$emit('click-cta-button')"
         >{{ ctaButtonLabel }}</a>
       </foreignObject>
     </svg>

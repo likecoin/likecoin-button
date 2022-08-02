@@ -27,12 +27,12 @@
       />
       <transition
         v-if="isHovering"
+        :css="false"
         @before-appear="hoverRimBeforeEnter"
         @appear="hoverRimEnter"
         @before-enter="hoverRimBeforeEnter"
         @enter="hoverRimEnter"
         @leave="hoverRimLeave"
-        :css="false"
       >
         <circle
           :cx="radius"
@@ -46,12 +46,12 @@
       <g style="clip-path: url(#save-icon-mask)">
         <transition
           v-if="toggled"
+          :css="false"
           @before-appear="iconFillBeforeEnter"
           @appear="iconFillEnter"
           @before-enter="iconFillBeforeEnter"
           @enter="iconFillEnter"
           @leave="iconFillLeave"
-          :css="false"
         >
           <rect
             :fill="iconFill"

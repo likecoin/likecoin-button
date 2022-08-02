@@ -9,11 +9,11 @@
     />
     <!-- Cooldown Fill -->
     <circle
+      ref="fill"
       :r="radius"
       :style="fillStyle"
       :cx="center"
       :cy="center"
-      ref="fill"
     />
   </g>
 </template>

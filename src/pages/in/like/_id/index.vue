@@ -45,15 +45,16 @@
             :like-button-label="likeButtonLabel"
             :cta-button-preset="ctaButtonPreset"
             :style="{ textAlign: 'center' }"
-            @click-like-button-label="onClickLikeStats"
             :cta-href="likerWallet && ctaHref"
             :hint-label="hintText"
             :should-show-cta="hasSuperLiked"
             :cta-button-label="ctaButtonLabel"
+            @click-like-button-label="onClickLikeStats"
           >
             <template #like-button>
               <LikeButton
                 :id="id"
+                ref="likeButton"
                 :count="likeCount"
                 :cooldown="cooldownProgress"
                 :cooldown-end-time="nextSuperLikeTime"
@@ -64,7 +65,6 @@
                 @click="onClickLike"
                 @click-disabled="onClickCooldown"
                 @cooldown-end="updateSuperLikeStatus"
-                ref="likeButton"
               />
             </template>
             <template #identity="identityProps">
@@ -212,8 +212,8 @@ export default {
         switch (this.$route.query.action) {
           case 'like':
             if (
-              (!this.isCreator && this.likeCount <= 0)
-              && this.$refs.likeButton
+              (!this.isCreator && this.likeCount <= 0) &&
+              this.$refs.likeButton
             ) {
               // Click the LikeButton directly for clicking effect
               this.$nextTick(() => {
@@ -261,7 +261,7 @@ export default {
     }
   },
   methods: {
-    async doLogin(action) {
+    doLogin(action) {
       if (this.isPreview) return;
       this.postSignInAction = action;
       this.signUp({ isNewWindow: false });
@@ -287,6 +287,7 @@ export default {
         window.close();
         window.history.back();
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error(err);
       }
     },
@@ -296,10 +297,10 @@ export default {
         this.doLike();
         const isPaidSubscriber = this.isSubscribed && !this.isTrialSubscriber;
         if (
-          this.isMaxLike
-          && (
-            !isPaidSubscriber
-            || (isPaidSubscriber && (!checkIsMobileClient() || checkIsTrustClient()))
+          this.isMaxLike &&
+          (
+            !isPaidSubscriber ||
+            (isPaidSubscriber && (!checkIsMobileClient() || checkIsTrustClient()))
           )
         ) {
           this.contentKey = 'cta';

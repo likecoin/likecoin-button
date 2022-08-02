@@ -58,6 +58,7 @@ export async function checkHasStorageAPIAccess() {
     const res = await document.hasStorageAccess();
     return res;
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error(err);
     return false;
   }
@@ -76,6 +77,7 @@ export async function requestStorageAPIAccess() {
     const res = await document.requestStorageAccess();
     return res || true;
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error(err);
     return false;
   }

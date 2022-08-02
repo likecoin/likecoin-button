@@ -2,9 +2,9 @@
   <div class="embed-create-widget-button">
     <a
       :href="link"
-      @click="onClickCreate"
       target="_blank"
       rel="noopener"
+      @click="onClickCreate"
     >
       {{ $t(`Embed.label.createMy${isButton ? 'Button' : 'Widget'}`) }}
     </a>

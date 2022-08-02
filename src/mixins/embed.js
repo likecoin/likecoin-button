@@ -32,7 +32,6 @@ import { checkHasStorageAPIAccess, checkIsFirefoxStrictMode } from '~/util/clien
 import { handleQueryStringInUrl } from '~/util/url';
 import { isValidAddress, changeAddressPrefix, maskedWallet } from '~/util/cosmos';
 
-
 const MAX_LIKE = 5;
 const LIKE_STATS_WINDOW_NAME = 'LIKER_LIST_STATS_WINDOW';
 
@@ -143,13 +142,13 @@ export default {
     }
     const likerData = await apiGetLikerDataByAddress(address)
       .catch(() => {});
-    const displayName = (likerData && likerData.data && likerData.data.displayName)
+    const displayName = (likerData && likerData.data && likerData.data.displayName) ||
     // stakeholdersName is only set if stakeholder wallet is used
-    || stakeholdersName
-    || maskedWallet(address);
-    const avatar = (likerData && likerData.data && likerData.data.avatar)
+    stakeholdersName ||
+    maskedWallet(address);
+    const avatar = (likerData && likerData.data && likerData.data.avatar) ||
     // Will use generative art in the future
-    || `https://avatars.dicebear.com/api/identicon/${encodeURIComponent(iscnId)}.svg`;
+    `https://avatars.dicebear.com/api/identicon/${encodeURIComponent(iscnId)}.svg`;
 
     return {
       id,
@@ -356,12 +355,13 @@ export default {
         this.hasStorageAPIAccess = await checkHasStorageAPIAccess();
         // Cross-site Cookie randomly disappear in fx strict mode
         const isFirefoxStrictMode = checkIsFirefoxStrictMode();
-        res = process.client
-          && navigator.cookieEnabled
-          && this.hasStorageAPIAccess
-          && isCookieEnabled()
-          && !isFirefoxStrictMode;
+        res = process.client &&
+          navigator.cookieEnabled &&
+          this.hasStorageAPIAccess &&
+          isCookieEnabled() &&
+          !isFirefoxStrictMode;
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error(err);
         return false;
       }
@@ -422,8 +422,8 @@ export default {
               this.isTrialSubscriber = isTrialSubscriber;
               this.civicLikerVersion = civicLikerVersion;
               if (
-                this.hasCookieSupport
-                && serverCookieSupported !== undefined
+                this.hasCookieSupport &&
+                serverCookieSupported !== undefined
               ) {
                 this.hasCookieSupport = serverCookieSupported;
               }

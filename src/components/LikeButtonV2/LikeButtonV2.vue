@@ -9,10 +9,10 @@
     <defs>
       <clipPath :id="buttonMaskID">
         <transition
+          mode="out-in"
           @before-enter="buttonMaskBeforeEnter"
           @enter="buttonMaskEnter"
           @leave="buttonMaskLeave"
-          mode="out-in"
         >
           <path
             v-if="isShowBadge"
@@ -47,11 +47,11 @@
     <g :style="{ clipPath: `url(#${buttonMaskID})` }">
       <g :style="buttonStyle">
         <transition
+          :css="false"
+          mode="in-out"
           @before-enter="buttonBgBeforeEnter"
           @enter="buttonBgEnter"
           @leave="buttonBgleave"
-          :css="false"
-          mode="in-out"
         >
           <!-- Button Bg -->
           <circle
@@ -69,10 +69,10 @@
           }"
         >
           <transition
+            :css="false"
             @before-enter="buttonIconBeforeEnter"
             @enter="buttonIconEnter"
             @leave="buttonIconleave"
-            :css="false"
           >
             <!-- Button Clap -->
             <g
@@ -90,9 +90,9 @@
             >
               <!-- Button Star -->
               <transition
+                :css="false"
                 @enter="starIconEnter"
                 @leave="starIconleave"
-                :css="false"
               >
                 <g :key="state">
                   <!-- Star Bits -->
@@ -150,6 +150,7 @@
           </transition>
         </g>
         <Cooldown
+          ref="cooldown"
           :value="cooldownValue"
           :end-time="cooldownEndTime"
           :color="cooldownFillColor"
@@ -157,7 +158,6 @@
           :center="78"
           :is-bold="!isDisabled && isHovering"
           @end="onCooldownEnd"
-          ref="cooldown"
         />
       </g>
       <foreignObject
@@ -168,15 +168,15 @@
       >
         <button
           v-if="!isDisabled"
+          key="normal"
           :style="buttonStyle"
           v-on="buttonListeners"
-          key="normal"
         />
         <button
           v-else
+          key="disabled"
           :style="buttonStyle"
           @click="onClickDisabledButton"
-          key="disabled"
         />
       </foreignObject>
     </g>
@@ -303,9 +303,9 @@ export default {
       return 'superlikeable';
     },
     isDisabled() {
-      return this.state === 'just-superliked'
-        || this.state === 'cooldown'
-        || this.hasBlockingAnimation;
+      return this.state === 'just-superliked' ||
+        this.state === 'cooldown' ||
+        this.hasBlockingAnimation;
     },
     isShowBadge() {
       return this.isCreator || this.count > 0;
@@ -354,8 +354,8 @@ export default {
     },
     cooldownValue() {
       if (
-        this.state === 'just-superliked'
-        || this.state === 'cooldown'
+        this.state === 'just-superliked' ||
+        this.state === 'cooldown'
       ) {
         return this.cooldown;
       }

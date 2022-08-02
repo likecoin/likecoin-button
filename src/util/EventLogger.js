@@ -24,6 +24,7 @@ export async function setTrackerUser({ user }) {
       userId: hashedId,
     });
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error(err);
   }
   if (window.fbq) {
@@ -53,7 +54,9 @@ export function logTrackerEvent(
     });
     if (window.fbq) window.fbq('trackCustom', `${category}_${action}`, { label });
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error('logging error:');
+    // eslint-disable-next-line no-console
     console.error(err);
   }
 }

@@ -9,11 +9,23 @@ module.exports = {
   },
   extends: [
     'airbnb-base',
+    '@nuxtjs',
     'plugin:vue/recommended',
     'plugin:nuxt/recommended',
   ],
   // add your custom rules here
   rules: {
+    semi: 'off',
+    'comma-dangle': [
+      'error', {
+        arrays: 'only-multiline',
+        objects: 'only-multiline',
+        imports: 'only-multiline',
+        exports: 'only-multiline',
+        functions: 'ignore'
+      },
+    ],
+    'no-console': 'warn',
     // don't require .vue extension when importing
     'import/extensions': ['error', 'always', {
       js: 'never',

@@ -1,8 +1,8 @@
 <template>
   <NFTWidgetBaseCard class="flex items-center justify-between px-[24px]">
     <button
-      @click="handleClickLike"
       class="flex items-center transition-colors text-medium-gray hover:text-dark-gray"
+      @click="handleClickLike"
     >
       <NFTWidgetIconLike class="w-[20px] h-[20px]" />
       <span class="ml-[12px]">{{ likeActionLabel }}</span>

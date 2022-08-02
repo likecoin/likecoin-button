@@ -50,11 +50,13 @@ export default {
   watch: {
     error(newErr) {
       if (newErr) {
+        // eslint-disable-next-line no-console
         console.error(newErr);
       }
     },
   },
   mounted() {
+    // eslint-disable-next-line no-console
     console.error(this.error);
     setTimeout(() => {
       window.location.href = HOMEPAGE;

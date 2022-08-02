@@ -18,7 +18,9 @@ async function loadLanguageAsync(i18n, lang) {
     i18n.loadedLanguages = [defaultLocale];
   }
   if (!i18n.loadedLanguages.includes(lang)) {
-    const msgs = await import(/* webpackChunkName: "lang-[request]" */ `@/locales/client/${lang}`);
+    // Fix ESLint error in template string
+    // eslint-disable-next-line prefer-template
+    const msgs = await import(/* webpackChunkName: "lang-[request]" */ '@/locales/client/' + lang);
     i18n.setLocaleMessage(lang, msgs);
     i18n.loadedLanguages.push(lang);
   }
@@ -46,8 +48,8 @@ export default async ({
     });
   } else if (req) {
     locale = (
-      (req.acceptsLanguages && req.acceptsLanguages(supportedLocales))
-      || defaultLocale
+      (req.acceptsLanguages && req.acceptsLanguages(supportedLocales)) ||
+      defaultLocale
     );
     if (!supportedLocales.includes(locale)) locale = defaultLocale;
   }

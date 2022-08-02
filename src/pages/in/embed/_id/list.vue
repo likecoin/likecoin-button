@@ -7,8 +7,8 @@
           slot="header-left"
         >
           <a
-            @click="$router.go(-1)"
             href="#"
+            @click="$router.go(-1)"
           >
             {{ $t('general.back') }}
           </a>
@@ -74,7 +74,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import Vue from 'vue'; // eslint-disable-line import/no-extraneous-dependencies
@@ -165,7 +164,7 @@ export default {
     this.fetchList();
   },
   methods: {
-    async fetchList() {
+    fetchList() {
       this.likers.forEach(async (r) => {
         try {
           const { data } = await apiGetUserMinById(r.id);
@@ -175,6 +174,7 @@ export default {
           Vue.set(r, 'isSubscribedCivicLiker', data.isSubscribedCivicLiker);
           Vue.set(r, 'civicLikerSince', data.civicLikerSince);
         } catch (err) {
+          // eslint-disable-next-line no-console
           console.error(err);
         } finally {
           this.isFetched = true;
@@ -195,7 +195,6 @@ export default {
   },
 };
 </script>
-
 
 <style lang="scss">
 @import "~assets/css/variables";

@@ -31,6 +31,7 @@ export default {
       }
       redirect(urlString);
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error(err);
       error(err);
     }

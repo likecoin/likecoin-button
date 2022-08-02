@@ -7,8 +7,8 @@
   >
     <defs>
       <path
-        :d="$options.triangle.path"
         id="clap-effect-path"
+        :d="$options.triangle.path"
       />
     </defs>
     <g ref="graph">

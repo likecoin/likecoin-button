@@ -7,10 +7,10 @@
     width="36"
   >
     <transition
+      :css="false"
       @before-enter="beforeEnter"
       @enter="enter"
       @leave="leave"
-      :css="false"
     >
       <g v-if="!isHidden">
         <g key="count">
@@ -21,9 +21,9 @@
             :style="bgStyle"
           />
           <transition
+            :css="false"
             @enter="countLabelEnter"
             @leave="countLabeleave"
-            :css="false"
           >
             <g :key="`${count}`">
               <text
@@ -35,13 +35,13 @@
           </transition>
         </g>
         <transition
+          :css="false"
+          mode="in-out"
           @before-appear="overlayBeforeEnter"
           @apper="overlayEnter"
           @before-enter="overlayBeforeEnter"
           @enter="overlayEnter"
           @leave="overlayLeave"
-          :css="false"
-          mode="in-out"
         >
           <g
             v-if="isMax"
@@ -61,18 +61,18 @@
           </g>
           <g
             v-else-if="isShareable || isShared"
+            key="share-icon"
             :style="{
               fill: shareIconContentColor,
               fillRule: 'evenodd',
             }"
-            key="share-icon"
           >
             <transition
+              :css="false"
+              mode="in-out"
               @before-enter="shareIconBgBeforeEnter"
               @enter="shareIconBgEnter"
               @leave="shareIconBgLeave"
-              :css="false"
-              mode="in-out"
             >
               <circle
                 :key="state"
@@ -85,9 +85,9 @@
               />
             </transition>
             <transition
+              :css="false"
               @enter="shareIconContentEnter"
               @leave="shareIconContentLeave"
-              :css="false"
             >
               <g :key="state">
                 <path d="M13.13,15.11a2,2,0,1,0-2-2A2,2,0,0,0,13.13,15.11Z" />

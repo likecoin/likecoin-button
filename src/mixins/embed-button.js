@@ -77,6 +77,7 @@ export default {
           window.top.location.href = popupURL;
           return;
         } catch (err) {
+          // eslint-disable-next-line no-console
           console.error(err);
         }
       }

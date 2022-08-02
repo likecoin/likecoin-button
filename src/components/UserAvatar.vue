@@ -36,7 +36,6 @@
   </div>
 </template>
 
-
 <script>
 import { LIKE_CO_HOSTNAME } from '@/constant';
 
@@ -67,7 +66,6 @@ export default {
   },
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import "~assets/css/variables";

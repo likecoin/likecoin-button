@@ -3,10 +3,10 @@ export default {
   experimentID: '',
   isEligible: ({ req, route }) => {
     if (process.server && req.headers && req.headers.dnt === '1') return false;
-    if (process.client && (window.doNotTrack
-      || navigator.doNotTrack
-      || !navigator.cookieEnabled
-      || !(document.cookie && /likebutton_cookie=1/.test(document.cookie)))
+    if (process.client && (window.doNotTrack ||
+      navigator.doNotTrack ||
+      !navigator.cookieEnabled ||
+      !(document.cookie && /likebutton_cookie=1/.test(document.cookie)))
     ) {
       return false;
     }

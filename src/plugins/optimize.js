@@ -9,7 +9,7 @@ import {
 
 import experiments from '~/experiments';
 
-export default async ({ req, res, query }) => {
+export default ({ req, res, query }) => {
   try {
     if (process.server) {
       // eslint-disable-next-line no-underscore-dangle

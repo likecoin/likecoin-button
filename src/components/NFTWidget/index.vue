@@ -9,8 +9,8 @@
       <NFTWidgetCollectActionBar
         :price="price"
         :collect-button-label="collectButtonLabel"
-        @collect="handleCollect"
         class="mt-[8px]"
+        @collect="handleCollect"
       />
     </NFTWidgetBaseCard>
   </div>

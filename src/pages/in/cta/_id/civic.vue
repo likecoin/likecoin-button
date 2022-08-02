@@ -6,8 +6,8 @@
         slot="header-left"
       >
         <a
-          @click="$router.go(-1)"
           href="#"
+          @click="$router.go(-1)"
         >
           {{ $t('general.back') }}
         </a>
@@ -46,7 +46,6 @@
   </div>
 </template>
 
-
 <script>
 import LikeForm from '~/components/LikeForm';
 
@@ -67,7 +66,6 @@ export default {
   },
 };
 </script>
-
 
 <style lang="scss">
 @import "~assets/css/variables";

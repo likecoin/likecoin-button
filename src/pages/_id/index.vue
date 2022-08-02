@@ -49,7 +49,7 @@ export default {
       return encodeURIComponent(`https://${EXTERNAL_HOSTNAME}${this.$route.path}`);
     },
   },
-  async fetch({
+  fetch({
     params,
     redirect,
   }) {
