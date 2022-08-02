@@ -41,6 +41,7 @@ const nuxtConfig = {
   ** Customize the progress bar color
   */
   loading: { color: '#3B8070' },
+  components: true,
   plugins: [
     { src: '~/plugins/polyfill', ssr: false },
     { src: '~/plugins/likecoin-ui-vue' },
@@ -133,6 +134,9 @@ const nuxtConfig = {
     'nuxt-svg-loader',
     // '@likecoin/nuxt-google-optimize',
   ],
+  buildModules: [
+    '@nuxtjs/tailwindcss',
+  ],
   sentry: {
     clientIntegrations: {
       /* default integrations will still be added due to deep-merge */
@@ -148,16 +152,13 @@ const nuxtConfig = {
   ** Build configuration
   */
   build: {
-    extractCSS: true,
-    /* BUG: cannot parallel with extractCSS */
-    // parallel: true,
     babel: {
       presets: ({ isServer }) => [
         [
           '@nuxt/babel-preset-app',
           {
             targets: isServer
-              ? { node: '8.11.1' }
+              ? { node: '10' }
               : { browsers: 'ie 11, > 0.5%, Firefox ESR' },
           },
         ],
@@ -167,16 +168,19 @@ const nuxtConfig = {
     /*
     ** Run ESLint on save
     */
-    extend(config, { isClient, isDev }) {
+    extend(config, ctx) {
       /* eslint-disable no-param-reassign */
-      if (isClient) {
-        config.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules|nuxt)/,
-        });
-        if (!isDev) config.devtool = '#source-map';
+      if (ctx.isClient) {
+        if (ctx.isDev) {
+          config.module.rules.push({
+            enforce: 'pre',
+            test: /\.(js|vue)$/,
+            loader: 'eslint-loader',
+            exclude: /(node_modules)||(.svg$)/,
+          });
+        } else {
+          config.devtool = 'source-map';
+        }
       }
       /* eslint-enable no-param-reassign */
     },
