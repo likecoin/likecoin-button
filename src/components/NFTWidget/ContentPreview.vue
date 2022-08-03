@@ -2,7 +2,7 @@
   <a
     :href="url"
     :title="title"
-    class="flex flex-col overflow-hidden rounded-[8px] bg-gray-f7"
+    class="flex flex-col overflow-hidden rounded-[8px] bg-gray-f7 text-dark-gray"
     rel="noopener noreferrer"
     target="_blank"
     @click="handleClick"
@@ -15,12 +15,12 @@
       <img
         :src="imgSrc"
         :alt="title"
-        class="block object-contain"
+        class="block object-cover w-full"
       >
     </div>
     <div class="p-[16px] shrink-0">
-      <div class="text-[16px] leading-[1.25] font-[600]">{{ title }}</div>
-      <div class="text-[16px] leading-[1.25] font-[400] mt-[4px]">
+      <div class="text-[16px] leading-[1.25] font-600">{{ title }}</div>
+      <div class="text-[16px] leading-[1.25] font-400 mt-[4px]">
         {{ description }}
       </div>
     </div>

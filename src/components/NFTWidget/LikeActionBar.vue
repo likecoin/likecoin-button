@@ -8,30 +8,27 @@
       <span class="ml-[12px]">{{ likeActionLabel }}</span>
     </button>
     <div class="flex items-center text-dark-gray ml-[8px]">
-      <NuxtLink
-        :to="`/${creatorAddress}`"
+      <a
+        :href="creatorURL"
         class="flex items-center text-like-green group -my-[8px]"
         target="_blank"
       >
-        <Identity
+        <IdentityV2
           :avatar-url="creatorAvatarSrc"
           :avatar-size="32"
-          :is-avatar-outlined="isCivicLiker"
+          :is-avatar-outlined="isCreatorCivicLiker"
         />
-        <span class="ml-[8px] group-hover:underline">{{ formattedCreatorDisplayName }}</span>
-      </NuxtLink>
+        <span class="ml-[8px] group-hover:underline">{{ formattedCreatorName }}</span>
+      </a>
     </div>
   </NFTWidgetBaseCard>
 </template>
 
 <script>
+import { LIKER_LAND_URL_BASE } from '~/constant';
 import { ellipsis } from '~/util/ui';
-import Identity from '~/components/Identity/Identity';
 
 export default {
-  components: {
-    Identity,
-  },
   props: {
     iscnId: {
       type: String,
@@ -49,7 +46,7 @@ export default {
       type: String,
       default: '',
     },
-    isCivicLiker: {
+    isCreatorCivicLiker: {
       type: Boolean,
       default: false,
     },
@@ -59,8 +56,11 @@ export default {
     },
   },
   computed: {
-    formattedCreatorDisplayName() {
-      return ellipsis(this.creatorDisplayName);
+    formattedCreatorName() {
+      return ellipsis(this.creatorDisplayName || this.creatorAddress);
+    },
+    creatorURL() {
+      return `${LIKER_LAND_URL_BASE}/${this.creatorAddress}`;
     },
   },
   methods: {

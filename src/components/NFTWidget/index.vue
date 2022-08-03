@@ -2,9 +2,11 @@
   <div class="rounded-[16px]">
     <NFTWidgetBaseCard>
       <NFTWidgetContentPreview
+        class="transition-shadow cursor-pointer hover:shadow-[0_0_0_2px_#aaf1e7]"
         :title="title"
         :description="description"
         :img-src="imgSrc"
+        :url="url"
       />
       <NFTWidgetCollectActionBar
         :price="price"
@@ -13,6 +15,11 @@
         @collect="handleCollect"
       />
     </NFTWidgetBaseCard>
+    <NFTWidgetLikeActionBar
+      class="mt-[8px]"
+      :creator-address="ownerAddress"
+      @like="handleLike"
+    />
   </div>
 </template>
 
@@ -31,6 +38,10 @@ export default {
       type: String,
       default: '',
     },
+    url: {
+      type: String,
+      default: undefined,
+    },
     price: {
       type: Number,
       default: undefined,
@@ -39,10 +50,17 @@ export default {
       type: String,
       default: undefined,
     },
+    ownerAddress: {
+      type: String,
+      default: undefined,
+    },
   },
   methods: {
     handleCollect() {
-      // TODO
+      this.$emit('collect');
+    },
+    handleLike() {
+      this.$emit('like');
     },
   },
 };

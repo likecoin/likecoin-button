@@ -21,6 +21,10 @@ export const ISCN_RAW_DATA_ENDPOINT = IS_TESTNET
 
 export const LIKER_LAND_URL_BASE = IS_TESTNET ? 'https://rinkeby.liker.land' : 'https://liker.land';
 
+export const APP_LIKE_CO_URL_BASE = IS_TESTNET
+  ? 'https://app.rinkeby.like.co'
+  : 'https://app.like.co';
+
 /* use LIKE_CO_HOSTNAME for now to prevent CORS preflight problem
  should USE EXTERNAL_HOSTNAME in future */
 export const LIKECOIN_MISC_API_BASE = `https://${LIKE_CO_HOSTNAME}/api`;
@@ -55,3 +59,9 @@ export const MEDIUM_QUERY_STRING_TO_REMOVE = [
 export const CLW3_NOTICE_URL = 'https://matters.news/@likecoin/%E8%AE%9A%E8%B3%9E%E5%85%AC%E6%B0%91-web3-%E6%94%B9%E7%89%88%E8%BF%8E%E8%99%8E%E5%B9%B4-bafyreigrx6dnzmbnfea3btnbzno272bsfadnhwpztuaaf4z5cyxflarx5y';
 
 export const DEPUB_SPACE_URL = IS_TESTNET ? 'https://stag.depub.space/' : 'https://depub.space/';
+
+export const LIKECOIN_CHAIN_RPC = IS_TESTNET
+  ? 'https://node.testnet.like.co/rpc/'
+  : 'https://mainnet-node.like.co/rpc/';
+
+export const DEFAULT_AVATAR = 'https://static.like.co/likecoin_de-portrait.jpg';
