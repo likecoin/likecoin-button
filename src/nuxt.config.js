@@ -95,9 +95,6 @@ const nuxtConfig = {
           "'unsafe-inline'",
           'fonts.googleapis.com',
         ],
-        'report-uri': [
-          process.env.SENTRY_REPORT_URI,
-        ],
       },
     },
   },
