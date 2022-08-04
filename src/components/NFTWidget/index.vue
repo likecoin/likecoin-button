@@ -12,9 +12,11 @@
         @load-image="handleImageLoad"
       />
       <NFTWidgetCollectActionBar
-        :price="price"
-        :collect-button-label="collectButtonLabel"
         class="mt-[8px]"
+        :price="price"
+        :collector-count="collectorCount"
+        :collected-count="collectedCount"
+        :collect-button-label="collectButtonLabel"
         @collect="handleCollect"
       />
     </NFTWidgetBaseCard>
@@ -46,6 +48,14 @@ export default {
       default: undefined,
     },
     price: {
+      type: Number,
+      default: undefined,
+    },
+    collectorCount: {
+      type: Number,
+      default: undefined,
+    },
+    collectedCount: {
       type: Number,
       default: undefined,
     },

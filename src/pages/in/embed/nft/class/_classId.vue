@@ -6,6 +6,8 @@
     :img-src="contentImage"
     :url="contentURL"
     :price="nftPrice"
+    :collector-count="nftCollectorCount"
+    :collected-count="nftCollectedCount"
     :owner-address="iscnOwnerAddress"
     @view-details="viewNFTDetails"
     @collect="collectNFT"
@@ -21,6 +23,7 @@ import {
 } from '~/constant';
 import {
   apiGetNFTMetadata,
+  apiGetNFTOwners,
   apiGetNFTPurchaseInfo,
 } from '~/util/api/api';
 import { getClassInfo } from '~/util/nft';
@@ -44,14 +47,18 @@ export default {
     const { classId } = params;
     let metadata;
     const [
-      apiMetadata,
       chainMetadata = {},
-      purchaseInfo,
+      apiMetadataResult,
+      ownersResult,
+      purchaseInfoResult,
     ] = await Promise.all([
+      getClassInfo(classId),
       apiGetNFTMetadata({ classId })
         // eslint-disable-next-line no-console
         .catch(error => console.error(error)),
-      getClassInfo(classId),
+      apiGetNFTOwners({ classId })
+        // eslint-disable-next-line no-console
+        .catch(error => console.error(error)),
       apiGetNFTPurchaseInfo({ classId })
         // eslint-disable-next-line no-console
         .catch(error => console.error(error))
@@ -70,10 +77,10 @@ export default {
       metadata: classMetadata,
       parent,
     };
-    if (apiMetadata && apiMetadata.data) {
+    if (apiMetadataResult && apiMetadataResult.data) {
       metadata = {
         ...metadata,
-        ...apiMetadata.data,
+        ...apiMetadataResult.data,
       };
     }
     const {
@@ -88,7 +95,13 @@ export default {
     } = metadata;
     const {
       price: nftPrice,
-    } = (purchaseInfo || {}).data || {}
+    } = (purchaseInfoResult || {}).data || {};
+    const ownersMap = (ownersResult || {}).data || {};
+    const nftCollectedCount = Object.values(ownersMap).reduce(
+      (count, collected) => count + collected.length,
+      0
+    );
+    const nftCollectorCount = Object.keys(ownersMap).length;
     return {
       classId,
       contentTitle,
@@ -98,6 +111,8 @@ export default {
       iscnId,
       iscnOwnerAddress,
       nftPrice,
+      nftCollectedCount,
+      nftCollectorCount,
     };
   },
   mounted() {
