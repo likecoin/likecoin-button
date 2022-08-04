@@ -24,6 +24,9 @@
     <NFTWidgetLikeActionBar
       class="mt-[8px]"
       :creator-address="ownerAddress"
+      :creator-display-name="ownerDisplayName"
+      :creator-avatar-src="ownerAvatarSrc"
+      :is-creator-civic-liker="isOwnerCivicLiker"
       @like="handleLike"
     />
   </div>
@@ -70,6 +73,18 @@ export default {
     },
     ownerAddress: {
       type: String,
+      default: undefined,
+    },
+    ownerDisplayName: {
+      type: String,
+      default: undefined,
+    },
+    ownerAvatarSrc: {
+      type: String,
+      default: undefined,
+    },
+    isOwnerCivicLiker: {
+      type: Boolean,
       default: undefined,
     },
   },

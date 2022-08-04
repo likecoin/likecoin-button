@@ -9,6 +9,8 @@
     :collector-count="nftCollectorCount"
     :collected-count="nftCollectedCount"
     :owner-address="iscnOwnerAddress"
+    :owner-display-name="iscnOwnerDisplayName"
+    :owner-avatar-src="iscnOwnerAvatarSrc"
     :is-content-clickable="false"
     @view-details="viewNFTDetails"
     @collect="collectNFT"
@@ -23,6 +25,7 @@ import {
   LIKER_LAND_URL_BASE,
 } from '~/constant';
 import {
+  apiGetLikerDataByAddress,
   apiGetNFTMetadata,
   apiGetNFTOwners,
   apiGetNFTPurchaseInfo,
@@ -103,6 +106,16 @@ export default {
       0
     );
     const nftCollectorCount = Object.keys(ownersMap).length;
+
+    const likerDataResult = await apiGetLikerDataByAddress(iscnOwnerAddress)
+      // eslint-disable-next-line no-console
+      .catch(error => console.error(error));
+    const {
+      displayName: iscnOwnerDisplayName,
+      avatar: iscnOwnerAvatarSrc,
+      isCivicLikerTrial: isIscnOwnerCivicLikerTrial,
+      isSubscribedCivicLiker: isIscnOwnerSubscribedCivicLiker,
+    } = (likerDataResult || {}).data || {}
     return {
       classId,
       contentTitle,
@@ -111,6 +124,9 @@ export default {
       contentURL,
       iscnId,
       iscnOwnerAddress,
+      iscnOwnerDisplayName,
+      iscnOwnerAvatarSrc,
+      isIscnOwnerCivicLiker: isIscnOwnerSubscribedCivicLiker || isIscnOwnerCivicLikerTrial,
       nftPrice,
       nftCollectedCount,
       nftCollectorCount,
