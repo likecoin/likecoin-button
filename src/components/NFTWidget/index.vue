@@ -9,6 +9,7 @@
         :description="description"
         :img-src="imgSrc"
         :url="url"
+        :is-clickable="isContentClickable"
         @load-image="handleImageLoad"
       />
       <NFTWidgetCollectActionBar
@@ -46,6 +47,10 @@ export default {
     url: {
       type: String,
       default: undefined,
+    },
+    isContentClickable: {
+      type: Boolean,
+      default: true,
     },
     price: {
       type: Number,

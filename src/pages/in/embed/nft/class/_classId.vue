@@ -9,6 +9,7 @@
     :collector-count="nftCollectorCount"
     :collected-count="nftCollectedCount"
     :owner-address="iscnOwnerAddress"
+    :is-content-clickable="false"
     @view-details="viewNFTDetails"
     @collect="collectNFT"
     @like="likeISCN"

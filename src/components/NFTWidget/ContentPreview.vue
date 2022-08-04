@@ -1,10 +1,9 @@
 <template>
-  <a
-    :href="url"
+  <component
+    :is="tag"
+    v-bind="props"
     :title="title"
     class="flex flex-col overflow-hidden rounded-[8px] bg-gray-f7 text-dark-gray"
-    rel="noopener noreferrer"
-    target="_blank"
     @click="handleClick"
   >
     <div
@@ -25,7 +24,7 @@
         {{ description }}
       </div>
     </div>
-  </a>
+  </component>
 </template>
 
 <script>
@@ -49,10 +48,25 @@ export default {
     },
     url: {
       type: String,
-      default: '',
+      default: undefined,
+    },
+    isClickable: {
+      type: Boolean,
+      default: true,
     },
   },
   computed: {
+    tag() {
+      return this.isClickable ? 'a' : 'div';
+    },
+    props() {
+      if (!this.isClickable) return {};
+      return {
+        href: this.url,
+        rel: 'noopener noreferrer',
+        target: '_blank',
+      }
+    },
     imgStyle() {
       return {
         backgroundColor: this.imgBgColor,
