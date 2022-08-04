@@ -1,8 +1,10 @@
 <template>
   <div class="rounded-[16px]">
-    <NFTWidgetBaseCard>
+    <NFTWidgetBaseCard
+      class="transition-colors cursor-pointer hover:border-like-cyan-light"
+      @click="handleViewDetails"
+    >
       <NFTWidgetContentPreview
-        class="transition-shadow cursor-pointer hover:shadow-[0_0_0_2px_#aaf1e7]"
         :title="title"
         :description="description"
         :img-src="imgSrc"
@@ -57,6 +59,9 @@ export default {
     },
   },
   methods: {
+    handleViewDetails() {
+      this.$emit('view-details');
+    },
     handleCollect() {
       this.$emit('collect');
     },

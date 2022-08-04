@@ -20,7 +20,7 @@
         font-600
         leading-[1.25]
       "
-      @click="onClickCollectButton"
+      @click.stop="onClickCollectButton"
     >
       <NFTWidgetIconInsertCoin class="mr-[12px]" />
       {{ collectButtonTitle }}

@@ -7,6 +7,7 @@
     :url="contentURL"
     :price="nftPrice"
     :owner-address="iscnOwnerAddress"
+    @view-details="viewNFTDetails"
     @collect="collectNFT"
     @like="likeISCN"
     @load-image="notifyParentOfResizing"
@@ -14,7 +15,10 @@
 </template>
 
 <script>
-import { APP_LIKE_CO_URL_BASE } from '~/constant';
+import {
+  APP_LIKE_CO_URL_BASE,
+  LIKER_LAND_URL_BASE,
+} from '~/constant';
 import {
   apiGetNFTMetadata,
   apiGetNFTPurchaseInfo,
@@ -26,6 +30,9 @@ export default {
   computed: {
     widgetId() {
       return this.$route.query.wid;
+    },
+    detailsURL() {
+      return `${LIKER_LAND_URL_BASE}/nft/class/${this.classId}`;
     },
     purchaseURL() {
       return `${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(
@@ -108,6 +115,12 @@ export default {
     }
   },
   methods: {
+    viewNFTDetails() {
+      window.open(
+        this.detailsURL,
+        `collect_${this.classId}`
+      );
+    },
     collectNFT() {
       window.open(
         this.purchaseURL,
