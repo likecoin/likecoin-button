@@ -9,6 +9,7 @@
     :owner-address="iscnOwnerAddress"
     @collect="collectNFT"
     @like="likeISCN"
+    @load-image="notifyParentOfResizing"
   />
 </template>
 

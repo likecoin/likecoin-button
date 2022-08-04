@@ -7,6 +7,7 @@
         :description="description"
         :img-src="imgSrc"
         :url="url"
+        @load-image="handleImageLoad"
       />
       <NFTWidgetCollectActionBar
         :price="price"
@@ -61,6 +62,9 @@ export default {
     },
     handleLike() {
       this.$emit('like');
+    },
+    handleImageLoad() {
+      this.$emit('load-image');
     },
   },
 };

@@ -16,6 +16,7 @@
         :src="imgSrc"
         :alt="title"
         class="block object-cover w-full"
+        @load="handleLoadImage"
       >
     </div>
     <div class="p-[16px] shrink-0">
@@ -61,6 +62,9 @@ export default {
   methods: {
     handleClick(event) {
       event.stopPropagation();
+    },
+    handleLoadImage() {
+      this.$emit('load-image');
     },
   },
 };
