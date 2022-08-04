@@ -10,7 +10,7 @@
     <div class="flex items-center text-dark-gray ml-[8px]">
       <a
         :href="creatorURL"
-        class="flex items-center text-like-green group -my-[8px]"
+        class="flex items-center text-like-green group my-[-8px]"
         target="_blank"
       >
         <IdentityV2
