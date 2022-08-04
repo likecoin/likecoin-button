@@ -1,5 +1,6 @@
 <template>
   <NFTWidget
+    ref="widget"
     :title="contentTitle"
     :description="contentDescription"
     :img-src="contentImage"
@@ -22,6 +23,9 @@ import { getClassInfo } from '~/util/nft';
 export default {
   layout: 'widget',
   computed: {
+    widgetId() {
+      return this.$route.query.wid;
+    },
     purchaseURL() {
       return `${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(
         this.iscnId
@@ -88,6 +92,20 @@ export default {
       nftPrice,
     };
   },
+  mounted() {
+    // For iframe to resize
+    if (window.parent) {
+      this.resizeListener = window.addEventListener('resize', () => {
+        window.requestAnimationFrame(this.notifyParentOfResizing);
+      });
+      this.notifyParentOfResizing();
+    }
+  },
+  beforeDestroy() {
+    if (this.resizeListener) {
+      window.removeEventListener(this.resizeListener);
+    }
+  },
   methods: {
     collectNFT() {
       window.open(
@@ -103,6 +121,22 @@ export default {
         )}&action=like`,
         `like_${this.classId}`,
         'popup=1,width=768,height=576,top=0,left=0'
+      );
+    },
+    notifyParentOfResizing() {
+      if (!window.parent || !this.$refs.widget) return;
+      const {
+        scrollWidth: width,
+        scrollHeight: height,
+      } = this.$refs.widget.$el;
+      window.parent.postMessage(
+        {
+          type: 'likecoin-nft-widget-resize',
+          widgetId: this.widgetId,
+          width,
+          height,
+        },
+        '*'
       );
     },
   }
