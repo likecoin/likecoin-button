@@ -4,7 +4,6 @@ const { IS_TESTNET } = process.env;
 const nuxtConfig = {
   env: {
     SENTRY_DSN: process.env.SENTRY_DSN,
-    FACEBOOK_PIXEL_ID: process.env.FACEBOOK_PIXEL_ID,
     IS_TESTNET,
   },
   /*
@@ -74,15 +73,12 @@ const nuxtConfig = {
           'www.gstatic.cn',
           'ajax.googleapis.com',
           'js.intercomcdn.com',
-          'connect.facebook.net',
           'use.typekit.net',
         ],
         'frame-src': [
           'like.co',
           '*.like.co',
           'www.google.com',
-          '*.facebook.com',
-          '*.facebook.net',
         ],
         'connect-src': [
           "'self'",
