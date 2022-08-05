@@ -26,11 +26,6 @@ export async function setTrackerUser({ user }) {
   } catch (err) {
     console.error(err);
   }
-  if (window.fbq) {
-    const userPayload = {};
-    if (user) userPayload.external_id = user;
-    window.fbq('init', process.env.FACEBOOK_PIXEL_ID, userPayload);
-  }
 }
 
 export function logTrackerEvent(
@@ -51,7 +46,6 @@ export function logTrackerEvent(
       label,
       value,
     });
-    if (window.fbq) window.fbq('trackCustom', `${category}_${action}`, { label });
   } catch (err) {
     console.error('logging error:');
     console.error(err);
