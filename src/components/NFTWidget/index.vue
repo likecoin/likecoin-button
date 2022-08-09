@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-[16px]">
+  <div :class="rootClass">
     <NFTWidgetBaseCard
       class="transition-colors cursor-pointer hover:border-like-cyan-light"
       @click="handleViewDetails"
@@ -10,6 +10,7 @@
         :img-src="imgSrc"
         :url="url"
         :is-clickable="isContentClickable"
+        :is-fixed-size="isFixedSize"
         @load-image="handleImageLoad"
       />
       <NFTWidgetCollectActionBar
@@ -86,6 +87,20 @@ export default {
     isOwnerCivicLiker: {
       type: Boolean,
       default: undefined,
+    },
+    isFixedSize: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  computed: {
+    rootClass() {
+      return [
+        'rounded-[16px]',
+        {
+          'w-[360px]': !!this.isFixedSize,
+        },
+      ];
     },
   },
   methods: {

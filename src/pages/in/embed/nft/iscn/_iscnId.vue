@@ -11,6 +11,7 @@
     :owner-address="iscnOwnerAddress"
     :owner-display-name="iscnOwnerDisplayName"
     :owner-avatar-src="iscnOwnerAvatarSrc"
+    :is-fixed-size="isFixedSize"
     :is-content-clickable="false"
     @view-details="viewNFTDetails"
     @collect="collectNFT"

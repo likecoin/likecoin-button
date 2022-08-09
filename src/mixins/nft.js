@@ -12,6 +12,9 @@ import {
 export default {
   layout: 'widget',
   computed: {
+    isFixedSize() {
+      return !this.$route.query.responsive;
+    },
     widgetId() {
       return this.$route.query.wid;
     },

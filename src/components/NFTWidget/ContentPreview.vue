@@ -8,21 +8,19 @@
   >
     <div
       v-if="imgSrc"
-      :style="imgStyle"
-      class="grow bg-gray-9b"
+      :class="imgWrapperClasses"
+      :style="imgWrapperStyle"
     >
       <img
+        :class="imgClasses"
         :src="imgSrc"
         :alt="title"
-        class="block object-cover w-full"
         @load="handleLoadImage"
       >
     </div>
     <div class="p-[16px] shrink-0">
-      <div class="text-[16px] leading-[1.25] font-600">{{ title }}</div>
-      <div class="text-[16px] leading-[1.25] font-400 mt-[4px]">
-        {{ description }}
-      </div>
+      <div :class="titleClasses">{{ title }}</div>
+      <div :class="descriptionClasses">{{ description }}</div>
     </div>
   </component>
 </template>
@@ -54,6 +52,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    isFixedSize: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     tag() {
@@ -67,10 +69,57 @@ export default {
         target: '_blank',
       }
     },
-    imgStyle() {
+    titleClasses() {
+      return [
+        'text-[16px]',
+        'leading-[1.25]',
+        'font-600',
+        {
+          'whitespace-nowrap': this.isFixedSize,
+          'overflow-hidden': this.isFixedSize,
+          'overflow-ellipsis': this.isFixedSize,
+        },
+      ];
+    },
+    descriptionClasses() {
+      return [
+        'text-[16px]',
+        'leading-[1.25]',
+        'font-400',
+        'mt-[4px]',
+        {
+          'whitespace-nowrap': this.isFixedSize,
+          'overflow-hidden': this.isFixedSize,
+          'overflow-ellipsis': this.isFixedSize,
+        },
+      ];
+    },
+    imgWrapperClasses() {
+      return [
+        'grow',
+        'bg-gray-9b',
+        {
+          relative: this.isFixedSize,
+        },
+      ];
+    },
+    imgWrapperStyle() {
       return {
+        paddingTop: this.isFixedSize ? '56.25%' : 0,
         backgroundColor: this.imgBgColor,
       };
+    },
+    imgClasses() {
+      return [
+        'block',
+        'object-cover',
+        'w-full',
+        {
+          absolute: this.isFixedSize,
+          'inset-0': this.isFixedSize,
+          'h-full': this.isFixedSize,
+        }
+      ];
     },
   },
   methods: {
