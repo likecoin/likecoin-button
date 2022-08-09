@@ -166,6 +166,19 @@ export const apiGetDataMinByIscnId = (iscnId = '') => axios.get(`${ISCN_RAW_DATA
 
 export const apiGetLikerDataByAddress = (address = '') => axios.get(`${LIKECOIN_API}/users/addr/${address}/min`);
 
+export const apiGetNFTMintInfo = ({
+  iscnId = '',
+  classId = '',
+  nftId = '',
+}) => {
+  const qsPayload = new URLSearchParams({
+    iscn_id: iscnId,
+    class_id: classId,
+    nft_id: nftId,
+  });
+  return axios.get(`${LIKECOIN_API}/likernft/mint?${qsPayload.toString()}`);
+};
+
 export const apiGetNFTMetadata = ({
   iscnId = '',
   classId = '',
