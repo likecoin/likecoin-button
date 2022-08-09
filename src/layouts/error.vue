@@ -56,6 +56,18 @@ export default {
     },
   },
   mounted() {
+    // XXX: Mitigate Firebase function double decoding
+    if (this.$route.path.startsWith('/in/embed/nft/iscn/iscn:/likecoin-chain')) {
+      this.$router.replace({
+        name: 'in-embed-nft-iscn-iscnId',
+        params: {
+          iscnId: this.$route.path.replace('/in/embed/nft/iscn/iscn:/', 'iscn://'),
+        },
+        query: this.$route.query,
+      });
+      return;
+    }
+
     // eslint-disable-next-line no-console
     console.error(this.error);
     setTimeout(() => {
