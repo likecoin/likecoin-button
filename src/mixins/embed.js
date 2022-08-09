@@ -26,6 +26,7 @@ import {
   apiGetSuperLikeMyStatus,
   apiGetDataMinByIscnId,
   apiGetLikerDataByAddress,
+  apiGetNFTMintInfo,
 } from '~/util/api/api';
 
 import { checkHasStorageAPIAccess, checkIsFirefoxStrictMode } from '~/util/client';
@@ -62,6 +63,7 @@ export default {
     params,
     error,
     query,
+    redirect,
   }) {
     let amount;
     try {
@@ -113,10 +115,26 @@ export default {
         };
       }
     }
-    const data = await apiGetDataMinByIscnId(iscnId).catch((err) => {
-      console.error(err); // eslint-disable-line no-console
-      error({ statusCode: 404, message: '' });
-    });
+    const [data, hasMintedNFT] = await Promise.all([
+      apiGetDataMinByIscnId(iscnId).catch((err) => {
+        console.error(err); // eslint-disable-line no-console
+        error({ statusCode: 404, message: 'ISCN_NOT_FOUND' });
+      }),
+      apiGetNFTMintInfo({ iscnId })
+        .then((res) => {
+          if (res.data) {
+            // Redirect to NFT Widget if the ISCN has been minted to an NFT
+            redirect({ name: 'in-embed-nft', query: { ...query, iscn_id: iscnId } });
+            return true;
+          }
+          return false;
+        })
+        .catch(() => false)
+    ]);
+    if (!data || hasMintedNFT) {
+      return undefined;
+    }
+
     const metadata = data && data.data.records[0].data.contentMetadata;
     const stakeholders = data && data.data.records[0].data.stakeholders;
 

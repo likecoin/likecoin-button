@@ -24,19 +24,23 @@ export default {
       )}`;
     },
   },
-  async asyncData({ params }) {
+  async asyncData({ params, query }) {
+    const apiParams = {
+      iscnId: params.iscnId || query.iscn_id,
+      classId: params.classId || query.class_id,
+    };
     const [
       apiMintInfoResult,
       apiMetadataResult,
       apiOwnersResult,
     ] = await Promise.all([
-      apiGetNFTMintInfo(params)
+      apiGetNFTMintInfo(apiParams)
         // eslint-disable-next-line no-console
         .catch(error => console.error(error)),
-      apiGetNFTMetadata(params)
+      apiGetNFTMetadata(apiParams)
         // eslint-disable-next-line no-console
         .catch(error => console.error(error)),
-      apiGetNFTOwners(params)
+      apiGetNFTOwners(apiParams)
         // eslint-disable-next-line no-console
         .catch(error => console.error(error)),
     ]);
