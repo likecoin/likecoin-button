@@ -6,7 +6,7 @@
         :href="HOMEPAGE"
         class="error-link"
       >
-        {{ $t('LikeButton.label.backToHome') }}
+        {{ $t('general.back') }}
       </a>
     </p>
   </div>
