@@ -37,41 +37,33 @@ export default {
       apiMetadataResult,
       apiOwnersResult,
     ] = await Promise.all([
-      apiGetNFTMintInfo(apiParams)
-        // eslint-disable-next-line no-console
-        .catch(error => console.error(error)),
-      apiGetNFTMetadata(apiParams)
-        // eslint-disable-next-line no-console
-        .catch(error => console.error(error)),
-      apiGetNFTOwners(apiParams)
-        // eslint-disable-next-line no-console
-        .catch(error => console.error(error)),
+      apiGetNFTMintInfo(apiParams).catch(() => ({})),
+      apiGetNFTMetadata(apiParams).catch(() => ({})),
+      apiGetNFTOwners(apiParams).catch(() => ({})),
     ]);
     const {
       iscnId,
       classId: nftClassId,
       currentPrice: nftPrice,
       soldCount: nftCollectedCount,
-    } = (apiMintInfoResult || {}).data || {}
+    } = apiMintInfoResult.data || {}
     const {
       name: contentTitle,
       description: contentDescription,
       image: contentImage,
       external_url: contentURL,
       iscn_owner: iscnOwnerAddress,
-    } = (apiMetadataResult || {}).data || {};
-    const ownersMap = (apiOwnersResult || {}).data || {};
+    } = apiMetadataResult.data || {};
+    const ownersMap = apiOwnersResult.data || {};
     const nftCollectorCount = Object.keys(ownersMap).length;
 
-    const likerDataResult = await apiGetLikerDataByAddress(iscnOwnerAddress)
-      // eslint-disable-next-line no-console
-      .catch(error => console.error(error));
+    const likerDataResult = await apiGetLikerDataByAddress(iscnOwnerAddress).catch(() => ({}));
     const {
       displayName: iscnOwnerDisplayName,
       avatar: iscnOwnerAvatarSrc,
       isCivicLikerTrial: isIscnOwnerCivicLikerTrial,
       isSubscribedCivicLiker: isIscnOwnerSubscribedCivicLiker,
-    } = (likerDataResult || {}).data || {}
+    } = likerDataResult.data || {}
     return {
       contentTitle,
       contentDescription,
