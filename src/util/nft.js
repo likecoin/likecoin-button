@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { ISCNQueryClient, ISCNSigningClient } from '@likecoin/iscn-js';
 import { parseNFTClassDataFields } from '@likecoin/iscn-js/dist/messages/parsing';
 import { LIKECOIN_CHAIN_RPC } from '../constant';
