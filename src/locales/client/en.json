@@ -12,7 +12,7 @@
   "LikeButton": {
     "head": {
       "title": "Like {name}'s work",
-      "description": "Reward Creativity, powered by LikeCoin"
+      "description": "Decentralize Publishing. Own your content forever. Powered by LikeCoin"
     }
   },
   "LikeCountLabel": "No Likes | 1 Like | {count} Likes",

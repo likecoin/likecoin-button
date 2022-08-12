@@ -11,7 +11,7 @@
   "LikeButton": {
     "head": {
       "title": "赞好 {name} 的作品",
-      "description": "Reward Creativity, powered by LikeCoin"
+      "description": "Decentralize Publishing. Own your content forever. Powered by LikeCoin"
     }
   },
   "LikeCountLabel": "尚无点赞 | 1 个赞 | {count} 个赞",
