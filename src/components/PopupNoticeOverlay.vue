@@ -7,11 +7,11 @@
 
       <svg
         class="popup-notice-overlay-dialog"
-        width="480"
-        viewBox="0 0 480 240"
+        width="360"
+        viewBox="0 0 360 240"
       >
         <foreignObject
-          width="480"
+          width="360"
           height="240"
         >
           <div
