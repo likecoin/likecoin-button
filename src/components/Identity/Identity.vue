@@ -69,7 +69,7 @@ export default {
       return 13;
     },
     displayNameWidth() {
-      return 180;
+      return 160;
     },
     displayNameHeight() {
       return this.height;
