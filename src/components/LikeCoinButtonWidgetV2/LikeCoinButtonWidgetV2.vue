@@ -7,7 +7,7 @@
     <svg
       :style="svgStyle"
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 480 180"
+      viewBox="0 0 360 180"
     >
       <slot
         v-bind="identitySlotProps"
@@ -170,9 +170,9 @@ export default {
       if (this.isStickyBottomLayout) {
         style.marginTop = '-52px';
         style.marginLeft = '-10px';
-        style.maxWidth = '400px';
+        style.maxWidth = '280px';
       } else {
-        style.maxWidth = '480px';
+        style.maxWidth = '360px';
       }
       return style;
     },

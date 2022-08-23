@@ -7,6 +7,7 @@ import {
 import {
   LIKE_CO_HOSTNAME,
   LIKER_LAND_URL_BASE,
+  LIKECOIN_OEMBED_API_BASE,
   MEDIUM_MEDIA_REGEX,
   DEPUB_SPACE_URL,
 } from '@/constant';
@@ -58,6 +59,42 @@ export default {
   components: {
     EmbedCreateWidgetButton,
     EmbedUserInfo,
+  },
+  head() {
+    return {
+      title: this.$t('LikeButton.head.title', { name: this.id }),
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: this.$t('LikeButton.head.title', { name: this.id }),
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.$t('LikeButton.head.description'),
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: this.$t('LikeButton.head.description'),
+        },
+      ],
+      link: [
+        {
+          rel: 'alternate',
+          type: 'application/json+oembed',
+          href: `${LIKECOIN_OEMBED_API_BASE}?url=${this.encodedExternalURL}&format=json`,
+          title: this.$t('LikeButton.head.title', { name: this.id }),
+        },
+        {
+          rel: 'alternate',
+          type: 'application/xml+oembed',
+          href: `${LIKECOIN_OEMBED_API_BASE}?url=${this.encodedExternalURL}&format=xml`,
+          title: this.$t('LikeButton.head.title', { name: this.id }),
+        },
+      ],
+    };
   },
   async asyncData({
     params,

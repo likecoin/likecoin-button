@@ -4,24 +4,23 @@ const { IS_TESTNET } = process.env;
 const nuxtConfig = {
   env: {
     SENTRY_DSN: process.env.SENTRY_DSN,
-    FACEBOOK_PIXEL_ID: process.env.FACEBOOK_PIXEL_ID,
     IS_TESTNET,
   },
   /*
   ** Headers of the page
   */
   head: {
-    title: 'LikeCoin - Reinventing the Like',
+    title: 'LikeCoin Widget By LikerLand',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'With our unique LikeRank algorithm and decentralized Like button, we trace content footprint and reward all creators involved. This is called Proof of Creativity.' },
-      { hid: 'og_title', property: 'og:title', content: 'LikeCoin - Reinventing the Like' },
-      { hid: 'og_description', property: 'og:description', content: 'With our unique LikeRank algorithm and decentralized Like button, we trace content footprint and reward all creators involved. This is called Proof of Creativity.' },
-      { hid: 'og_image', property: 'og:image', content: 'https://button.like.co/images/og/likebutton.png' },
-      { hid: 'og_image_alt', property: 'og:image:alt', content: 'LikeCoin' },
-      { hid: 'og_image_width', property: 'og:image:width', content: '1200' },
-      { hid: 'og_image_height', property: 'og:image:height', content: '630' },
+      { hid: 'description', name: 'description', content: 'Decentralize Publishing. Own your content forever.' },
+      { hid: 'og:title', property: 'og:title', content: 'LikeCoin Widget By LikerLand' },
+      { hid: 'og:description', property: 'og:description', content: 'Decentralize Publishing. Own your content forever.' },
+      { hid: 'og:image', property: 'og:image', content: 'https://button.like.co/images/og/likebutton.png' },
+      { hid: 'og:image:alt', property: 'og:image:alt', content: 'LikeCoin' },
+      { hid: 'og:image:width', property: 'og:image:width', content: '1200' },
+      { hid: 'og:image:height', property: 'og:image:height', content: '630' },
       { hid: 'theme-color', name: 'theme-color', content: '#D2F0F0' },
     ],
     link: [
@@ -46,7 +45,6 @@ const nuxtConfig = {
     { src: '~/plugins/polyfill', ssr: false },
     { src: '~/plugins/likecoin-ui-vue' },
     { src: '~/plugins/vue-i18n' },
-    { src: '~/plugins/fbpixel.client.js', ssr: false },
     { src: '~/plugins/gsap.client.js', ssr: false },
     // { src: '~/plugins/optimize.js' },
   ],
@@ -76,15 +74,12 @@ const nuxtConfig = {
           'www.gstatic.cn',
           'ajax.googleapis.com',
           'js.intercomcdn.com',
-          'connect.facebook.net',
           'use.typekit.net',
         ],
         'frame-src': [
           'like.co',
           '*.like.co',
           'www.google.com',
-          '*.facebook.com',
-          '*.facebook.net',
         ],
         'connect-src': [
           "'self'",
@@ -95,9 +90,6 @@ const nuxtConfig = {
           "'self'",
           "'unsafe-inline'",
           'fonts.googleapis.com',
-        ],
-        'report-uri': [
-          process.env.SENTRY_REPORT_URI,
         ],
       },
     },
