@@ -124,7 +124,11 @@ export default {
   },
   methods: {
     handleClick(event) {
-      event.stopPropagation();
+      if (this.tag === 'a' && this.url) {
+        event.stopPropagation();
+      } else {
+        this.$emit('click', event);
+      }
     },
     handleLoadImage() {
       this.$emit('load-image');
