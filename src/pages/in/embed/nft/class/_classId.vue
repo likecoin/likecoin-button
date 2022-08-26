@@ -13,10 +13,11 @@
     :owner-avatar-src="iscnOwnerAvatarSrc"
     :is-fixed-size="isFixedSize"
     :is-content-clickable="false"
+    :style="widgetStyle"
     @view-details="viewNFTDetails"
     @collect="collectNFT"
     @like="likeISCN"
-    @load-image="notifyParentOfResizing"
+    @load-image="handleResizing"
   />
 </template>
 

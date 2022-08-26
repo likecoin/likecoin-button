@@ -1,5 +1,5 @@
 <template>
-  <div :class="rootClass">
+  <div class="rounded-[16px]">
     <NFTWidgetBaseCard
       class="transition-colors cursor-pointer hover:border-like-cyan-light"
       @click="handleViewDetails"
@@ -91,16 +91,6 @@ export default {
     isFixedSize: {
       type: Boolean,
       default: true,
-    },
-  },
-  computed: {
-    rootClass() {
-      return [
-        'rounded-[16px]',
-        {
-          'w-[360px]': !!this.isFixedSize,
-        },
-      ];
     },
   },
   methods: {

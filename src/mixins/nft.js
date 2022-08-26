@@ -11,9 +11,27 @@ import {
 
 export default {
   layout: 'widget',
+  data() {
+    return {
+      widgetScale: 1,
+    };
+  },
   computed: {
     isFixedSize() {
       return !this.$route.query.responsive;
+    },
+    widgetWidth() {
+      return 360;
+    },
+    widgetStyle() {
+      if (this.isFixedSize) {
+        return {
+          width: `${this.widgetWidth}px`,
+          transform: `scale(${this.widgetScale})`,
+          transformOrigin: 'top left',
+        };
+      }
+      return null;
     },
     widgetId() {
       return this.$route.query.wid;
@@ -82,12 +100,10 @@ export default {
   },
   mounted() {
     // For iframe to resize
-    if (window.parent) {
-      this.resizeListener = window.addEventListener('resize', () => {
-        window.requestAnimationFrame(this.notifyParentOfResizing);
-      });
-      this.notifyParentOfResizing();
-    }
+    this.resizeListener = window.addEventListener('resize', () => {
+      window.requestAnimationFrame(this.handleResizing);
+    });
+    this.handleResizing();
   },
   beforeDestroy() {
     if (this.resizeListener) {
@@ -132,6 +148,13 @@ export default {
         },
         '*'
       );
+    },
+    handleResizing() {
+      if (this.isFixedSize) {
+        this.widgetScale = Math.min(1, window.innerWidth / this.widgetWidth);
+      } else {
+        this.notifyParentOfResizing();
+      }
     },
   }
 };
