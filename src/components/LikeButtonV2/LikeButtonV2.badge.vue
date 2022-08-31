@@ -38,7 +38,7 @@
           :css="false"
           mode="in-out"
           @before-appear="overlayBeforeEnter"
-          @apper="overlayEnter"
+          @appear="overlayEnter"
           @before-enter="overlayBeforeEnter"
           @enter="overlayEnter"
           @leave="overlayLeave"
