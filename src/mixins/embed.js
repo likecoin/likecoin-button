@@ -118,7 +118,12 @@ export default {
 
     if (id !== 'iscn') {
       const mappingDataRes = await apiGetURLToISCNMapping(id, referrer).catch((err) => {
-        console.error(err); // eslint-disable-line no-console
+        if (!(err.response && err.response.status === 404)) {
+          console.error(JSON.stringify({ // eslint-disable-line no-console
+            message: err,
+            stack: err.stack,
+          }));
+        }
       });
       if (mappingDataRes && mappingDataRes.data) {
         // TODO: use iscnId instead of composing from prefix and id
@@ -128,7 +133,12 @@ export default {
 
       if (!iscnId) {
         const data = await apiGetUserMinById(id).catch((err) => {
-          console.error(err); // eslint-disable-line no-console
+          if (!(err.response && err.response.status === 404)) {
+            console.error(JSON.stringify({ // eslint-disable-line no-console
+              message: err,
+              stack: err.stack,
+            }));
+          }
           error({ statusCode: 404, message: '' });
         });
         const {
@@ -152,7 +162,12 @@ export default {
       }
     }
     const data = await apiGetDataMinByIscnId(iscnId).catch((err) => {
-      console.error(err); // eslint-disable-line no-console
+      if (!(err.response && err.response.status === 404)) {
+        console.error(JSON.stringify({ // eslint-disable-line no-console
+          message: err,
+          stack: err.stack,
+        }));
+      }
       error({ statusCode: 404, message: '' });
     });
     const metadata = data && data.data.records[0].data.contentMetadata;
