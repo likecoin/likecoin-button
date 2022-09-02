@@ -1,4 +1,5 @@
 import { LIKER_LAND_URL_BASE } from '~/constant';
+import { checkIsValidISCNId, checkIsValidNFTClassId } from '~/util/nft';
 import {
   apiGetNFTMintInfo,
   apiGetLikerDataByAddress,
@@ -40,17 +41,47 @@ export default {
       return `${this.detailsURL}?action=collect`;
     },
   },
-  async asyncData({ params, query }) {
+  async asyncData({
+    redirect,
+    error,
+    query: { iscn_id: qsIscnId, class_id: qsNftClassId, ...query }
+  }) {
+    if (qsIscnId) {
+      if (!checkIsValidISCNId(qsIscnId)) {
+        error({ statusCode: 400, message: 'INVALID_ISCN_ID' });
+        return undefined;
+      }
+    } else if (qsNftClassId) {
+      if (!checkIsValidNFTClassId(qsNftClassId)) {
+        error({ statusCode: 400, message: 'INVALID_NFT_CLASS_ID' });
+        return undefined;
+      }
+    } else {
+      redirect('/');
+      return undefined;
+    }
     const apiParams = {
-      iscnId: params.iscnId || query.iscn_id,
-      classId: params.classId || query.class_id,
+      iscnId: qsIscnId,
+      classId: qsNftClassId,
     };
     const [
       apiMintInfoResult,
       apiMetadataResult,
       apiOwnersResult,
     ] = await Promise.all([
-      apiGetNFTMintInfo(apiParams).catch(() => ({})),
+      apiGetNFTMintInfo(apiParams).catch(() => {
+        // Redirect to /in/like/iscn?iscn_id=:iscn_id if the ISCN has not been minted NFT
+        if (apiParams.iscnId && !apiParams.classId) {
+          redirect({
+            name: 'in-like-id',
+            params: { id: 'iscn' },
+            query: { ...query, iscn_id: qsIscnId },
+          });
+        } else {
+          error({ statusCode: 404, message: 'NFT_NOT_MINTED' });
+        }
+        return {};
+      }),
       apiGetNFTMetadata(apiParams).catch(() => ({})),
       apiGetNFTOwners(apiParams).catch(() => ({})),
     ]);
