@@ -1,7 +1,4 @@
-import {
-  APP_LIKE_CO_URL_BASE,
-  LIKER_LAND_URL_BASE,
-} from '~/constant';
+import { LIKER_LAND_URL_BASE } from '~/constant';
 import {
   apiGetNFTMintInfo,
   apiGetLikerDataByAddress,
@@ -40,9 +37,7 @@ export default {
       return `${LIKER_LAND_URL_BASE}/nft/class/${this.nftClassId}`;
     },
     purchaseURL() {
-      return `${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(
-        this.iscnId
-      )}`;
+      return `${this.detailsURL}?action=collect`;
     },
   },
   async asyncData({ params, query }) {
