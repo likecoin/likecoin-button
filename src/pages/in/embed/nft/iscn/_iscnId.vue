@@ -1,30 +1,18 @@
-<template>
-  <NFTWidget
-    ref="widget"
-    :title="contentTitle"
-    :description="contentDescription"
-    :img-src="contentImage"
-    :url="contentURL"
-    :price="nftPrice"
-    :collector-count="nftCollectorCount"
-    :collected-count="nftCollectedCount"
-    :owner-address="iscnOwnerAddress"
-    :owner-display-name="iscnOwnerDisplayName"
-    :owner-avatar-src="iscnOwnerAvatarSrc"
-    :is-fixed-size="isFixedSize"
-    :is-content-clickable="false"
-    :style="widgetStyle"
-    @view-details="viewNFTDetails"
-    @collect="collectNFT"
-    @like="likeISCN"
-    @load-image="handleResizing"
-  />
-</template>
-
 <script>
-import nftMixin from '~/mixins/nft';
+import { checkIsValidISCNId } from '~/util/nft';
 
 export default {
-  mixins: [nftMixin],
+  fetch({
+    error,
+    redirect,
+    params: { iscnId },
+    query,
+  }) {
+    if (checkIsValidISCNId(iscnId)) {
+      redirect({ name: 'in-embed-nft', query: { ...query, iscn_id: iscnId } });
+    } else {
+      error({ statusCode: 400, message: 'INVALID_ISCN_ID' });
+    }
+  },
 };
 </script>
