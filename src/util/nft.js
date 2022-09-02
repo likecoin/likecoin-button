@@ -26,6 +26,6 @@ export async function getClassInfo(classId) {
   return nftClass;
 }
 
-export const checkIsValidISCNId = value => value.startsWith('iscn://likecoin-chain');
+export const checkIsValidISCNId = value => /^iscn:\/\/([-_.:=+,a-zA-Z0-9]+)\/([-_.:=+,a-zA-Z0-9]+)(?:\/([0-9]+))?\/?$/.test(value);
 
-export const checkIsValidNFTClassId = value => value.startsWith('likenft1');
+export const checkIsValidNFTClassId = value => /^likenft1[ac-hj-np-z02-9]+$/.test(value);
