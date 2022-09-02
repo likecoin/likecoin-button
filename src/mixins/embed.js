@@ -404,7 +404,7 @@ export default {
     },
 
     creatorPortfolioURL() {
-      let url = `${LIKER_LAND_URL_BASE}/${this.id}/civic?utm_source=button`;
+      let url = `${LIKER_LAND_URL_BASE}/${this.id}?utm_source=button`;
       if (this.referrer) {
         url = `${url}&referrer=${encodeURIComponent(this.referrer)}`;
       }
