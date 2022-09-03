@@ -176,8 +176,10 @@ export default {
         .then((res) => {
           if (res.data) {
             // Redirect to NFT Widget if the ISCN has been minted to an NFT
-            redirect({ name: 'in-embed-nft', query: { ...query, iscn_id: iscnId } });
-            return true;
+            if (query.action !== 'like') {
+              redirect({ name: 'in-embed-nft', query: { ...query, iscn_id: iscnId } });
+              return true;
+            }
           }
           return false;
         })
