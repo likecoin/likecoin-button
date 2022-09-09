@@ -5,11 +5,11 @@
     <ul class="flex items-center flex-wrap gap-x-[20px] gap-y-[16px]">
       <li class="flex items-center text-[12px] leading-[5/3] font-600 text-medium-gray">
         <NFTWidgetIconNFT class="w-[16px]" />
-        <span class="ml-[6px]">{{ collectorCount }}</span>
+        <span class="ml-[6px]">{{ collectedCount }}</span>
       </li>
       <li class="flex items-center text-[12px] leading-[5/3] font-600 text-medium-gray">
         <NFTWidgetIconOwner class="w-[16px]" />
-        <span class="ml-[6px]">{{ collectedCount }}</span>
+        <span class="ml-[6px]">{{ collectorCount }}</span>
       </li>
       <li class="flex text-[16px] leading-[1.25] text-like-green font-600">
         <NFTWidgetIconInsertCoin class="mr-[6px]" />
