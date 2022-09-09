@@ -130,6 +130,13 @@ const nuxtConfig = {
     '@nuxtjs/tailwindcss',
   ],
   sentry: {
+    config: {
+      ignoreErrors: [
+        'Unable to get property \'matched\' of undefined or null reference',
+        '未指定的錯誤',
+        'Unspecified error',
+      ],
+    },
     clientIntegrations: {
       /* default integrations will still be added due to deep-merge */
       ReportingObserver: false, // reporting is very noisy on CSP violation.
