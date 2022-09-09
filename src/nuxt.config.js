@@ -111,6 +111,11 @@ const nuxtConfig = {
         path: '/:id/done',
         component: resolve(__dirname, 'pages/_id/index.vue'),
       });
+      routes.push({
+        name: 'in-nft-id',
+        path: '/in/nft/:id?',
+        component: resolve(__dirname, 'pages/nft/_id.vue'),
+      });
     },
   },
   serverMiddleware: [

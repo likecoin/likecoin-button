@@ -2,6 +2,7 @@
 export default {
   fetch({ redirect, params, query }) {
     // Redirect
+    // /iscn?iscn_id=:iscn_id -> /in/like/iscn?iscn_id=:iscn_id
     // /iscn/:iscn_id  -> /in/like/iscn?iscn_id=:iscn_id
     redirect({
       name: 'in-like-id',
