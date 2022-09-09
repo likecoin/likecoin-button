@@ -59,7 +59,7 @@ export default {
     const { id } = params;
     if (checkIsValidISCNId(id)) {
       // /:iscn_id -> /in/like/iscn?iscn_id=:iscn_id
-      redirect({ name: 'in-like-id', params: { id: 'iscn' }, query: { iscn_id: id } });
+      redirect({ name: 'in-like-id', params: { id: 'iscn' }, query: { ...query, iscn_id: id } });
     } else if (checkIsValidNFTClassId(id)) {
       // /:class_id -> /in/nft?class_id=:class_id
       redirect({ name: 'in-nft', query: { ...query, class_id: id } });
