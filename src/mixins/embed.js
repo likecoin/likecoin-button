@@ -189,6 +189,7 @@ export default {
       return undefined;
     }
 
+    const iscnOwner = data && data.data && data.data.owner;
     const metadata = data && data.data.records[0].data.contentMetadata;
     const stakeholders = data && data.data.records[0].data.stakeholders;
 
@@ -210,7 +211,7 @@ export default {
       address = stakeholdersValidlikeWallet;
       stakeholdersName = (stakeholders && stakeholders[0] && stakeholders[0].entity.name);
     } else {
-      address = data && data.data && data.data.owner;
+      address = iscnOwner;
     }
     const likerData = await apiGetLikerDataByAddress(address)
       .catch(() => {});
@@ -225,6 +226,7 @@ export default {
     return {
       id,
       displayName,
+      iscnOwner,
       iscnId,
       amount,
       avatar,
@@ -406,7 +408,8 @@ export default {
     },
 
     creatorPortfolioURL() {
-      let url = `${LIKER_LAND_URL_BASE}/${this.id}?utm_source=button`;
+      const targetId = this.iscnOwner || this.id
+      let url = `${LIKER_LAND_URL_BASE}/${targetId}?utm_source=button`;
       if (this.referrer) {
         url = `${url}&referrer=${encodeURIComponent(this.referrer)}`;
       }
