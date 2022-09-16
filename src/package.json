@@ -26,7 +26,6 @@
     "@likecoin/iscn-js": "^0.2.1",
     "@likecoin/nuxt-google-optimize": "^0.5.3-like.10",
     "@likecoin/ui-vue": "^0.7.1",
-    "@nuxtjs/google-tag-manager": "^2.1.4",
     "@nuxtjs/sentry": "^5.1.7",
     "axios": "^0.19.0",
     "bech32": "^2.0.0",
@@ -43,6 +42,7 @@
     "tiny-cookie": "^2.3.2",
     "url-parse": "^1.4.4",
     "uuid": "^3.4.0",
+    "vue-gtag": "^1.16.1",
     "vue-i18n": "^8.8.2",
     "vuetify": "^1.5.3"
   },
