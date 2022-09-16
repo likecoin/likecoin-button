@@ -14,18 +14,16 @@ function digestMessage(message) {
   return window.crypto.subtle.digest('SHA-256', data);
 }
 
-export async function setTrackerUser({ user }) {
+export async function setTrackerUser(vue, { user }) {
   if (window.doNotTrack || navigator.doNotTrack) return;
-  window.dataLayer = window.dataLayer || [];
   try {
-    let hashedId = await digestMessage(user);
-    hashedId = hexString(hashedId);
-    window.dataLayer.push({
-      userId: hashedId,
-    });
+    if (vue.$gtag) {
+      let hashedId = await digestMessage(user);
+      hashedId = hexString(hashedId);
+      vue.$gtag.set({ userId: hashedId });
+    }
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
+    console.error(err); // eslint-disable-line no-console
   }
 }
 
@@ -39,14 +37,13 @@ export function logTrackerEvent(
   try {
     // do not track
     if (window.doNotTrack || navigator.doNotTrack) return;
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: 'customEvent',
-      category,
-      action,
-      label,
-      value,
-    });
+    if (vue.$gtag) {
+      vue.$gtag.event(action, {
+        event_category: category,
+        event_label: label.substring(0, 499),
+        value,
+      });
+    }
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error('logging error:');

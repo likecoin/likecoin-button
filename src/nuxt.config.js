@@ -4,6 +4,7 @@ const { IS_TESTNET } = process.env;
 const nuxtConfig = {
   env: {
     SENTRY_DSN: process.env.SENTRY_DSN,
+    GA_TRACKING_ID: process.env.GA_TRACKING_ID,
     IS_TESTNET,
   },
   /*
@@ -46,6 +47,7 @@ const nuxtConfig = {
     { src: '~/plugins/likecoin-ui-vue' },
     { src: '~/plugins/vue-i18n' },
     { src: '~/plugins/gsap.client.js', ssr: false },
+    { src: '~/plugins/gtag.client.js', ssr: false },
     // { src: '~/plugins/optimize.js' },
   ],
   render: {
@@ -122,11 +124,6 @@ const nuxtConfig = {
     '~/server_middleware/header-listener',
   ],
   modules: [
-    ['@nuxtjs/google-tag-manager', {
-      id: process.env.GTM_ID || 'GTM-XXXXXXX',
-      pageTracking: true,
-      respectDoNotTrack: true,
-    }],
     '@nuxtjs/sentry',
     'nuxt-svg-loader',
     // '@likecoin/nuxt-google-optimize',
