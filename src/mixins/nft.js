@@ -28,6 +28,9 @@ export default {
     widgetWidth() {
       return 360;
     },
+    widgetHeight() {
+      return 480;
+    },
     widgetStyle() {
       if (this.isFixedSize) {
         return {
@@ -190,7 +193,9 @@ export default {
     },
     handleResizing() {
       if (this.isFixedSize) {
-        this.widgetScale = Math.min(1, window.innerWidth / this.widgetWidth);
+        const maxWidthScale = window.innerWidth / this.widgetWidth;
+        const maxHeightScale = window.innerHeight / this.widgetHeight;
+        this.widgetScale = Math.min(maxHeightScale, maxWidthScale);
       } else {
         this.notifyParentOfResizing();
       }
