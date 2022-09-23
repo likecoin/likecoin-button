@@ -8,11 +8,17 @@ import {
 } from '~/util/api/api';
 import { logTrackerEvent } from '@/util/EventLogger';
 
+const WIDGET_SIZE = {
+  WIDTH: 360,
+  HEIGHT: 480,
+};
+
 export default {
   layout: 'widget',
   data() {
     return {
       widgetScale: 1,
+      maxWidgetWidth: WIDGET_SIZE.WIDTH,
     };
   },
   computed: {
@@ -26,10 +32,7 @@ export default {
       return !this.$route.query.responsive;
     },
     widgetWidth() {
-      return 360;
-    },
-    widgetHeight() {
-      return 480;
+      return Math.max(this.maxWidgetWidth, WIDGET_SIZE.WIDTH);
     },
     widgetStyle() {
       if (this.isFixedSize) {
@@ -193,9 +196,13 @@ export default {
     },
     handleResizing() {
       if (this.isFixedSize) {
-        const maxWidthScale = window.innerWidth / this.widgetWidth;
-        const maxHeightScale = window.innerHeight / this.widgetHeight;
-        this.widgetScale = Math.min(maxHeightScale, maxWidthScale);
+        const maxWidthScale = window.innerWidth / WIDGET_SIZE.WIDTH;
+        const maxHeightScale = window.innerHeight / WIDGET_SIZE.HEIGHT;
+        this.maxWidgetWidth = Math.min(
+          window.innerWidth,
+          window.innerHeight * WIDGET_SIZE.WIDTH / WIDGET_SIZE.HEIGHT
+        );
+        this.widgetScale = Math.min(1, maxHeightScale, maxWidthScale);
       } else {
         this.notifyParentOfResizing();
       }
