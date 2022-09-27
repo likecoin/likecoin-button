@@ -59,7 +59,7 @@ jobs:
             SENTRY_PUBLISH_RELEASE=TRUE \
             SENTRY_DSN=${TEST_SENTRY_DSN} \
             SENTRY_PROJECT=${TEST_SENTRY_PROJECT} \
-            firebase deploy
+            firebase deploy -f
           environment:
             IS_TESTNET: true
   deploy_mainnet:
@@ -83,7 +83,7 @@ jobs:
           command: |
             firebase use default
             SENTRY_PUBLISH_RELEASE=TRUE \
-            firebase deploy
+            firebase deploy -f
 workflows:
   version: 2
   build_and_test:
