@@ -49,6 +49,7 @@
             :hint-label="hintText"
             :should-show-cta="hasSuperLiked"
             :cta-button-label="ctaButtonLabel"
+            :width="480"
             @click-like-button-label="onClickLikeStats"
           >
             <template #like-button>
