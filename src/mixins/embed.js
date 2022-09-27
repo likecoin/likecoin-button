@@ -33,7 +33,7 @@ import {
 import { checkHasStorageAPIAccess, checkIsFirefoxStrictMode } from '~/util/client';
 import { checkIsValidISCNId, checkIsValidNFTClassId } from '~/util/nft';
 import { handleQueryStringInUrl } from '~/util/url';
-import { isValidAddress, changeAddressPrefix, maskedWallet } from '~/util/cosmos';
+import { maskedWallet } from '~/util/cosmos';
 
 const MAX_LIKE = 5;
 const LIKE_STATS_WINDOW_NAME = 'LIKER_LIST_STATS_WINDOW';
@@ -207,34 +207,10 @@ export default {
 
     const iscnOwner = data && data.data && data.data.owner;
     const metadata = data && data.data.records[0].data.contentMetadata;
-    const stakeholders = data && data.data.records[0].data.stakeholders;
-
-    const stakeholdersFirstId = (stakeholders && stakeholders[0] && stakeholders[0].entity && stakeholders[0].entity['@id']) || '';
-    let inputAddress = stakeholdersFirstId;
-    const addressLengthWithoutPrefixAnd1 = 38;
-    if (stakeholdersFirstId.startsWith('did:like:')) {
-      inputAddress = `like1${stakeholdersFirstId.slice(stakeholdersFirstId.length - addressLengthWithoutPrefixAnd1)}`;
-    } else if (inputAddress.startsWith('did:cosmos:')) {
-      inputAddress = `cosmos1${stakeholdersFirstId.slice(stakeholdersFirstId.length - addressLengthWithoutPrefixAnd1)}`;
-    }
-    let stakeholdersValidlikeWallet;
-    if (isValidAddress(inputAddress)) {
-      stakeholdersValidlikeWallet = changeAddressPrefix(inputAddress, 'like');
-    }
-    let address;
-    let stakeholdersName;
-    if (stakeholdersValidlikeWallet) {
-      address = stakeholdersValidlikeWallet;
-      stakeholdersName = (stakeholders && stakeholders[0] && stakeholders[0].entity.name);
-    } else {
-      address = iscnOwner;
-    }
-    const likerData = await apiGetLikerDataByAddress(address)
+    const likerData = await apiGetLikerDataByAddress(iscnOwner)
       .catch(() => {});
     const displayName = (likerData && likerData.data && likerData.data.displayName) ||
-    // stakeholdersName is only set if stakeholder wallet is used
-    stakeholdersName ||
-    maskedWallet(address);
+    maskedWallet(iscnOwner);
     const avatar = (likerData && likerData.data && likerData.data.avatar) ||
     // Will use generative art in the future
     `https://avatars.dicebear.com/api/identicon/${encodeURIComponent(iscnId)}.svg`;
