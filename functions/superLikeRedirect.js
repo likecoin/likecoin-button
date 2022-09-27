@@ -1,4 +1,6 @@
-const functions = require('firebase-functions');
+// TODO: eslint import cannot handle firebase module
+// eslint-disable-next-line import/no-unresolved
+const { onRequest } = require('firebase-functions/v2/https');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
@@ -7,15 +9,8 @@ const Axios = require('axios');
 const HttpAgent = require('agentkeepalive');
 const base64url = require('base64url');
 
-let IS_TESTNET = false;
-if ((functions.config().likeco || {}).testmode) {
-  process.env.IS_TESTNET = true;
-  IS_TESTNET = true;
-}
+const IS_TESTNET = process.env.IS_TESTNET === 'TRUE';
 
-if ((functions.config().sentry || {}).report_uri) {
-  process.env.SENTRY_REPORT_URI = functions.config().sentry.report_uri;
-}
 const LIKE_CO_HOSTNAME = IS_TESTNET ? 'rinkeby.like.co' : 'like.co';
 const LIKECOIN_API_BASE = `https://api.${LIKE_CO_HOSTNAME}`;
 
@@ -82,4 +77,4 @@ app.use('/:id', async (req, res) => {
   }
 });
 
-module.exports = functions.https.onRequest(app);
+module.exports = onRequest({ region: ['us-west1'] }, app);
