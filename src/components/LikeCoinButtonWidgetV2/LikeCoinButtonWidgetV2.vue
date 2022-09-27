@@ -45,7 +45,7 @@
         v-if="isShowHintLabel"
         :x="saveSlotProps.x"
         y="0"
-        width="300"
+        width="212"
         height="60"
       >
         <div :style="hintLabelStyle">{{ hintLabel }}</div>
@@ -56,7 +56,7 @@
         v-if="shouldShowCta"
         :x="saveSlotProps.x"
         :y="saveSlotProps.y"
-        width="300"
+        width="212"
         height="36"
       >
         <a
