@@ -39,7 +39,7 @@
     "rewrites": [
       {
         "source": "**",
-        "function": "superLikeRedirect"
+        "function": "superlike"
       }
     ],
     "appAssociation": "NONE",
