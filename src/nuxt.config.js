@@ -64,19 +64,9 @@ const nuxtConfig = {
         ],
         'script-src': [
           "'self'",
-          /* gtm inline code */
-          "'sha256-X3ZM8SMe34uV9LglkNh69UN/Vkuo+blzT0E7mN1rUnQ='",
-          /* https://github.com/nuxt/nuxt.js/issues/5627 */
-          // "'unsafe-inline'", // ignored by browser with sha support
+          "'unsafe-inline'", // ignored by browser with sha support
           'www.google-analytics.com',
           'www.googletagmanager.com',
-          'www.googleadservices.com',
-          'ajax.googleapis.com',
-          '*.google.com',
-          'www.gstatic.com',
-          'www.gstatic.cn',
-          'ajax.googleapis.com',
-          'js.intercomcdn.com',
           'use.typekit.net',
         ],
         'frame-src': [
