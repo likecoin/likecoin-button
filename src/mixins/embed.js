@@ -190,7 +190,7 @@ export default {
       }),
       apiGetNFTMintInfo({ iscnId })
         .then((res) => {
-          if (res.data) {
+          if (res && res.data) {
             // Redirect to NFT Widget if the ISCN has been minted to an NFT
             if (query.action !== 'like') {
               redirect({ name: 'in-embed-nft', query: { ...restQuery, iscn_id: iscnId } });

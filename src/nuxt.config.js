@@ -54,6 +54,7 @@ const nuxtConfig = {
     csp: {
       enabled: true,
       hashAlgorithm: 'sha256',
+      unsafeInlineCompatibility: true,
       policies: {
         'default-src': [
           "'self'",
@@ -120,9 +121,6 @@ const nuxtConfig = {
       });
     },
   },
-  serverMiddleware: [
-    '~/server_middleware/header-listener',
-  ],
   modules: [
     '@nuxtjs/sentry',
     'nuxt-svg-loader',
