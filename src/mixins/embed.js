@@ -502,7 +502,7 @@ export default {
                 }
                 const promises = [
                   this.updateSuperLikeStatus(),
-                  setTrackerUser({ user: liker }),
+                  setTrackerUser(this, { user: liker }),
                 ];
                 await Promise.all(promises);
               }
