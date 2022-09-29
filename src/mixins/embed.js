@@ -120,7 +120,7 @@ export default {
     } = query;
     const { referrer = '' } = query;
     let [type, iscnId, classId] = [qsType, qsIscnId, qsClassId];
-    if (!type && referrer.match(MEDIUM_MEDIA_REGEX)) {
+    if (!type && referrer && referrer.match(MEDIUM_MEDIA_REGEX)) {
       type = 'medium';
     }
 
@@ -149,7 +149,7 @@ export default {
       }
 
       if (!iscnId) {
-        const data = await apiGetUserMinById(id).catch((err) => {
+        const { data } = await apiGetUserMinById(id).catch((err) => {
           if (!(err.response && err.response.status === 404)) {
             console.error(JSON.stringify({ // eslint-disable-line no-console
               message: err,
@@ -157,7 +157,9 @@ export default {
             }));
           }
           error({ statusCode: 404, message: '' });
+          return {};
         });
+        if (!data) return {};
         const {
           displayName,
           avatar,
@@ -165,7 +167,7 @@ export default {
           isCivicLikerTrial,
           isSubscribedCivicLiker,
           civicLikerSince,
-        } = data.data;
+        } = data;
         return {
           id,
           displayName: displayName || id,
@@ -190,7 +192,7 @@ export default {
       }),
       apiGetNFTMintInfo({ iscnId })
         .then((res) => {
-          if (res && res.data) {
+          if (res.data) {
             // Redirect to NFT Widget if the ISCN has been minted to an NFT
             if (query.action !== 'like') {
               redirect({ name: 'in-embed-nft', query: { ...restQuery, iscn_id: iscnId } });
@@ -571,7 +573,7 @@ export default {
         this.hasSuperLiked = false;
         this.cooldownProgress = cooldownProgress;
       });
-      this.likerWallet = address.data.likerWallet;
+      this.likerWallet = address && address.data.likerWallet;
       this.ctaHref = `${DEPUB_SPACE_URL}${this.likerWallet}`;
     },
     openLikeStats(options = { isNewWindow: true }) {
