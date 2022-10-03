@@ -34,10 +34,16 @@ export default {
     widgetId() {
       return this.$route.query.wid;
     },
+    shouldCollectInCampaign() {
+      return this.$route.query.campaign !== undefined;
+    },
     detailsURL() {
       return `${LIKER_LAND_URL_BASE}/nft/class/${this.nftClassId}`;
     },
     purchaseURL() {
+      if (this.shouldCollectInCampaign) {
+        return `${LIKER_LAND_URL_BASE}/campaign/writing-nft#${this.nftClassId}`;
+      }
       return `${this.detailsURL}?action=collect`;
     },
   },
@@ -147,7 +153,7 @@ export default {
       window.open(
         this.purchaseURL,
         `collect_${this.classId}`,
-        'popup=1,width=768,height=576,top=0,left=0'
+        this.shouldCollectInCampaign ? undefined : 'popup=1,width=768,height=576,top=0,left=0'
       );
     },
     likeISCN() {
