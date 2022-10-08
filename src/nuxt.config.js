@@ -65,6 +65,7 @@ const nuxtConfig = {
         'script-src': [
           "'self'",
           "'unsafe-inline'", // ignored by browser with sha support
+          "'wasm-unsafe-eval'",
           'www.google-analytics.com',
           'www.googletagmanager.com',
           'use.typekit.net',
@@ -125,6 +126,8 @@ const nuxtConfig = {
         'Unable to get property \'matched\' of undefined or null reference',
         '未指定的錯誤',
         'Unspecified error',
+        'WebAssembly.instantiate',
+        'Refused to create a WebAssembly object',
       ],
     },
     clientIntegrations: {
