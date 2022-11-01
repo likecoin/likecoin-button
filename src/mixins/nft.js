@@ -38,13 +38,13 @@ export default {
       return this.$route.query.campaign !== undefined;
     },
     detailsURL() {
-      return `${LIKER_LAND_URL_BASE}/nft/class/${this.nftClassId}`;
+      return `${LIKER_LAND_URL_BASE}/nft/class/${this.nftClassId}?utm_source=widget`;
     },
     purchaseURL() {
       if (this.shouldCollectInCampaign) {
-        return `${LIKER_LAND_URL_BASE}/campaign/writing-nft#${this.nftClassId}`;
+        return `${LIKER_LAND_URL_BASE}/campaign/writing-nft?utm_source=widget#${this.nftClassId}`;
       }
-      return `${this.detailsURL}?action=collect`;
+      return `${this.detailsURL}?action=collect&utm_source=widget`;
     },
   },
   async asyncData({
