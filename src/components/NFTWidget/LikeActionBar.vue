@@ -60,7 +60,7 @@ export default {
       return ellipsis(this.creatorDisplayName || this.creatorAddress);
     },
     creatorURL() {
-      return `${LIKER_LAND_URL_BASE}/${this.creatorAddress}`;
+      return `${LIKER_LAND_URL_BASE}/${this.creatorAddress}?utm_source=widget`;
     },
   },
   methods: {
