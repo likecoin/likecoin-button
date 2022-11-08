@@ -127,6 +127,7 @@ const nuxtConfig = {
         '未指定的錯誤',
         'Unspecified error',
         'WebAssembly.instantiate',
+        'WebAssembly Instantiation',
         'Refused to create a WebAssembly object',
       ],
     },
