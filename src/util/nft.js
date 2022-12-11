@@ -1,11 +1,19 @@
-import { ISCNQueryClient, ISCNSigningClient } from '@likecoin/iscn-js';
-import { parseNFTClassDataFields } from '@likecoin/iscn-js/dist/messages/parsing';
 import { LIKECOIN_CHAIN_RPC } from '../constant';
 
+let iscnLib = null;
 let queryClient = null;
+
+export async function getISCNLib() {
+  if (!iscnLib) {
+    iscnLib = await import(/* webpackChunkName: "iscn_js" */ '@likecoin/iscn-js');
+  }
+  return iscnLib;
+}
+
 export async function getNFTQueryClient() {
   if (!queryClient) {
-    const client = new ISCNQueryClient();
+    const iscn = await getISCNLib();
+    const client = new iscn.ISCNQueryClient();
     await client.connect(LIKECOIN_CHAIN_RPC);
     queryClient = client;
   }
@@ -13,16 +21,18 @@ export async function getNFTQueryClient() {
 }
 
 export async function createNFTSigningClient(signer) {
-  const client = new ISCNSigningClient();
+  const iscn = await getISCNLib();
+  const client = new iscn.ISCNSigningClient();
   await client.connectWithSigner(LIKECOIN_CHAIN_RPC, signer);
   return client;
 }
 
 export async function getClassInfo(classId) {
+  const iscn = await getISCNLib();
   const c = await getNFTQueryClient();
   const client = await c.getQueryClient();
   let { class: nftClass } = await client.nft.class(classId);
-  if (nftClass) nftClass = parseNFTClassDataFields(nftClass);
+  if (nftClass) nftClass = iscn.parseNFTClassDataFields(nftClass);
   return nftClass;
 }
 

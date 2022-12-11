@@ -1,4 +1,7 @@
 /* eslint import/no-extraneous-dependencies: "off" */
+// eslint-disable-next-line nuxt/no-cjs-in-config
+const path = require('path');
+
 const { IS_TESTNET } = process.env;
 
 const nuxtConfig = {
@@ -174,6 +177,9 @@ const nuxtConfig = {
         } else {
           config.devtool = 'source-map';
         }
+      }
+      if (!ctx.isDev) {
+        config.resolve.alias['bn.js'] = path.join(__dirname, './node_modules/bn.js');
       }
       /* eslint-enable no-param-reassign */
     },
