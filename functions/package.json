@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@cosmjs/stargate": "^0.28.7",
-    "@likecoin/iscn-js": "^0.2.1",
+    "@likecoin/iscn-js": "^0.2.2",
     "@likecoin/nuxt-google-optimize": "^0.5.3-like.10",
     "@likecoin/ui-vue": "^0.7.1",
     "@nuxtjs/google-tag-manager": "^2.1.4",
