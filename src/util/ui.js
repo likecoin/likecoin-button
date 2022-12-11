@@ -11,4 +11,8 @@ export function ellipsis(value) {
   return value;
 }
 
+export function getLikeCoResizedImageUrl(url, size) {
+  return url.replace(/\?size=\d+/, `?size=${size}`);
+}
+
 export default ellipsis;
