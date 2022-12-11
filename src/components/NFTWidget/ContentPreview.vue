@@ -13,7 +13,7 @@
     >
       <img
         :class="imgClasses"
-        :src="imgSrc"
+        :src="resizedSrc"
         :alt="title"
         @load="handleLoadImage"
       >
@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { getLikeCoResizedImageUrl } from '~/util/ui';
+
 export default {
   props: {
     imgSrc: {
@@ -68,6 +70,10 @@ export default {
         rel: 'noopener noreferrer',
         target: '_blank',
       }
+    },
+    resizedSrc() {
+      if (this.isFixedSize) return getLikeCoResizedImageUrl(this.imgSrc, 720);
+      return this.imgSrc;
     },
     titleClasses() {
       return [
