@@ -37,6 +37,7 @@
 
 <script>
 import { DEFAULT_AVATAR } from '~/constant';
+import { getLikeCoResizedImageUrl } from '~/util/ui';
 
 export default {
   name: 'identity-avatar-v2',
@@ -73,7 +74,7 @@ export default {
       ];
     },
     imageSrc() {
-      return this.url || DEFAULT_AVATAR;
+      return getLikeCoResizedImageUrl(this.url || DEFAULT_AVATAR, this.size);
     },
     imageStyle() {
       const borderWidth = `${this.size * 0.05}px`;
