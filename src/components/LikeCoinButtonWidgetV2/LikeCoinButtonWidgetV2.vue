@@ -56,15 +56,16 @@
         v-if="upgradeHref"
         :x="upgradeLabelX"
         :y="upgradeLabelY"
-        width="60"
-        height="20"
+        width="120"
+        height="30"
       >
         <a
           :href="upgradeHref"
           target="_blank"
           rel="noreferrer noopener"
+          :style="upgradeLabelStyle"
         >
-          <div :style="upgradeLabelStyle">{{ this.$t('HintLabel.Upgrade') }}</div>
+          {{ this.$t('HintLabel.Upgrade') }}
         </a>
       </foreignObject>
 
@@ -214,10 +215,10 @@ export default {
       };
     },
     upgradeLabelX() {
-      return 198;
+      return 108;
     },
     upgradeLabelY() {
-      return 120;
+      return 115;
     },
     labelY() {
       return 140;
@@ -263,9 +264,6 @@ export default {
     upgradeLabelStyle() {
       return {
         ...this.textStyle,
-        width: '100%',
-        height: '100%',
-        display: 'flex',
         fontSize: '8px',
       };
     },
