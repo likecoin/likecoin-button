@@ -89,6 +89,8 @@ export default {
       return LAYOUTS.includes(mode) && mode !== LAYOUT_DEFAULT;
     },
     upgradeUrl() {
+      // temp limit to vocus.cc only
+      if (this.referrer && !this.referrer.includes('vocus.cc')) return '';
       if (!this.referrer && !this.iscnId) return '';
       return getNFTMintLink({ referrer: this.referrer, iscnId: this.iscnId, user: this.id });
     },
