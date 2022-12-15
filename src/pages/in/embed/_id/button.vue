@@ -6,6 +6,7 @@
       :cta-button-label="ctaButtonLabel"
       :cta-button-preset="ctaButtonPreset"
       :hint-label="hintText"
+      :upgrade-href="upgradeUrl"
       :cta-href="likerWallet && ctaHref"
       :is-show-like-button="isShowLikeButton"
       :should-show-cta="hasSuperLiked"
@@ -44,6 +45,7 @@ import {
   isFacebookBrowser,
 } from '~/util/client';
 
+import { getNFTMintLink } from '~/util/api/api';
 import mixin from '~/mixins/embed-button';
 
 import Identity from '~/components/Identity/Identity';
@@ -85,6 +87,10 @@ export default {
     hasAltMode() {
       const { mode } = this.$route.query;
       return LAYOUTS.includes(mode) && mode !== LAYOUT_DEFAULT;
+    },
+    upgradeUrl() {
+      if (!this.referrer && !this.iscnId) return '';
+      return getNFTMintLink({ referrer: this.referrer, iscnId: this.iscnId, user: this.id });
     },
   },
   mounted() {

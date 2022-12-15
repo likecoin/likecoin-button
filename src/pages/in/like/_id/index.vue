@@ -47,6 +47,7 @@
             :style="{ textAlign: 'center' }"
             :cta-href="likerWallet && ctaHref"
             :hint-label="hintText"
+            :upgrade-href="upgradeUrl"
             :should-show-cta="hasSuperLiked"
             :cta-button-label="ctaButtonLabel"
             :width="480"
@@ -91,6 +92,7 @@
 <script>
 import {
   apiGetPageTitle,
+  getNFTMintLink,
 } from '@/util/api/api';
 
 import { checkValidDomainNotIP, handleQueryStringInUrl } from '@/util/url';
@@ -180,6 +182,10 @@ export default {
         ref: this.contentKey,
         class: 'text-content',
       };
+    },
+    upgradeUrl() {
+      if (!this.referrer && !this.iscnId) return '';
+      return getNFTMintLink({ referrer: this.referrer, iscnId: this.iscnId, user: this.id });
     },
     ctaTitle() {
       if (this.isTrialSubscriber) {
