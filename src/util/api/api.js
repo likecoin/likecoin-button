@@ -1,5 +1,5 @@
 import axios from '~/plugins/axios';
-import { LIKECOIN_API, ISCN_RAW_DATA_ENDPOINT } from '@/constant';
+import { LIKECOIN_API, APP_LIKE_CO_URL_BASE, ISCN_RAW_DATA_ENDPOINT } from '@/constant';
 
 function getLikeCoinButtonHeaders({
   documentReferrer = '',
@@ -213,3 +213,18 @@ export const apiGetNFTPurchaseInfo = ({
   });
   return axios.get(`${LIKECOIN_API}/likernft/purchase?${qsPayload.toString()}`);
 };
+
+export const getNFTMintLink = ({
+  referrer = '',
+  iscnId = '',
+  user = '',
+}) => {
+  if (iscnId) {
+    return `${APP_LIKE_CO_URL_BASE}/nft/iscn/${encodeURIComponent(iscnId)}`;
+  }
+  const qsPayload = new URLSearchParams({
+    url: referrer,
+    liker_id: user,
+  });
+  return `${APP_LIKE_CO_URL_BASE}/nft/url?${qsPayload.toString()}`;
+}
