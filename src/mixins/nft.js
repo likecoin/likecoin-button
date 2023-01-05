@@ -1,3 +1,5 @@
+import { BigNumber } from 'bignumber.js';
+
 import { LIKER_LAND_URL_BASE } from '~/constant';
 import { checkIsValidISCNId, checkIsValidNFTClassId } from '~/util/nft';
 import {
@@ -5,6 +7,7 @@ import {
   apiGetLikerDataByAddress,
   apiGetNFTMetadata,
   apiGetNFTOwners,
+  getNFTListingInfo,
 } from '~/util/api/api';
 
 export default {
@@ -15,6 +18,16 @@ export default {
     };
   },
   computed: {
+    nftIsShowListingPrice() {
+      return (
+        this.nftListing && this.nftListing.price < this.nftCollectingPrice
+      );
+    },
+    nftPrice() {
+      return this.nftIsShowListingPrice
+        ? this.nftListing.price
+        : this.nftCollectingPrice;
+    },
     isFixedSize() {
       return !this.$route.query.responsive;
     },
@@ -74,6 +87,7 @@ export default {
       apiMintInfoResult,
       apiMetadataResult,
       apiOwnersResult,
+      nftListingResult,
     ] = await Promise.all([
       apiGetNFTMintInfo(apiParams).catch(() => {
         // Redirect to /in/like/iscn?iscn_id=:iscn_id if the ISCN has not been minted NFT
@@ -90,11 +104,12 @@ export default {
       }),
       apiGetNFTMetadata(apiParams).catch(() => ({})),
       apiGetNFTOwners(apiParams).catch(() => ({})),
+      getNFTListingInfo(qsNftClassId).catch(() => ({})),
     ]);
     const {
       iscnId,
       classId: nftClassId,
-      currentPrice: nftPrice,
+      currentPrice: nftCollectingPrice,
       soldCount: nftCollectedCount,
     } = apiMintInfoResult.data || {}
     const {
@@ -114,6 +129,27 @@ export default {
       isCivicLikerTrial: isIscnOwnerCivicLikerTrial,
       isSubscribedCivicLiker: isIscnOwnerSubscribedCivicLiker,
     } = likerDataResult.data || {}
+
+    const { listings = [] } = nftListingResult.data || {};
+    const nftListing = listings
+      .map((l) => {
+        const {
+          class_id: classId,
+          nft_id: nftId,
+          seller,
+          price,
+          expiration,
+        } = l;
+        return {
+          classId,
+          nftId,
+          seller,
+          price: new BigNumber(price).shiftedBy(-9).toNumber(),
+          expiration: new Date(expiration),
+        };
+      })
+      .sort((a, b) => a.price - b.price)[0]
+
     return {
       contentTitle,
       contentDescription,
@@ -125,7 +161,8 @@ export default {
       iscnOwnerAvatarSrc,
       isIscnOwnerCivicLiker: isIscnOwnerSubscribedCivicLiker || isIscnOwnerCivicLikerTrial,
       nftClassId,
-      nftPrice,
+      nftCollectingPrice,
+      nftListing,
       nftCollectedCount,
       nftCollectorCount,
     };

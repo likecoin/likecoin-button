@@ -64,4 +64,8 @@ export const LIKECOIN_CHAIN_RPC = IS_TESTNET
   ? 'https://node.testnet.like.co/rpc/'
   : 'https://mainnet-node.like.co/rpc/';
 
+export const LIKECOIN_CHAIN_API = IS_TESTNET
+  ? 'https://node.testnet.like.co'
+  : 'https://mainnet-node.like.co';
+
 export const DEFAULT_AVATAR = 'https://static.like.co/likecoin_de-portrait.jpg';

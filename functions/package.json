@@ -23,6 +23,7 @@
     "axios": "^0.21.2",
     "base64url": "^3.0.1",
     "bech32": "^2.0.0",
+    "bignumber.js": "^9.1.1",
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
     "cookie-parser": "^1.4.4",
