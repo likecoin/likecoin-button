@@ -38,7 +38,7 @@ export default {
       return this.$route.query.campaign !== undefined;
     },
     detailsURL() {
-      return `${LIKER_LAND_URL_BASE}/nft/class/${this.nftClassId}?utm_source=widget`;
+      return `${LIKER_LAND_URL_BASE}/nft/class/${this.nftClassId}`;
     },
     purchaseURL() {
       if (this.shouldCollectInCampaign) {
@@ -145,7 +145,7 @@ export default {
   methods: {
     viewNFTDetails() {
       window.open(
-        this.detailsURL,
+        `${this.detailsURL}?utm_source=widget`,
         `collect_${this.classId}`
       );
     },
