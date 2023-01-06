@@ -7,7 +7,7 @@ const helmet = require('helmet');
 const onHeaders = require('on-headers');
 const { Nuxt } = require('nuxt-start');
 
-const nuxtConfig = require('./nuxt.config.js');
+const nuxtConfig = require('./nuxt.config');
 
 function setCacheHeader(req, res, next) {
   onHeaders(res, () => {
