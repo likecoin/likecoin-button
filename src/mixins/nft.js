@@ -9,6 +9,7 @@ import {
   apiGetNFTOwners,
   getNFTListingInfo,
 } from '~/util/api/api';
+import { logTrackerEvent } from '@/util/EventLogger';
 
 export default {
   layout: 'widget',
@@ -181,12 +182,14 @@ export default {
   },
   methods: {
     viewNFTDetails() {
+      logTrackerEvent(this, 'NFTWidgetAction', 'clickViewNFTDetails', 'clickViewNFTDetails(widget)', 1);
       window.open(
         `${this.detailsURL}?utm_source=widget`,
         `collect_${this.classId}`
       );
     },
     collectNFT() {
+      logTrackerEvent(this, 'NFTWidgetAction', 'clickCollectNFT', 'clickCollectNFT(widget)', 1);
       window.open(
         this.purchaseURL,
         `collect_${this.classId}`,
@@ -194,6 +197,7 @@ export default {
       );
     },
     likeISCN() {
+      logTrackerEvent(this, 'NFTWidgetAction', 'clickLikeISCN', 'clickLikeISCN(widget)', 1);
       window.open(
         `/in/like/iscn/?iscn_id=${encodeURIComponent(
           this.iscnId
