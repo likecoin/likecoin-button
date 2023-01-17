@@ -6,7 +6,7 @@
     :img-src="contentImage"
     :url="contentURL"
     :price="nftPrice"
-    :collect-button-label="$t('CTA.NFT.Button')"
+    :collect-button-label="collectButtonLabel"
     :collector-count="nftCollectorCount"
     :collected-count="nftCollectedCount"
     :owner-address="iscnOwnerAddress"
@@ -24,8 +24,18 @@
 
 <script>
 import nftMixin from '~/mixins/nft';
+import experimentMixin from '~/mixins/experiment';
 
 export default {
-  mixins: [nftMixin],
+  mixins: [
+    nftMixin,
+    experimentMixin('isExperimenting', 'collect-button-text', 'variant'),
+  ],
+  computed: {
+    collectButtonLabel() {
+      if (this.isExperimenting) return this.$t('CTA.NFT.ButtonExp');
+      return this.$t('CTA.NFT.Button');
+    },
+  },
 };
 </script>

@@ -34,7 +34,8 @@
       "DepubSpace": "查看 depub.space"
     },
     "NFT": {
-      "Button": "收藏作品"
+      "Button": "收藏作品",
+      "ButtonExp": "支持作者"
     }
   },
   "Embed": {
