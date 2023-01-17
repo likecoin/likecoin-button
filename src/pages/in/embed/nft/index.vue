@@ -6,6 +6,7 @@
     :img-src="contentImage"
     :url="contentURL"
     :price="nftPrice"
+    :collect-button-label="$t('CTA.NFT.Button')"
     :collector-count="nftCollectorCount"
     :collected-count="nftCollectedCount"
     :owner-address="iscnOwnerAddress"

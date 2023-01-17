@@ -34,7 +34,7 @@
       @click.stop="onClickCollectButton"
     >
       <NFTWidgetIconInsertCoin class="mr-[12px]" />
-      {{ collectButtonTitle }}
+      {{ collectButtonLabel }}
     </button>
   </div>
 </template>
@@ -42,7 +42,7 @@
 <script>
 export default {
   props: {
-    collectButtonTitle: {
+    collectButtonLabel: {
       type: String,
       default: 'Collect Now',
     },

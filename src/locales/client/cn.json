@@ -31,6 +31,9 @@
       "Button": "立即注册",
       "Subscribing": "赞助中",
       "DepubSpace": "查看 depub.space"
+    },
+    "NFT": {
+      "Button": "收藏作品"
     }
   },
   "Embed": {
