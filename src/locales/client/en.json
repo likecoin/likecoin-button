@@ -32,12 +32,10 @@
       "Button": "Register now",
       "Subscribing": "Supporting",
       "DepubSpace": "Check on depub.space"
-    },
-    "NFT": {
-      "Button": "Collect Now",
-      "ButtonExp": "Support Me"
     }
   },
+  "cta_nft_collect_button": "Collect Now",
+  "cta_nft_collect_button_exp": "Support Me",
   "Embed": {
     "back": {
       "civicLiker": {

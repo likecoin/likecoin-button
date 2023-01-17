@@ -33,8 +33,8 @@ export default {
   ],
   computed: {
     collectButtonLabel() {
-      if (this.isExperimenting) return this.$t('CTA.NFT.ButtonExp');
-      return this.$t('CTA.NFT.Button');
+      if (this.isExperimenting) return this.$t('cta_nft_collect_button_exp');
+      return this.$t('cta_nft_collect_button');
     },
   },
 };
