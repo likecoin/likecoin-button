@@ -34,7 +34,8 @@
       "DepubSpace": "Check on depub.space"
     },
     "NFT": {
-      "Button": "Collect Now"
+      "Button": "Collect Now",
+      "ButtonExp": "Support Me"
     }
   },
   "Embed": {
