@@ -51,7 +51,7 @@ const nuxtConfig = {
     { src: '~/plugins/vue-i18n' },
     { src: '~/plugins/gsap.client.js', ssr: false },
     { src: '~/plugins/gtag.client.js', ssr: false },
-    // { src: '~/plugins/optimize.js' },
+    { src: '~/plugins/experiment.client.js', ssr: false },
   ],
   render: {
     csp: {
