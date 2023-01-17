@@ -32,6 +32,9 @@
       "Button": "Register now",
       "Subscribing": "Supporting",
       "DepubSpace": "Check on depub.space"
+    },
+    "NFT": {
+      "Button": "Collect Now"
     }
   },
   "Embed": {
