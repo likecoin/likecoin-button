@@ -32,12 +32,10 @@
       "Button": "按月贊助",
       "Subscribing": "贊助中",
       "DepubSpace": "查看 depub.space"
-    },
-    "NFT": {
-      "Button": "收藏作品",
-      "ButtonExp": "支持作者"
     }
   },
+  "cta_nft_collect_button": "收藏作品",
+  "cta_nft_collect_button_exp": "支持作者",
   "Embed": {
     "back": {
       "civicLiker": {
