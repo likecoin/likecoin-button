@@ -8,18 +8,20 @@
       <span class="ml-[12px]">{{ likeActionLabel }}</span>
     </button>
     <div class="flex items-center text-dark-gray ml-[8px]">
-      <a
-        :href="creatorURL"
-        class="flex items-center text-like-green group my-[-8px]"
-        target="_blank"
-      >
-        <IdentityV2
-          :avatar-url="creatorAvatarSrc"
-          :avatar-size="32"
-          :is-avatar-outlined="isCreatorCivicLiker"
-        />
-        <span class="ml-[8px] group-hover:underline">{{ formattedCreatorName }}</span>
-      </a>
+      <client-only>
+        <a
+          :href="creatorURL"
+          class="flex items-center text-like-green group my-[-8px]"
+          target="_blank"
+        >
+          <IdentityV2
+            :avatar-url="creatorAvatarSrc"
+            :avatar-size="32"
+            :is-avatar-outlined="isCreatorCivicLiker"
+          />
+          <span class="ml-[8px] group-hover:underline">{{ formattedCreatorName }}</span>
+        </a>
+      </client-only>
     </div>
   </NFTWidgetBaseCard>
 </template>
