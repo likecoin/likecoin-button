@@ -51,7 +51,6 @@ const nuxtConfig = {
     { src: '~/plugins/vue-i18n' },
     { src: '~/plugins/gsap.client.js', ssr: false },
     { src: '~/plugins/gtag.client.js', ssr: false },
-    { src: '~/plugins/experiment.client.js', ssr: false },
   ],
   render: {
     csp: {
@@ -118,7 +117,9 @@ const nuxtConfig = {
   modules: [
     '@nuxtjs/sentry',
     'nuxt-svg-loader',
-    '@likecoin/nuxt-google-optimize',
+    ['@likecoin/nuxt-google-optimize', {
+      plugins: [{ src: '~/plugins/experiment.client.js', mode: 'client' }],
+    }],
   ],
   buildModules: [
     '@nuxtjs/tailwindcss',
