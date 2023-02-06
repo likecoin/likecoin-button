@@ -1,6 +1,6 @@
 export default {
   name: 'collect-button-text',
-  experimentID: '3zWuqnDmRJmKe89D_4M_sg',
+  experimentID: 'zDXr_rXTRSqaSe1r_EjpqA',
   isEligible: ({ route }) => !process.server && !!route.name && !route.name.includes('in-embed-id'),
   variants: [{ name: 'origin', weight: 1 }, { name: 'variant', weight: 1 }],
 };
