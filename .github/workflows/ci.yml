@@ -1,0 +1,29 @@
+name: ci
+
+on: [push, pull_request]
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Setup node env 🏗
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+          cache: 'npm'
+          cache-dependency-path: |
+            src/package-lock.json
+            functions/package-lock.json
+      - name: Dependencies
+        run: npm --prefix src install && npm --prefix functions install && cp src/nuxt.config.js src/tailwind.config.js functions/
+      - name: Lint Test
+        run: npm --prefix src run lint && npm --prefix functions run lint
+      - name: Build
+        run: npm --prefix src run build
+      - name: Server Test
+        run: npm --prefix src start &
+      - name: Curl Test
+        run: curl --retry 10 --retry-delay 5 -v http://127.0.0.1:3000/

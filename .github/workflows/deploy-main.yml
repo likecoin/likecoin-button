@@ -1,0 +1,35 @@
+name: Deploy to button.like.co
+
+on:
+  push:
+    branches:
+      - 'deploy/main'
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: main
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Setup node env 🏗
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+          cache: 'npm'
+          cache-dependency-path: |
+            src/package-lock.json
+            functions/package-lock.json
+      - name: Dependencies
+        run: npm --prefix src install && npm --prefix functions install && cp src/nuxt.config.js src/tailwind.config.js functions/
+      - uses: w9jds/setup-firebase@main
+        with:
+          firebase_token: ${{ secrets.FIREBASE_TOKEN }}
+      - run: firebase use default
+      - run: firebase deploy -f
+        env:
+          SENTRY_DSN: ${{ vars.SENTRY_DSN }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_PUBLISH_RELEASE: 'TRUE'
