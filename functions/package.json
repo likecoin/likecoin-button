@@ -36,6 +36,7 @@
     "lodash": "^4.17.11",
     "lodash.debounce": "^4.0.8",
     "node-fetch-native": "^1.0.1",
+    "node-html-to-image": "^3.3.0",
     "nuxt-start": "^2.15.3",
     "nuxt-svg-loader": "^1.0.1",
     "on-headers": "^1.0.2",

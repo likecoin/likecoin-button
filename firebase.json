@@ -25,6 +25,10 @@
     ],
     "rewrites": [
       {
+        "source": "/in/embed/**/image**",
+        "function": "imagessr"
+      },
+      {
         "source": "**",
         "function": "ssrapp"
       }
