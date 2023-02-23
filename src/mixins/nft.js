@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
 import { LIKER_LAND_URL_BASE } from '~/constant';
-import { checkIsValidISCNId, checkIsValidNFTClassId } from '~/util/nft';
+import { checkIsValidISCNId, checkIsValidNFTClassId, parseImageURLFromMetadata } from '~/util/nft';
 import {
   apiGetNFTMintInfo,
   apiGetLikerDataByAddress,
@@ -116,7 +116,7 @@ export default {
     const {
       name: contentTitle,
       description: contentDescription,
-      image: contentImage,
+      image: contentImage = '',
       external_url: contentURL,
       iscn_owner: iscnOwnerAddress,
     } = apiMetadataResult.data || {};
@@ -154,7 +154,7 @@ export default {
     return {
       contentTitle,
       contentDescription,
-      contentImage,
+      contentImage: parseImageURLFromMetadata(contentImage),
       contentURL,
       iscnId,
       iscnOwnerAddress,
