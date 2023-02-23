@@ -21,6 +21,13 @@ app.get(['/in/embed/**', '/in/like/**'], async (req, res) => {
       quality: 100,
       type: 'jpeg',
       selector: '#__layout > div',
+      puppeteerArgs: {
+        defaultViewport: {
+          width: 360,
+          height: 480,
+          deviceScaleFactor: 1.0,
+        },
+      },
     });
     res.writeHead(200, {
       'Content-Type': 'image/jpeg',
