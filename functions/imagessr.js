@@ -14,6 +14,7 @@ app.get(['/in/embed/**', '/in/like/**'], async (req, res) => {
       res.status(400).send('INVALID_URL');
       return;
     }
+    const scale = Number(req.query.scale) || 1;
     const { EXTERNAL_HOSTNAME } = process.env;
     const url = `https://${EXTERNAL_HOSTNAME}${req.originalUrl.replace('/image', '')}`;
     const { data } = await axios.get(url);
@@ -26,12 +27,12 @@ app.get(['/in/embed/**', '/in/like/**'], async (req, res) => {
         defaultViewport: {
           width: 360,
           height: 480,
-          deviceScaleFactor: 2.0,
+          deviceScaleFactor: scale,
         },
       },
     });
     const withMetadata = await sharp(image)
-      .withMetadata({ density: 144 })
+      .withMetadata({ density: 77 * scale })
       .toBuffer();
     res.writeHead(200, {
       'Content-Type': 'image/jpeg',
