@@ -4,6 +4,7 @@ const { onRequest } = require('firebase-functions/v2/https');
 const express = require('express');
 const axios = require('axios');
 const nodeHtmlToImage = require('node-html-to-image');
+const sharp = require('sharp');
 
 const app = express();
 
@@ -25,15 +26,18 @@ app.get(['/in/embed/**', '/in/like/**'], async (req, res) => {
         defaultViewport: {
           width: 360,
           height: 480,
-          deviceScaleFactor: 1.0,
+          deviceScaleFactor: 2.0,
         },
       },
     });
+    const withMetadata = await sharp(image)
+      .withMetadata({ density: 144 })
+      .toBuffer();
     res.writeHead(200, {
       'Content-Type': 'image/jpeg',
       'Cache-Control': 'public, max-age=3600, stale-while-revalidate=3600, stale-if-error=3600',
     });
-    res.end(image, 'binary');
+    res.end(withMetadata, 'binary');
   } catch (err) {
     console.error(JSON.stringify(err));
     res.sendStatus(500);
