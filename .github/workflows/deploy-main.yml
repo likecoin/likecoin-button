@@ -29,6 +29,7 @@ jobs:
       - run: firebase use default
       - run: firebase deploy -f
         env:
+          GA_TRACKING_ID: ${{ vars.GA_TRACKING_ID }}
           SENTRY_DSN: ${{ vars.SENTRY_DSN }}
           SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
