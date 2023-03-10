@@ -22,11 +22,11 @@ app.get(['/in/embed/**', '/in/like/**'], async (req, res) => {
       html: data,
       quality: 100,
       type: 'jpeg',
-      selector: '#__layout > div',
+      selector: '#nft-basecard',
       puppeteerArgs: {
         defaultViewport: {
           width: 360,
-          height: 480,
+          height: 373,
           deviceScaleFactor: scale,
         },
       },
