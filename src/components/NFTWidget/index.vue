@@ -1,6 +1,7 @@
 <template>
   <div class="rounded-[16px]">
     <NFTWidgetBaseCard
+      id="nft-basecard"
       class="transition-colors cursor-pointer hover:border-like-cyan-light"
       @click="handleViewDetails"
     >
