@@ -117,9 +117,9 @@ const nuxtConfig = {
   modules: [
     '@nuxtjs/sentry',
     'nuxt-svg-loader',
-    ['@likecoin/nuxt-google-optimize', {
-      plugins: [{ src: '~/plugins/experiment.client.js', mode: 'client' }],
-    }],
+    // ['@likecoin/nuxt-google-optimize', {
+    //   plugins: [{ src: '~/plugins/experiment.client.js', mode: 'client' }],
+    // }],
   ],
   buildModules: [
     '@nuxtjs/tailwindcss',
@@ -140,10 +140,11 @@ const nuxtConfig = {
       ReportingObserver: false, // reporting is very noisy on CSP violation.
     },
   },
-  googleOptimize: {
-    useFetch: false,
-    maxAge: 86400, // 1 day
-  },
+  // googleOptimize: {
+  //   cookieName: '__session',
+  //   useFetch: true,
+  //   maxAge: 604800, // 1 week
+  // },
   /*
   ** Build configuration
   */
