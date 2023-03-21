@@ -29,7 +29,7 @@ async function getNewPage(browser, { width = 1024, height = 768 } = {}) {
   return page;
 }
 
-async function makeScreenShot(page, url, {
+async function makeScreenshot(page, url, {
   selector = 'body',
   type = 'png',
   quality = 80,
@@ -68,7 +68,7 @@ app.get(['/in/embed/**', '/in/like/**'], async (req, res) => {
       width: 360,
       height: 373,
     });
-    const image = await makeScreenShot(page, url, {
+    const image = await makeScreenshot(page, url, {
       type: 'jpeg',
       selector: '#nft-basecard',
       quality: 100,
