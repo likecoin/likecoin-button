@@ -6,6 +6,7 @@
       @click="handleViewDetails"
     >
       <NFTWidgetContentPreview
+        v-if="isShowCover"
         :title="title"
         :description="description"
         :img-src="imgSrc"
@@ -24,6 +25,7 @@
       />
     </NFTWidgetBaseCard>
     <NFTWidgetLikeActionBar
+      v-if="isShowLikeBar"
       class="mt-[8px]"
       :creator-address="ownerAddress"
       :creator-display-name="ownerDisplayName"
@@ -90,6 +92,14 @@ export default {
       default: undefined,
     },
     isFixedSize: {
+      type: Boolean,
+      default: true,
+    },
+    isShowCover: {
+      type: Boolean,
+      default: true,
+    },
+    isShowLikeBar: {
       type: Boolean,
       default: true,
     },

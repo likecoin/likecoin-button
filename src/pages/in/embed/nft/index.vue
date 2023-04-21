@@ -13,6 +13,8 @@
     :owner-display-name="iscnOwnerDisplayName"
     :owner-avatar-src="iscnOwnerAvatarSrc"
     :is-fixed-size="isFixedSize"
+    :is-show-cover="isShowCover"
+    :is-show-like-bar="isShowLikeBar"
     :is-content-clickable="false"
     :style="widgetStyle"
     @view-details="viewNFTDetails"
@@ -27,5 +29,13 @@ import nftMixin from '~/mixins/nft';
 
 export default {
   mixins: [nftMixin],
+  computed: {
+    isShowCover() {
+      return this.$route.query.cover !== '0';
+    },
+    isShowLikeBar() {
+      return this.$route.query.like_bar !== '0';
+    },
+  },
 };
 </script>
