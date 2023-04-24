@@ -26,10 +26,5 @@ import nftMixin from '~/mixins/nft';
 
 export default {
   mixins: [nftMixin],
-  computed: {
-    collectButtonLabel() {
-      return this.$route.query.cta_button_label || this.$t('cta_nft_collect_button');
-    },
-  },
 };
 </script>

@@ -19,6 +19,9 @@ export default {
     };
   },
   computed: {
+    collectButtonLabel() {
+      return this.$route.query.cta_button_label || this.$t('cta_nft_collect_button');
+    },
     nftIsShowListingPrice() {
       return (
         this.nftListing && this.nftListing.price < this.nftCollectingPrice
