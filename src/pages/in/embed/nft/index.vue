@@ -6,7 +6,7 @@
     :img-src="contentImage"
     :url="contentURL"
     :price="nftPrice"
-    :collect-button-label="$t('cta_nft_collect_button')"
+    :collect-button-label="collectButtonLabel"
     :collector-count="nftCollectorCount"
     :collected-count="nftCollectedCount"
     :owner-address="iscnOwnerAddress"
@@ -30,6 +30,9 @@ import nftMixin from '~/mixins/nft';
 export default {
   mixins: [nftMixin],
   computed: {
+    collectButtonLabel() {
+      return this.$route.query.cta_button_label || this.$t('cta_nft_collect_button');
+    },
     isShowCover() {
       return this.$route.query.cover !== '0';
     },
