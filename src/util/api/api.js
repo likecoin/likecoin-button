@@ -4,6 +4,7 @@ import {
   ISCN_RAW_DATA_ENDPOINT,
   LIKECOIN_API,
   LIKECOIN_CHAIN_API,
+  LIKECOIN_NFT_API_WALLET,
 } from '@/constant';
 
 function getLikeCoinButtonHeaders({
@@ -197,17 +198,6 @@ export const apiGetNFTMetadata = ({
   return axios.get(`${LIKECOIN_API}/likernft/metadata?${qsPayload.toString()}`);
 };
 
-export const apiGetNFTOwners = ({
-  iscnId = '',
-  classId = '',
-}) => {
-  const qsPayload = new URLSearchParams({
-    iscn_id: iscnId,
-    class_id: classId,
-  });
-  return axios.get(`${LIKECOIN_API}/likernft/metadata/owners?${qsPayload.toString()}`);
-};
-
 export const apiGetNFTPurchaseInfo = ({
   iscnId = '',
   classId = '',
@@ -232,6 +222,19 @@ export const getNFTMintLink = ({
     liker_id: user,
   });
   return `${APP_LIKE_CO_URL_BASE}/nft/url?${qsPayload.toString()}`;
+}
+
+export const getNFTOwners = ({
+  classId = '',
+  excludeISCNOwner = true,
+  ignoreList = LIKECOIN_NFT_API_WALLET,
+}) => {
+  const qsPayload = new URLSearchParams({
+    class_id: classId,
+    exclude_iscn_owner: excludeISCNOwner,
+    ignore_list: ignoreList,
+  });
+  return axios.get(`${LIKECOIN_CHAIN_API}/likechain/likenft/v1/owner?${qsPayload.toString()}`);
 }
 
 export const getNFTListingInfo = classId => axios.get(`${LIKECOIN_CHAIN_API}/likechain/likenft/v1/listings/${classId}`);

@@ -6,7 +6,7 @@ import {
   apiGetNFTMintInfo,
   apiGetLikerDataByAddress,
   apiGetNFTMetadata,
-  apiGetNFTOwners,
+  getNFTOwners,
   getNFTListingInfo,
 } from '~/util/api/api';
 import { logTrackerEvent } from '@/util/EventLogger';
@@ -107,14 +107,13 @@ export default {
         return {};
       }),
       apiGetNFTMetadata(apiParams).catch(() => ({})),
-      apiGetNFTOwners(apiParams).catch(() => ({})),
+      getNFTOwners({ classId: qsNftClassId }).catch(() => ({})),
       getNFTListingInfo(qsNftClassId).catch(() => ({})),
     ]);
     const {
       iscnId,
       classId: nftClassId,
       currentPrice: nftCollectingPrice,
-      soldCount: nftCollectedCount,
     } = apiMintInfoResult.data || {}
     const {
       name: contentTitle,
@@ -123,8 +122,9 @@ export default {
       external_url: contentURL,
       iscn_owner: iscnOwnerAddress,
     } = apiMetadataResult.data || {};
-    const ownersMap = apiOwnersResult.data || {};
-    const nftCollectorCount = Object.keys(ownersMap).length;
+    const { owners = [] } = apiOwnersResult.data || {};
+    const nftCollectorCount = owners.length;
+    const nftCollectedCount = owners.reduce((acc, o) => acc + o.count, 0);
 
     const likerDataResult = await apiGetLikerDataByAddress(iscnOwnerAddress).catch(() => ({}));
     const {

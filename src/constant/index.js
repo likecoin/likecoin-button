@@ -69,3 +69,7 @@ export const LIKECOIN_CHAIN_API = IS_TESTNET
   : 'https://mainnet-node.like.co';
 
 export const DEFAULT_AVATAR = 'https://static.like.co/likecoin_de-portrait.jpg';
+
+export const LIKECOIN_NFT_API_WALLET = IS_TESTNET
+  ? 'like1yney2cqn5qdrlc50yr5l53898ufdhxafqz9gxp'
+  : 'like17m4vwrnhjmd20uu7tst7nv0kap6ee7js69jfrs';
