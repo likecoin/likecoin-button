@@ -90,8 +90,6 @@ export default {
     const [
       apiMintInfoResult,
       apiMetadataResult,
-      apiOwnersResult,
-      nftListingResult,
     ] = await Promise.all([
       apiGetNFTMintInfo(apiParams).catch(() => {
         // Redirect to /in/like/iscn?iscn_id=:iscn_id if the ISCN has not been minted NFT
@@ -107,14 +105,19 @@ export default {
         return {};
       }),
       apiGetNFTMetadata(apiParams).catch(() => ({})),
-      getNFTOwners({ classId: qsNftClassId }).catch(() => ({})),
-      getNFTListingInfo(qsNftClassId).catch(() => ({})),
     ]);
     const {
       iscnId,
       classId: nftClassId,
       currentPrice: nftCollectingPrice,
     } = apiMintInfoResult.data || {}
+    const [
+      apiOwnersResult,
+      nftListingResult,
+    ] = await Promise.all([
+      getNFTOwners({ classId: nftClassId }).catch(() => ({})),
+      getNFTListingInfo(nftClassId).catch(() => ({})),
+    ]);
     const {
       name: contentTitle,
       description: contentDescription,
