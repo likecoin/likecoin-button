@@ -38,7 +38,7 @@ async function makeScreenshot(page, url, {
   await page.goto(url);
   const element = await page.$(selector);
   if (!element) {
-    throw Error(`No element matches selector: ${selector}`);
+    throw Error('SELECTOR_NOT_FOUND');
   }
   const buffer = await element.screenshot({
     type,
@@ -82,6 +82,10 @@ app.get(['/in/embed/**', '/in/like/**'], async (req, res) => {
     });
     res.end(withMetadata, 'binary');
   } catch (err) {
+    if (err.message === 'SELECTOR_NOT_FOUND') {
+      res.status(400).send('NOT_WRITING_NFT');
+      return;
+    }
     console.error(JSON.stringify(err));
     res.sendStatus(500);
   } finally {
