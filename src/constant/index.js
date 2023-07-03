@@ -49,6 +49,12 @@ export const QUERY_STRING_TO_REMOVE = [
   'utm_term',
   'utm_content',
   'ldtag_cl',
+  '_trms',
+  'comment_id',
+  'reply_comment_id',
+  'pixfrom',
+  'spm',
+  'clickId',
 ];
 
 export const MEDIUM_QUERY_STRING_TO_REMOVE = [
