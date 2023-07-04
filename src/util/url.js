@@ -37,6 +37,8 @@ export const handleQueryStringInUrl = (referrer) => {
       delete url.query[qs];
     });
     url.set('query', url.query);
+    // SPA router in hash mode usually starts with #
+    if (!url.hash.startsWith('#/')) url.hash = '';
     return url.toString();
   } catch (err) {
     return '';
