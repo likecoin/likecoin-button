@@ -55,6 +55,8 @@ export const QUERY_STRING_TO_REMOVE = [
   'pixfrom',
   'spm',
   'clickId',
+  'avivid_manual',
+  'AviviD_main_uuid',
 ];
 
 export const MEDIUM_QUERY_STRING_TO_REMOVE = [
