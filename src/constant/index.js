@@ -57,6 +57,7 @@ export const QUERY_STRING_TO_REMOVE = [
   'clickId',
   'avivid_manual',
   'AviviD_main_uuid',
+  'mibextid',
 ];
 
 export const MEDIUM_QUERY_STRING_TO_REMOVE = [
