@@ -34,7 +34,7 @@ export default {
     if (this.isUserFetched && !this.isLoggedIn) {
       if (this.hasCookieSupport) {
         if (!(window.doNotTrack || navigator.doNotTrack)) { // do not prefetch if DNT
-          link.push({ rel: 'prefetch', href: this.signUpURL });
+          link.push({ rel: 'prefetch', href: this.signUpUrl });
         }
       } else {
         link.push({ rel: 'prefetch', href: this.popupURL });

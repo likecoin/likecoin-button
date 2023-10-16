@@ -48,7 +48,16 @@
         width="212"
         height="60"
       >
-        <div :style="hintLabelStyle">{{ hintLabel }}</div>
+        <a
+          v-if="!isLoggedIn"
+          target="_blank"
+          rel="noopener"
+          :href="signUpHref"
+          :style="hintLabelStyle"
+        >
+          {{ hintLabel }}
+        </a>
+        <div v-else :style="hintLabelStyle">{{ hintLabel }}</div>
       </foreignObject>
 
       <!-- Upgrade -->
@@ -62,7 +71,7 @@
         <a
           :href="upgradeHref"
           target="_blank"
-          rel="noreferrer noopener"
+          rel="noopener"
           :style="upgradeLabelStyle"
         >
           {{ this.$t('HintLabel.Upgrade') }}
@@ -145,11 +154,19 @@ export default {
       type: String,
       default: undefined,
     },
+    signUpHref: {
+      type: String,
+      default: '',
+    },
     upgradeHref: {
       type: String,
       default: '',
     },
     isShowLikeButton: {
+      type: Boolean,
+      default: true,
+    },
+    isLoggedIn: {
       type: Boolean,
       default: true,
     },

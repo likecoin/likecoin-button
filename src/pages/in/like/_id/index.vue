@@ -48,8 +48,10 @@
             :cta-href="likerWallet && ctaHref"
             :hint-label="hintText"
             :upgrade-href="upgradeUrl"
+            :sign-up-href="signUpUrl"
             :should-show-cta="hasSuperLiked"
             :cta-button-label="ctaButtonLabel"
+            :is-logged-in="isLoggedIn"
             :width="480"
             @click-like-button-label="onClickLikeStats"
           >
