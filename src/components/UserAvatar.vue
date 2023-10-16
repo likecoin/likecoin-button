@@ -21,7 +21,7 @@
     >
       <a
         v-if="user.displayName"
-        :href="`https://${LIKE_CO_HOSTNAME}/${user.id}`"
+        :href="`${LIKER_LAND_URL_BASE}/${user.id}`"
         rel="noopener noreferrer"
         target="_blank"
       >
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { LIKE_CO_HOSTNAME } from '@/constant';
+import { LIKER_LAND_URL_BASE } from '@/constant';
 
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 
@@ -51,7 +51,7 @@ export default {
   },
   data() {
     return {
-      LIKE_CO_HOSTNAME,
+      LIKER_LAND_URL_BASE,
       style: {
         displayNamePlaceholder: {
           width: `${50 + Math.floor(Math.random() * 35)}%`,

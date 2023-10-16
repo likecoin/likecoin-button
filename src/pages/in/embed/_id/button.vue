@@ -10,6 +10,7 @@
       :cta-href="likerWallet && ctaHref"
       :is-show-like-button="isShowLikeButton"
       :should-show-cta="hasSuperLiked"
+      :stat-url="statUrl"
       @click-like-button-label="onClickLikeStats"
     )
       template(#like-button)
