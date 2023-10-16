@@ -100,15 +100,32 @@
           <div v-else>{{ ctaButtonLabel }}</div>
         </a>
       </foreignObject>
+
+      <foreignObject
+        x="324"
+        y="144"
+        width="16"
+        height="16"
+      >
+        <a
+          :href="likerLandUrl"
+          :style="textStyle"
+          target="_blank"
+          rel="noopener"
+        >
+          <like-question-icon />
+        </a>
+      </foreignObject>
     </svg>
   </div>
 </template>
 
 <script>
+import LikeQuestionIcon from '~/assets/like-button/question-btn.svg';
 import Identity from '../Identity/Identity';
 import LikeButton from '../LikeButtonV2/LikeButtonV2';
 
-import { DEPUB_SPACE_URL } from '../../constant';
+import { DEPUB_SPACE_URL, LIKER_LAND_URL_BASE } from '../../constant';
 
 export const LAYOUT_DEFAULT = 'default';
 export const LAYOUT_STICKY_BOTTOM = 'sticky-bottom';
@@ -119,6 +136,7 @@ export default {
   components: {
     Identity,
     LikeButton,
+    LikeQuestionIcon,
   },
   props: {
     layout: {
@@ -292,6 +310,9 @@ export default {
     },
     depupSpaceUrl() {
       return DEPUB_SPACE_URL;
+    },
+    likerLandUrl() {
+      return LIKER_LAND_URL_BASE;
     },
   },
 };
