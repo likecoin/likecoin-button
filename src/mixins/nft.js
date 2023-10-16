@@ -54,14 +54,19 @@ export default {
     shouldCollectInCampaign() {
       return this.$route.query.campaign !== undefined;
     },
-    detailsURL() {
+    detailsUrl() {
       return `${LIKER_LAND_URL_BASE}/nft/class/${this.nftClassId}`;
     },
-    purchaseURL() {
+    purchaseUrl() {
       if (this.shouldCollectInCampaign) {
         return `${LIKER_LAND_URL_BASE}/campaign/writing-nft?utm_source=widget#${this.nftClassId}`;
       }
-      return `${this.detailsURL}?action=collect&utm_source=widget`;
+      return `${this.detailsUrl}?action=collect&utm_source=widget`;
+    },
+    likeIscnUrl() {
+      return `/in/like/iscn/?iscn_id=${encodeURIComponent(
+        this.iscnId
+      )}&action=like`
     },
   },
   async asyncData({
@@ -190,14 +195,14 @@ export default {
     viewNFTDetails() {
       logTrackerEvent(this, 'NFTWidgetAction', 'clickViewNFTDetails', 'clickViewNFTDetails(widget)', 1);
       window.open(
-        `${this.detailsURL}?utm_source=widget`,
+        `${this.detailsUrl}?utm_source=widget`,
         `collect_${this.classId}`
       );
     },
     collectNFT() {
       logTrackerEvent(this, 'NFTWidgetAction', 'clickCollectNFT', 'clickCollectNFT(widget)', 1);
       window.open(
-        this.purchaseURL,
+        this.purchaseUrl,
         `collect_${this.classId}`,
         this.shouldCollectInCampaign ? undefined : 'popup=1,width=768,height=576,top=0,left=0'
       );
@@ -205,9 +210,7 @@ export default {
     likeISCN() {
       logTrackerEvent(this, 'NFTWidgetAction', 'clickLikeISCN', 'clickLikeISCN(widget)', 1);
       window.open(
-        `/in/like/iscn/?iscn_id=${encodeURIComponent(
-          this.iscnId
-        )}&action=like`,
+        this.likeIscnUrl,
         `like_${this.classId}`,
         'popup=1,width=768,height=576,top=0,left=0'
       );

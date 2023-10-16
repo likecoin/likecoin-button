@@ -1,10 +1,10 @@
 <template>
-  <component
-    :is="tag"
+  <a
     v-bind="props"
     :title="title"
     class="flex flex-col overflow-hidden rounded-[8px] bg-gray-f7 text-dark-gray"
-    @click="handleClick"
+    :href="href"
+    @click.prevent="handleClick"
   >
     <div
       v-if="imgSrc"
@@ -22,7 +22,7 @@
       <div :class="titleClasses">{{ title }}</div>
       <div :class="descriptionClasses">{{ description }}</div>
     </div>
-  </component>
+  </a>
 </template>
 
 <script>
@@ -58,10 +58,14 @@ export default {
       type: Boolean,
       default: true,
     },
+    detailsUrl: {
+      type: String,
+      default: '',
+    },
   },
   computed: {
-    tag() {
-      return this.isClickable ? 'a' : 'div';
+    href() {
+      return this.isClickable ? this.url : this.detailsUrl;
     },
     props() {
       if (!this.isClickable) return {};

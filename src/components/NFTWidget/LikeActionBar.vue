@@ -1,12 +1,13 @@
 <template>
   <NFTWidgetBaseCard class="flex items-center justify-between px-[24px]">
-    <button
+    <a
       class="flex items-center transition-colors text-medium-gray hover:text-dark-gray"
-      @click="handleClickLike"
+      :href="likeIscnUrl"
+      @click.prevent="handleClickLike"
     >
       <NFTWidgetIconLike class="w-[20px] h-[20px]" />
       <span class="ml-[12px]">{{ likeActionLabel }}</span>
-    </button>
+    </a>
     <div class="flex items-center text-dark-gray ml-[8px]">
       <client-only>
         <a
@@ -33,6 +34,10 @@ import { ellipsis } from '~/util/ui';
 export default {
   props: {
     iscnId: {
+      type: String,
+      default: '',
+    },
+    likeIscnUrl: {
       type: String,
       default: '',
     },
