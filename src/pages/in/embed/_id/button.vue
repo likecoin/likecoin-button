@@ -13,29 +13,31 @@
       @click-like-button-label="onClickLikeStats"
     )
       template(#like-button)
-        LikeButton(
-          ref="likeButton"
-          :id="id"
-          :count="likeCount"
-          :cooldown="cooldownProgress"
-          :cooldown-end-time="nextSuperLikeTime"
-          :has-super-liked="hasSuperLiked"
-          :is-just-super-liked="isJustSuperLiked"
-          :is-super-like-enabled="isSuperLiker"
-          :is-creator="isCreator"
-          @click="onClickLike"
-          @click-disabled="onClickCooldown"
-          @cooldown-end="updateSuperLikeStatus"
-        )
+        a(@click.prevent :href="popupURL")
+          LikeButton(
+            ref="likeButton"
+            :id="id"
+            :count="likeCount"
+            :cooldown="cooldownProgress"
+            :cooldown-end-time="nextSuperLikeTime"
+            :has-super-liked="hasSuperLiked"
+            :is-just-super-liked="isJustSuperLiked"
+            :is-super-like-enabled="isSuperLiker"
+            :is-creator="isCreator"
+            @click="onClickLike"
+            @click-disabled="onClickCooldown"
+            @cooldown-end="updateSuperLikeStatus"
+          )
       template(#identity="identityProps")
-        Identity(
-          :avatarURL="avatar"
-          :display-name="displayName"
-          :is-avatar-button-outlined="isCreatorCivicLiker"
-          v-bind="identityProps"
-          @click-avatar="onClickAvatar"
-          @click-display-name="onClickAvatar"
-        )
+        a(@click.prevent :href="creatorPortfolioURL")
+          Identity(
+            :avatarURL="avatar"
+            :display-name="displayName"
+            :is-avatar-button-outlined="isCreatorCivicLiker"
+            v-bind="identityProps"
+            @click-avatar="onClickAvatar"
+            @click-display-name="onClickAvatar"
+          )
 </template>
 
 <script>

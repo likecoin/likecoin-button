@@ -11,6 +11,7 @@
         :description="description"
         :img-src="imgSrc"
         :url="url"
+        :details-url="detailsUrl"
         :is-clickable="isContentClickable"
         :is-fixed-size="isFixedSize"
         @load-image="handleImageLoad"
@@ -21,6 +22,8 @@
         :collector-count="collectorCount"
         :collected-count="collectedCount"
         :collect-button-label="collectButtonLabel"
+        :purchase-url="purchaseUrl"
+        :details-url="detailsUrl"
         @collect="handleCollect"
       />
     </NFTWidgetBaseCard>
@@ -31,6 +34,7 @@
       :creator-display-name="ownerDisplayName"
       :creator-avatar-src="ownerAvatarSrc"
       :is-creator-civic-liker="isOwnerCivicLiker"
+      :like-iscn-url="likeIscnUrl"
       @like="handleLike"
     />
   </div>
@@ -102,6 +106,18 @@ export default {
     isShowLikeBar: {
       type: Boolean,
       default: true,
+    },
+    detailsUrl: {
+      type: String,
+      default: '',
+    },
+    purchaseUrl: {
+      type: String,
+      default: '',
+    },
+    likeIscnUrl: {
+      type: String,
+      default: '',
     },
   },
   methods: {
