@@ -33,11 +33,12 @@
         height="36"
       >
         <div :style="labelStyle">
-          <button
+          <a
             :style="labelButtonStyle"
             class="likecoin-button-widget__label-button"
-            @click="$emit('click-like-button-label')"
-          >{{ likeButtonLabel }}</button>
+            :href="statUrl"
+            @click.prevent="$emit('click-like-button-label')"
+          >{{ likeButtonLabel }}</a>
         </div>
       </foreignObject>
 
@@ -156,6 +157,10 @@ export default {
     shouldShowCta: {
       type: Boolean,
       default: false,
+    },
+    statUrl: {
+      type: String,
+      default: '',
     },
     width: {
       type: Number,

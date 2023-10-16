@@ -321,6 +321,9 @@ export default {
       const amountPath = `${this.amount ? `/${this.amount}` : ''}`;
       return `https://${LIKE_CO_HOSTNAME}/${this.id}${amountPath}${this.targetQueryString}`;
     },
+    statUrl() {
+      return `/in/embed/${this.id}/list${this.targetQueryString}`;
+    },
     likeCount: {
       get() {
         return this.like_count;
@@ -580,7 +583,7 @@ export default {
       const { id, referrer, iscnId } = this;
       if (options.isNewWindow) {
         window.open(
-          `/in/embed/${id}/list${this.targetQueryString}`,
+          this.statUrl,
           LIKE_STATS_WINDOW_NAME,
           'menubar=no,location=no,width=576,height=768',
         );
