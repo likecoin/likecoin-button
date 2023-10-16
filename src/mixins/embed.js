@@ -314,7 +314,7 @@ export default {
       return `?from=${encodeURIComponent(id)}${referrerQuery}&utm_source=button`;
     },
 
-    signUpURL() {
+    signUpUrl() {
       return `https://${LIKE_CO_HOSTNAME}/in/register${this.targetQueryString}&register=1&is_popup=1`;
     },
     superLikeURL() {
@@ -546,13 +546,13 @@ export default {
     signUp(options = { isNewWindow: true }) {
       if (options.isNewWindow) {
         const w = window.open(
-          this.signUpURL,
+          this.signUpUrl,
           'signup',
           'width=540,height=600,menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes',
         );
         this.$root.$emit('openPopupNoticeOverlay', w);
       } else {
-        window.location = `${this.signUpURL}&redirect=${encodeURIComponent(window.location.href)}`;
+        window.location = `${this.signUpUrl}&redirect=${encodeURIComponent(window.location.href)}`;
       }
       logTrackerEvent(this, 'LikeButtonFlow', 'triggerSignUpIn', 'triggerSignUpIn', 1);
     },
