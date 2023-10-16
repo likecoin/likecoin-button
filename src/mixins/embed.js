@@ -311,7 +311,7 @@ export default {
       if (iscnId) {
         return `?iscn_id=${encodeURIComponent(iscnId)}&utm_source=button`;
       }
-      return `?=${encodeURIComponent(id)}${referrerQuery}&utm_source=button`;
+      return `?from=${encodeURIComponent(id)}${referrerQuery}&utm_source=button`;
     },
 
     signUpURL() {
