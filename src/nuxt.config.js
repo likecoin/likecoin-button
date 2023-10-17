@@ -26,6 +26,7 @@ const nuxtConfig = {
       { hid: 'og:image:width', property: 'og:image:width', content: '1200' },
       { hid: 'og:image:height', property: 'og:image:height', content: '630' },
       { hid: 'theme-color', name: 'theme-color', content: '#D2F0F0' },
+      { hid: 'robots', name: 'robots', content: 'noindex, indexifembedded' },
     ],
     link: [
       { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
