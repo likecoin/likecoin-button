@@ -3,11 +3,10 @@ import { BigNumber } from 'bignumber.js';
 import { LIKER_LAND_URL_BASE } from '~/constant';
 import { checkIsValidISCNId, checkIsValidNFTClassId, parseImageURLFromMetadata } from '~/util/nft';
 import {
-  apiGetNFTMintInfo,
+  apiGetNFTPurchaseInfo,
   apiGetLikerDataByAddress,
   apiGetNFTMetadata,
   getNFTOwners,
-  getNFTListingInfo,
 } from '~/util/api/api';
 import { logTrackerEvent } from '@/util/EventLogger';
 
@@ -22,15 +21,8 @@ export default {
     collectButtonLabel() {
       return this.$route.query.cta_button_label || this.$t('cta_nft_collect_button');
     },
-    nftIsShowListingPrice() {
-      return (
-        this.nftListing && this.nftListing.price < this.nftCollectingPrice
-      );
-    },
     nftPrice() {
-      return this.nftIsShowListingPrice
-        ? this.nftListing.price
-        : this.nftCollectingPrice;
+      return this.nftCollectingPrice;
     },
     isFixedSize() {
       return !this.$route.query.responsive;
@@ -93,10 +85,10 @@ export default {
       classId: qsNftClassId,
     };
     const [
-      apiMintInfoResult,
+      apiPriceInfoResult,
       apiMetadataResult,
     ] = await Promise.all([
-      apiGetNFTMintInfo(apiParams).catch(() => {
+      apiGetNFTPurchaseInfo(apiParams).catch(() => {
         // Redirect to /in/like/iscn?iscn_id=:iscn_id if the ISCN has not been minted NFT
         if (apiParams.iscnId && !apiParams.classId) {
           redirect({
@@ -115,14 +107,8 @@ export default {
       iscnId,
       classId: nftClassId,
       currentPrice: nftCollectingPrice,
-    } = apiMintInfoResult.data || {}
-    const [
-      apiOwnersResult,
-      nftListingResult,
-    ] = await Promise.all([
-      getNFTOwners({ classId: nftClassId }).catch(() => ({})),
-      getNFTListingInfo(nftClassId).catch(() => ({})),
-    ]);
+    } = apiPriceInfoResult?.data?.metadata || {}
+    const apiOwnersResult = await getNFTOwners({ classId: nftClassId }).catch(() => ({}));
     const {
       name: contentTitle,
       description: contentDescription,
@@ -142,26 +128,6 @@ export default {
       isSubscribedCivicLiker: isIscnOwnerSubscribedCivicLiker,
     } = likerDataResult.data || {}
 
-    const { listings = [] } = nftListingResult.data || {};
-    const nftListing = listings
-      .map((l) => {
-        const {
-          class_id: classId,
-          nft_id: nftId,
-          seller,
-          price,
-          expiration,
-        } = l;
-        return {
-          classId,
-          nftId,
-          seller,
-          price: new BigNumber(price).shiftedBy(-9).toNumber(),
-          expiration: new Date(expiration),
-        };
-      })
-      .sort((a, b) => a.price - b.price)[0]
-
     return {
       contentTitle,
       contentDescription,
@@ -174,7 +140,6 @@ export default {
       isIscnOwnerCivicLiker: isIscnOwnerSubscribedCivicLiker || isIscnOwnerCivicLikerTrial,
       nftClassId,
       nftCollectingPrice,
-      nftListing,
       nftCollectedCount,
       nftCollectorCount,
     };

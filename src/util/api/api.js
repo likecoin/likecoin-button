@@ -236,5 +236,3 @@ export const getNFTOwners = ({
   });
   return axios.get(`${LIKECOIN_CHAIN_API}/likechain/likenft/v1/owner?${qsPayload.toString()}`);
 }
-
-export const getNFTListingInfo = classId => axios.get(`${LIKECOIN_CHAIN_API}/likechain/likenft/v1/listings/${classId}`);
