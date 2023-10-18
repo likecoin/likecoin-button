@@ -1,5 +1,3 @@
-import { BigNumber } from 'bignumber.js';
-
 import { LIKER_LAND_URL_BASE } from '~/constant';
 import { checkIsValidISCNId, checkIsValidNFTClassId, parseImageURLFromMetadata } from '~/util/nft';
 import {
