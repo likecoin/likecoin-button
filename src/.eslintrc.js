@@ -26,6 +26,7 @@ module.exports = {
       },
     ],
     'no-console': 'warn',
+    'space-before-function-paren': ['error', 'never'],
     // don't require .vue extension when importing
     'import/extensions': ['error', 'always', {
       js: 'never',
@@ -40,13 +41,15 @@ module.exports = {
           'CONDITIONALS',
           'RENDER_MODIFIERS',
           'GLOBAL',
-          'UNIQUE',
-          'BINDING',
+          ['UNIQUE', 'SLOT'],
+          'TWO_WAY_BINDING',
           'DEFINITION',
+          'OTHER_DIRECTIVES',
           'OTHER_ATTR',
           'CONTENT',
           'EVENTS',
         ],
+        alphabetical: false,
       },
     ],
     'vue/name-property-casing': ['error', 'kebab-case'],
@@ -56,6 +59,7 @@ module.exports = {
     'vue/html-closing-bracket-spacing': ['error'],
     'vue/multiline-html-element-content-newline': 'off',
     'vue/singleline-html-element-content-newline': 'off',
+    'nuxt/no-cjs-in-config': 'off',
   },
   globals: {},
   settings: {

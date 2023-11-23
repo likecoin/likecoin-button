@@ -27,7 +27,7 @@ async function loadLanguageAsync(i18n, lang) {
   return setI18nLanguage(i18n, lang);
 }
 
-export default async ({
+export default async({
   app,
   req,
   query,
@@ -37,7 +37,7 @@ export default async ({
   if (!locale) {
     if (!process.server) {
       let navLangs = [];
-      if (navigator.language) navLangs.push(navigator.language);
+      if (navigator.language) { navLangs.push(navigator.language); }
       if (navigator.languages && navigator.languages.length) {
         navLangs = navLangs.concat(navigator.languages);
       }
@@ -57,7 +57,7 @@ export default async ({
       );
     }
   }
-  if (!supportedLocales.includes(locale)) locale = defaultLocale;
+  if (!supportedLocales.includes(locale)) { locale = defaultLocale; }
   app.i18n = new VueI18n({
     locale,
     fallbackLocale: defaultLocale,

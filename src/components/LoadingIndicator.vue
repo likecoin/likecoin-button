@@ -14,7 +14,7 @@ export default {
     layout: {
       type: String,
       validator(value) {
-        return ['small', 'large', 'fluid'].indexOf(value) !== -1;
+        return ['small', 'large', 'fluid'].includes(value);
       },
       default: 'fluid',
     },

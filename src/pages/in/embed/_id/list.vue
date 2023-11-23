@@ -165,7 +165,7 @@ export default {
   },
   methods: {
     fetchList() {
-      this.likers.forEach(async (r) => {
+      this.likers.forEach(async(r) => {
         try {
           const { data } = await apiGetUserMinById(r.id);
           Vue.set(r, 'avatar', data.avatar);

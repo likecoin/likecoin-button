@@ -32,7 +32,7 @@ export async function getClassInfo(classId) {
   const c = await getNFTQueryClient();
   const client = await c.getQueryClient();
   let { class: nftClass } = await client.nft.class(classId);
-  if (nftClass) nftClass = iscn.parseNFTClassDataFields(nftClass);
+  if (nftClass) { nftClass = iscn.parseNFTClassDataFields(nftClass); }
   return nftClass;
 }
 

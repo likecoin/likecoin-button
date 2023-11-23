@@ -7,7 +7,7 @@ export default function experimentsMixin(
   return {
     computed: {
       [propName]() {
-        if (!this.$exp || !isEligible(this)) return false;
+        if (!this.$exp || !isEligible(this)) { return false; }
         const { name, $activeVariants } = this.$exp;
         if (
           this.$exp.isEligible &&

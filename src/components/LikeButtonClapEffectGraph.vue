@@ -46,10 +46,10 @@ export default {
   methods: {
     animate() {
       const { graph } = this.$refs;
-      if (!graph) return;
+      if (!graph) { return; }
 
       const allTriangles = [...graph.children].map(g => g.children);
-      if (allTriangles.length === 0) return;
+      if (allTriangles.length === 0) { return; }
 
       const {
         yMax, yMin, scaleMax, scaleMin,

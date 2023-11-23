@@ -15,7 +15,7 @@ function digestMessage(message) {
 }
 
 export async function setTrackerUser(vue, { user }) {
-  if (window.doNotTrack || navigator.doNotTrack) return;
+  if (window.doNotTrack || navigator.doNotTrack) { return; }
   try {
     if (vue.$gtag) {
       let hashedId = await digestMessage(user);
@@ -36,7 +36,7 @@ export function logTrackerEvent(
 ) {
   try {
     // do not track
-    if (window.doNotTrack || navigator.doNotTrack) return;
+    if (window.doNotTrack || navigator.doNotTrack) { return; }
     if (vue.$gtag) {
       vue.$gtag.event(action, {
         event_category: category,

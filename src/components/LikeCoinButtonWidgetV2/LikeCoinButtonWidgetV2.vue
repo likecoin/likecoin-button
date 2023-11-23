@@ -75,7 +75,7 @@
           rel="noopener"
           :style="upgradeLabelStyle"
         >
-          {{ this.$t('HintLabel.Upgrade') }}
+          {{ $t('HintLabel.Upgrade') }}
         </a>
       </foreignObject>
 

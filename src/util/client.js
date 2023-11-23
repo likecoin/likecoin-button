@@ -1,5 +1,5 @@
 export function checkIsMobileClient() {
-  if (!global.window) return false;
+  if (!global.window) { return false; }
   const ua = global.window.navigator.userAgent;
   if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua)) {
     return true;
@@ -8,10 +8,10 @@ export function checkIsMobileClient() {
 }
 
 export function checkIsDesktopChrome() {
-  if (!global.window) return false;
+  if (!global.window) { return false; }
   const ua = global.window.navigator.userAgent;
   const uv = global.window.navigator.vendor;
-  if (checkIsMobileClient()) return false;
+  if (checkIsMobileClient()) { return false; }
   return (/Chrome/i.test(ua) && /Google/i.test(uv)) && !(/OPR/i.test(ua));
 }
 
@@ -20,24 +20,24 @@ export function checkIsTrustClient() {
 }
 
 export function checkIsIOSInApp() {
-  if (!global.window) return false;
+  if (!global.window) { return false; }
   const ua = global.window.navigator.userAgent;
-  if (!/iPhone|iPad|iPod/i.test(ua)) return false;
+  if (!/iPhone|iPad|iPod/i.test(ua)) { return false; }
   return !/Safari/i.test(ua);
 }
 
 export function isAndroid() {
-  if (!navigator) return false;
+  if (!navigator) { return false; }
   return /android/i.test(navigator.userAgent);
 }
 
 export function isFacebookBrowser() {
-  if (!navigator) return false;
+  if (!navigator) { return false; }
   return /FB_IAB/i.test(navigator.userAgent);
 }
 
 export function isIOS() {
-  if (!navigator) return false;
+  if (!navigator) { return false; }
   return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 }
 
@@ -46,14 +46,14 @@ export function openURL(vue, url, name, specs, replace) {
     window.location.assign(url);
   } else {
     const w = window.open(url, name || '_blank', specs, replace);
-    if (w) w.opener = null;
+    if (w) { w.opener = null; }
   }
 }
 
 export async function checkHasStorageAPIAccess() {
   // https://webkit.org/blog/8311/intelligent-tracking-prevention-2-0/
   // TODO: try to request for storageAPI access
-  if (typeof document.hasStorageAccess !== 'function') return true;
+  if (typeof document.hasStorageAccess !== 'function') { return true; }
   try {
     const res = await document.hasStorageAccess();
     return res;
@@ -72,7 +72,7 @@ export function checkIsFirefoxStrictMode() {
 }
 
 export async function requestStorageAPIAccess() {
-  if (typeof document.requestStorageAccess !== 'function') return false;
+  if (typeof document.requestStorageAccess !== 'function') { return false; }
   try {
     const res = await document.requestStorageAccess();
     return res || true;

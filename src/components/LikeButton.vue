@@ -250,7 +250,7 @@ export default {
     },
     debouncedSnapKnobProgress: _debounce(
       // eslint-disable-next-line func-names
-      function () { this.snapKnobProgress(); },
+      function() { this.snapKnobProgress(); },
       50,
     ),
     setClientX(e) {
@@ -258,14 +258,14 @@ export default {
     },
     showLikeCountBubble() {
       this.isShowLikeCountBubble = true;
-      if (this.bubbleTimer) clearTimeout(this.bubbleTimer);
+      if (this.bubbleTimer) { clearTimeout(this.bubbleTimer); }
       this.bubbleTimer = setTimeout(() => {
         this.isShowLikeCountBubble = false;
       }, 500);
 
       // If the bubble has already shown, scale the bubble a little bit bigger
       const { likeCountBubble: el } = this.$refs;
-      if (el) TweenLite.to(el, 0.1, { scale: 1.1 }).reverse(0);
+      if (el) { TweenLite.to(el, 0.1, { scale: 1.1 }).reverse(0); }
     },
     clearLongPress() {
       this.isLongPressingKnob = false;
@@ -293,7 +293,7 @@ export default {
       if (e && e.button !== undefined && e.button !== 0) {
         return; // handle left click only
       }
-      if (this.hasMovedKnob) return;
+      if (this.hasMovedKnob) { return; }
 
       if (this.isMax && this.isKnobMovable && !this.isLongPressingKnob) {
         this.knobProgress = 1;
@@ -307,7 +307,7 @@ export default {
       this.showLikeCountBubble();
     },
     onMovingKnob(e) {
-      if (!this.isPressingKnob) return;
+      if (!this.isPressingKnob) { return; }
 
       if (requestAnimationFrame) {
         requestAnimationFrame(() => this.updateKnobProgressByEvent(e));
@@ -322,7 +322,7 @@ export default {
       }
     },
     onPressKnob(e) {
-      if (checkIsMobileClient()) return;
+      if (checkIsMobileClient()) { return; }
       if (e && e.button !== undefined && e.button !== 0) {
         return; // handle left click only
       }
@@ -341,7 +341,7 @@ export default {
     onReleaseKnob() {
       this.clearLongPress();
 
-      if (!this.isPressingKnob) return;
+      if (!this.isPressingKnob) { return; }
 
       this.isPressingKnob = false;
       this.snapKnobProgress();
