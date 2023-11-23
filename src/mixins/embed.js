@@ -106,7 +106,7 @@ export default {
     let amount;
     try {
       const parse = parseInt(params.amount, 10);
-      if (parse && !Number.isNaN(parse)) amount = parse;
+      if (parse && !Number.isNaN(parse)) { amount = parse; }
     } catch (e) {
       // no op;
     }
@@ -159,7 +159,7 @@ export default {
           error({ statusCode: 404, message: '' });
           return {};
         });
-        if (!data) return {};
+        if (!data) { return {}; }
         const {
           displayName,
           avatar,
@@ -289,7 +289,7 @@ export default {
       return integration;
     },
     documentReferrer() {
-      if (!process.client) return '';
+      if (!process.client) { return ''; }
       let windowReferrer = '';
       try {
         if (window.opener) {
@@ -441,7 +441,7 @@ export default {
       return res;
     },
     getParentSuperLikeID() {
-      if (!document.cookie || !isCookieEnabled()) return '';
+      if (!document.cookie || !isCookieEnabled()) { return ''; }
       return getCookie('likebutton_superlike_id');
     },
     async updateSuperLikeStatus() {
@@ -479,7 +479,7 @@ export default {
             isCookieSupport: this.hasCookieSupport,
             ...this.apiMetadata,
           })
-            .then(async ({ data: myData }) => {
+            .then(async({ data: myData }) => {
               const {
                 liker,
                 isSubscribed,

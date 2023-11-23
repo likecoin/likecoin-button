@@ -22,7 +22,7 @@ export default {
         url = `/in/like/${this.id}/?referrer=${encodeURIComponent(this.referrer)}`;
       }
       url += '&popup=1';
-      if (this.buttonType) url += `&type=${encodeURIComponent(this.buttonType)}`;
+      if (this.buttonType) { url += `&type=${encodeURIComponent(this.buttonType)}`; }
       return url;
     },
     isPreview() {
@@ -53,11 +53,11 @@ export default {
       console.error(err);
     }
     window.addEventListener('message', this.handleWindowMessage);
-    if (this.isPreview) return;
+    if (this.isPreview) { return; }
     this.hasCookieSupport = await this.getIsCookieSupport();
     this.parentSuperLikeID = this.getParentSuperLikeID();
     await this.updateUserSignInStatus();
-    if (this.onCheckCookieSupport) this.onCheckCookieSupport(this.hasCookieSupport);
+    if (this.onCheckCookieSupport) { this.onCheckCookieSupport(this.hasCookieSupport); }
     this.isUserFetched = true;
   },
   beforeDestroy() {
@@ -90,14 +90,14 @@ export default {
     },
     async handleWindowMessage(event) {
       const { data } = event;
-      if (typeof data !== 'object') return;
+      if (typeof data !== 'object') { return; }
 
       /* public acitons */
       if (event.source === window.parent || event.source === window.top) {
         switch (data.action) {
           case 'SET_REFERRER': {
             const { referrer } = data.content;
-            if (referrer === undefined) return;
+            if (referrer === undefined) { return; }
             this.$router.replace({
               name: this.$route.name,
               params: this.$route.params,
@@ -149,13 +149,13 @@ export default {
 
           // For preview usage
           case 'PREVIEW': {
-            if (!this.isPreview) return;
+            if (!this.isPreview) { return; }
 
             const { user } = data.content;
             if (user) {
-              if (user.user) this.id = user.user;
-              if (user.displayName) this.displayName = user.displayName;
-              if (user.avatar) this.avatar = user.avatar;
+              if (user.user) { this.id = user.user; }
+              if (user.displayName) { this.displayName = user.displayName; }
+              if (user.avatar) { this.avatar = user.avatar; }
               this.avatarHalo = getAvatarHaloTypeFromUser(user);
             }
             break;

@@ -7,6 +7,22 @@ import { EXTERNAL_HOSTNAME, LIKECOIN_OEMBED_API_BASE } from '@/constant';
 import { checkIsValidISCNId, checkIsValidNFTClassId } from '~/util/nft';
 
 export default {
+  fetch({
+    params,
+    query,
+    redirect,
+  }) {
+    const { id } = params;
+    if (checkIsValidISCNId(id)) {
+      // /:iscn_id -> /in/like/iscn?iscn_id=:iscn_id
+      redirect({ name: 'in-like-id', params: { id: 'iscn' }, query: { ...query, iscn_id: id } });
+    } else if (checkIsValidNFTClassId(id)) {
+      // /:class_id -> /in/nft?class_id=:class_id
+      redirect({ name: 'in-nft', query: { ...query, class_id: id } });
+    } else {
+      redirect({ name: 'in-like-id', params, query });
+    }
+  },
   head() {
     return {
       title: this.$t('LikeButton.head.title', { name: this.id }),
@@ -50,22 +66,6 @@ export default {
     encodedExternalURL() {
       return encodeURIComponent(`https://${EXTERNAL_HOSTNAME}${this.$route.path}`);
     },
-  },
-  fetch({
-    params,
-    query,
-    redirect,
-  }) {
-    const { id } = params;
-    if (checkIsValidISCNId(id)) {
-      // /:iscn_id -> /in/like/iscn?iscn_id=:iscn_id
-      redirect({ name: 'in-like-id', params: { id: 'iscn' }, query: { ...query, iscn_id: id } });
-    } else if (checkIsValidNFTClassId(id)) {
-      // /:class_id -> /in/nft?class_id=:class_id
-      redirect({ name: 'in-nft', query: { ...query, class_id: id } });
-    } else {
-      redirect({ name: 'in-like-id', params, query });
-    }
   },
 };
 </script>

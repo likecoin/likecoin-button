@@ -23,6 +23,11 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      HOMEPAGE,
+    };
+  },
   head() {
     return {
       title: this.message,
@@ -32,11 +37,6 @@ export default {
           content: 'width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no',
         },
       ],
-    };
-  },
-  data() {
-    return {
-      HOMEPAGE,
     };
   },
   computed: {

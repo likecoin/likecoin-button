@@ -4,7 +4,7 @@
 export default ({ app }) => {
   if (app.$exp && app.$gtag) {
     const { experimentID, $variantIndexes } = app.$exp;
-    if (!experimentID || !$variantIndexes || !$variantIndexes.length) return;
+    if (!experimentID || !$variantIndexes || !$variantIndexes.length) { return; }
     if (app.$gtag && window && window.gtag) {
       // HACK: exp event needs to be sent after page_view is sent
       // no good way to define plugin ordering now, use setTimeout

@@ -1,5 +1,4 @@
 /* eslint import/no-extraneous-dependencies: "off" */
-// eslint-disable-next-line nuxt/no-cjs-in-config
 const path = require('path');
 
 const { IS_TESTNET } = process.env;
@@ -196,4 +195,4 @@ const nuxtConfig = {
 };
 
 /* do not use es6 export since we directly require() it in functions */
-module.exports = nuxtConfig; // eslint-disable-line nuxt/no-cjs-in-config
+module.exports = nuxtConfig;

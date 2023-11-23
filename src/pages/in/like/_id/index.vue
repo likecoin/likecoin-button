@@ -120,6 +120,34 @@ export default {
     LikeCoinButtonWidgetV2,
   },
   mixins: [mixin],
+  asyncData(ctx) {
+    return Promise.all([
+      mixin.asyncData(ctx),
+      (async() => {
+        const { query } = ctx;
+        let { referrer = '' } = query;
+        if (referrer) {
+          referrer = handleQueryStringInUrl(referrer);
+        }
+        const url = encodeURI(referrer);
+        if (checkValidDomainNotIP(url)) {
+          const referrerTitle = await apiGetPageTitle(referrer);
+          return { referrerTitle };
+        }
+        return {};
+      })(),
+    ]).then(res => ({ ...res[0], ...res[1] }));
+  },
+  data() {
+    return {
+      referrerTitle: '',
+
+      contentKey: 'loading',
+      contentStyle: {
+        height: '65px',
+      },
+    };
+  },
   head() {
     return {
       title: this.$t('LikeButton.head.title', { name: this.displayName }),
@@ -157,16 +185,6 @@ export default {
       ],
     };
   },
-  data() {
-    return {
-      referrerTitle: '',
-
-      contentKey: 'loading',
-      contentStyle: {
-        height: '65px',
-      },
-    };
-  },
   computed: {
     isLoading() {
       return this.contentKey === 'loading' || this.isRedirecting;
@@ -186,7 +204,7 @@ export default {
       };
     },
     upgradeUrl() {
-      if (!this.referrer && !this.iscnId) return '';
+      if (!this.referrer && !this.iscnId) { return ''; }
       return getNFTMintLink({ referrer: this.referrer, iscnId: this.iscnId, user: this.id });
     },
     ctaTitle() {
@@ -244,24 +262,6 @@ export default {
       }
     },
   },
-  asyncData(ctx) {
-    return Promise.all([
-      mixin.asyncData(ctx),
-      (async () => {
-        const { query } = ctx;
-        let { referrer = '' } = query;
-        if (referrer) {
-          referrer = handleQueryStringInUrl(referrer);
-        }
-        const url = encodeURI(referrer);
-        if (checkValidDomainNotIP(url)) {
-          const referrerTitle = await apiGetPageTitle(referrer);
-          return { referrerTitle };
-        }
-        return {};
-      })(),
-    ]).then(res => ({ ...res[0], ...res[1] }));
-  },
   async mounted() {
     await this.updateUserSignInStatus();
     if (this.isPopup && !this.isLoggedIn) {
@@ -271,7 +271,7 @@ export default {
   },
   methods: {
     doLogin(action) {
-      if (this.isPreview) return;
+      if (this.isPreview) { return; }
       this.postSignInAction = action;
       this.signUp({ isNewWindow: false });
     },

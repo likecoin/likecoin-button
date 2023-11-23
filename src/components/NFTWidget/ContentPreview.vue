@@ -68,7 +68,7 @@ export default {
       return this.isClickable ? this.url : this.detailsUrl;
     },
     props() {
-      if (!this.isClickable) return {};
+      if (!this.isClickable) { return {}; }
       return {
         href: this.url,
         rel: 'noopener noreferrer',
@@ -76,7 +76,7 @@ export default {
       }
     },
     resizedSrc() {
-      if (this.isFixedSize) return getLikeCoResizedImageUrl(this.imgSrc, 360);
+      if (this.isFixedSize) { return getLikeCoResizedImageUrl(this.imgSrc, 360); }
       return this.imgSrc;
     },
     titleClasses() {

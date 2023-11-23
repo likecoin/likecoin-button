@@ -179,7 +179,7 @@ export default {
       );
     },
     notifyParentOfResizing() {
-      if (!window.parent || !this.$refs.widget) return;
+      if (!window.parent || !this.$refs.widget) { return; }
       const {
         scrollWidth: width,
         scrollHeight: height,

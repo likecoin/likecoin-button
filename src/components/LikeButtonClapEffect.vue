@@ -29,7 +29,7 @@ export default {
     },
     removeGraph(id) {
       const index = this.graphIds.indexOf(id);
-      if (index >= 0) this.graphIds.splice(index, 1);
+      if (index >= 0) { this.graphIds.splice(index, 1); }
     },
   },
 };

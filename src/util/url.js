@@ -11,11 +11,11 @@ const URL = require('url-parse');
 */
 export const checkValidDomainNotIP = (url) => {
   const match = url.match(/^(?:http(?:s)?:\/\/)?([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+)(?::\d+)?/);
-  if (!match || !match[1]) return false;
+  if (!match || !match[1]) { return false; }
   const parts = match[1].split('.');
   const isIP = (parts.length === 4 && parts.every((part) => {
     try {
-      if (!part.match(/^\d{1,3}$/)) return false;
+      if (!part.match(/^\d{1,3}$/)) { return false; }
       const partNum = Number(part);
       return partNum >= 0 && partNum <= 255;
     } catch (err) {
@@ -38,7 +38,7 @@ export const handleQueryStringInUrl = (referrer) => {
     });
     url.set('query', url.query);
     // SPA router in hash mode usually starts with #
-    if (!url.hash.startsWith('#/')) url.hash = '';
+    if (!url.hash.startsWith('#/')) { url.hash = ''; }
     return url.toString();
   } catch (err) {
     return '';

@@ -65,7 +65,6 @@ import { logTrackerEvent } from '@/util/EventLogger';
 
 export default {
   name: 'embed-id-button',
-  layout: 'embedv2',
   components: {
     Identity,
     LikeButton,
@@ -73,6 +72,7 @@ export default {
     LikeCoinButtonWidgetV2,
   },
   mixins: [mixin],
+  layout: 'embedv2',
   data() {
     return {
       isUserFetched: false,
@@ -95,8 +95,8 @@ export default {
     },
     upgradeUrl() {
       // temp limit to vocus.cc only
-      if (this.referrer && !this.referrer.includes('vocus.cc')) return '';
-      if (!this.referrer && !this.iscnId) return '';
+      if (this.referrer && !this.referrer.includes('vocus.cc')) { return ''; }
+      if (!this.referrer && !this.iscnId) { return ''; }
       return getNFTMintLink({ referrer: this.referrer, iscnId: this.iscnId, user: this.id });
     },
   },
@@ -111,7 +111,7 @@ export default {
   },
   methods: {
     async doLogin(action) {
-      if (this.isPreview) return;
+      if (this.isPreview) { return; }
       this.postSignInAction = action;
       if (!this.hasCookieSupport || (isAndroid() && isFacebookBrowser())) {
         // User has not log in and 3rd party cookie is blocked
@@ -147,7 +147,7 @@ export default {
         this.ctaClickCount = 1;
       } else {
         this.ctaClickCount = (this.ctaClickCount + 1) % 5;
-        if (this.ctaClickCount !== 0) return false;
+        if (this.ctaClickCount !== 0) { return false; }
       }
       return true;
     },

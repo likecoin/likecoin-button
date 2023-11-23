@@ -1,5 +1,3 @@
-/* eslint-disable prettier/prettier */
-
 /*
 
 Tailwind - The Utility-First CSS Framework
