@@ -12,7 +12,7 @@ jobs:
       - name: Setup node env 🏗
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           cache: 'npm'
           cache-dependency-path: |
             src/package-lock.json
@@ -26,4 +26,4 @@ jobs:
       - name: Server Test
         run: npm --prefix src start &
       - name: Curl Test
-        run: curl --retry 10 --retry-delay 5 -v http://127.0.0.1:3000/
+        run: curl --retry 10 --retry-delay 5 -v http://localhost:3000/
