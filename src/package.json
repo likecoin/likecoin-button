@@ -5,7 +5,7 @@
   "author": "William Chong",
   "private": true,
   "engines": {
-    "node": "16"
+    "node": "18"
   },
   "scripts": {
     "dev": "IS_TESTNET=TRUE nuxt",
@@ -37,7 +37,7 @@
     "intersection-observer": "^0.7.0",
     "lodash.debounce": "^4.0.8",
     "node-fetch-native": "^1.0.1",
-    "nuxt": "^2.15.7",
+    "nuxt": "^2.17.2",
     "nuxt-svg-loader": "^1.0.1",
     "on-headers": "^1.0.2",
     "tiny-cookie": "^2.3.2",
@@ -51,7 +51,7 @@
     "@babel/core": "^7.12.0",
     "@nuxtjs/eslint-config": "^5.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
-    "@nuxtjs/tailwindcss": "^4.2.1",
+    "@nuxtjs/tailwindcss": "^5.3.5",
     "@storybook/addon-actions": "^6.0.28",
     "@storybook/addon-essentials": "^6.0.28",
     "@storybook/addon-knobs": "^6.0.28",
@@ -62,10 +62,10 @@
     "eslint": "^7.0.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-import-resolver-webpack": "^0.11.0",
-    "eslint-plugin-nuxt": "^2.0.0",
     "eslint-loader": "^4.0.0",
     "eslint-plugin-import": "^2.20.0",
-    "node-sass": "^6.0.1",
+    "eslint-plugin-nuxt": "^2.0.0",
+    "node-sass": "^7.0.0",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
     "react-is": "^16.13.1",
