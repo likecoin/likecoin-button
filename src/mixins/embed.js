@@ -501,9 +501,7 @@ export default {
               }
               if (this.isLoggedIn) {
                 if (this.$sentry) {
-                  this.$sentry.configureScope((scope) => {
-                    scope.setUser({ id: liker });
-                  });
+                  this.$sentry.setUser({ id: liker });
                 }
                 const promises = [
                   this.updateSuperLikeStatus(),
