@@ -437,7 +437,13 @@ export default {
         console.error(err);
         return false;
       }
-      setCookie('likebutton_cookie', 1);
+      try {
+        setCookie('likebutton_cookie', 1);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
+        return false;
+      }
       return res;
     },
     getParentSuperLikeID() {
