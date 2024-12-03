@@ -258,8 +258,6 @@ export default {
       hasFollowedCreator: false,
       isLoadingFollowStatus: false,
 
-      supportingQuantity: 0,
-
       hasCookieSupport: false,
       hasStorageAPIAccess: false,
 
@@ -350,14 +348,8 @@ export default {
     ctaButtonLabel() {
       return this.$t('CTA.CivicLiker.DepubSpace');
     },
-    ctaButtonPreset() {
-      return this.isSupportingCreator ? 'special' : 'default';
-    },
     isCreatorCivicLiker() {
       return this.isCivicLikerTrial || this.isSubscribedCivicLiker;
-    },
-    isSupportingCreator() {
-      return this.supportingQuantity > 0;
     },
     hintText() {
       if (!this.isLoggedIn) {
@@ -604,9 +596,7 @@ export default {
       }
     },
     onClickCTAButton() {
-      const url = this.isSupportingCreator
-        ? `${LIKER_LAND_URL_BASE}/${this.id}?civic_welcome=1`
-        : `${LIKER_LAND_URL_BASE}/${this.id}/civic${this.targetQueryString}`;
+      const url = `${LIKER_LAND_URL_BASE}/${this.id}${this.targetQueryString}`;
       window.open(
         url,
         '_blank',

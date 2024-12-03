@@ -21,7 +21,7 @@
     >
       <a
         v-if="user.displayName"
-        :href="`${LIKER_LAND_URL_BASE}/${user.id}`"
+        :href="`${LIKER_LAND_URL_BASE}/${user.id}?utm_source=button`"
         rel="noopener noreferrer"
         target="_blank"
       >
