@@ -41,16 +41,10 @@ export default {
     widgetId() {
       return this.$route.query.wid;
     },
-    shouldCollectInCampaign() {
-      return this.$route.query.campaign !== undefined;
-    },
     detailsUrl() {
-      return `${LIKER_LAND_URL_BASE}/nft/class/${this.nftClassId}`;
+      return `${LIKER_LAND_URL_BASE}/nft/class/${this.nftClassId}?utm_source=widget`;
     },
     purchaseUrl() {
-      if (this.shouldCollectInCampaign) {
-        return `${LIKER_LAND_URL_BASE}/campaign/writing-nft?utm_source=widget#${this.nftClassId}`;
-      }
       return `${this.detailsUrl}?action=collect&utm_source=widget`;
     },
     likeIscnUrl() {
@@ -167,7 +161,7 @@ export default {
       window.open(
         this.purchaseUrl,
         `collect_${this.classId}`,
-        this.shouldCollectInCampaign ? undefined : 'popup=1,width=768,height=576,top=0,left=0'
+        'popup=1,width=768,height=576,top=0,left=0'
       );
     },
     likeISCN() {
