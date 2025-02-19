@@ -13,7 +13,13 @@ export default (ctx, inject) => {
     Vue.use(
       VueGtag,
       {
-        config: { id: process.env.GA_TRACKING_ID },
+        config: {
+          id: process.env.GA_TRACKING_ID,
+          params: {
+            cookie_flags: 'SameSite=None; Secure',
+            cookie_update: false,
+          },
+        },
         bootstrap: !(window.doNotTrack || navigator.doNotTrack),
         includes,
       },
