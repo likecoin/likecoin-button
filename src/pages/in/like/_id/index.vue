@@ -13,7 +13,7 @@
     <div class="lc-page-content">
       <div class="like-single-page">
 
-        <h1 class="referrer-title">
+        <h1 v-if="referrerTitle" class="referrer-title">
           {{ referrerTitle }}
         </h1>
 
@@ -93,11 +93,8 @@
 
 <script>
 import {
-  apiGetPageTitle,
   getNFTMintLink,
 } from '@/util/api/api';
-
-import { checkValidDomainNotIP, handleQueryStringInUrl } from '@/util/url';
 
 import Identity from '~/components/Identity/Identity';
 import LikeButton from '~/components/LikeButtonV2/LikeButtonV2';
@@ -120,24 +117,6 @@ export default {
     LikeCoinButtonWidgetV2,
   },
   mixins: [mixin],
-  asyncData(ctx) {
-    return Promise.all([
-      mixin.asyncData(ctx),
-      (async() => {
-        const { query } = ctx;
-        let { referrer = '' } = query;
-        if (referrer) {
-          referrer = handleQueryStringInUrl(referrer);
-        }
-        const url = encodeURI(referrer);
-        if (checkValidDomainNotIP(url)) {
-          const referrerTitle = await apiGetPageTitle(referrer);
-          return { referrerTitle };
-        }
-        return {};
-      })(),
-    ]).then(res => ({ ...res[0], ...res[1] }));
-  },
   data() {
     return {
       referrerTitle: '',

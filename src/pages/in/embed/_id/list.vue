@@ -87,9 +87,8 @@ import {
   apiGetUserMinById,
   apiGetLikeButtonLikerList,
   apiGetLikeButtonTotalCount,
-  apiGetPageTitle,
 } from '@/util/api/api';
-import { checkValidDomainNotIP, handleQueryStringInUrl } from '@/util/url';
+import { handleQueryStringInUrl } from '@/util/url';
 
 export default {
   name: 'embed-id-list',
@@ -143,19 +142,10 @@ export default {
       apiGetLikeButtonLikerList(id, { referrer, iscnId }),
       apiGetLikeButtonTotalCount(id, { referrer, iscnId }),
     );
-    if (referrer) {
-      const url = encodeURI(referrer);
-      /* Try to get html to fetch title below */
-      if (checkValidDomainNotIP(url)) {
-        promises.push(apiGetPageTitle(referrer));
-      }
-    }
     const [
       { data: likers },
       { data: totalData },
-      title,
     ] = await Promise.all(promises);
-    this.title = title;
     this.numOfLikes = totalData.total;
     this.numOfLikers = totalData.totalLiker;
     // eslint-disable-next-line no-shadow

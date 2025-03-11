@@ -155,10 +155,6 @@ export const apiPostSuperLike = (id, data) => {
 
 export const apiQueryCoinGeckoInfo = () => axios.get('https://api.coingecko.com/api/v3/coins/likecoin?localization=false', { withCredentials: false });
 
-export const apiGetPageTitle = url => axios.get(`${LIKECOIN_API}/like/like/suggest/info/?url=${encodeURIComponent(url)}`)
-  .then(res => (res.data || {}).title || '')
-  .catch(() => '');
-
 export const apiGetSupportingUserByID = (id = '') => axios.get(
   `${LIKECOIN_API}/civic/support/users/${id}`,
   { withCredentials: true },
