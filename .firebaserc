@@ -8,9 +8,6 @@
       "hosting": {
         "button": [
           "likecoin-button"
-        ],
-        "superlike": [
-          "superlike"
         ]
       }
     },
@@ -18,9 +15,6 @@
       "hosting": {
         "button": [
           "likecoin-button-develop"
-        ],
-        "superlike": [
-          "superlike-dev"
         ]
       }
     }
