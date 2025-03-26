@@ -161,7 +161,10 @@ const nuxtConfig = {
         ],
       ],
     },
-    transpile: ['gsap'],
+    transpile: [
+      'gsap',
+      ({ isLegacy }) => isLegacy && 'axios',
+    ],
     /*
     ** Run ESLint on save
     */
