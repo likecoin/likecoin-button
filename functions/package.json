@@ -13,8 +13,6 @@
     "package": "npm run clean && npm run build && npm run deps:copy && npm run deps:install"
   },
   "dependencies": {
-    "@cosmjs/stargate": "^0.28.7",
-    "@likecoin/iscn-js": "^0.2.2",
     "@likecoin/ui-vue": "^0.7.1",
     "@nuxtjs/google-tag-manager": "^2.1.4",
     "@nuxtjs/sentry": "^8.0.7",
