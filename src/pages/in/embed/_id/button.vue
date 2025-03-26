@@ -1,6 +1,6 @@
-<template lang="pug">
-  div
-    LikeCoinButtonWidgetV2(
+<template>
+  <div>
+    <LikeCoinButtonWidgetV2
       :layout="widgetLayout"
       :like-button-label="likeButtonLabel"
       :cta-button-label="ctaButtonLabel"
@@ -14,12 +14,12 @@
       :should-show-cta="hasSuperLiked"
       :stat-url="statUrl"
       @click-like-button-label="onClickLikeStats"
-    )
-      template(#like-button)
-        a(@click.prevent :href="popupURL")
-          LikeButton(
-            ref="likeButton"
+    >
+      <template #like-button>
+        <a :href="popupURL" @click.prevent>
+          <LikeButton
             :id="id"
+            ref="likeButton"
             :count="likeCount"
             :cooldown="cooldownProgress"
             :cooldown-end-time="nextSuperLikeTime"
@@ -30,17 +30,23 @@
             @click="onClickLike"
             @click-disabled="onClickCooldown"
             @cooldown-end="updateSuperLikeStatus"
-          )
-      template(#identity="identityProps")
-        a(@click.prevent :href="creatorPortfolioURL")
-          Identity(
+          />
+        </a>
+      </template>
+      <template #identity="identityProps">
+        <a :href="creatorPortfolioURL" @click.prevent>
+          <Identity
             :avatarURL="avatar"
             :display-name="displayName"
             :is-avatar-button-outlined="isCreatorCivicLiker"
             v-bind="identityProps"
             @click-avatar="onClickAvatar"
             @click-display-name="onClickAvatar"
-          )
+          />
+        </a>
+      </template>
+    </LikeCoinButtonWidgetV2>
+  </div>
 </template>
 
 <script>
@@ -59,7 +65,6 @@ import LikeCoinButtonWidgetV2, {
   LAYOUT_DEFAULT,
 } from '~/components/LikeCoinButtonWidgetV2/LikeCoinButtonWidgetV2';
 import LikeButton from '~/components/LikeButtonV2/LikeButtonV2';
-import SaveButton from '~/components/SaveButton/SaveButton';
 
 import { logTrackerEvent } from '@/util/EventLogger';
 
@@ -68,7 +73,6 @@ export default {
   components: {
     Identity,
     LikeButton,
-    SaveButton,
     LikeCoinButtonWidgetV2,
   },
   mixins: [mixin],
