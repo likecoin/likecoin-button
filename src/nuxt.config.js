@@ -30,12 +30,6 @@ const nuxtConfig = {
     link: [
       { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
       { rel: 'preload', href: 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Material+Icons', as: 'style' },
-      // {
-      //   rel: 'preload',
-      //   href: `https://${IS_TESTNET ? 'rinkeby.' : ''}like.co/api/experiments/list`,
-      //   as: 'fetch',
-      //   crossorigin: 'anonymous',
-      // },
       { rel: 'icon', type: 'image/png', href: '/favicon.png' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Material+Icons' },
     ],
@@ -117,9 +111,6 @@ const nuxtConfig = {
   modules: [
     '@nuxtjs/sentry',
     'nuxt-svg-loader',
-    // ['@likecoin/nuxt-google-optimize', {
-    //   plugins: [{ src: '~/plugins/experiment.client.js', mode: 'client' }],
-    // }],
   ],
   buildModules: [
     '@nuxtjs/tailwindcss',
@@ -140,11 +131,6 @@ const nuxtConfig = {
       ReportingObserver: false, // reporting is very noisy on CSP violation.
     },
   },
-  // googleOptimize: {
-  //   cookieName: '__session',
-  //   useFetch: true,
-  //   maxAge: 604800, // 1 week
-  // },
   /*
   ** Build configuration
   */
