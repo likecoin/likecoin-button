@@ -2,7 +2,7 @@
   "functions": {
     "source": "functions/dist",
     "predeploy": [
-      "npm --prefix src run lint && npm --prefix src run build && rm -rf functions/nuxt && cp -r src/.nuxt/ functions/nuxt/ && cp -r src/experiments functions/ && cp src/nuxt.config.js src/tailwind.config.js functions/ && npm --prefix functions run lint && npm --prefix functions run package "
+      "npm --prefix src run lint && npm --prefix src run build && rm -rf functions/nuxt && cp -r src/.nuxt/ functions/nuxt/ && cp src/nuxt.config.js src/tailwind.config.js functions/ && npm --prefix functions run lint && npm --prefix functions run package "
     ]
   },
   "hosting": [{

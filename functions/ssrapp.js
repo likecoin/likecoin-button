@@ -16,11 +16,7 @@ function setCacheHeader(req, res, next) {
     } else {
       res.setHeader('Cache-Control', 'no-store');
     }
-    if (nuxtConfig.googleOptimize) { // cookie sensitive ab testing
-      res.setHeader('Vary', 'Cookie, Accept-Language');
-    } else {
-      res.setHeader('Vary', 'Accept-Language');
-    }
+    res.setHeader('Vary', 'Accept-Language');
   });
   next();
 }
