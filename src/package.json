@@ -22,8 +22,6 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "@cosmjs/stargate": "^0.28.7",
-    "@likecoin/iscn-js": "^0.2.2",
     "@likecoin/ui-vue": "^0.7.1",
     "@nuxtjs/sentry": "^8.0.7",
     "axios": "^1.8.2",
