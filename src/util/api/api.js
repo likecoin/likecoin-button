@@ -192,17 +192,6 @@ export const apiGetNFTMetadata = ({
   return axios.get(`${LIKECOIN_API}/likernft/metadata?${qsPayload.toString()}`);
 };
 
-export const apiGetNFTPurchaseInfo = ({
-  iscnId = '',
-  classId = '',
-}) => {
-  const qsPayload = new URLSearchParams({
-    iscn_id: iscnId,
-    class_id: classId,
-  });
-  return axios.get(`${LIKECOIN_API}/likernft/purchase?${qsPayload.toString()}`);
-};
-
 export const getNFTMintLink = ({
   referrer = '',
   iscnId = '',
