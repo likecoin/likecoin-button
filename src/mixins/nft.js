@@ -1,7 +1,7 @@
 import { LIKER_LAND_URL_BASE } from '~/constant';
 import { checkIsValidISCNId, checkIsValidNFTClassId, parseImageURLFromMetadata } from '~/util/nft';
 import {
-  apiGetNFTPurchaseInfo,
+  apiGetNFTMintInfo,
   apiGetLikerDataByAddress,
   apiGetNFTMetadata,
   getNFTOwners,
@@ -83,10 +83,10 @@ export default {
       classId: qsNftClassId,
     };
     const [
-      apiPriceInfoResult,
+      apiMintInfoResult,
       apiMetadataResult,
     ] = await Promise.all([
-      apiGetNFTPurchaseInfo(apiParams).catch(() => {
+      apiGetNFTMintInfo(apiParams).catch(() => {
         // Redirect to /in/like/iscn?iscn_id=:iscn_id if the ISCN has not been minted NFT
         if (apiParams.iscnId && !apiParams.classId) {
           redirect({
@@ -104,8 +104,7 @@ export default {
     const {
       iscnId,
       classId: nftClassId,
-      currentPrice: nftCollectingPrice,
-    } = apiPriceInfoResult?.data?.metadata || {}
+    } = apiMintInfoResult?.data || {}
     const apiOwnersResult = await getNFTOwners({ classId: nftClassId }).catch(() => ({}));
     const {
       name: contentTitle,
@@ -137,7 +136,7 @@ export default {
       iscnOwnerAvatarSrc,
       isIscnOwnerCivicLiker: isIscnOwnerSubscribedCivicLiker || isIscnOwnerCivicLikerTrial,
       nftClassId,
-      nftCollectingPrice,
+      nftCollectingPrice: 0,
       nftCollectedCount,
       nftCollectorCount,
     };
