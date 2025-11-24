@@ -5,7 +5,7 @@
   "author": "William Chong",
   "private": true,
   "engines": {
-    "node": "18"
+    "node": "20"
   },
   "scripts": {
     "dev": "IS_TESTNET=TRUE nuxt",
