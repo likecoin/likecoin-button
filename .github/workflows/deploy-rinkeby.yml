@@ -28,7 +28,6 @@ jobs:
         run: npm --prefix src install && npm --prefix functions install && cp src/nuxt.config.js src/tailwind.config.js functions/
       - uses: w9jds/setup-firebase@main
         with:
-          tools-version: 11.30.0
           firebase_token: ${{ secrets.FIREBASE_TOKEN }}
       - run: firebase use dev
       - run: firebase deploy -f
