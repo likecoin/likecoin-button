@@ -89,6 +89,7 @@ import {
   apiGetLikeButtonTotalCount,
 } from '@/util/api/api';
 import { handleQueryStringInUrl } from '@/util/url';
+import { BOOK_URL_BASE } from '~/constant';
 
 export default {
   name: 'embed-id-list',
@@ -120,7 +121,7 @@ export default {
       return this.urlReferrer;
     },
     aboutURL() {
-      return `https://3ook.com/about?from=${this.$route.params.id}&referrer=${encodeURIComponent(this.referrer)}&utm_source=button`;
+      return `${BOOK_URL_BASE}/about?from=${this.$route.params.id}&referrer=${encodeURIComponent(this.referrer)}&utm_source=button`;
     },
     shouldShowBackButton() {
       return this.$route.query.show_back === '1';

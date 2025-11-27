@@ -21,6 +21,8 @@ export const ISCN_RAW_DATA_ENDPOINT = IS_TESTNET
 
 export const LIKER_LAND_URL_BASE = IS_TESTNET ? 'https://rinkeby.liker.land' : 'https://liker.land';
 
+export const BOOK_URL_BASE = IS_TESTNET ? 'https://sepolia.3ook.com' : 'https://3ook.com';
+
 export const APP_LIKE_CO_URL_BASE = IS_TESTNET
   ? 'https://app.rinkeby.like.co'
   : 'https://app.like.co';
