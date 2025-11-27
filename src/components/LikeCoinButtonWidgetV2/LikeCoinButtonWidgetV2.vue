@@ -109,7 +109,7 @@
         height="16"
       >
         <a
-          :href="likerLandUrl"
+          :href="aboutUrl"
           :style="textStyle"
           target="_blank"
           rel="noopener"
@@ -126,7 +126,7 @@ import LikeQuestionIcon from '~/assets/like-button/question-btn.svg';
 import Identity from '../Identity/Identity';
 import LikeButton from '../LikeButtonV2/LikeButtonV2';
 
-import { DEPUB_SPACE_URL, LIKER_LAND_URL_BASE } from '../../constant';
+import { DEPUB_SPACE_URL, BOOK_URL_BASE } from '../../constant';
 
 export const LAYOUT_DEFAULT = 'default';
 export const LAYOUT_STICKY_BOTTOM = 'sticky-bottom';
@@ -316,8 +316,8 @@ export default {
     depupSpaceUrl() {
       return DEPUB_SPACE_URL;
     },
-    likerLandUrl() {
-      return LIKER_LAND_URL_BASE;
+    aboutUrl() {
+      return `${BOOK_URL_BASE}/about?utm_source=button`;
     },
   },
 };
