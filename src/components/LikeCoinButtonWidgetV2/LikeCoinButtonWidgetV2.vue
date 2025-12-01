@@ -113,6 +113,7 @@
           :style="textStyle"
           target="_blank"
           rel="noopener"
+          :title="$t('HintLabel.About')"
         >
           <like-question-icon />
         </a>

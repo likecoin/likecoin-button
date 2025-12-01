@@ -91,6 +91,7 @@
     "likeCountLabel": "{n} Like | {n} Likes"
   },
   "HintLabel": {
+    "About": "About LikeCoin",
     "SignIn": "Register as a free Liker",
     "Upgrade": "Upgrade",
     "PleaseLike": "Clap 1 - 5 times to reward the creator",

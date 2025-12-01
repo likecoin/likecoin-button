@@ -84,6 +84,7 @@
     "likeCountLabel": "{n}人已按赞"
   },
   "HintLabel": {
+    "About": "关于 LikeCoin",
     "SignIn": "免费注册，化赞为赏",
     "Upgrade": "升級",
     "PleaseLike": "最多可拍掌 5 下，鼓励作者",

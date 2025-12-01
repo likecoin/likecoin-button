@@ -91,6 +91,7 @@
     "likeCountLabel": "{n} Like | {n} Likes"
   },
   "HintLabel": {
+    "About": "關於 LikeCoin",
     "SignIn": "註冊 Liker ID 免費按讚",
     "Upgrade": "升級",
     "PleaseLike": "最多可拍掌 5 下，鼓勵作者",

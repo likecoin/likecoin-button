@@ -41,5 +41,8 @@
       "login": "Liker IDにログイン",
       "showMore": "もっと見る"
     }
+  },
+  "HintLabel": {
+    "About": "LikeCoin について"
   }
 }
