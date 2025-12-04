@@ -36,36 +36,8 @@
   },
   "cta_nft_collect_button": "收藏作品",
   "Embed": {
-    "back": {
-      "civicLiker": {
-        "title": "立即成為讚賞公民",
-        "subtitle": "少喝一杯咖啡，共創一個生態",
-        "button": "升級",
-        "trial": {
-          "title": "@:Embed.back.civicLiker.title",
-          "button": "@:Embed.back.civicLiker.button"
-        },
-        "paid": {
-          "title": "贈送讚賞幣支持作者",
-          "button": "贈送"
-        }
-      }
-    },
     "label": {
-      "support": "支持",
-      "providedBy": "by LikeCoin 化讚為賞回饋創作",
-      "subtitle": "喜歡這篇文章",
-      "title": "化讚為賞 回饋創作",
-      "createMyWidget": "創建我的 LikeWidget",
-      "createMyButton": "創建我的 LikeButton",
-      "clickLikeButton": "請拍掌支持我",
-      "clickLikeButtonNoLogin": "請登入，並為我拍掌",
-      "rewardUserWithLikeToken": "以 LIKE 代幣讚賞 {user}",
-      "supportUser": "支持 {user}",
-      "supportUserNoLogin": "支持 {user}",
-      "loginAdvice": "{login} 你讚好的作者能獲得更多 LikeCoin",
-      "numLikesForArticle": "從 {numOfLikers} 人獲得 {numOfLikes} Like",
-      "registerNow": "登入"
+      "numLikesForArticle": "從 {numOfLikers} 人獲得 {numOfLikes} Like"
     },
     "button": {
       "login": "登入 Liker ID",

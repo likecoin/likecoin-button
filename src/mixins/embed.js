@@ -12,8 +12,6 @@ import {
   DEPUB_SPACE_URL,
 } from '@/constant';
 
-import EmbedCreateWidgetButton from '~/components/embed/EmbedCreateWidgetButton';
-import EmbedUserInfo from '~/components/embed/EmbedUserInfo';
 import { setTrackerUser, logTrackerEvent } from '@/util/EventLogger';
 
 import {
@@ -56,10 +54,6 @@ const debouncedOnClick = debounce((that) => {
 }, 500);
 
 export default {
-  components: {
-    EmbedCreateWidgetButton,
-    EmbedUserInfo,
-  },
   head() {
     return {
       title: this.$t('LikeButton.head.title', { name: this.id }),

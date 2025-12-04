@@ -35,29 +35,7 @@
   },
   "cta_nft_collect_button": "收藏作品",
   "Embed": {
-    "back": {
-      "civicLiker": {
-        "title": "立即登记",
-        "subtitle": "进一步支持创作",
-        "registered": "感谢你支持创作",
-        "button": "赞赏公民",
-        "trial": {
-          "title": "立即申请为正式赞赏公民",
-          "button": "申请"
-        }
-      }
-    },
     "label": {
-      "support": "支持",
-      "providedBy": "by LikeCoin 化赞为赏回馈创作",
-      "subtitle": "喜欢这篇文章",
-      "title": "化赞为赏 回馈创作",
-      "createMyWidget": "创建我的 LikeWidget",
-      "createMyButton": "创建我的 LikeButton",
-      "clickLikeButton": "点击全新的 LikeButton ",
-      "rewardUserWithLikeToken": "以 LIKE 代币赞赏 {user}",
-      "supportUser": "支持 {user}",
-      "loginAdvice": "{login} 你赞好的作者能获得更多 LikeCoin",
       "numLikesForArticle": "从 {numOfLikers} 人获得 {numOfLikes} Like"
     },
     "button": {

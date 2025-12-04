@@ -36,36 +36,8 @@
   },
   "cta_nft_collect_button": "Collect Now",
   "Embed": {
-    "back": {
-      "civicLiker": {
-        "title": "Upgrade to Civic Liker now",
-        "subtitle": "Trade a coffee for a better world",
-        "button": "Upgrade",
-        "trial": {
-          "title": "@:Embed.back.civicLiker.title",
-          "button": "@:Embed.back.civicLiker.button"
-        },
-        "paid": {
-          "title": "Send LikeCoin for further support",
-          "button": "Send"
-        }
-      }
-    },
     "label": {
-      "support": "Support",
-      "providedBy": "by LikeCoin reinvented LikeButton",
-      "subtitle": "Like this article?",
-      "title": "Reward the writer with LIKE token",
-      "createMyWidget": "Create my LikeWidget",
-      "createMyButton": "Create my LikeButton",
-      "clickLikeButton": "Clap for me to support my work",
-      "clickLikeButtonNoLogin": "Register now and clap for me",
-      "rewardUserWithLikeToken": "Reward {user} with LIKE token",
-      "supportUser": "Support {user}",
-      "supportUserNoLogin": "Support {user}",
-      "loginAdvice": "{login} the writer you like will generate more LikeCoin",
-      "numLikesForArticle": "{numOfLikes} Like from {numOfLikers} people",
-      "registerNow": "Monthly support"
+      "numLikesForArticle": "{numOfLikes} Like from {numOfLikers} people"
     },
     "button": {
       "login": "Login to Liker ID",
