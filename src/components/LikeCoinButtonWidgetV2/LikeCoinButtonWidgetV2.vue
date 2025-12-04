@@ -61,24 +61,6 @@
         <div v-else :style="hintLabelStyle">{{ hintLabel }}</div>
       </foreignObject>
 
-      <!-- Upgrade -->
-      <foreignObject
-        v-if="upgradeHref"
-        :x="upgradeLabelX"
-        :y="upgradeLabelY"
-        width="120"
-        height="30"
-      >
-        <a
-          :href="upgradeHref"
-          target="_blank"
-          rel="noopener"
-          :style="upgradeLabelStyle"
-        >
-          {{ $t('HintLabel.Upgrade') }}
-        </a>
-      </foreignObject>
-
       <!-- CTA -->
       <foreignObject
         v-if="shouldShowCta"
@@ -178,10 +160,6 @@ export default {
       type: String,
       default: '',
     },
-    upgradeHref: {
-      type: String,
-      default: '',
-    },
     isShowLikeButton: {
       type: Boolean,
       default: true,
@@ -255,12 +233,6 @@ export default {
         y: 130,
       };
     },
-    upgradeLabelX() {
-      return 108;
-    },
-    upgradeLabelY() {
-      return 115;
-    },
     labelY() {
       return 140;
     },
@@ -300,12 +272,6 @@ export default {
         display: 'flex',
         textAlign: 'left',
         alignItems: 'flex-end',
-      };
-    },
-    upgradeLabelStyle() {
-      return {
-        ...this.textStyle,
-        fontSize: '8px',
       };
     },
     ctaButtonClass() {

@@ -47,7 +47,6 @@
             :style="{ textAlign: 'center' }"
             :cta-href="likerWallet && ctaHref"
             :hint-label="hintText"
-            :upgrade-href="upgradeUrl"
             :sign-up-href="signUpUrl"
             :should-show-cta="hasSuperLiked"
             :cta-button-label="ctaButtonLabel"
@@ -92,10 +91,6 @@
 </template>
 
 <script>
-import {
-  getNFTMintLink,
-} from '@/util/api/api';
-
 import Identity from '~/components/Identity/Identity';
 import LikeButton from '~/components/LikeButtonV2/LikeButtonV2';
 import LikeCoinButtonWidgetV2 from '~/components/LikeCoinButtonWidgetV2/LikeCoinButtonWidgetV2';
@@ -181,10 +176,6 @@ export default {
         ref: this.contentKey,
         class: 'text-content',
       };
-    },
-    upgradeUrl() {
-      if (!this.referrer && !this.iscnId) { return ''; }
-      return getNFTMintLink({ referrer: this.referrer, iscnId: this.iscnId, user: this.id });
     },
     ctaTitle() {
       if (this.isTrialSubscriber) {
