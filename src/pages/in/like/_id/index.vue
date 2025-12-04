@@ -177,30 +177,6 @@ export default {
         class: 'text-content',
       };
     },
-    ctaTitle() {
-      if (this.isTrialSubscriber) {
-        return this.$t('Embed.back.civicLiker.trial.title');
-      }
-      if (this.isSubscribed) {
-        return this.$t('Embed.back.civicLiker.paid.title');
-      }
-      return this.$t('Embed.back.civicLiker.title');
-    },
-    ctaSubtitle() {
-      if (this.isSubscribed && !this.isTrialSubscriber) {
-        return '';
-      }
-      return this.$t('Embed.back.civicLiker.subtitle');
-    },
-    ctaButtonTitle() {
-      if (this.isTrialSubscriber) {
-        return this.$t('Embed.back.civicLiker.trial.button');
-      }
-      if (this.isSubscribed) {
-        return this.$t('Embed.back.civicLiker.paid.button');
-      }
-      return this.$t('Embed.back.civicLiker.button');
-    },
   },
   watch: {
     hasUpdateUserSignInStatus(value, prevValue) {
