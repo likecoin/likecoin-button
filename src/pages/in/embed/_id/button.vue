@@ -4,7 +4,7 @@
       :layout="widgetLayout"
       :like-button-label="likeButtonLabel"
       :hint-label="hintText"
-      :sign-up-href="signUpUrl"
+      :hint-href="creatorPortfolioURL"
       :is-logged-in="isLoggedIn"
       :is-show-like-button="isShowLikeButton"
       :stat-url="statUrl"
@@ -121,14 +121,9 @@ export default {
         logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike(embed)', 1);
       }
     },
-    async onClickLike() {
+    onClickLike() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickLikeButton', 'clickLikeButton(embed)', 1);
-      if (this.isLoggedIn) {
-        // Case 3: User has logged in
-        this.doLike();
-      } else {
-        await this.doLogin('like');
-      }
+      this.goToPortfolio();
     },
     onClickLikeStats() {
       this.openLikeStats();

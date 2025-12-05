@@ -46,8 +46,7 @@
   },
   "HintLabel": {
     "About": "About LikeCoin",
-    "SignIn": "Register as a free Liker",
-    "PleaseLike": "Clap 1 - 5 times to reward the creator"
+    "Bookshelf": "Visit my Bookshelf"
   },
   "PopupOverlay": {
     "title": "Let’s clap in the pop-up window",

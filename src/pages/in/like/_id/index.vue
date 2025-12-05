@@ -45,7 +45,7 @@
             :like-button-label="likeButtonLabel"
             :style="{ textAlign: 'center' }"
             :hint-label="hintText"
-            :sign-up-href="signUpUrl"
+            :hint-href="creatorPortfolioURL"
             :is-logged-in="isLoggedIn"
             :width="480"
             @click-like-button-label="onClickLikeStats"
@@ -224,13 +224,8 @@ export default {
         console.error(err);
       }
     },
-    async onClickLike() {
-      if (this.isLoggedIn) {
-        // Case 3: User has logged in
-        this.doLike();
-      } else {
-        await this.doLogin('like');
-      }
+    onClickLike() {
+      this.goToPortfolio();
     },
     onClickLikeStats() {
       this.openLikeStats({ isNewWindow: false });

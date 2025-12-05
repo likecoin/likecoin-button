@@ -307,10 +307,7 @@ export default {
       return this.isCivicLikerTrial || this.isSubscribedCivicLiker;
     },
     hintText() {
-      if (!this.isLoggedIn) {
-        return this.$t('HintLabel.SignIn');
-      }
-      return this.$t('HintLabel.PleaseLike');
+      return this.$t('HintLabel.Bookshelf');
     },
     apiMetadata() {
       return {
@@ -323,7 +320,7 @@ export default {
 
     creatorPortfolioURL() {
       const targetId = this.iscnOwner || this.id
-      let url = `${LIKER_LAND_URL_BASE}/${targetId}?utm_source=button`;
+      let url = `${LIKER_LAND_URL_BASE}/${targetId}?utm_source=button&from=${encodeURIComponent(targetId)}`;
       if (this.referrer) {
         url = `${url}&referrer=${encodeURIComponent(this.referrer)}`;
       }

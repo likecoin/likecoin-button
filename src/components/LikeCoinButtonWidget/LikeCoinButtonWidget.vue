@@ -51,7 +51,7 @@
       <foreignObject
         v-if="isShowHintLabel"
         :x="saveSlotProps.x"
-        y="0"
+        y="10"
         width="300"
         height="60"
       >

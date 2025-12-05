@@ -45,20 +45,18 @@
       <foreignObject
         v-if="isShowHintLabel"
         :x="saveSlotProps.x"
-        y="0"
+        y="10"
         width="212"
         height="60"
       >
         <a
-          v-if="!isLoggedIn"
           target="_blank"
           rel="noopener"
-          :href="signUpHref"
+          :href="hintHref"
           :style="hintLabelStyle"
         >
           {{ hintLabel }}
         </a>
-        <div v-else :style="hintLabelStyle">{{ hintLabel }}</div>
       </foreignObject>
 
       <foreignObject
@@ -121,7 +119,7 @@ export default {
       type: String,
       default: undefined,
     },
-    signUpHref: {
+    hintHref: {
       type: String,
       default: '',
     },
