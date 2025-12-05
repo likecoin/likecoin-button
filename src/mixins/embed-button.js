@@ -55,7 +55,6 @@ export default {
     window.addEventListener('message', this.handleWindowMessage);
     if (this.isPreview) { return; }
     this.hasCookieSupport = await this.getIsCookieSupport();
-    this.parentSuperLikeID = this.getParentSuperLikeID();
     await this.updateUserSignInStatus();
     if (this.onCheckCookieSupport) { this.onCheckCookieSupport(this.hasCookieSupport); }
     this.isUserFetched = true;

@@ -16,24 +16,6 @@
     }
   },
   "LikeCountLabel": "No Likes | 1 Like | {count} Likes",
-  "CTA": {
-    "CivicLiker": {
-      "Title": "Join as a Civic Liker, support creators monthly",
-      "Description": [
-        "Civic Likers are citizens of the creative world who support creators continuously.",
-        "Enjoy the following exclusive benefits:"
-      ],
-      "Features": [
-        "Unlock Super Like privilege. The quota reset at noon and midnight everyday in the promotion period",
-        "Have a more influential vote to the daily-released Creators Fund by giving Likes",
-        "A virtuous halo around your avatar"
-      ],
-      "MoreAbout": "Know more about Civic Liker",
-      "Button": "Register now",
-      "Subscribing": "Supporting",
-      "DepubSpace": "Check on depub.space"
-    }
-  },
   "cta_nft_collect_button": "Collect Now",
   "Embed": {
     "label": {
@@ -65,13 +47,7 @@
   "HintLabel": {
     "About": "About LikeCoin",
     "SignIn": "Register as a free Liker",
-    "PleaseLike": "Clap 1 - 5 times to reward the creator",
-    "SuperLikedPleaseTryAgainLater": "Super Like is cooling down, reset at every 12 o'clock" ,
-    "SuperLikedFollowersWillSee": "Shared to depub.space",
-    "CanSuperLike": "Share to depub.space in one click",
-    "CanSuperLikeOwn": "Share to depub.space in one click",
-    "ToSuperLike": "Join Civic Liker to share to depub.space in one click",
-    "ToSuperLikeOwn": "Join Civic Liker to share to depub.space in one click"
+    "PleaseLike": "Clap 1 - 5 times to reward the creator"
   },
   "PopupOverlay": {
     "title": "Let’s clap in the pop-up window",
@@ -79,6 +55,5 @@
     "link": "Why does pop-up appear?"
   },
   "Save": "Save",
-  "Saved": "Saved",
-  "SuperLikeNow": "Super Like Now"
+  "Saved": "Saved"
 }

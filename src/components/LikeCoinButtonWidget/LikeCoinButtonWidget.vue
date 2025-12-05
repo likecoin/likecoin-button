@@ -57,22 +57,6 @@
       >
         <div :style="hintLabelStyle">{{ hintLabel }}</div>
       </foreignObject>
-
-      <!-- CTA -->
-      <foreignObject
-        :x="saveSlotProps.x"
-        :y="saveSlotProps.y + 58"
-        width="300"
-        height="36"
-      >
-        <a
-          :class="ctaButtonClass"
-          :href="ctaHref"
-          target="_blank"
-          rel="noreferrer noopener"
-          @click="$emit('click-cta-button')"
-        >{{ ctaButtonLabel }}</a>
-      </foreignObject>
     </svg>
   </div>
 </template>
@@ -81,8 +65,6 @@
 import Identity from '../Identity/Identity';
 import LikeButton from '../LikeButtonV2/LikeButtonV2';
 import SaveButton from '../SaveButton/SaveButton';
-
-import { CLW3_NOTICE_URL } from '../../constant';
 
 export const LAYOUT_DEFAULT = 'default';
 export const LAYOUT_STICKY_BOTTOM = 'sticky-bottom';
@@ -104,14 +86,6 @@ export default {
     likeButtonLabel: {
       type: String,
       default: '',
-    },
-    ctaButtonLabel: {
-      type: String,
-      default: '',
-    },
-    ctaButtonPreset: {
-      type: String,
-      default: 'default',
     },
     avatarURL: {
       type: String,
@@ -219,15 +193,6 @@ export default {
         display: 'flex',
         alignItems: 'flex-end',
       };
-    },
-    ctaButtonClass() {
-      return [
-        'likecoin-button-widget__cta-button',
-        `likecoin-button-widget__cta-button--${this.ctaButtonPreset}`,
-      ];
-    },
-    ctaHref() {
-      return CLW3_NOTICE_URL;
     },
   },
 };

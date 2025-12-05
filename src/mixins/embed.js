@@ -1,6 +1,5 @@
 import {
   isCookieEnabled,
-  getCookie,
   setCookie,
 } from 'tiny-cookie';
 
@@ -9,19 +8,16 @@ import {
   LIKER_LAND_URL_BASE,
   LIKECOIN_OEMBED_API_BASE,
   MEDIUM_MEDIA_REGEX,
-  DEPUB_SPACE_URL,
 } from '@/constant';
 
 import { setTrackerUser, logTrackerEvent } from '@/util/EventLogger';
 
 import {
   apiPostLikeButton,
-  apiPostSuperLike,
   apiGetUserMinById,
   apiGetLikeButtonTotalCount,
   apiGetLikeButtonMyStatus,
   apiGetLikeButtonSelfCount,
-  apiGetSuperLikeMyStatus,
   apiGetDataMinByIscnId,
   apiGetLikerDataByAddress,
   apiGetNFTMintInfo,
@@ -220,14 +216,6 @@ export default {
 
       sessionId: uuidv4(),
 
-      isSuperLiker: false,
-      canSuperLike: false,
-      hasSuperLiked: false,
-      isJustSuperLiked: false,
-      nextSuperLikeTime: -1,
-      cooldownProgress: 0,
-      hasClickCooldown: false,
-      parentSuperLikeID: '',
       likerWallet: '',
 
       hasBookmarked: false,
@@ -243,7 +231,6 @@ export default {
       hasUpdateUserSignInStatus: false,
 
       isRedirecting: false,
-      ctaHref: DEPUB_SPACE_URL,
     };
   },
   computed: {
@@ -294,10 +281,6 @@ export default {
     signUpUrl() {
       return `https://${LIKE_CO_HOSTNAME}/in/register${this.targetQueryString}&register=1&is_popup=1`;
     },
-    superLikeURL() {
-      const amountPath = `${this.amount ? `/${this.amount}` : ''}`;
-      return `https://${LIKE_CO_HOSTNAME}/${this.id}${amountPath}${this.targetQueryString}`;
-    },
     statUrl() {
       return `/in/embed/${this.id}/list${this.targetQueryString}`;
     },
@@ -319,13 +302,7 @@ export default {
 
     // UI Labels
     likeButtonLabel() {
-      if (this.likeCount >= 5 && this.canSuperLike && this.cooldownProgress <= 0) {
-        return this.$t('SuperLikeNow');
-      }
       return this.$tc('LikeCountLabel', this.totalLike, { count: this.totalLike });
-    },
-    ctaButtonLabel() {
-      return this.$t('CTA.CivicLiker.DepubSpace');
     },
     isCreatorCivicLiker() {
       return this.isCivicLikerTrial || this.isSubscribedCivicLiker;
@@ -334,37 +311,7 @@ export default {
       if (!this.isLoggedIn) {
         return this.$t('HintLabel.SignIn');
       }
-      if (this.isCreator) {
-        if (this.cooldownProgress) {
-          if (this.hasClickCooldown) {
-            return this.$t('HintLabel.SuperLikedPleaseTryAgainLater');
-          }
-          if (this.hasSuperLiked) {
-            return this.$t('HintLabel.SuperLikedFollowersWillSee');
-          }
-          return undefined;
-        }
-        if (this.canSuperLike) {
-          return this.$t('HintLabel.CanSuperLikeOwn');
-        }
-        return this.$t('HintLabel.ToSuperLikeOwn');
-      }
-      if (this.likeCount < 5) {
-        return this.$t('HintLabel.PleaseLike');
-      }
-      if (this.cooldownProgress) {
-        if (this.hasClickCooldown) {
-          return this.$t('HintLabel.SuperLikedPleaseTryAgainLater');
-        }
-        if (this.hasSuperLiked) {
-          return this.$t('HintLabel.SuperLikedFollowersWillSee');
-        }
-        return undefined;
-      }
-      if (this.canSuperLike) {
-        return this.$t('HintLabel.CanSuperLike');
-      }
-      return this.$t('HintLabel.ToSuperLike');
+      return this.$t('HintLabel.PleaseLike');
     },
     apiMetadata() {
       return {
@@ -417,35 +364,6 @@ export default {
       }
       return res;
     },
-    getParentSuperLikeID() {
-      if (!document.cookie || !isCookieEnabled()) { return ''; }
-      return getCookie('likebutton_superlike_id');
-    },
-    async updateSuperLikeStatus() {
-      const { referrer, iscnId } = this.likeTarget;
-      await apiGetSuperLikeMyStatus(this.timezoneString, { referrer, iscnId }).then(({ data }) => {
-        const {
-          isSuperLiker,
-          canSuperLike,
-          lastSuperLikeInfos,
-          nextSuperLikeTs,
-          cooldown,
-          likeWallet,
-        } = data;
-        this.isSuperLiker = isSuperLiker;
-        this.canSuperLike = canSuperLike;
-        this.likerWallet = likeWallet;
-        this.ctaHref = `${DEPUB_SPACE_URL}${this.likerWallet}`;
-        // HACK: Assume if `hasSuperLiked` has set to `true`, don't override it as
-        // `lastSuperLikeInfos` may return empty array even the Super Like action is success
-        if (!this.hasSuperLiked) {
-          this.hasSuperLiked = !!(lastSuperLikeInfos && lastSuperLikeInfos.length);
-        }
-        this.nextSuperLikeTime = nextSuperLikeTs;
-        this.cooldownProgress = cooldown;
-      });
-      // TO-DO: handle updateSuperLikeStatus for ISCN
-    },
     async updateUserSignInStatus() {
       const { id, referrer, iscnId } = this.likeTarget;
       try {
@@ -481,7 +399,6 @@ export default {
                   this.$sentry.setUser({ id: liker });
                 }
                 const promises = [
-                  this.updateSuperLikeStatus(),
                   setTrackerUser(this, { user: liker }),
                 ];
                 await Promise.all(promises);
@@ -536,24 +453,6 @@ export default {
       this.likeCount += 1;
       debouncedOnClick(this);
     },
-    async newSuperLike() {
-      const { referrer, iscnId } = this.likeTarget;
-      const { cooldownProgress } = this;
-      this.hasSuperLiked = true;
-      this.isJustSuperLiked = true;
-      this.cooldownProgress = 1;
-      const address = await apiPostSuperLike(this.id, {
-        referrer,
-        iscnId,
-        tz: this.timezoneString,
-        ...this.apiMetadata,
-      }).catch(() => {
-        this.hasSuperLiked = false;
-        this.cooldownProgress = cooldownProgress;
-      });
-      this.likerWallet = address && address.data.likerWallet;
-      this.ctaHref = `${DEPUB_SPACE_URL}${this.likerWallet}`;
-    },
     openLikeStats(options = { isNewWindow: true }) {
       const { id, referrer, iscnId } = this;
       if (options.isNewWindow) {
@@ -573,18 +472,6 @@ export default {
           },
         });
       }
-    },
-    onClickCTAButton() {
-      const url = `${LIKER_LAND_URL_BASE}/${this.id}${this.targetQueryString}`;
-      window.open(
-        url,
-        '_blank',
-        'menubar=no,location=no,width=527,height=700',
-      );
-      // TO-DO: handle on click CTA to go depub.SPACE
-    },
-    onClickCooldown() {
-      this.hasClickCooldown = true;
     },
     goToPortfolio({ type = 'popup', target = '_blank', feature = '' } = {}) {
       const url = this.creatorPortfolioURL;

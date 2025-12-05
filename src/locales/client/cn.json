@@ -15,24 +15,6 @@
     }
   },
   "LikeCountLabel": "尚无点赞 | 1 个赞 | {count} 个赞",
-  "CTA": {
-    "CivicLiker": {
-      "Title": "成为赞赏公民，每月赞助创作者",
-      "Description": [
-        "赞赏公民是一群愿意持续回馈创作的网络公民。",
-        "成为赞赏公民可享以下福利："
-      ],
-      "Features": [
-        "解锁 Super Like，推广时间内每天整点中午及凌晨获赠一次 Super Like 的权利。",
-        "拍手赞赏作品对创作基金的分配有更大影响力",
-        "头像显示独有的光环标记，突显尊贵的身份了解更多赞赏公民福利"
-      ],
-      "MoreAbout": "了解更多赞赏公民福利",
-      "Button": "立即注册",
-      "Subscribing": "赞助中",
-      "DepubSpace": "查看 depub.space"
-    }
-  },
   "cta_nft_collect_button": "收藏作品",
   "Embed": {
     "label": {
@@ -64,15 +46,8 @@
   "HintLabel": {
     "About": "关于 LikeCoin",
     "SignIn": "免费注册，化赞为赏",
-    "PleaseLike": "最多可拍掌 5 下，鼓励作者",
-    "SuperLikedPleaseTryAgainLater": "Super Like 冷却中，逢 12 点重置" ,
-    "SuperLikedFollowersWillSee": "已经分享到 depub.space",
-    "CanSuperLike": "一键分享到 depub.space",
-    "CanSuperLikeOwn": "一键分享到 depub.space",
-    "ToSuperLike": "成为赞赏公民，一键分享佳作到 depub.space",
-    "ToSuperLikeOwn": "成为赞赏公民，一键分享佳作到 depub.space"
+    "PleaseLike": "最多可拍掌 5 下，鼓励作者"
   },
   "Save": "收藏",
-  "Saved": "已收藏",
-  "SuperLikeNow": "立即 Super Like"
+  "Saved": "已收藏"
 }

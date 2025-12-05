@@ -9,7 +9,6 @@ import { CSSPlugin } from 'gsap/CSSPlugin';
 
 import LikeButtonV2 from './LikeButtonV2';
 import LikeButtonV2Badge from './LikeButtonV2.badge';
-import LikeButtonV2Cooldown from './LikeButtonV2.cooldown';
 import LikeButtonV2StateTable from './LikeButtonV2.stateTable';
 
 gsap.registerPlugin(CSSPlugin);
@@ -31,26 +30,6 @@ export const Default = () => ({
         max: 5,
         step: 1,
       }),
-    },
-    cooldown: {
-      default: number('Cooldown', 0, {
-        range: true,
-        min: 0,
-        max: 1,
-        step: 0.01,
-      }),
-    },
-    cooldownEndTimeFromNow: {
-      default: number('Cooldown end time from now (seconds)', 10),
-    },
-    hasSuperLiked: {
-      default: boolean('Super Liked', false),
-    },
-    isJustSuperLiked: {
-      default: boolean('Just Super Liked', false),
-    },
-    isSuperLikeEnabled: {
-      default: boolean('Enable Super Like', true),
     },
     isCreator: {
       default: boolean('Is creator', false),
@@ -82,11 +61,6 @@ export const Default = () => ({
     <LikeButtonV2
       v-bind="{
         count,
-        cooldown,
-        cooldownEndTime: Date.now() + cooldownEndTimeFromNow * 1000,
-        hasSuperLiked,
-        isJustSuperLiked,
-        isSuperLikeEnabled,
         isCreator,
         explosionSize,
         explosionRange,
@@ -109,52 +83,13 @@ export const Badge = () => ({
         step: 1,
       }),
     },
-    hasSuperLiked: {
-      default: boolean('Super Liked', false),
-    },
-    isSuperLikeEnabled: {
-      default: boolean('Enable Super Like', true),
-    },
   },
   template: `
     <LikeButtonV2Badge
       v-bind="{
         count,
-        hasSuperLiked,
-        isSuperLikeEnabled,
       }"
     />
-  `,
-});
-
-export const Cooldown = () => ({
-  components: {
-    LikeButtonV2Cooldown,
-  },
-  props: {
-    value: {
-      default: number('Value', 0.5, {
-        range: true,
-        min: 0,
-        max: 1,
-        step: 0.01,
-      }),
-    },
-    endTimeFromNow: {
-      default: number('End time from now (seconds)', 10),
-    },
-  },
-  template: `
-    <svg viewBox="0 0 100 100" width="100">
-      <LikeButtonV2Cooldown
-        v-bind="{
-          value,
-          endTime: Date.now() + endTimeFromNow * 1000,
-          radius: 36,
-          center: 50,
-        }"
-      />
-    </svg>
   `,
 });
 

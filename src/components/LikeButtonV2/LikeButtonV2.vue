@@ -55,7 +55,6 @@
         >
           <!-- Button Bg -->
           <circle
-            :key="state"
             :r="radius"
             :style="buttonBgStyle"
             cx="78"
@@ -76,7 +75,6 @@
           >
             <!-- Button Clap -->
             <g
-              v-if="state === 'initial'"
               key="clap"
             >
               <path
@@ -84,81 +82,8 @@
                 style="fill: #28646e"
               />
             </g>
-            <g
-              v-else
-              key="star"
-            >
-              <!-- Button Star -->
-              <transition
-                :css="false"
-                @enter="starIconEnter"
-                @leave="starIconleave"
-              >
-                <g :key="state">
-                  <!-- Star Bits -->
-                  <StarBits
-                    v-if="isShowStarBits"
-                    @end="isShowStarBits = false"
-                  />
-                  <path
-                    :style="{
-                      fill: superLikeIconFill,
-                      stroke: superLikeIconStroke,
-                      strokeWidth: '3px',
-                    }"
-                    d="M80,65.38l2.62,5.3a2.27,2.27,0,0,0,1.69,1.23l5.85.85a2.25,2.25,0,0,1,1.25,3.84l-4.23,4.12a2.24,2.24,0,0,0-.65,2l1,5.83a2.25,2.25,0,0,1-3.27,2.37L79,88.16a2.27,2.27,0,0,0-2.09,0l-5.23,2.75a2.25,2.25,0,0,1-3.27-2.37l1-5.83a2.24,2.24,0,0,0-.65-2L64.51,76.6a2.25,2.25,0,0,1,1.25-3.84l5.85-.85a2.27,2.27,0,0,0,1.69-1.23l2.62-5.3A2.25,2.25,0,0,1,80,65.38Z"
-                  />
-                  <!-- Tick -->
-                  <polyline
-                    v-if="isShowSuperLikeTick"
-                    points="73.38 80.35 76.68 83.18 82.8 75.76"
-                    style="fill: none;stroke: #28646e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3px;fill-rule: evenodd"
-                  />
-                  <!-- Button Star Trail -->
-                  <g
-                    v-else
-                    :style="{
-                      fill: 'none',
-                      stroke: superLikeIconStroke,
-                      strokeLinecap: 'round',
-                      strokeLinejoin: 'round',
-                      strokeWidth: '3px'
-                    }"
-                  >
-                    <line
-                      x1="72"
-                      y1="98"
-                      x2="72"
-                      y2="102"
-                    />
-                    <line
-                      x1="84"
-                      y1="98"
-                      x2="84"
-                      y2="102"
-                    />
-                    <line
-                      x1="78"
-                      y1="100"
-                      x2="78"
-                      y2="104"
-                    />
-                  </g>
-                </g>
-              </transition>
-            </g>
           </transition>
         </g>
-        <Cooldown
-          ref="cooldown"
-          :value="cooldownValue"
-          :end-time="cooldownEndTime"
-          :color="cooldownFillColor"
-          :radius="radius"
-          :center="78"
-          :is-bold="!isDisabled && isHovering"
-          @end="onCooldownEnd"
-        />
       </g>
       <foreignObject
         x="40"
@@ -167,16 +92,9 @@
         height="76"
       >
         <button
-          v-if="!isDisabled"
           key="normal"
           :style="buttonStyle"
           v-on="buttonListeners"
-        />
-        <button
-          v-else
-          key="disabled"
-          :style="buttonStyle"
-          @click="onClickDisabledButton"
         />
       </foreignObject>
     </g>
@@ -191,41 +109,23 @@
         v-bind="{
           count,
           maxCount,
-          hasSuperLiked,
           isCreator,
         }"
       />
     </svg>
-    <!-- Clap Bits -->
-    <ClapBits
-      v-for="cId in clapBits"
-      :key="cId"
-      v-bind="{
-        id,
-        explosionSize,
-        explosionRange,
-      }"
-      @end="finishClapBitsAnimation"
-    />
   </svg>
 </template>
 <!-- eslint-enable max-len -->
 
 <script>
-import { TimelineMax, TweenMax } from 'gsap/all';
+import { TweenMax } from 'gsap/all';
 import Badge from './LikeButtonV2.badge';
-import ClapBits from './LikeButtonV2.clapBits';
-import Cooldown from './LikeButtonV2.cooldown';
-import StarBits from './LikeButtonV2.starBits';
 import ButtonMixin from '../../mixins/button';
 
 export default {
   name: 'like-button-v2',
   components: {
     Badge,
-    ClapBits,
-    Cooldown,
-    StarBits,
   },
   mixins: [ButtonMixin],
   props: {
@@ -236,26 +136,6 @@ export default {
     maxCount: {
       type: Number,
       default: 5,
-    },
-    cooldown: {
-      type: Number,
-      default: 0,
-    },
-    cooldownEndTime: {
-      type: Number,
-      default: 0,
-    },
-    hasSuperLiked: {
-      type: Boolean,
-      default: false,
-    },
-    isJustSuperLiked: {
-      type: Boolean,
-      default: false,
-    },
-    isSuperLikeEnabled: {
-      type: Boolean,
-      default: true,
     },
     isCreator: {
       type: Boolean,
@@ -281,37 +161,11 @@ export default {
   data() {
     return {
       radius: 38,
-      hasBlockingAnimation: false,
-      clapBits: [],
-      isShowStarBits: false,
     };
   },
   computed: {
-    state() {
-      if (!this.isCreator && this.count < this.maxCount) {
-        return 'initial';
-      }
-      if (!this.isSuperLikeEnabled) {
-        return 'unsuperlikeable';
-      }
-      if (this.cooldown) {
-        if (this.hasSuperLiked && this.isJustSuperLiked) {
-          return 'just-superliked';
-        }
-        return 'cooldown';
-      }
-      return 'superlikeable';
-    },
-    isDisabled() {
-      return this.state === 'just-superliked' ||
-        this.state === 'cooldown' ||
-        this.hasBlockingAnimation;
-    },
     isShowBadge() {
       return this.isCreator || this.count > 0;
-    },
-    isShowSuperLikeTick() {
-      return this.state === 'just-superliked';
     },
     idSuffix() {
       return this.id ? `-${this.id}` : '';
@@ -331,111 +185,20 @@ export default {
       };
     },
     buttonBgColor() {
-      switch (this.state) {
-        case 'superlikeable':
-          return '#50e3c2';
-
-        case 'unsuperlikeable':
-          return '#f7f7f7';
-
-        case 'just-superliked':
-        case 'cooldown':
-          return '#fff';
-
-        case 'initial':
-        default:
-          return '#aaf1e7';
-      }
+      return '#aaf1e7';
     },
     buttonBgStyle() {
       return {
         fill: this.buttonBgColor,
       };
     },
-    cooldownValue() {
-      if (
-        this.state === 'just-superliked' ||
-        this.state === 'cooldown'
-      ) {
-        return this.cooldown;
-      }
-      return 0;
-    },
-    cooldownFillColor() {
-      switch (this.state) {
-        case 'superlikeable':
-          return '#28646e';
-
-        case 'just-superliked':
-        case 'cooldown':
-          return '#50e3c2';
-
-        case 'unsuperlikeable':
-          return '#4a4a4a';
-
-        case 'initial':
-        default:
-          if (this.isPressing || this.count > 0) {
-            return '#28646e';
-          }
-          return '#50e3c2';
-      }
-    },
-    superLikeIconStroke() {
-      switch (this.state) {
-        case 'unsuperlikeable':
-          return '#9b9b9b';
-
-        case 'cooldown':
-          return '#e6e6e6';
-
-        case 'just-superliked':
-          return '#50e3c2';
-
-        default:
-          return '#28646e';
-      }
-    },
-    superLikeIconFill() {
-      switch (this.state) {
-        case 'unsuperlikeable':
-        case 'cooldown':
-          return '#50e3c200';
-
-        default:
-          return '#50e3c2';
-      }
-    },
   },
   methods: {
     onClick() {
-      if (
-        ![
-          'unsuperlikeable',
-          'just-superliked',
-          'cooldown',
-        ].includes(this.state)
-      ) {
-        this.startClapBitsAnimation();
-      }
       this.$emit('click');
     },
     onClickDisabledButton() {
       this.$emit('click-disabled');
-    },
-    onCooldownEnd() {
-      this.$emit('cooldown-end');
-    },
-    startClapBitsAnimation() {
-      this.clapBits.push(
-        `button-clapbits${this.idSuffix}-${Date.now()}`,
-      );
-    },
-    finishClapBitsAnimation(id) {
-      const index = this.clapBits.indexOf(id);
-      if (index !== -1) {
-        this.clapBits.splice(index, 1);
-      }
     },
     buttonBgBeforeEnter(el) {
       TweenMax.set(el, { opacity: 0 });
@@ -453,33 +216,17 @@ export default {
       });
     },
     buttonIconBeforeEnter(el) {
-      if (this.state === 'initial') {
-        TweenMax.set(el, { opacity: 0 });
-      } else {
-        TweenMax.set(el, { y: 50 });
-      }
+      TweenMax.set(el, { opacity: 0 });
     },
     buttonIconEnter(el, done) {
-      if (this.state === 'initial') {
-        TweenMax.fromTo(el, 0.5, {
-          scale: 0,
-          transformOrigin: '50% 50%',
-          onComplete: done,
-        }, {
-          scale: 1,
-          opacity: 1,
-        });
-      } else {
-        this.hasBlockingAnimation = true;
-        const tl = new TimelineMax({ onComplete: done });
-        tl.to(el, 0.5, {
-          y: 0,
-          onComplete: () => {
-            this.hasBlockingAnimation = false;
-          },
-        });
-        this.$refs.cooldown.animateTrack(tl);
-      }
+      TweenMax.fromTo(el, 0.5, {
+        scale: 0,
+        transformOrigin: '50% 50%',
+        onComplete: done,
+      }, {
+        scale: 1,
+        opacity: 1,
+      });
     },
     buttonIconleave(el, done) {
       TweenMax.to(el, 0.5, {
@@ -488,66 +235,6 @@ export default {
         transformOrigin: '50% 50%',
         onComplete: done,
       });
-    },
-    starIconEnter(el, done) {
-      if (this.state === 'just-superliked') {
-        const [star, tick] = el.children;
-        TweenMax.set(tick, { opacity: 0 });
-        const tl = new TimelineMax({
-          onComplete: done,
-        });
-        tl.from(el, 0.7, {
-          scale: 0.4,
-          y: 50,
-          transformOrigin: '50% 50%',
-        });
-        tl.fromTo(star, 0.5, {
-          fill: '#50e3c2',
-          strokeWidth: 0,
-        }, {
-          scale: 1.2,
-          transformOrigin: '50% 50%',
-          onComplete: () => {
-            this.isShowStarBits = true;
-          },
-        }, 0);
-        tl.to(tick, 0.2, { opacity: 1 });
-        this.$refs.cooldown.animateTrack(tl);
-      } else {
-        TweenMax.from(el, 0.5, {
-          scaleX: 0.7,
-          scaleY: 1.5,
-          y: 100,
-          opacity: 0,
-          transformOrigin: '50% 50%',
-          onComplete: done,
-        });
-      }
-    },
-    starIconleave(el, done) {
-      if (this.state === 'cooldown') {
-        TweenMax.to(el, 0.5, {
-          scaleX: 0.7,
-          scaleY: 1.5,
-          y: -100,
-          opacity: 0,
-          transformOrigin: '50% 50%',
-          onComplete: done,
-        });
-      } else {
-        const [, tick] = el.children;
-        const tl = new TimelineMax({
-          onComplete: done,
-        });
-        tl.to(el, 0.2, {
-          opacity: 0,
-          scale: 2,
-          transformOrigin: '50% 50%',
-        });
-        tl.to(tick, 0.2, {
-          opacity: 0,
-        });
-      }
     },
     buttonMaskBeforeEnter(el) {
       if (this.isShowBadge) {

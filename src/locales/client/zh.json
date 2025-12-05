@@ -16,24 +16,6 @@
     }
   },
   "LikeCountLabel": "尚無按讚 | 1 個讚 | {count} 個讚",
-  "CTA": {
-    "CivicLiker": {
-      "Title": "成為讚賞公民，每月贊助創作者",
-      "Description": [
-        "讚賞公民是一群願意持續回饋創作的網絡公民。",
-        "成為讚賞公民可享以下福利："
-      ],
-      "Features": [
-        "解鎖 Super Like，推廣時間內每天整點中午及凌晨獲贈一次 Super Like 的權利。",
-        "拍手讚賞作品對創作基金的分配有更大影響力",
-        "頭像顯示獨有的光環標記，突顯尊貴的身份瞭解更多讚賞公民福利"
-      ],
-      "MoreAbout": "瞭解更多讚賞公民福利",
-      "Button": "按月贊助",
-      "Subscribing": "贊助中",
-      "DepubSpace": "查看 depub.space"
-    }
-  },
   "cta_nft_collect_button": "收藏作品",
   "Embed": {
     "label": {
@@ -65,13 +47,7 @@
   "HintLabel": {
     "About": "關於 LikeCoin",
     "SignIn": "註冊 Liker ID 免費按讚",
-    "PleaseLike": "最多可拍掌 5 下，鼓勵作者",
-    "SuperLikedPleaseTryAgainLater": "Super Like 冷卻中，逢 12 點重置" ,
-    "SuperLikedFollowersWillSee": "已經分享到 depub.space",
-    "CanSuperLike": "一鍵分享到 depub.space",
-    "CanSuperLikeOwn": "一鍵分享到 depub.space",
-    "ToSuperLike": "成為讚賞公民，一鍵分享佳作到 depub.space",
-    "ToSuperLikeOwn": "成為讚賞公民，一鍵分享佳作到 depub.space"
+    "PleaseLike": "最多可拍掌 5 下，鼓勵作者"
   },
   "PopupOverlay": {
     "title": "請在「彈出式視窗」中點讚支持作者{br}Please sign-in in the pop up window",
@@ -79,6 +55,5 @@
     "link": "為何出現彈出式視窗"
   },
   "Save": "收藏",
-  "Saved": "已收藏",
-  "SuperLikeNow": "立即 Super Like"
+  "Saved": "已收藏"
 }

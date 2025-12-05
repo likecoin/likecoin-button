@@ -39,90 +39,6 @@
           <div><code>initial</code></div>
         </td>
       </tr>
-
-      <tr>
-        <th colspan="5">
-          <h2>Un-Super-Like-able</h2>
-          <p>For those who <b>CURRENTLY CANNOT</b> perform Super Like
-            (i.e., not a Civic Liker)</p>
-        </th>
-      </tr>
-      <tr>
-        <td>
-          <Maxed />
-          <caption>never Super Liked before</caption>
-        </td>
-        <td>
-          <MaxedButSuperLiked />
-          <caption>Super Liked at least once</caption>
-        </td>
-      </tr>
-      <tr>
-        <td
-          class="code-range"
-          colspan="2"
-        >
-          <div><code>unsuperlikeable</code></div>
-        </td>
-      </tr>
-
-      <tr>
-        <th colspan="5">
-          <h2>Super-Like-able</h2>
-          <p>For those who <b>CURRENTLY</b> can perform Super Like</p>
-        </th>
-      </tr>
-      <tr>
-        <td>
-          <SuperLikeable />
-          <caption>never Super Liked before</caption>
-        </td>
-        <td>
-          <SuperLiked />
-          <caption>Super Liked at least once</caption>
-        </td>
-      </tr>
-      <tr>
-        <td
-          class="code-range"
-          colspan="2"
-        >
-          <div><code>superlikeable</code></div>
-        </td>
-      </tr>
-
-      <tr>
-        <th colspan="5">
-          <h2>Cooldown</h2>
-          <p>For those who have Super Liked recently and now waiting for the cooldown</p>
-        </th>
-      </tr>
-      <tr>
-        <td>
-          <SuperLikeableCooldown />
-          <caption>Super Liked other</caption>
-        </td>
-        <td>
-          <Cooldown />
-          <caption>Super Liked at least once</caption>
-        </td>
-        <td>
-          <JustSuperLiked />
-          <caption>just Super Liked this</caption>
-        </td>
-      </tr>
-      <tr>
-        <td
-          class="code-range"
-          colspan="2"
-        >
-          <div><code>cooldown</code></div>
-        </td>
-        <td class="code-range">
-          <div><code>just-superliked</code></div>
-        </td>
-      </tr>
-
     </table>
 
     <table>
@@ -170,30 +86,6 @@
         </td>
       </tr>
 
-      <tr>
-        <th colspan="5">
-          <h2>Super Like</h2>
-        </th>
-      </tr>
-      <tr>
-        <td>
-          <BadgeShareable />
-          <caption>Not yet Super Liked</caption>
-        </td>
-        <td>
-          <BadgeShared />
-          <caption>Super Liked</caption>
-        </td>
-      </tr>
-      <tr>
-        <td class="code-range">
-          <div><code>shareable</code></div>
-        </td>
-        <td class="code-range">
-          <div><code>shared</code></div>
-        </td>
-      </tr>
-
     </table>
   </div>
 </template>
@@ -205,10 +97,6 @@ import LikeButtonBadge from './LikeButtonV2.badge';
 const ButtonFactory = ({
   id,
   count = 0,
-  cooldown = 0,
-  hasSuperLiked = false,
-  isJustSuperLiked = false,
-  isSuperLikeEnabled = false,
   isCreator = false,
 } = {}) => ({
   components: {
@@ -218,10 +106,6 @@ const ButtonFactory = ({
     return {
       id,
       count,
-      cooldown,
-      hasSuperLiked,
-      isJustSuperLiked,
-      isSuperLikeEnabled,
       isCreator,
     };
   },
@@ -230,11 +114,6 @@ const ButtonFactory = ({
       v-bind="{
         id,
         count,
-        cooldown,
-        cooldownEndTime: 0,
-        hasSuperLiked,
-        isJustSuperLiked,
-        isSuperLikeEnabled,
         isCreator,
       }"
     />
@@ -243,8 +122,6 @@ const ButtonFactory = ({
 
 const BadgeFactory = ({
   count = 0,
-  hasSuperLiked = false,
-  isSuperLikeEnabled = false,
 } = {}) => ({
   components: {
     LikeButtonBadge,
@@ -252,8 +129,6 @@ const BadgeFactory = ({
   data() {
     return {
       count,
-      hasSuperLiked,
-      isSuperLikeEnabled,
     };
   },
   template: `
@@ -263,8 +138,6 @@ const BadgeFactory = ({
         y="0"
         v-bind="{
           count,
-          hasSuperLiked,
-          isSuperLikeEnabled,
         }"
       />
     </svg>
@@ -279,44 +152,6 @@ const components = {};
   { id: 'Clapped3', count: 3 },
   { id: 'Clapped4', count: 4 },
   { id: 'Maxed', count: 5 },
-
-  {
-    id: 'MaxedButSuperLiked',
-    count: 5,
-    hasSuperLiked: true,
-  },
-  {
-    id: 'SuperLikeable',
-    count: 5,
-    isSuperLikeEnabled: true,
-  },
-  {
-    id: 'SuperLikeableCooldown',
-    count: 5,
-    isSuperLikeEnabled: true,
-    cooldown: 0.5,
-  },
-  {
-    id: 'JustSuperLiked',
-    count: 5,
-    isSuperLikeEnabled: true,
-    hasSuperLiked: true,
-    isJustSuperLiked: true,
-    cooldown: 0.95,
-  },
-  {
-    id: 'Cooldown',
-    count: 5,
-    isSuperLikeEnabled: true,
-    hasSuperLiked: true,
-    cooldown: 0.5,
-  },
-  {
-    id: 'SuperLiked',
-    count: 5,
-    isSuperLikeEnabled: true,
-    hasSuperLiked: true,
-  },
 ].forEach(({ id, ...restConfigs }) => {
   components[id] = ButtonFactory({
     id: id.toLowerCase(),
@@ -343,16 +178,6 @@ const components = {};
   {
     id: 'Badge4',
     count: 4,
-  },
-
-  {
-    id: 'BadgeShareable',
-    count: 5,
-  },
-  {
-    id: 'BadgeShared',
-    count: 5,
-    hasSuperLiked: true,
   },
 ].forEach(({ id, ...restConfigs }) => {
   components[id] = BadgeFactory(restConfigs);

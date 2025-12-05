@@ -69,8 +69,6 @@ export const MEDIUM_QUERY_STRING_TO_REMOVE = [
 
 export const CLW3_NOTICE_URL = 'https://matters.news/@likecoin/%E8%AE%9A%E8%B3%9E%E5%85%AC%E6%B0%91-web3-%E6%94%B9%E7%89%88%E8%BF%8E%E8%99%8E%E5%B9%B4-bafyreigrx6dnzmbnfea3btnbzno272bsfadnhwpztuaaf4z5cyxflarx5y';
 
-export const DEPUB_SPACE_URL = IS_TESTNET ? 'https://stag.depub.space/' : 'https://depub.space/';
-
 export const LIKECOIN_CHAIN_API = IS_TESTNET
   ? 'https://node.testnet.like.co'
   : 'https://mainnet-node.like.co';
