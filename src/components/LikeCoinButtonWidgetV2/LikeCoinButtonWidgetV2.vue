@@ -61,29 +61,6 @@
         <div v-else :style="hintLabelStyle">{{ hintLabel }}</div>
       </foreignObject>
 
-      <!-- CTA -->
-      <foreignObject
-        v-if="shouldShowCta"
-        :x="saveSlotProps.x"
-        :y="saveSlotProps.y"
-        width="212"
-        height="36"
-      >
-        <a
-          :class="ctaButtonClass"
-          :href="ctaHref || depupSpaceUrl"
-          target="_blank"
-          rel="noreferrer noopener"
-          @click="$emit('click-cta-button')"
-        >
-          <lc-loading-indicator
-            v-if="!ctaHref"
-            :style="labelStyle"
-          />
-          <div v-else>{{ ctaButtonLabel }}</div>
-        </a>
-      </foreignObject>
-
       <foreignObject
         x="324"
         y="144"
@@ -109,7 +86,7 @@ import LikeQuestionIcon from '~/assets/like-button/question-btn.svg';
 import Identity from '../Identity/Identity';
 import LikeButton from '../LikeButtonV2/LikeButtonV2';
 
-import { DEPUB_SPACE_URL, BOOK_URL_BASE } from '../../constant';
+import { BOOK_URL_BASE } from '../../constant';
 
 export const LAYOUT_DEFAULT = 'default';
 export const LAYOUT_STICKY_BOTTOM = 'sticky-bottom';
@@ -129,18 +106,6 @@ export default {
       default: LAYOUT_DEFAULT,
     },
     likeButtonLabel: {
-      type: String,
-      default: '',
-    },
-    ctaButtonLabel: {
-      type: String,
-      default: '',
-    },
-    ctaButtonPreset: {
-      type: String,
-      default: 'default',
-    },
-    ctaHref: {
       type: String,
       default: '',
     },
@@ -167,10 +132,6 @@ export default {
     isLoggedIn: {
       type: Boolean,
       default: true,
-    },
-    shouldShowCta: {
-      type: Boolean,
-      default: false,
     },
     statUrl: {
       type: String,
@@ -273,15 +234,6 @@ export default {
         textAlign: 'left',
         alignItems: 'flex-end',
       };
-    },
-    ctaButtonClass() {
-      return [
-        'likecoin-button-widget__cta-button',
-        `likecoin-button-widget__cta-button--${this.ctaButtonPreset}`,
-      ];
-    },
-    depupSpaceUrl() {
-      return DEPUB_SPACE_URL;
     },
     aboutUrl() {
       return `${BOOK_URL_BASE}/about?utm_source=button`;

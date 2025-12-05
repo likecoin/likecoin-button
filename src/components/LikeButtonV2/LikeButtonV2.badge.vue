@@ -59,43 +59,6 @@
               y="22"
             >MAX</text>
           </g>
-          <g
-            v-else-if="isShareable || isShared"
-            key="share-icon"
-            :style="{
-              fill: shareIconContentColor,
-              fillRule: 'evenodd',
-            }"
-          >
-            <transition
-              :css="false"
-              mode="in-out"
-              @before-enter="shareIconBgBeforeEnter"
-              @enter="shareIconBgEnter"
-              @leave="shareIconBgLeave"
-            >
-              <circle
-                :key="state"
-                :cx="radius"
-                :cy="radius"
-                :r="radius"
-                :style="{
-                  fill: shareIconBgColor,
-                }"
-              />
-            </transition>
-            <transition
-              :css="false"
-              @enter="shareIconContentEnter"
-              @leave="shareIconContentLeave"
-            >
-              <g :key="state">
-                <path d="M13.13,15.11a2,2,0,1,0-2-2A2,2,0,0,0,13.13,15.11Z" />
-                <path d="M11,19.51a1.23,1.23,0,0,1,1.08-1.24,7.23,7.23,0,0,0,6.19-6.19,1.25,1.25,0,1,1,2.48.34,9.76,9.76,0,0,1-8.34,8.33A1.25,1.25,0,0,1,11,19.68,1,1,0,0,1,11,19.51Z" />
-                <path d="M11,24.8a1.24,1.24,0,0,1,1.15-1.24A12.42,12.42,0,0,0,23.58,12.15a1.25,1.25,0,0,1,2.5.2,14.93,14.93,0,0,1-13.73,13.7A1.25,1.25,0,0,1,11,24.91Z" />
-              </g>
-            </transition>
-          </g>
         </transition>
       </g>
     </transition>
@@ -104,7 +67,7 @@
 <!-- eslint-enable max-len -->
 
 <script>
-import { TimelineMax, TweenMax } from 'gsap/all';
+import { TweenMax } from 'gsap/all';
 
 export default {
   name: 'like-button-v2-badge',
@@ -117,10 +80,6 @@ export default {
       type: Number,
       default: 5,
     },
-    hasSuperLiked: {
-      type: Boolean,
-      default: false,
-    },
     isCreator: {
       type: Boolean,
       default: false,
@@ -131,18 +90,10 @@ export default {
       return 18;
     },
     state() {
-      if (!this.isCreator) {
-        if (this.count === 0) {
-          return 'hidden';
-        }
-        if (this.count < this.maxCount) {
-          return 'liked';
-        }
+      if (this.count === 0) {
+        return 'hidden';
       }
-      if (this.hasSuperLiked) {
-        return 'shared';
-      }
-      return 'shareable';
+      return 'liked';
     },
     isHidden() {
       return this.state === 'hidden';
@@ -152,12 +103,6 @@ export default {
     },
     isMax() {
       return this.state === 'max';
-    },
-    isShareable() {
-      return this.state === 'shareable';
-    },
-    isShared() {
-      return this.state === 'shared';
     },
     bgStyle() {
       return { fill: '#aaf1e7' };
@@ -181,12 +126,6 @@ export default {
         ...this.baseTextStyle,
         fontSize: '12px',
       };
-    },
-    shareIconBgColor() {
-      return this.isShared ? '#50e3c2' : '#e6e6e6';
-    },
-    shareIconContentColor() {
-      return this.isShared ? '#28646e' : '#9b9b9b';
     },
   },
   methods: {
@@ -243,45 +182,6 @@ export default {
         opacity: 0,
         onComplete,
       });
-    },
-    shareIconBgBeforeEnter(el) {
-      TweenMax.set(el, { opacity: 0 });
-    },
-    shareIconBgEnter(el, onComplete) {
-      TweenMax.to(el, 0.25, {
-        opacity: 1,
-        onComplete,
-      });
-    },
-    shareIconBgLeave(el, onComplete) {
-      TweenMax.to(el, 0, {
-        opacity: 0,
-        delay: 0.25,
-        onComplete,
-      });
-    },
-    shareIconContentEnter(el, onComplete) {
-      const tl = new TimelineMax({ onComplete });
-      if (this.isShareable) {
-        tl.from(el, 0.25, { opacity: 0 });
-      } else {
-        tl.from(el.children, 0.25, {
-          opacity: 0,
-          delay: 0.25,
-          stagger: 0.2,
-        });
-      }
-    },
-    shareIconContentLeave(el, onComplete) {
-      const tl = new TimelineMax({ onComplete });
-      if (this.isShared) {
-        tl.to(el.children, 0.25, {
-          opacity: 0,
-          stagger: 0.2,
-        });
-      } else {
-        tl.to(el, 0.25, { opacity: 0 });
-      }
     },
   },
 };

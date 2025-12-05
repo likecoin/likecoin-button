@@ -3,14 +3,10 @@
     <LikeCoinButtonWidgetV2
       :layout="widgetLayout"
       :like-button-label="likeButtonLabel"
-      :cta-button-label="ctaButtonLabel"
-      :cta-button-preset="ctaButtonPreset"
       :hint-label="hintText"
       :sign-up-href="signUpUrl"
-      :cta-href="likerWallet && ctaHref"
       :is-logged-in="isLoggedIn"
       :is-show-like-button="isShowLikeButton"
-      :should-show-cta="hasSuperLiked"
       :stat-url="statUrl"
       @click-like-button-label="onClickLikeStats"
     >
@@ -20,15 +16,8 @@
             :id="id"
             ref="likeButton"
             :count="likeCount"
-            :cooldown="cooldownProgress"
-            :cooldown-end-time="nextSuperLikeTime"
-            :has-super-liked="hasSuperLiked"
-            :is-just-super-liked="isJustSuperLiked"
-            :is-super-like-enabled="isSuperLiker"
             :is-creator="isCreator"
             @click="onClickLike"
-            @click-disabled="onClickCooldown"
-            @cooldown-end="updateSuperLikeStatus"
           />
         </a>
       </template>
@@ -127,34 +116,10 @@ export default {
         logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp(embed)', 1);
       }
     },
-    async doLike() {
+    doLike() {
       if (!this.isMaxLike && !this.isCreator) {
         this.like();
         logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike(embed)', 1);
-      } else if (this.canSuperLike) {
-        await this.newSuperLike();
-        await this.updateSuperLikeStatus();
-      } else {
-        this.showCivicLikerCTA();
-      }
-    },
-    getShouldShowCivicLikerCTA() {
-      if (this.ctaClickCount === undefined) {
-        this.ctaClickCount = 1;
-      } else {
-        this.ctaClickCount = (this.ctaClickCount + 1) % 5;
-        if (this.ctaClickCount !== 0) { return false; }
-      }
-      return true;
-    },
-    showCivicLikerCTA() {
-      if (this.getShouldShowCivicLikerCTA()) {
-        this.goToPortfolio({
-          type: 'popup',
-          target: 'civic-liker-cta',
-          feature: 'width=540,height=640,menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes',
-        });
-        logTrackerEvent(this, 'LikeButtonFlow', 'clickCivicLikerCTA', 'clickCivicLikerCTA(embed)', 1);
       }
     },
     async onClickLike() {

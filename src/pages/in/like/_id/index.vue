@@ -43,13 +43,9 @@
           <LikeCoinButtonWidgetV2
             v-else
             :like-button-label="likeButtonLabel"
-            :cta-button-preset="ctaButtonPreset"
             :style="{ textAlign: 'center' }"
-            :cta-href="likerWallet && ctaHref"
             :hint-label="hintText"
             :sign-up-href="signUpUrl"
-            :should-show-cta="hasSuperLiked"
-            :cta-button-label="ctaButtonLabel"
             :is-logged-in="isLoggedIn"
             :width="480"
             @click-like-button-label="onClickLikeStats"
@@ -59,15 +55,8 @@
                 :id="id"
                 ref="likeButton"
                 :count="likeCount"
-                :cooldown="cooldownProgress"
-                :cooldown-end-time="nextSuperLikeTime"
-                :has-super-liked="hasSuperLiked"
-                :is-just-super-liked="isJustSuperLiked"
-                :is-super-like-enabled="isSuperLiker"
                 :is-creator="isCreator"
                 @click="onClickLike"
-                @click-disabled="onClickCooldown"
-                @cooldown-end="updateSuperLikeStatus"
               />
             </template>
             <template #identity="identityProps">
@@ -97,7 +86,6 @@ import LikeCoinButtonWidgetV2 from '~/components/LikeCoinButtonWidgetV2/LikeCoin
 
 import mixin from '~/mixins/embed';
 
-import { checkIsMobileClient, checkIsTrustClient } from '~/util/client';
 import { logTrackerEvent } from '@/util/EventLogger';
 import {
   EXTERNAL_HOSTNAME,
@@ -221,20 +209,11 @@ export default {
       this.postSignInAction = action;
       this.signUp({ isNewWindow: false });
     },
-    async doLike() {
+    doLike() {
       if (!this.isMaxLike && !this.isCreator) {
         this.like();
         logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike(popup)', 1);
-      } else if (this.canSuperLike) {
-        await this.newSuperLike();
-        await this.updateSuperLikeStatus();
-      } else {
-        this.showCivicLikerCTA();
       }
-    },
-    showCivicLikerCTA() {
-      this.goToPortfolio({ type: 'self' });
-      logTrackerEvent(this, 'LikeButtonFlow', 'clickCivicLikerCTA', 'clickCivicLikerCTA(popup)', 1);
     },
     onClickBackButton() {
       logTrackerEvent(this, 'LikeButtonFlow', 'clickBackButton', 'clickBackButton(popup)', 1);
@@ -250,16 +229,6 @@ export default {
       if (this.isLoggedIn) {
         // Case 3: User has logged in
         this.doLike();
-        const isPaidSubscriber = this.isSubscribed && !this.isTrialSubscriber;
-        if (
-          this.isMaxLike &&
-          (
-            !isPaidSubscriber ||
-            (isPaidSubscriber && (!checkIsMobileClient() || checkIsTrustClient()))
-          )
-        ) {
-          this.contentKey = 'cta';
-        }
       } else {
         await this.doLogin('like');
       }
@@ -393,7 +362,4 @@ $badge-width: 485px;
   }
 }
 
-#embed-cta-button {
-  margin-top: 8px;
-}
 </style>
