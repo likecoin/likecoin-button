@@ -16,7 +16,6 @@
             :id="id"
             ref="likeButton"
             :count="likeCount"
-            :is-creator="isCreator"
             @click="onClickLike"
           />
         </a>
@@ -117,7 +116,7 @@ export default {
       }
     },
     doLike() {
-      if (!this.isMaxLike && !this.isCreator) {
+      if (!this.isMaxLike) {
         this.like();
         logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike(embed)', 1);
       }

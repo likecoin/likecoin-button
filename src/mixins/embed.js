@@ -204,7 +204,6 @@ export default {
   },
   data() {
     return {
-      isCreator: false,
       isLoggedIn: false,
       isSubscribed: false,
       isTrialSubscriber: false,

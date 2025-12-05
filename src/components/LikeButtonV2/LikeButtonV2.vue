@@ -109,7 +109,6 @@
         v-bind="{
           count,
           maxCount,
-          isCreator,
         }"
       />
     </svg>
@@ -137,10 +136,6 @@ export default {
       type: Number,
       default: 5,
     },
-    isCreator: {
-      type: Boolean,
-      default: false,
-    },
     /**
      * An unique ID required if there are 2 or more buttons appears on the same
      * page.
@@ -165,7 +160,7 @@ export default {
   },
   computed: {
     isShowBadge() {
-      return this.isCreator || this.count > 0;
+      return this.count > 0;
     },
     idSuffix() {
       return this.id ? `-${this.id}` : '';

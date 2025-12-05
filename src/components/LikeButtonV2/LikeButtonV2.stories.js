@@ -1,7 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   withKnobs,
-  boolean,
   number,
 } from '@storybook/addon-knobs';
 import { gsap } from 'gsap';
@@ -31,9 +30,6 @@ export const Default = () => ({
         step: 1,
       }),
     },
-    isCreator: {
-      default: boolean('Is creator', false),
-    },
     explosionSize: {
       default: number('Explosion Size', 0.65, {
         range: true,
@@ -61,7 +57,6 @@ export const Default = () => ({
     <LikeButtonV2
       v-bind="{
         count,
-        isCreator,
         explosionSize,
         explosionRange,
       }"
