@@ -81,10 +81,11 @@
 
 <script>
 import LikeQuestionIcon from '~/assets/like-button/question-btn.svg';
+
+import { BOOK_URL_BASE } from '@/constant';
+
 import Identity from '../Identity/Identity';
 import LikeButton from '../LikeButtonV2/LikeButtonV2';
-
-import { BOOK_URL_BASE } from '../../constant';
 
 export const LAYOUT_DEFAULT = 'default';
 export const LAYOUT_STICKY_BOTTOM = 'sticky-bottom';

@@ -8,6 +8,7 @@ import {
   LIKER_LAND_URL_BASE,
   LIKECOIN_OEMBED_API_BASE,
   MEDIUM_MEDIA_REGEX,
+  BOOK_URL_BASE,
 } from '@/constant';
 
 import { setTrackerUser, logTrackerEvent } from '@/util/EventLogger';
@@ -142,6 +143,8 @@ export default {
           isCivicLikerTrial,
           isSubscribedCivicLiker,
           civicLikerSince,
+          likeWallet,
+          evmWallet,
         } = data;
         return {
           id,
@@ -152,6 +155,8 @@ export default {
           isSubscribedCivicLiker,
           civicLikerSince,
           amount,
+          likeWallet,
+          evmWallet,
         };
       }
     }
@@ -320,6 +325,10 @@ export default {
 
     creatorPortfolioURL() {
       const targetId = this.iscnOwner || this.id
+      const targetWallet = this.evmWallet || this.likeWallet;
+      if (targetWallet) {
+        return `${BOOK_URL_BASE}/store?owner_wallet=${targetWallet}&utm_source=button&from=@${encodeURIComponent(targetId)}`;
+      }
       let url = `${LIKER_LAND_URL_BASE}/${targetId}?utm_source=button&from=${encodeURIComponent(targetId)}`;
       if (this.referrer) {
         url = `${url}&referrer=${encodeURIComponent(this.referrer)}`;
