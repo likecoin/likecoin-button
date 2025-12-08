@@ -306,7 +306,10 @@ export default {
 
     // UI Labels
     likeButtonLabel() {
-      return this.$tc('LikeCountLabel', this.totalLike, { count: this.totalLike });
+      if (this.totalLike > 0) {
+        return this.$tc('LikeCountLabel', this.totalLike, { count: this.totalLike });
+      }
+      return '';
     },
     isCreatorCivicLiker() {
       return this.isCivicLikerTrial || this.isSubscribedCivicLiker;

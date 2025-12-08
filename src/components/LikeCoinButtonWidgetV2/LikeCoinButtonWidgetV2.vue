@@ -26,7 +26,7 @@
 
       <!-- Like Button Label -->
       <foreignObject
-        v-if="isShowLikeButton"
+        v-if="isShowLikeButton && likeButtonLabel"
         :y="labelY"
         x="28"
         width="100"
