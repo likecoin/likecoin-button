@@ -45,7 +45,7 @@
             :like-button-label="likeButtonLabel"
             :style="{ textAlign: 'center' }"
             :hint-label="hintText"
-            :sign-up-href="signUpUrl"
+            :hint-href="creatorPortfolioURL"
             :is-logged-in="isLoggedIn"
             :width="480"
             @click-like-button-label="onClickLikeStats"
@@ -55,7 +55,6 @@
                 :id="id"
                 ref="likeButton"
                 :count="likeCount"
-                :is-creator="isCreator"
                 @click="onClickLike"
               />
             </template>
@@ -173,7 +172,7 @@ export default {
         switch (this.$route.query.action) {
           case 'like':
             if (
-              (!this.isCreator && this.likeCount <= 0) &&
+              this.likeCount <= 0 &&
               this.$refs.likeButton
             ) {
               // Click the LikeButton directly for clicking effect
@@ -210,7 +209,7 @@ export default {
       this.signUp({ isNewWindow: false });
     },
     doLike() {
-      if (!this.isMaxLike && !this.isCreator) {
+      if (!this.isMaxLike) {
         this.like();
         logTrackerEvent(this, 'LikeButtonFlow', 'clickLike', 'clickLike(popup)', 1);
       }
@@ -225,13 +224,8 @@ export default {
         console.error(err);
       }
     },
-    async onClickLike() {
-      if (this.isLoggedIn) {
-        // Case 3: User has logged in
-        this.doLike();
-      } else {
-        await this.doLogin('like');
-      }
+    onClickLike() {
+      this.goToPortfolio();
     },
     onClickLikeStats() {
       this.openLikeStats({ isNewWindow: false });

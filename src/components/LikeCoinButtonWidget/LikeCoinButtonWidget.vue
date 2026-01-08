@@ -33,7 +33,7 @@
       </slot>
       <!-- Like Button Label -->
       <foreignObject
-        v-if="isShowLikeButton"
+        v-if="isShowLikeButton && likeButtonLabel"
         :y="labelY"
         x="28"
         width="100"
@@ -51,7 +51,7 @@
       <foreignObject
         v-if="isShowHintLabel"
         :x="saveSlotProps.x"
-        y="0"
+        y="10"
         width="300"
         height="60"
       >

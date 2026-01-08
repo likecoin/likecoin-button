@@ -52,7 +52,7 @@
               mode="out-in"
             >
               <div key="clap">
-                <like-clap-icon />
+                <book-icon />
               </div>
             </transition-group>
 
@@ -105,7 +105,7 @@ import { TweenLite, CSSPlugin } from 'gsap/all';
 
 import { checkIsMobileClient } from '~/util/client';
 
-import LikeClapIcon from '~/assets/like-button/like-clap.svg';
+import BookIcon from '~/assets/like-button/book.svg';
 import LikeTextIcon from '~/assets/like-button/like-text.svg';
 
 import ClapEffect from './LikeButtonClapEffect';
@@ -113,8 +113,8 @@ import ClapEffect from './LikeButtonClapEffect';
 export default {
   name: 'like-button',
   components: {
+    BookIcon,
     ClapEffect,
-    LikeClapIcon,
     LikeTextIcon,
   },
   props: {

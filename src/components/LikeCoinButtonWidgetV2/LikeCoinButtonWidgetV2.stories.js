@@ -49,7 +49,6 @@ export const Default = (_, { argTypes }) => ({
 
 const Controlled = ({
   count,
-  isCreator = false,
 } = {}) => (_, { argTypes }) => ({
   components: {
     Identity,
@@ -69,7 +68,6 @@ const Controlled = ({
   data() {
     return {
       count: count || 0,
-      isCreator,
       isSaved: false,
     };
   },
@@ -83,7 +81,7 @@ const Controlled = ({
   },
   methods: {
     onClickLikeButton() {
-      if (!isCreator && this.count < 5) {
+      if (this.count < 5) {
         this.count += 1;
       }
     },
@@ -102,7 +100,6 @@ const Controlled = ({
         <LikeButtonV2
           v-bind="{
             count,
-            isCreator,
           }"
           @click="onClickLikeButton"
         />
@@ -129,7 +126,3 @@ const Controlled = ({
 });
 
 export const Liker = Controlled();
-
-export const Creator = Controlled({
-  isCreator: true,
-});

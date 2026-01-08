@@ -46,8 +46,7 @@
   },
   "HintLabel": {
     "About": "關於 LikeCoin",
-    "SignIn": "註冊 Liker ID 免費按讚",
-    "PleaseLike": "最多可拍掌 5 下，鼓勵作者"
+    "Bookshelf": "看看我的書架"
   },
   "PopupOverlay": {
     "title": "請在「彈出式視窗」中點讚支持作者{br}Please sign-in in the pop up window",

@@ -26,7 +26,7 @@
 
       <!-- Like Button Label -->
       <foreignObject
-        v-if="isShowLikeButton"
+        v-if="isShowLikeButton && likeButtonLabel"
         :y="labelY"
         x="28"
         width="100"
@@ -45,20 +45,18 @@
       <foreignObject
         v-if="isShowHintLabel"
         :x="saveSlotProps.x"
-        y="0"
+        y="10"
         width="212"
         height="60"
       >
         <a
-          v-if="!isLoggedIn"
           target="_blank"
           rel="noopener"
-          :href="signUpHref"
+          :href="hintHref"
           :style="hintLabelStyle"
         >
           {{ hintLabel }}
         </a>
-        <div v-else :style="hintLabelStyle">{{ hintLabel }}</div>
       </foreignObject>
 
       <foreignObject
@@ -83,10 +81,11 @@
 
 <script>
 import LikeQuestionIcon from '~/assets/like-button/question-btn.svg';
+
+import { BOOK_URL_BASE } from '@/constant';
+
 import Identity from '../Identity/Identity';
 import LikeButton from '../LikeButtonV2/LikeButtonV2';
-
-import { BOOK_URL_BASE } from '../../constant';
 
 export const LAYOUT_DEFAULT = 'default';
 export const LAYOUT_STICKY_BOTTOM = 'sticky-bottom';
@@ -121,7 +120,7 @@ export default {
       type: String,
       default: undefined,
     },
-    signUpHref: {
+    hintHref: {
       type: String,
       default: '',
     },

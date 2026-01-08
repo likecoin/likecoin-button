@@ -80,10 +80,6 @@ export default {
       type: Number,
       default: 5,
     },
-    isCreator: {
-      type: Boolean,
-      default: false,
-    },
   },
   computed: {
     radius() {

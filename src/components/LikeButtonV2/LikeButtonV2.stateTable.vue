@@ -97,7 +97,6 @@ import LikeButtonBadge from './LikeButtonV2.badge';
 const ButtonFactory = ({
   id,
   count = 0,
-  isCreator = false,
 } = {}) => ({
   components: {
     LikeButton,
@@ -106,7 +105,6 @@ const ButtonFactory = ({
     return {
       id,
       count,
-      isCreator,
     };
   },
   template: `
@@ -114,7 +112,6 @@ const ButtonFactory = ({
       v-bind="{
         id,
         count,
-        isCreator,
       }"
     />
   `,
