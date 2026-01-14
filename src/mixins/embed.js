@@ -1,9 +1,4 @@
 import {
-  isCookieEnabled,
-  setCookie,
-} from 'tiny-cookie';
-
-import {
   LIKE_CO_HOSTNAME,
   LIKER_LAND_URL_BASE,
   LIKECOIN_OEMBED_API_BASE,
@@ -24,7 +19,6 @@ import {
   apiGetNFTMintInfo,
 } from '~/util/api/api';
 
-import { checkHasStorageAPIAccess, checkIsFirefoxStrictMode } from '~/util/client';
 import { checkIsValidISCNId, checkIsValidNFTClassId } from '~/util/nft';
 import { handleQueryStringInUrl } from '~/util/url';
 import { maskedWallet } from '~/util/cosmos';
@@ -43,7 +37,6 @@ const debouncedOnClick = debounce((that) => {
     apiPostLikeButton(that.likeTarget.id, count, {
       referrer: that.likeTarget.referrer,
       iscnId: that.likeTarget.iscnId,
-      isCookieSupport: that.hasCookieSupport,
       ...that.apiMetadata,
     });
   }
@@ -229,9 +222,6 @@ export default {
       hasFollowedCreator: false,
       isLoadingFollowStatus: false,
 
-      hasCookieSupport: false,
-      hasStorageAPIAccess: false,
-
       hasUpdateUserSignInStatus: false,
 
       isRedirecting: false,
@@ -347,31 +337,6 @@ export default {
     },
   },
   methods: {
-    async getIsCookieSupport() {
-      let res = false;
-      try {
-        this.hasStorageAPIAccess = await checkHasStorageAPIAccess();
-        // Cross-site Cookie randomly disappear in fx strict mode
-        const isFirefoxStrictMode = checkIsFirefoxStrictMode();
-        res = process.client &&
-          navigator.cookieEnabled &&
-          this.hasStorageAPIAccess &&
-          isCookieEnabled() &&
-          !isFirefoxStrictMode;
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(err);
-        return false;
-      }
-      try {
-        setCookie('likebutton_cookie', 1);
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(err);
-        return false;
-      }
-      return res;
-    },
     async updateUserSignInStatus() {
       const { id, referrer, iscnId } = this.likeTarget;
       try {
@@ -379,7 +344,6 @@ export default {
           apiGetLikeButtonMyStatus(id, {
             referrer,
             iscnId,
-            isCookieSupport: this.hasCookieSupport,
             ...this.apiMetadata,
           })
             .then(async({ data: myData }) => {
@@ -387,7 +351,6 @@ export default {
                 liker,
                 isSubscribed,
                 isTrialSubscriber,
-                serverCookieSupported,
                 civicLikerVersion,
                 isSelfWork,
               } = myData;
@@ -396,12 +359,6 @@ export default {
               this.isSubscribed = isSubscribed;
               this.isTrialSubscriber = isTrialSubscriber;
               this.civicLikerVersion = civicLikerVersion;
-              if (
-                this.hasCookieSupport &&
-                serverCookieSupported !== undefined
-              ) {
-                this.hasCookieSupport = serverCookieSupported;
-              }
               if (this.isLoggedIn) {
                 if (this.$sentry) {
                   this.$sentry.setUser({ id: liker });
