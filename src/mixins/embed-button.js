@@ -3,13 +3,14 @@ import { LIKE_CO_HOSTNAME } from '@/constant';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 import { isAndroid, isFacebookBrowser } from '~/util/client';
 
+import { apiGetLikeButtonTotalCount } from '~/util/api/api';
+
 import mixin from './embed';
 
 export default {
   mixins: [mixin],
   data() {
     return {
-      isUserFetched: false,
       isShowLikeButton: true,
     };
   },
@@ -29,21 +30,6 @@ export default {
       return this.$route.query.preview === '1';
     },
   },
-  head() {
-    const link = [];
-    if (this.isUserFetched && !this.isLoggedIn) {
-      if (this.hasCookieSupport) {
-        if (!(window.doNotTrack || navigator.doNotTrack)) { // do not prefetch if DNT
-          link.push({ rel: 'prefetch', href: this.signUpUrl });
-        }
-      } else {
-        link.push({ rel: 'prefetch', href: this.popupURL });
-      }
-    }
-    return {
-      link,
-    };
-  },
   async mounted() {
     try {
       // Notify app when button is mounted
@@ -54,10 +40,18 @@ export default {
     }
     window.addEventListener('message', this.handleWindowMessage);
     if (this.isPreview) { return; }
-    this.hasCookieSupport = await this.getIsCookieSupport();
-    await this.updateUserSignInStatus();
-    if (this.onCheckCookieSupport) { this.onCheckCookieSupport(this.hasCookieSupport); }
-    this.isUserFetched = true;
+
+    const { id, referrer, iscnId } = this.likeTarget;
+    try {
+      const { data: totalData } = await apiGetLikeButtonTotalCount(id, {
+        referrer,
+        iscnId,
+      });
+      this.totalLike = totalData.total;
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
   },
   beforeDestroy() {
     window.removeEventListener('message', this.handleWindowMessage);

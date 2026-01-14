@@ -37,12 +37,6 @@
 </template>
 
 <script>
-import {
-  requestStorageAPIAccess,
-  isAndroid,
-  isFacebookBrowser,
-} from '~/util/client';
-
 import mixin from '~/mixins/embed-button';
 
 import Identity from '~/components/Identity/Identity';
@@ -65,7 +59,6 @@ export default {
   layout: 'embedv2',
   data() {
     return {
-      isUserFetched: false,
       isShowAltMode: false,
     };
   },
@@ -94,26 +87,12 @@ export default {
     window.removeEventListener('message', this.onReceiveMessage, false);
   },
   methods: {
-    async doLogin(action) {
+    doLogin(action) {
       if (this.isPreview) { return; }
       this.postSignInAction = action;
-      if (!this.hasCookieSupport || (isAndroid() && isFacebookBrowser())) {
-        // User has not log in and 3rd party cookie is blocked
-        // or: android fb iab stuck when sign in new window, use like popup
-        this.openPopup(action);
-        const eventAction = action.replace(/^./, s => s.toUpperCase());
-        logTrackerEvent(this, 'LikeButtonFlow', `popup${eventAction}`, `popup${eventAction}(embed)`, 1);
-        if (!(this.hasStorageAPIAccess)) {
-          if (await requestStorageAPIAccess()) {
-            this.hasCookieSupport = await this.getIsCookieSupport();
-            await this.updateUserSignInStatus();
-          }
-        }
-      } else {
-        // User has not log in and 3rd party cookie is not blocked
-        this.signUp();
-        logTrackerEvent(this, 'LikeButtonFlow', 'popupSignUp', 'popupSignUp(embed)', 1);
-      }
+      this.openPopup(action);
+      const eventAction = action.replace(/^./, s => s.toUpperCase());
+      logTrackerEvent(this, 'LikeButtonFlow', `popup${eventAction}`, `popup${eventAction}(embed)`, 1);
     },
     doLike() {
       if (!this.isMaxLike) {

@@ -26,14 +26,12 @@ export const apiGetUserMinById = id => axios.get(`${LIKECOIN_API}/users/id/${id}
 export const apiGetLikeButtonMyStatus = (id, data) => {
   const {
     referrer = '',
-    isCookieSupport,
     iscnId = '',
   } = data;
-  const cookieParam = isCookieSupport !== undefined ? `&cookie_support=${isCookieSupport ? 1 : 0}` : '';
   return axios.get(
     id === 'iscn'
-      ? `${LIKECOIN_API}/like/likebutton/iscn/self?iscn_id=${encodeURIComponent(iscnId)}${cookieParam}&show_count=0`
-      : `${LIKECOIN_API}/like/likebutton/${id}/self?referrer=${encodeURIComponent(referrer)}${cookieParam}&show_count=0`,
+      ? `${LIKECOIN_API}/like/likebutton/iscn/self?iscn_id=${encodeURIComponent(iscnId)}&show_count=0`
+      : `${LIKECOIN_API}/like/likebutton/${id}/self?referrer=${encodeURIComponent(referrer)}&show_count=0`,
     {
       headers: getLikeCoinButtonHeaders(data),
       withCredentials: true,

@@ -49,36 +49,3 @@ export function openURL(vue, url, name, specs, replace) {
     if (w) { w.opener = null; }
   }
 }
-
-export async function checkHasStorageAPIAccess() {
-  // https://webkit.org/blog/8311/intelligent-tracking-prevention-2-0/
-  // TODO: try to request for storageAPI access
-  if (typeof document.hasStorageAccess !== 'function') { return true; }
-  try {
-    const res = await document.hasStorageAccess();
-    return res;
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
-    return false;
-  }
-}
-
-export function checkIsFirefoxStrictMode() {
-  const isFireFox = navigator.userAgent.includes('Firefox');
-  const DNT = window.doNotTrack || navigator.doNotTrack;
-  // We cannot detect ETP strict mode, but it sets DNT to 1.
-  return (isFireFox && DNT && DNT === '1');
-}
-
-export async function requestStorageAPIAccess() {
-  if (typeof document.requestStorageAccess !== 'function') { return false; }
-  try {
-    const res = await document.requestStorageAccess();
-    return res || true;
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
-    return false;
-  }
-}

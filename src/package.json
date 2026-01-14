@@ -37,7 +37,6 @@
     "nuxt": "^2.18.1",
     "nuxt-svg-loader": "^1.0.1",
     "on-headers": "^1.0.2",
-    "tiny-cookie": "^2.3.2",
     "url-parse": "^1.4.4",
     "uuid": "^3.4.0",
     "vue-gtag": "^1.16.1",
