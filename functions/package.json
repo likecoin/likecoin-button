@@ -61,7 +61,7 @@
     "eslint": "^7.0.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.0",
-    "webpack": "^4.29.5"
+    "webpack": "^5.104.1"
   },
   "private": true
 }
